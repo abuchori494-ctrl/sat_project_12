@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderStackedBars();
   generateHeatmap();
   updateTasksProgress();
+  renderDashboardWidgets();
   renderPastExams();
 });
 
@@ -1171,6 +1172,85 @@ function generateHeatmap() {
     cell.title = `Intensity: Level ${val}`;
     mayGrid.appendChild(cell);
   });
+}
+
+async function renderDashboardWidgets() {
+  await renderConsistencyTracker();
+  await renderDailyAgenda();
+}
+
+async function renderConsistencyTracker() {
+  try {
+    const res = await fetch(API_BASE + '/api/user/consistency');
+    if (!res.ok) throw new Error('Failed to fetch consistency data');
+    const data = await res.json();
+
+    const container = document.getElementById('consistency-tracker-boxes');
+    const summaryEl = document.getElementById('ctc-summary');
+
+    if (!container || !summaryEl) return;
+
+    container.innerHTML = '';
+    // FIX 6: use todayIndex from API to mark today's box
+    const todayIdx = (data.todayIndex !== undefined) ? data.todayIndex : ((new Date().getDay() + 6) % 7);
+    data.week.forEach((isComplete, i) => {
+      const dayBox = document.createElement('div');
+      dayBox.className = 'ctc-day';
+      if (i === todayIdx) {
+        dayBox.classList.add('today');
+      }
+      if (isComplete) {
+        dayBox.classList.add('complete');
+        dayBox.innerHTML = '✓';
+      }
+      container.appendChild(dayBox);
+    });
+
+    summaryEl.textContent = `${data.activeCount} of 7 days active this week`;
+
+  } catch (error) {
+    console.error("Error rendering consistency tracker:", error);
+    const container = document.getElementById('consistency-tracker-boxes');
+    if(container) container.innerHTML = `<p class="dac-prompt" style="grid-column: span 7;">Could not load tracker.</p>`;
+  }
+}
+
+async function renderDailyAgenda() {
+  try {
+    const res = await fetch(API_BASE + '/api/planner/agenda');
+    if (!res.ok) throw new Error('Failed to fetch agenda');
+    const data = await res.json();
+
+    const container = document.getElementById('daily-agenda-tasks');
+    if (!container) return;
+
+    if (data.tasks.length === 0) {
+      container.innerHTML = `<p class="dac-prompt">Create a study plan to get your daily agenda.</p>`;
+      return;
+    }
+
+    container.innerHTML = data.tasks.map(task => `
+      <div class="da-task-card">
+        <h4>${task.topic}</h4>
+        <div class="da-meta">
+          <span class="da-meta-pill">${task.questions} Questions</span>
+          <span class="da-meta-pill">~${task.time} min</span>
+        </div>
+        <a href="#" class="da-start-link" onclick="startPracticeTopic('${task.topic}'); return false;">Start practice →</a>
+      </div>
+    `).join('');
+
+  } catch (error) {
+    console.error("Error rendering daily agenda:", error);
+    const container = document.getElementById('daily-agenda-tasks');
+    if(container) container.innerHTML = `<p class="dac-prompt">Could not load agenda.</p>`;
+  }
+}
+
+function startPracticeTopic(topic) {
+  // This could navigate to the question bank view filtered by topic
+  showToast(`Starting practice for: ${topic}`);
+  show('exams'); // The 'exams' view seems to be the question bank
 }
 
 // --- UTILITIES ---

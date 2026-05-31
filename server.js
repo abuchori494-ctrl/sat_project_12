@@ -17,8 +17,17 @@ const store = {
     name: 'Abdullah',
     currentScore: 1220,
     goalScore: 1560,
-    examDate: '2025-12-05',
+    examDate: '2026-12-05', // FIX 1: updated to a future date
     streak: 3,
+    consistency: {
+      '2026-05-25': true,
+      '2026-05-26': true,
+      '2026-05-27': false,
+      '2026-05-28': true,
+      '2026-05-29': true,
+      '2026-05-30': false,
+      '2026-05-31': true
+    },
     coins: 80,
     flames: 1,
     savedColleges: [],
@@ -679,6 +688,44 @@ app.post('/api/user/settings', (req, res) => {
   res.json(store.user.settings);
 });
 
+app.get('/api/user/consistency', (req, res) => {
+  // FIX 6: use real current time, not a hardcoded date
+  const now = new Date();
+  // ISO week: Monday=0, Sunday=6
+  const dayOfWeekISO = (now.getDay() + 6) % 7;
+
+  const week = [];
+  let activeCount = 0;
+  for (let i = 0; i < 7; i++) {
+    const day = new Date(now);
+    day.setHours(0, 0, 0, 0);
+    day.setDate(now.getDate() - (dayOfWeekISO - i));
+    const dateKey = day.toISOString().split('T')[0];
+    const isComplete = !!store.user.consistency[dateKey];
+    week.push(isComplete);
+    if (isComplete) {
+      activeCount++;
+    }
+  }
+
+  // FIX 6: also return today's index (0=Mon … 6=Sun) so the frontend
+  // can highlight the current day box
+  res.json({
+    week, // array of 7 booleans [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
+    activeCount,
+    todayIndex: dayOfWeekISO // 0=Mon, 1=Tue, … 6=Sun
+  });
+});
+
+app.post('/api/user/consistency', (req, res) => {
+  const { date, completed } = req.body; // date in 'YYYY-MM-DD' format
+  if (!date) {
+    return res.status(400).json({ error: "Date is required" });
+  }
+  store.user.consistency[date] = !!completed;
+  res.json({ success: true, date, completed: store.user.consistency[date] });
+});
+
 // ==========================================================
 // DASHBOARD API
 // ==========================================================
@@ -931,6 +978,24 @@ app.post('/api/planner/create', (req, res) => {
   res.json({ success: true, plan });
 });
 
+app.get('/api/planner/agenda', (req, res) => {
+  const activePlanId = Object.keys(store.planner.plans)[0];
+  if (!activePlanId) {
+    return res.json({ tasks: [] });
+  }
+  const plan = store.planner.plans[activePlanId];
+  
+  const pendingTasks = plan.schedule.filter(t => t.status === 'pending');
+  const agendaTasks = pendingTasks.slice(0, 2).map(task => ({ // Show 2 tasks
+      topic: task.topic,
+      subject: task.subject,
+      questions: task.subject === 'Math' ? 22 : 27,
+      time: task.durationMinutes
+  }));
+
+  res.json({ tasks: agendaTasks });
+});
+
 app.get('/api/planner/plan/:planId', (req, res) => {
   const plan = store.planner.plans[req.params.planId];
   if (!plan) return res.status(404).json({ error: "Plan not found" });
@@ -1123,6 +1188,6 @@ app.get('/api/colleges/stats', (req, res) => {
 // ==========================================================
 app.listen(PORT, () => {
   console.log(`==========================================================`);
-  console.log(`✅ OnePrep Unified full-stack server running on http://localhost:${PORT}`);
+  console.log(`✅ SAT Platform Unified full-stack server running on http://localhost:${PORT}`);
   console.log(`==========================================================`);
 });

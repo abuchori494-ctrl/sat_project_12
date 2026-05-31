@@ -3,23 +3,1026 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OnePrep – Digital SAT Prep Platform</title>
-  <meta name="description" content="Prepare for the Digital SAT with expert practice questions, timed modules, and instant AI feedback." />
+  <title>SAT Platform – Digital SAT Prep Platform</title>
+  <meta name="description" content="Prepare for the Digital SAT with expert practice questions, timed modules, and instant AI feedback — built for the Bluebook era." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ===================================================================
+       SAT Platform DASHBOARD — LAVENDER DESIGN SYSTEM
+       =================================================================== */
+    :root {
+      --lav-bg:        #F8F7FF;
+      --lav-sidebar:   #4A4580; /* FIX 9: lightened from #3D3875 */
+      --lav-sidebar-active: #5A5690;
+      --lav-card:      #FFFFFF;
+      --lav-border:    #EDE9FE;
+      --lav-accent:    #7C6FE0;
+      --lav-accent2:   #B8B0F5;
+      --lav-light:     #F0EFFE;
+      --lav-dark:      #1A1035;
+      --lav-gray:      #6B7280;
+      --lav-shadow:    0 2px 12px rgba(124, 111, 224, 0.08);
+      --lav-card-shadow-strong: 0 4px 24px rgba(124, 111, 224, 0.12); /* FIX 5 */
+      --lav-radius:    16px;
+      --lav-grad:      linear-gradient(135deg, #7C6FE0, #B8B0F5);
+    }
+
+    /* ── Layout shell ── */
+    #app-body {
+      background: var(--lav-bg);
+      font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+    }
+
+    /* ── SIDEBAR (completely new) ── */
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: 240px;
+      background: var(--lav-sidebar);
+      display: flex;
+      flex-direction: column;
+      z-index: 200;
+      overflow-y: auto;
+      box-shadow: 4px 0 24px rgba(61, 56, 117, 0.18);
+    }
+    #sidebar::-webkit-scrollbar { width: 4px; }
+    #sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+    /* Logo */
+    #sidebar .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 24px 20px 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+    #sidebar .logo-icon { font-size: 26px; }
+    #sidebar .logo-text {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    /* Exam selector */
+    #sidebar .exam-selector {
+      margin: 0 16px 20px;
+      width: calc(100% - 32px);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      outline: none;
+    }
+    #sidebar .exam-selector option { background: var(--lav-sidebar); color: #fff; }
+
+    /* Nav links */
+    #sidebar .nav-links {
+      list-style: none;
+      padding: 0 10px;
+      flex: 1;
+    }
+    #sidebar .nav-links li { margin-bottom: 2px; }
+    #sidebar .nav-links li.section-label {
+      font-size: 9px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 12px 10px 4px;
+    }
+    #sidebar .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      color: rgba(255,255,255,0.82); /* FIX 9: lighter inactive text */
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    #sidebar .nav-links a:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+    #sidebar .nav-links a.active {
+      background: var(--lav-sidebar-active);
+      color: #fff;
+      box-shadow: inset 3px 0 0 var(--lav-accent2);
+    }
+    .badge-new {
+      font-size: 8px;
+      font-weight: 800;
+      background: var(--lav-accent);
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      position: absolute;
+      right: 10px;
+    }
+
+    /* Sidebar bottom */
+    #sidebar .sidebar-bottom {
+      padding: 16px 10px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    #sidebar .sidebar-bottom a,
+    #sidebar .sidebar-bottom button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      color: rgba(255,255,255,0.7);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+    #sidebar .sidebar-bottom a:hover,
+    #sidebar .sidebar-bottom button:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+    #sidebar .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.2);
+      margin-top: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #sidebar .user-profile:hover { background: rgba(0,0,0,0.3); }
+    #sidebar .avatar {
+      width: 32px; height: 32px;
+      background: var(--lav-accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 14px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    #sidebar .user-profile span:nth-child(2) {
+      flex: 1;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ── VIEWS WRAPPER ── */
+    .views-wrap {
+      margin-left: 240px;
+      min-height: 100vh;
+      background: var(--lav-bg);
+    }
+
+    /* Dashboard view: zero top padding so hero starts immediately — FIX 4 */
+    #v-dashboard {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 28px 60px;
+    }
+    .view { display: none; animation: viewFade 0.35s ease; }
+    .view.active { display: block; }
+    @keyframes viewFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ================================================================
+       SECTION 1 — HERO
+       ================================================================ */
+    /* FIX 4: removed top padding so content starts right at top */
+    .dashboard-top-viewport {
+      min-height: calc(100vh - 60px); /* Account for bottom padding of #v-dashboard */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .db-hero {
+      display: grid;
+      grid-template-columns: 60fr 40fr;
+      gap: 48px;
+      align-items: center;
+      padding: 16px 0 32px;
+    }
+    @media (max-height: 800px) {
+      .founder-quote-container { margin: 12px auto; padding: 16px 20px; }
+      .db-hero { padding: 12px 0 16px; gap: 24px; }
+      .founder-quote { font-size: clamp(1.4rem, 3vw, 2.2rem); }
+      .founder-author { margin-top: 8px; font-size: 1rem; }
+      .hero-badges-stack { margin-bottom: 12px; }
+      .hero-h1 { margin-bottom: 8px; font-size: clamp(1.8rem, 3vw, 2.6rem); }
+      .hero-sub { margin-bottom: 12px; font-size: 0.95rem; }
+      .hero-btns { margin-bottom: 16px; }
+      .hero-stats { padding-top: 12px; margin-bottom: 12px; }
+      .stat-item strong { font-size: 1.15rem; }
+      .scores-split-card { padding: 16px; }
+      .consistency-tracker-card { margin-bottom: 16px !important; }
+      .lav-card { padding: 16px; }
+    }
+
+    /* FIX 2: badges stacked vertically in a flex column */
+    .hero-badges-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    /* Announcement pill */
+    .hero-announce-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--lav-light);
+      color: var(--lav-accent);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 99px;
+      border: 1px solid var(--lav-border);
+      letter-spacing: 0.01em;
+    }
+
+    /* Tagline badge */
+    .hero-tagline-badge {
+      display: inline-block;
+      background: var(--lav-light);
+      color: var(--lav-accent);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 18px;
+      border-radius: 99px;
+    }
+
+    /* Headline */
+    .hero-h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 500;
+      font-style: italic;
+      line-height: 1.15;
+      color: var(--lav-dark);
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    /* Sub headline */
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--lav-gray);
+      line-height: 1.65;
+      max-width: 500px;
+      margin-bottom: 20px;
+    }
+
+    /* CTA buttons */
+    .hero-btns {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .btn-hero-filled {
+      background: var(--lav-accent);
+      color: #fff;
+      border: none;
+      padding: 12px 26px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(124, 111, 224, 0.25);
+    }
+    .btn-hero-filled:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(124, 111, 224, 0.35);
+      background: #6a5ed4;
+    }
+    .btn-hero-outline {
+      background: transparent;
+      color: var(--lav-accent);
+      border: 2px solid var(--lav-accent);
+      padding: 12px 26px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .btn-hero-outline:hover {
+      background: var(--lav-accent);
+      color: #fff;
+    }
+
+    /* Stats row */
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--lav-border);
+      margin-bottom: 16px;
+    }
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .stat-item .si-icon {
+      color: var(--lav-accent);
+      display: flex;
+      align-items: center;
+    }
+    .stat-item strong {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--lav-dark);
+    }
+    .stat-item span {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--lav-gray);
+    }
+    .stat-div {
+      width: 1px;
+      height: 28px;
+      background: var(--lav-border);
+    }
+
+    /* Exam countdown pill */
+    .hero-countdown-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--lav-light);
+      border: 1px solid var(--lav-border);
+      border-radius: 99px;
+      padding: 8px 18px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--lav-dark);
+    }
+    .hero-countdown-pill .cp-icon { font-size: 14px; }
+    .hero-countdown-pill strong { color: var(--lav-accent); }
+
+    /* ── Founder Quote ── */
+    .founder-quote-container {
+      max-width: 800px;
+      margin: 40px auto 10px auto;
+      text-align: center;
+      padding: 0;
+      background: transparent;
+      border: none;
+    }
+    .founder-quote {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.8rem, 4vw, 3.5rem);
+      font-weight: 500;
+      color: var(--lav-dark);
+      line-height: 1.2;
+      font-style: italic;
+    }
+    .founder-author {
+      margin-top: 16px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--lav-dark);
+    }
+
+    /* ── Split Score Card ── */
+    .scores-split-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px;
+    }
+    .scores-split-card .split-side {
+      flex: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .scores-split-card .split-divider {
+      width: 1px;
+      height: 60px;
+      background: var(--lav-border);
+      margin: 0 16px;
+    }
+    .ssc-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--lav-gray);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .ssc-score {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--lav-dark);
+      line-height: 1;
+    }
+    .ssc-sub {
+      font-size: 0.75rem;
+      color: var(--lav-gray);
+      margin-top: 6px;
+      font-weight: 600;
+    }
+    .ssc-pills {
+      margin-top: 8px;
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+    .ssc-pill {
+      font-size: 10px;
+      background: var(--lav-light);
+      color: var(--lav-accent);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    /* ── HERO RIGHT — Score Card — FIX 5: stronger shadow + left accent border ── */
+    .hero-score-card {
+      background: var(--lav-card);
+      border: 1px solid var(--lav-border);
+      border-left: 3px solid var(--lav-accent);
+      border-radius: var(--lav-radius);
+      box-shadow: var(--lav-card-shadow-strong);
+      padding: 28px 24px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .hsc-top-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--lav-gray);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .hsc-rings {
+      display: flex;
+      justify-content: space-around;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .hsc-ring-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .hsc-ring-block .ring-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--lav-gray);
+      text-align: center;
+    }
+
+    /* Circular progress rings */
+    .cp-ring {
+      position: relative;
+      width: 110px;
+      height: 110px;
+    }
+    .cp-ring svg { transform: rotate(-90deg); }
+    .cp-ring .ring-track {
+      fill: none;
+      stroke: #f3f4f6;
+      stroke-width: 9;
+    }
+    .cp-ring .ring-fill {
+      fill: none;
+      stroke-width: 9;
+      stroke-linecap: round;
+      transition: stroke-dasharray 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .cp-ring .ring-fill.purple { stroke: var(--lav-accent); }
+    .cp-ring .ring-fill.lavender { stroke: var(--lav-accent2); }
+    .cp-ring .ring-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .cp-ring .ring-inner strong {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: var(--lav-dark);
+      line-height: 1;
+    }
+    .cp-ring .ring-inner small {
+      font-size: 0.62rem;
+      font-weight: 600;
+      color: var(--lav-gray);
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    /* Divider + total score */
+    .hsc-divider {
+      border: none;
+      border-top: 1px dashed var(--lav-border);
+      margin: 0 0 16px;
+    }
+    .hsc-total {
+      text-align: center;
+    }
+    .hsc-total p {
+      font-size: 0.85rem;
+      color: var(--lav-gray);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .hsc-total .total-num {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: var(--lav-grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+    .hsc-total .total-denom {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--lav-gray);
+      -webkit-text-fill-color: var(--lav-gray);
+    }
+    .hsc-placeholder {
+      text-align: center;
+      padding: 24px 0;
+      color: var(--lav-gray);
+      font-size: 0.85rem;
+    }
+
+    /* ================================================================
+       SECTION 2 — CONSISTENCY + AGENDA
+       ================================================================ */
+    .db-mid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .lav-card {
+      background: var(--lav-card);
+      border: 1px solid var(--lav-border);
+      border-radius: var(--lav-radius);
+      box-shadow: var(--lav-shadow);
+      padding: 22px 22px 20px;
+    }
+
+    /* Consistency tracker */
+    .ctc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .ctc-header h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--lav-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    #ctc-summary {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--lav-gray);
+      background: var(--lav-light);
+      padding: 3px 10px;
+      border-radius: 99px;
+    }
+    .ctc-week-labels {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .ctc-week-labels span {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--lav-gray);
+    }
+    /* FIX 6: compact day boxes */
+    #consistency-tracker-boxes {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+    /* JS populates .ctc-day, .ctc-day.complete, .ctc-day.today */
+    .ctc-day {
+      aspect-ratio: 1;
+      border-radius: 7px;
+      background: #f1f0fb;
+      border: 1.5px solid var(--lav-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: transparent;
+      transition: all 0.3s ease;
+    }
+    /* FIX 6: today highlighted with purple border */
+    .ctc-day.today {
+      border: 2px solid var(--lav-accent);
+      background: var(--lav-light);
+    }
+    .ctc-day.complete {
+      background: #d1fae5;
+      border-color: #6ee7b7;
+      color: #059669;
+    }
+    /* today + complete: green fill, purple border */
+    .ctc-day.today.complete {
+      border: 2px solid var(--lav-accent);
+    }
+
+    /* Daily agenda */
+    #daily-agenda-tasks .da-task-card {
+      background: var(--lav-light);
+      border: 1px solid var(--lav-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    #daily-agenda-tasks .da-task-card:last-child { margin-bottom: 0; }
+    #daily-agenda-tasks .da-task-card h4 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--lav-dark);
+      margin-bottom: 8px;
+    }
+    .da-meta {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .da-meta-pill {
+      font-size: 11px;
+      font-weight: 600;
+      background: #fff;
+      color: var(--lav-accent);
+      padding: 3px 10px;
+      border-radius: 99px;
+      border: 1px solid var(--lav-border);
+    }
+    .da-start-link {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--lav-accent);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .da-start-link:hover { opacity: 0.7; }
+
+    /* FIX 8: redesigned agenda empty state */
+    .dac-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 16px 8px 4px;
+    }
+    .dac-empty-icon {
+      width: 52px; height: 52px;
+      background: var(--lav-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+    .dac-empty p {
+      font-size: 0.82rem;
+      color: var(--lav-gray);
+      line-height: 1.55;
+      margin-bottom: 14px;
+      max-width: 220px;
+    }
+    .dac-prompt-btn {
+      display: inline-block;
+      background: var(--lav-accent);
+      color: #fff;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .dac-prompt-btn:hover { background: #6a5ed4; }
+    .daily-agenda-card h3 {
+      font-size: 1.0rem;
+      font-weight: 700;
+      color: var(--lav-dark);
+      margin-bottom: 14px;
+    }
+
+    /* ================================================================
+       SECTION 3 — ANALYTICS STRIP
+       ================================================================ */
+    .db-analytics {
+      margin-bottom: 24px;
+    }
+    .db-analytics-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .db-analytics-header h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--lav-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .das-view-all {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--lav-accent);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+    .das-view-all:hover { opacity: 0.7; }
+
+    .das-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .das-card {
+      background: var(--lav-card);
+      border: 1px solid var(--lav-border);
+      border-radius: var(--lav-radius);
+      box-shadow: var(--lav-shadow);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .das-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(124, 111, 224, 0.13);
+    }
+    /* FIX 7: clean SVG icon slot (no emoji) */
+    .das-card-icon {
+      width: 36px; height: 36px;
+      background: var(--lav-light);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      flex-shrink: 0;
+    }
+    .das-card-icon svg { display: block; }
+    /* FIX 7: title case labels, no uppercase */
+    .das-card-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--lav-gray);
+      /* removed text-transform: uppercase */
+    }
+    /* FIX 7: consistent val size across all 4 cards */
+    .das-card-val {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--lav-dark);
+      line-height: 1;
+    }
+    .das-card-val.accent { color: var(--lav-accent); }
+    .das-card-val.green  { color: #059669; }
+    .das-card-btn {
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--lav-accent);
+      background: var(--lav-light);
+      border: 1px solid var(--lav-border);
+      border-radius: 8px;
+      padding: 5px 12px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+      align-self: flex-start;
+    }
+    .das-card-btn:hover { background: var(--lav-border); }
+    /* FIX 7: remove watermark circle pseudo-element */
+    .das-card::after { display: none; }
+
+    /* ================================================================
+       SECTION 4 — TODAY'S STUDY PLAN
+       ================================================================ */
+    .db-study-plan { margin-bottom: 48px; }
+    .db-study-plan h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--lav-dark);
+      margin-bottom: 14px;
+    }
+
+    .dsps-empty-card {
+      background: var(--lav-card);
+      border: 1px solid var(--lav-border);
+      border-radius: var(--lav-radius);
+      box-shadow: var(--lav-shadow);
+      padding: 40px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .dsps-empty-icon {
+      width: 60px; height: 60px;
+      background: var(--lav-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    .dsps-empty-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--lav-dark);
+      margin-bottom: 8px;
+    }
+    .dsps-empty-card p {
+      font-size: 0.88rem;
+      color: var(--lav-gray);
+      max-width: 340px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .btn-create-plan-solid {
+      background: var(--lav-accent);
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(124, 111, 224, 0.25);
+    }
+    .btn-create-plan-solid:hover {
+      background: #6a5ed4;
+      transform: translateY(-1px);
+    }
+
+    /* ================================================================
+       ALL OTHER EXISTING VIEWS (kept intact, minimal override)
+       ================================================================ */
+    /* Reuse existing .view classes from style.css for non-dashboard views */
+
+    #v-exams, #v-simulator, #v-analytics, #v-review, #v-chat {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 28px 60px;
+    }
+
+    /* ================================================================
+       RESPONSIVE
+       ================================================================ */
+    @media (max-width: 960px) {
+      .db-hero {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 24px 0 28px;
+      }
+      .hero-score-card { max-width: 420px; margin: 0 auto; }
+      .db-mid { grid-template-columns: 1fr; }
+      .das-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-badges-stack { align-items: center; }
+    }
+    @media (max-width: 600px) {
+      .views-wrap { margin-left: 0; }
+      #sidebar { transform: translateX(-100%); }
+      #v-dashboard { padding: 16px 16px 48px; }
+      .db-hero { padding: 16px 0 20px; }
+      .das-grid { grid-template-columns: 1fr 1fr; }
+      .hero-btns { flex-direction: column; }
+      .hero-stats { flex-wrap: wrap; gap: 12px; }
+    }
+    @media (max-width: 380px) {
+      .das-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ================================================================
+       KEEP EXISTING COMPONENT STYLES (chat, simulator, modals, toast)
+       ================================================================ */
+
+    /* Toast — unified */
+    .toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      z-index: 9999;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      background: var(--lav-accent);
+      color: white;
+      box-shadow: 0 4px 16px rgba(124,111,224,0.3);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+    }
+    .toast.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Preserve dark mode compatibility */
+    html.dark #v-dashboard,
+    html.dark .views-wrap { background: #1A1035; }
+    html.dark .lav-card,
+    html.dark .hero-score-card,
+    html.dark .das-card,
+    html.dark .dsps-empty-card,
+    html.dark .founder-quote-container {
+      background: #252144;
+      border-color: #3D3570;
+    }
+    html.dark .founder-quote { color: #fff; }
+  </style>
 </head>
+
 <body class="light" id="app-body">
 
-  <!-- ═══ VERTICAL SIDEBAR NAV (EXACT MOCKUP MATCH) ═══ -->
+  <!-- ═══════════════════════════════════════════════
+       SIDEBAR NAV
+  ═══════════════════════════════════════════════ -->
   <nav id="sidebar">
     <!-- Logo -->
     <div class="logo" onclick="show('dashboard')">
       <span class="logo-icon">🤖</span>
-      <span class="logo-text">OnePrep</span>
+      <span class="logo-text">SAT Platform</span>
     </div>
-    
+
     <!-- Exam Selector -->
     <select class="exam-selector" onchange="showToast('Selected ' + this.value.toUpperCase())">
       <option>SAT</option>
@@ -36,7 +1039,7 @@
           📊 Analytics <span class="badge-new">New</span>
         </a>
       </li>
-      
+
       <li class="section-label">PRACTICE</li>
       <li><a href="/question-bank" data-page="question-bank">🔲 Question Bank</a></li>
       <li><a href="/question-rush" data-page="question-rush">⚡ Question Rush</a></li>
@@ -47,7 +1050,7 @@
       <li class="section-label">PROGRESS</li>
       <li><a href="/" onclick="show('dashboard'); return false;" data-page="saved">🔖 Saved</a></li>
       <li><a href="/" onclick="show('review'); return false;" data-page="mistakes">❌ Mistakes Log</a></li>
-      
+
       <li class="section-label">COLLEGE</li>
       <li><a href="/colleges" data-page="colleges">🎓 Browse Colleges</a></li>
     </ul>
@@ -66,217 +1069,229 @@
     </div>
   </nav>
 
-  <!-- ═══ VIEWS WRAPPER ═══ -->
+  <!-- ═══════════════════════════════════════════════
+       VIEWS WRAPPER
+  ═══════════════════════════════════════════════ -->
   <div class="views-wrap">
-
-    <!-- ══ VIEW: LANDING ══ -->
-    <section id="v-landing" class="view active">
-      <div class="hero">
-        <div class="hero-content">
-          <div class="hero-badge">✨ June 2024 Exam Now Available</div>
-          <h1 class="hero-h1">The #1 Digital SAT<br><span class="grad-text">Prep Platform</span></h1>
-          <p class="hero-sub">Thousands of real questions, timed practice, and instant explanations — built for the Bluebook era.</p>
-          <div class="hero-btns">
-            <button class="btn-primary btn-lg" onclick="show('dashboard')">Start Practicing</button>
-            <button class="btn-ghost btn-lg" onclick="show('simulator')">Try Simulator</button>
-          </div>
-          <div class="hero-stats">
-            <div class="hs"><strong>4</strong><span>Modules</span></div>
-            <div class="hs-div"></div>
-            <div class="hs"><strong>80+</strong><span>Questions</span></div>
-            <div class="hs-div"></div>
-            <div class="hs"><strong>100%</strong><span>Free</span></div>
-          </div>
-        </div>
-        <div class="hero-visual">
-          <div class="hv-card">
-            <div class="hv-tag">Reading &amp; Writing</div>
-            <div class="hv-score">720</div>
-            <div class="hv-bar-wrap">
-              <div class="hv-bar" style="--w:90%"></div>
-            </div>
-            <div class="hv-tag hv-tag2">Mathematics</div>
-            <div class="hv-score">700</div>
-            <div class="hv-bar-wrap">
-              <div class="hv-bar hv-bar2" style="--w:82%"></div>
-            </div>
-            <div class="hv-total">Total: <strong>1420</strong> / 1600</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="social-proof">
-        <p class="sp-title">Trusted by students at top universities</p>
-        <div class="sp-logos">
-          <span>🏛 Columbia</span>
-          <span>🏛 MIT</span>
-          <span>🏛 Caltech</span>
-          <span>🏛 UChicago</span>
-          <span>🏛 Dartmouth</span>
-        </div>
-      </div>
-
-      <div class="features-grid">
-        <div class="feat-card">
-          <div class="feat-icon">📝</div>
-          <h3>Real Exam Questions</h3>
-          <p>Practice with authentic Digital SAT questions from official June 2024 test.</p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon">⏱️</div>
-          <h3>Timed Modules</h3>
-          <p>Simulate real exam conditions with module-by-module countdown timers.</p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon">💡</div>
-          <h3>Instant Explanations</h3>
-          <p>Every question has a detailed explanation to reinforce the underlying concept.</p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon">📊</div>
-          <h3>Track Progress</h3>
-          <p>See your accuracy, weak spots, and progress over time in the Analytics view.</p>
-        </div>
-      </div>
-    </section>
 
     <!-- ══ VIEW: DASHBOARD ══ -->
     <section id="v-dashboard" class="view active">
-      <!-- Header row matching mockup perfectly -->
-      <div class="dash-header-row">
-        <div class="dhr-search">
-          <span>🔍</span>
-          <input type="text" placeholder="Search..." />
-        </div>
-        <div class="dhr-badges">
-          <div class="dhr-badge streak">🔥 0</div>
-          <div class="dhr-badge coins">💎 80</div>
-        </div>
-      </div>
-      
-      <!-- Welcome Section -->
-      <div class="welcome-container">
-        <div class="welcome-left">
-          <h1 class="welcome-greeting">Good morning, <span class="wg-username">abdullah</span></h1>
-          <p class="welcome-subtitle">Let's start by creating a study plan</p>
-          <button class="btn-create-plan" onclick="createStudyPlan()">Create my study plan</button>
-        </div>
-        
-        <!-- Timer countdown card -->
-        <div class="timer-countdown-card">
-          <span class="tcc-label">Time left to SAT exam</span>
-          <div class="tcc-timer-row">
-            <div class="tcc-seg"><strong id="tcc-days">189</strong><small>days</small></div>
-            <div class="tcc-seg"><strong id="tcc-hours">15</strong><small>hrs</small></div>
-            <div class="tcc-seg"><strong id="tcc-minutes">46</strong><small>min</small></div>
+
+      <!-- Viewport wrapper to fit hero entirely -->
+      <div class="dashboard-top-viewport">
+        <!-- Founder Quote Section -->
+        <div class="founder-quote-container">
+          <div class="founder-quote">
+            “Every student deserves a 1600.<br>Start free.”
           </div>
-          <div class="tcc-footer">
-            <span class="tcc-date">Saturday, December 5</span>
-            <button class="tcc-switch-btn" onclick="switchTestDate()">⚙️ Switch test date</button>
+          <div class="founder-author">— Founders of SAT Platform</div>
+        </div>
+
+      <!-- ════════════════════════════════════════════
+           SECTION 1 — HERO
+           ════════════════════════════════════════════ -->
+      <div class="db-hero">
+
+        <!-- LEFT COLUMN (60%) -->
+        <div class="hero-left">
+          <!-- FIX 2: badges stacked vertically -->
+          <div class="hero-badges-stack">
+            <div class="hero-announce-pill">
+              ✨ May 2026 Real Past Exam Available Now
+            </div>
+          </div>
+
+          <!-- Headline -->
+          <h1 class="hero-h1">
+            The #1 Digital SAT<br>
+            Prep Platform
+          </h1>
+
+          <!-- Sub headline -->
+          <p class="hero-sub">
+            Thousands of real questions, timed practice, and instant explanations — built for the Bluebook era.
+          </p>
+
+          <!-- CTA Buttons -->
+          <div class="hero-btns">
+            <button class="btn-hero-filled" onclick="show('exams')">Start Practicing</button>
+            <button class="btn-hero-outline" onclick="show('simulator')">Try Simulator</button>
+          </div>
+
+          <!-- Stats Row -->
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="si-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              </div>
+              <strong>4</strong>
+              <span>Modules</span>
+            </div>
+            <div class="stat-div"></div>
+            <div class="stat-item">
+              <div class="si-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
+              <strong>5000+</strong>
+              <span>Questions</span>
+            </div>
+            <div class="stat-div"></div>
+            <!-- FIX 3: tag/price-tag SVG icon replacing plain checkmark -->
+            <div class="stat-item">
+              <div class="si-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              </div>
+              <strong>100%</strong>
+              <span>Free</span>
+            </div>
+          </div>
+
+          <!-- Exam Countdown pill — populated by JS -->
+          <div class="hero-countdown-pill" id="hero-countdown-pill">
+            <span class="cp-icon">⏰</span>
+            <span>Loading your exam countdown...</span>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN (40%) — Score Card -->
+        <div class="hero-right">
+          
+          <!-- Consistency Tracker Card moved to Top of Right Column -->
+          <div class="lav-card consistency-tracker-card" style="margin-bottom: 24px;">
+            <div class="ctc-header">
+              <h3>🔥 This Week</h3>
+              <span id="ctc-summary">0 of 7 days</span>
+            </div>
+            <div class="ctc-week-labels">
+              <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+            </div>
+            <div id="consistency-tracker-boxes" class="ctc-day-boxes"></div>
+            <!-- JS: renderConsistencyTracker() targets #consistency-tracker-boxes and #ctc-summary -->
+          </div>
+
+          <!-- Split Score Card -->
+          <div class="lav-card scores-split-card">
+            <!-- Target Score (Left) -->
+            <div class="split-side target-side">
+              <div class="ssc-title">🎯 Target</div>
+              <div class="ssc-score" id="target-score-val">--</div>
+              <div class="ssc-sub" id="target-score-sub">Your goal</div>
+            </div>
+
+            <!-- Divider -->
+            <div class="split-divider"></div>
+
+            <!-- Latest Score (Right) -->
+            <div class="split-side latest-side">
+              <div class="ssc-title">📊 Latest</div>
+              <div class="ssc-score" id="latest-score-val">--</div>
+              <div class="ssc-pills">
+                <span class="ssc-pill" id="latest-rw-pill">R&amp;W: --</span>
+                <span class="ssc-pill" id="latest-math-pill">Math: --</span>
+              </div>
+              <div class="ssc-sub">Last practice <span id="latest-score-date" style="font-weight:400"></span></div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.db-hero -->
+      </div><!-- /.dashboard-top-viewport -->
+
+      <!-- ════════════════════════════════════════════
+           SECTION 2 — CONSISTENCY TRACKER + DAILY AGENDA
+           ════════════════════════════════════════════ -->
+      <div class="db-mid">
+
+        <!-- Daily Agenda Card -->
+        <div class="lav-card daily-agenda-card">
+          <h3>Today's Agenda</h3>
+          <div id="daily-agenda-tasks" class="dac-tasks">
+            <!-- FIX 8: redesigned empty state; JS overwrites this when data loads -->
+            <div class="dac-empty" id="dac-empty-state">
+              <div class="dac-empty-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7C6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <p>No study plan yet — create one to unlock your daily agenda</p>
+              <a href="/study-planner" class="dac-prompt-btn">Create Study Plan</a>
+            </div>
           </div>
         </div>
       </div>
-      
-      <!-- Score Report Banner -->
-      <div class="score-report-banner">
-        <div class="srb-left">
-          <span class="srb-mascot">🤖</span>
-          <p class="srb-text">Got your May SAT score? Turn your score report into a personalized study plan</p>
+
+      <!-- ════════════════════════════════════════════
+           SECTION 3 — ANALYTICS STRIP
+           ════════════════════════════════════════════ -->
+      <div class="db-analytics">
+        <div class="db-analytics-header">
+          <h2>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C6FE0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Analytics
+          </h2>
+          <button class="das-view-all" onclick="show('analytics')">View all analytics →</button>
         </div>
-        <button class="srb-upload-btn" onclick="uploadScoreReport()">Upload score report</button>
-      </div>
-      
-      <!-- Analytics Section -->
-      <div class="dash-analytics-section">
-        <div class="das-header">
-          <h2>📊 Analytics</h2>
-          <button class="das-view-all" onclick="show('analytics')">View all analytics</button>
-        </div>
+
+        <!-- FIX 7: clean SVG icons, title case labels, no watermarks -->
         <div class="das-grid">
-          <!-- Card 1 -->
-          <div class="das-card watermark-check">
+          <!-- Card 1: Questions Attempted -->
+          <div class="das-card">
+            <div class="das-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </div>
             <span class="das-card-label">Questions Attempted</span>
-            <strong class="das-card-val">6</strong>
+            <strong class="das-card-val" id="stat-attempted">6</strong>
           </div>
-          <!-- Card 2 -->
-          <div class="das-card watermark-bars">
+
+          <!-- Card 2: Current Accuracy -->
+          <div class="das-card">
+            <div class="das-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="9 11 12 14 22 4"/></svg>
+            </div>
             <span class="das-card-label">Current Accuracy</span>
-            <strong class="das-card-val text-green">100%</strong>
+            <strong class="das-card-val green" id="stat-accuracy">100%</strong>
           </div>
-          <!-- Card 3 -->
-          <div class="das-card has-btn">
+
+          <!-- Card 3: Saved Questions -->
+          <div class="das-card">
+            <div class="das-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </div>
             <span class="das-card-label">Saved Questions</span>
-            <strong class="das-card-val">0</strong>
+            <strong class="das-card-val" id="stat-saved">0</strong>
             <button class="das-card-btn" onclick="show('exams')">View Saved</button>
           </div>
-          <!-- Card 4 -->
-          <div class="das-card has-btn">
+
+          <!-- Card 4: Recent Errors -->
+          <div class="das-card">
+            <div class="das-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </div>
             <span class="das-card-label">Recent Errors</span>
-            <strong class="das-card-val">0</strong>
+            <strong class="das-card-val" id="stat-errors">0</strong>
             <button class="das-card-btn" onclick="show('review')">View Errors</button>
           </div>
         </div>
       </div>
-      
-      <!-- Today's Study Plan Section -->
-      <div class="dash-study-plan-section">
-        <h2> Today's Study Plan</h2>
-        <div class="dsps-grid">
-          <!-- Left Large Card -->
-          <div class="dsps-create-card">
-            <!-- Cute CSS Mascot -->
-            <div class="cute-mascots-box">
-              <div class="mascot pink">
-                <div class="mascot-eye"></div>
-                <div class="mascot-eye"></div>
-              </div>
-              <div class="mascot green">
-                <div class="mascot-eye"></div>
-                <div class="mascot-eye"></div>
-              </div>
-              <div class="mascot blue">
-                <div class="mascot-eye"></div>
-                <div class="mascot-eye"></div>
-              </div>
-            </div>
-            <h3>Create a study plan</h3>
-            <p>Get a personalized study plan based on your test date and skill level.</p>
-            <button class="btn-create-plan-solid" onclick="createStudyPlan()">Create my study plan</button>
-          </div>
-          
-          <!-- Right Stats Grid -->
-          <div class="dsps-stats-col">
-            <!-- Card 1: Current Score -->
-            <div class="dsps-score-card">
-              <div class="dsps-score-info">
-                <span>Current Score</span>
-                <strong>1220</strong>
-              </div>
-              <div class="dsps-target-box">
-                <div class="dsps-target-vector">🎯</div>
-              </div>
-            </div>
-            
-            <!-- Cards row (Goal Score & Days until exam) -->
-            <div class="dsps-small-row">
-              <div class="dsps-small-card purple-bg">
-                <span>Goal Score</span>
-                <strong>1560</strong>
-              </div>
-              <div class="dsps-small-card yellow-bg">
-                <span>Days Until Exam</span>
-                <strong>190</strong>
-              </div>
-            </div>
-          </div>
+
+      <!-- ════════════════════════════════════════════
+           SECTION 4 — TODAY'S STUDY PLAN
+           ════════════════════════════════════════════ -->
+      <div class="db-study-plan dash-study-plan-section">
+        <h2>Today's Study Plan</h2>
+
+        <!-- Empty state — shown when no plan exists -->
+        <div class="dsps-create-card dsps-empty-card">
+          <div class="dsps-empty-icon">📅</div>
+          <h3>Create a study plan</h3>
+          <p>Get a personalized study plan based on your test date and skill level. Practice smarter, not harder.</p>
+          <button class="btn-create-plan-solid" onclick="createStudyPlan()">Create my study plan</button>
         </div>
       </div>
-    </section>
+
+    </section><!-- /#v-dashboard -->
+
 
     <!-- ══ VIEW: PAST EXAMS ══ -->
-    <!-- ══ VIEW: PAST EXAMS (EXACT MOCKUP MATCH) ══ -->
     <section id="v-exams" class="view">
-      
+
       <!-- Top header layout -->
       <div class="exams-header-bar">
         <div class="ehb-left">
@@ -289,7 +1304,7 @@
           </div>
           <p class="ehb-quote">"Pick your subject. Master one module a time. Save words. Get better."</p>
         </div>
-        
+
         <!-- Theme Switcher and Search -->
         <div class="ehb-right">
           <div class="theme-toggle-row">
@@ -307,32 +1322,31 @@
       </div>
 
       <div class="exams-columns-layout">
-        
+
         <!-- COLUMN 1: English & Reading -->
         <div class="ecl-column">
           <div class="ecl-header">
             <span class="ecl-icon">📖</span>
             <div>
-              <h3>English & Reading</h3>
-              <p>Focus on comprehension & language</p>
+              <h3>English &amp; Reading</h3>
+              <p>Focus on comprehension &amp; language</p>
             </div>
           </div>
-          
           <div class="ecl-cards-list" id="english-list"></div>
         </div>
-        
+
         <!-- COLUMN 2: Math -->
         <div class="ecl-column">
           <div class="ecl-header">
             <span class="ecl-icon">🧮</span>
             <div>
               <h3>Math</h3>
-              <p>Master modules 1 & 2</p>
+              <p>Master modules 1 &amp; 2</p>
             </div>
           </div>
           <div class="ecl-cards-list" id="math-list"></div>
         </div>
-        
+
         <!-- COLUMN 3: Vocabulary Bank -->
         <div class="ecl-column">
           <div class="ecl-header">
@@ -342,9 +1356,9 @@
               <p id="vocab-count">5 words mastered • 15 to go</p>
             </div>
           </div>
-          
+
           <div class="ecl-cards-list">
-            
+
             <!-- Daily Challenge Card -->
             <div class="daily-challenge-card">
               <div class="dcc-info">
@@ -354,15 +1368,13 @@
               </div>
               <div class="dcc-bulb">💡</div>
             </div>
-            
+
             <!-- Dynamic Words list -->
-            <div id="vocab-list" class="vocab-words-feed">
-              <!-- JS will populate word cards with customized icons -->
-            </div>
-            
+            <div id="vocab-list" class="vocab-words-feed"></div>
+
             <!-- Custom Add word form -->
             <button class="btn-add-word-solid" id="btn-add" onclick="toggleAddForm()">+ ADD NEW WORD</button>
-            
+
             <div class="add-form-glass" id="add-form" style="display:none">
               <input type="text" id="f-word" placeholder="Word *" />
               <input type="text" id="f-pos"  placeholder="Part of speech (adj, noun...)" />
@@ -373,20 +1385,20 @@
                 <button class="btn-cancel-word" onclick="toggleAddForm()">Cancel</button>
               </div>
             </div>
-            
+
             <!-- Quiz bottom banner card -->
             <div class="quiz-banner-card" onclick="launchQuiz()">
               <div class="qbc-icon">📚</div>
               <div class="qbc-info">
                 <strong>Vocabulary Quiz</strong>
-                <p>Challenge yourself with flashcards & learn faster</p>
+                <p>Challenge yourself with flashcards &amp; learn faster</p>
               </div>
               <div class="qbc-arrow">➔</div>
             </div>
-            
+
           </div>
         </div>
-        
+
       </div>
     </section>
 
@@ -489,14 +1501,14 @@
     <!-- ══ VIEW: ANALYTICS ══ -->
     <section id="v-analytics" class="view">
       <div class="analytics-layout">
-        
-        <!-- LEFT PANEL (Know your weak spots) -->
+
+        <!-- LEFT PANEL -->
         <div class="alc-card alc-main">
           <div class="alc-header">
             <h2>Know your weak spots</h2>
             <p>See weekly activity, accuracy by topic, and time share by difficulty so you know exactly what to practice.</p>
           </div>
-          
+
           <!-- CHART 1: Stacked Bar Chart -->
           <div class="weekly-activity-box">
             <div class="y-axis-labels">
@@ -506,20 +1518,14 @@
               <span>20</span>
               <span>0</span>
             </div>
-            <div class="bars-container" id="stacked-bars-container">
-              <!-- JS will populate beautifully designed stacked bars here -->
-            </div>
+            <div class="bars-container" id="stacked-bars-container"></div>
           </div>
-          
-          <!-- MIDDLE SECTION: Accuracy by Topic (2 columns) -->
+
+          <!-- Accuracy by Topic -->
           <div class="accuracy-topics-grid">
-            <!-- Column 1: English & Reading -->
             <div class="at-col">
               <div class="topic-row">
-                <div class="tr-info">
-                  <strong>Information and Ideas</strong>
-                  <small>48 attempts</small>
-                </div>
+                <div class="tr-info"><strong>Information and Ideas</strong><small>48 attempts</small></div>
                 <div class="tr-slider-wrapper">
                   <div class="tr-slider-track">
                     <div class="tr-slider-fill red-fill" style="width: 40%"></div>
@@ -530,12 +1536,8 @@
                 </div>
                 <span class="tr-pct">72%</span>
               </div>
-              
               <div class="topic-row">
-                <div class="tr-info">
-                  <strong>Craft and Structure</strong>
-                  <small>41 attempts</small>
-                </div>
+                <div class="tr-info"><strong>Craft and Structure</strong><small>41 attempts</small></div>
                 <div class="tr-slider-wrapper">
                   <div class="tr-slider-track">
                     <div class="tr-slider-fill red-fill" style="width: 50%"></div>
@@ -546,12 +1548,8 @@
                 </div>
                 <span class="tr-pct">58%</span>
               </div>
-              
               <div class="topic-row">
-                <div class="tr-info">
-                  <strong>Standard English Con...</strong>
-                  <small>36 attempts</small>
-                </div>
+                <div class="tr-info"><strong>Standard English Con...</strong><small>36 attempts</small></div>
                 <div class="tr-slider-wrapper">
                   <div class="tr-slider-track">
                     <div class="tr-slider-fill red-fill" style="width: 20%"></div>
@@ -563,14 +1561,9 @@
                 <span class="tr-pct">81%</span>
               </div>
             </div>
-            
-            <!-- Column 2: Math -->
             <div class="at-col">
               <div class="topic-row">
-                <div class="tr-info">
-                  <strong>Algebra</strong>
-                  <small>52 attempts</small>
-                </div>
+                <div class="tr-info"><strong>Algebra</strong><small>52 attempts</small></div>
                 <div class="tr-slider-wrapper">
                   <div class="tr-slider-track">
                     <div class="tr-slider-fill red-fill" style="width: 30%"></div>
@@ -581,12 +1574,8 @@
                 </div>
                 <span class="tr-pct">64%</span>
               </div>
-              
               <div class="topic-row">
-                <div class="tr-info">
-                  <strong>Advanced Math</strong>
-                  <small>38 attempts</small>
-                </div>
+                <div class="tr-info"><strong>Advanced Math</strong><small>38 attempts</small></div>
                 <div class="tr-slider-wrapper">
                   <div class="tr-slider-track">
                     <div class="tr-slider-fill red-fill" style="width: 45%"></div>
@@ -597,12 +1586,8 @@
                 </div>
                 <span class="tr-pct">47%</span>
               </div>
-              
               <div class="topic-row">
-                <div class="tr-info">
-                  <strong>Problem-Solving and ...</strong>
-                  <small>28 attempts</small>
-                </div>
+                <div class="tr-info"><strong>Problem-Solving and ...</strong><small>28 attempts</small></div>
                 <div class="tr-slider-wrapper">
                   <div class="tr-slider-track">
                     <div class="tr-slider-fill red-fill" style="width: 20%"></div>
@@ -615,10 +1600,9 @@
               </div>
             </div>
           </div>
-          
-          <!-- BOTTOM SECTION: Time share by difficulty (2 Donut charts & legends) -->
+
+          <!-- Donut charts -->
           <div class="donut-shares-grid">
-            <!-- Donut 1 -->
             <div class="donut-box">
               <div class="donut-wrapper">
                 <svg viewBox="0 0 36 36" class="circular-chart">
@@ -627,10 +1611,7 @@
                   <path class="circle orange-seg" stroke-dasharray="40, 100" stroke-dashoffset="-25" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                   <path class="circle red-seg" stroke-dasharray="35, 100" stroke-dashoffset="-65" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                 </svg>
-                <div class="donut-center">
-                  <strong>2m 12s</strong>
-                  <small>avg</small>
-                </div>
+                <div class="donut-center"><strong>2m 12s</strong><small>avg</small></div>
               </div>
               <div class="donut-legend">
                 <div class="dl-item"><span class="bullet bullet-green"></span> Easy <span class="dl-val">46s <small>avg 1m 11s</small></span></div>
@@ -638,8 +1619,6 @@
                 <div class="dl-item"><span class="bullet bullet-red"></span> Hard <span class="dl-val">2m 52s <small>avg 2m 23s</small></span></div>
               </div>
             </div>
-            
-            <!-- Donut 2 -->
             <div class="donut-box">
               <div class="donut-wrapper">
                 <svg viewBox="0 0 36 36" class="circular-chart">
@@ -648,10 +1627,7 @@
                   <path class="circle orange-seg" stroke-dasharray="35, 100" stroke-dashoffset="-30" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                   <path class="circle red-seg" stroke-dasharray="35, 100" stroke-dashoffset="-65" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                 </svg>
-                <div class="donut-center">
-                  <strong>1m 58s</strong>
-                  <small>avg</small>
-                </div>
+                <div class="donut-center"><strong>1m 58s</strong><small>avg</small></div>
               </div>
               <div class="donut-legend">
                 <div class="dl-item"><span class="bullet bullet-green"></span> Easy <span class="dl-val">55s <small>avg 1m 8s</small></span></div>
@@ -661,75 +1637,37 @@
             </div>
           </div>
         </div>
-        
-        <!-- RIGHT PANEL (Pacing & Heatmap activity) -->
+
+        <!-- RIGHT PANEL -->
         <div class="alc-sidebar">
-          
+
           <!-- Pacing Card -->
           <div class="alc-card pacing-card">
             <div class="pacing-chart-box">
               <div class="pacing-y-labels">
-                <span>1m</span>
-                <span>45s</span>
-                <span>30s</span>
-                <span>15s</span>
-                <span>0s</span>
+                <span>1m</span><span>45s</span><span>30s</span><span>15s</span><span>0s</span>
               </div>
               <div class="pacing-bars-container">
-                <!-- Platform Range Pill bars with "Your time" hollow white dots -->
-                <div class="pacing-bar-wrapper">
-                  <div class="pacing-track-range" style="bottom: 30%; height: 50%">
-                    <div class="pacing-user-dot" style="bottom: 40%"></div>
-                  </div>
-                </div>
-                <div class="pacing-bar-wrapper">
-                  <div class="pacing-track-range" style="bottom: 25%; height: 55%">
-                    <div class="pacing-user-dot" style="bottom: 35%"></div>
-                  </div>
-                </div>
-                <div class="pacing-bar-wrapper">
-                  <div class="pacing-track-range" style="bottom: 35%; height: 45%">
-                    <div class="pacing-user-dot" style="bottom: 60%"></div>
-                  </div>
-                </div>
-                <div class="pacing-bar-wrapper">
-                  <div class="pacing-track-range" style="bottom: 15%; height: 65%">
-                    <div class="pacing-user-dot" style="bottom: 70%"></div>
-                  </div>
-                </div>
-                <div class="pacing-bar-wrapper">
-                  <div class="pacing-track-range" style="bottom: 40%; height: 35%">
-                    <div class="pacing-user-dot" style="bottom: 20%"></div>
-                  </div>
-                </div>
-                <div class="pacing-bar-wrapper">
-                  <div class="pacing-track-range" style="bottom: 30%; height: 50%">
-                    <div class="pacing-user-dot" style="bottom: 35%"></div>
-                  </div>
-                </div>
-                <div class="pacing-bar-wrapper">
-                  <div class="pacing-track-range" style="bottom: 10%; height: 80%">
-                    <div class="pacing-user-dot" style="bottom: 90%"></div>
-                  </div>
-                </div>
-                <div class="pacing-bar-wrapper">
-                  <div class="pacing-track-range" style="bottom: 30%; height: 45%">
-                    <div class="pacing-user-dot" style="bottom: 50%"></div>
-                  </div>
-                </div>
+                <div class="pacing-bar-wrapper"><div class="pacing-track-range" style="bottom: 30%; height: 50%"><div class="pacing-user-dot" style="bottom: 40%"></div></div></div>
+                <div class="pacing-bar-wrapper"><div class="pacing-track-range" style="bottom: 25%; height: 55%"><div class="pacing-user-dot" style="bottom: 35%"></div></div></div>
+                <div class="pacing-bar-wrapper"><div class="pacing-track-range" style="bottom: 35%; height: 45%"><div class="pacing-user-dot" style="bottom: 60%"></div></div></div>
+                <div class="pacing-bar-wrapper"><div class="pacing-track-range" style="bottom: 15%; height: 65%"><div class="pacing-user-dot" style="bottom: 70%"></div></div></div>
+                <div class="pacing-bar-wrapper"><div class="pacing-track-range" style="bottom: 40%; height: 35%"><div class="pacing-user-dot" style="bottom: 20%"></div></div></div>
+                <div class="pacing-bar-wrapper"><div class="pacing-track-range" style="bottom: 30%; height: 50%"><div class="pacing-user-dot" style="bottom: 35%"></div></div></div>
+                <div class="pacing-bar-wrapper"><div class="pacing-track-range" style="bottom: 10%; height: 80%"><div class="pacing-user-dot" style="bottom: 90%"></div></div></div>
+                <div class="pacing-bar-wrapper"><div class="pacing-track-range" style="bottom: 30%; height: 45%"><div class="pacing-user-dot" style="bottom: 50%"></div></div></div>
               </div>
             </div>
             <div class="pacing-legend">
               <span><span class="legend-rect"></span> Platform range</span>
               <span><span class="legend-circle"></span> Your time</span>
             </div>
-            
             <div class="pacing-info">
               <h3>See how you pace</h3>
               <p>Compare your pacing to thousands of other students on the platform to see where you stand.</p>
             </div>
           </div>
-          
+
           <!-- Activity Heatmap Card -->
           <div class="alc-card heatmap-card">
             <div class="heatmap-calendars-row">
@@ -762,7 +1700,7 @@
               <p>See how daily practice adds up over time.</p>
             </div>
           </div>
-          
+
         </div>
       </div>
     </section>
@@ -774,16 +1712,14 @@
         <p class="page-sub">Understand every wrong answer deeply</p>
       </div>
       <div class="review-grid">
-        <!-- List -->
         <div class="review-list" id="review-list"></div>
-        <!-- Detail -->
         <div class="review-detail" id="review-detail">
           <div class="rd-placeholder">👈 Select a mistake to review</div>
         </div>
       </div>
     </section>
 
-    <!-- ══ VIEW: ASK PREPPY AI (GEMINI-POWERED) ══ -->
+    <!-- ══ VIEW: ASK PREPPY AI ══ -->
     <section id="v-chat" class="view">
       <div class="chat-wrapper">
         <div class="chat-header-bar">
@@ -798,7 +1734,7 @@
             <span class="chb-model-badge">Gemini 1.5 Pro</span>
           </div>
         </div>
-        
+
         <div class="chat-box-body" id="chat-box-body">
           <div class="chat-message preppy">
             <div class="cm-avatar">🤖</div>
@@ -808,7 +1744,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="chat-input-area">
           <textarea id="chat-msg-input" placeholder="Ask Preppy a question, e.g. Solve: x^2 - 6x + 9 = 0 step-by-step..." rows="2" onkeydown="handleChatKey(event)"></textarea>
           <button class="chat-send-btn" id="chat-send-btn" onclick="sendChatMessage()">Send ➔</button>
@@ -831,5 +1767,103 @@
 
   <script src="june2024Data.js"></script>
   <script src="app.js"></script>
+
+  <!-- Dashboard data loader — wires real API data into the new UI -->
+  <script>
+    // ─── Load dashboard data from /api/dashboard ───────────────────────
+    async function loadDashboardData() {
+      try {
+        const res = await fetch('/api/dashboard');
+        if (!res.ok) throw new Error('Dashboard fetch failed');
+        const data = await res.json();
+
+        // --- Score cards ---
+        const user = data.user;
+
+        // Target Score Card
+        const targetEl = document.getElementById('target-score-val');
+        const targetSub = document.getElementById('target-score-sub');
+        if (targetEl) {
+          if (user.goalScore) {
+            targetEl.textContent = user.goalScore;
+            if (targetSub) targetSub.textContent = "Your goal";
+          } else {
+            targetEl.innerHTML = `<a href="/study-planner" style="color:var(--lav-accent);font-size:16px;text-decoration:none;">Set your target →</a>`;
+            if (targetSub) targetSub.textContent = "";
+          }
+        }
+
+        // Latest Practice Score Card
+        const latestEl = document.getElementById('latest-score-val');
+        const rwPill = document.getElementById('latest-rw-pill');
+        const mathPill = document.getElementById('latest-math-pill');
+        const dateSpan = document.getElementById('latest-score-date');
+        if (latestEl) {
+          if (user.currentScore) {
+            const currentScore = user.currentScore;
+            const rwScore = Math.round(currentScore * 0.508);
+            const mathScore = currentScore - rwScore;
+            
+            latestEl.textContent = currentScore;
+            if (rwPill) { rwPill.textContent = `R&W: ${rwScore}`; rwPill.style.display = 'inline-block'; }
+            if (mathPill) { mathPill.textContent = `Math: ${mathScore}`; mathPill.style.display = 'inline-block'; }
+            
+            const practiceDate = user.lastActiveDate || new Date().toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
+            if (dateSpan) dateSpan.textContent = `· ${practiceDate}`;
+          } else {
+            latestEl.innerHTML = `<span style="font-size:16px;color:var(--lav-gray);font-weight:600;">Start practicing to see your score</span>`;
+            if (rwPill) rwPill.style.display = 'none';
+            if (mathPill) mathPill.style.display = 'none';
+            if (dateSpan) dateSpan.textContent = '';
+          }
+        }
+
+        // --- Analytics cards ---
+        const analytics = data.analytics || {};
+        const attemptedEl = document.getElementById('stat-attempted');
+        const accuracyEl  = document.getElementById('stat-accuracy');
+        const savedEl     = document.getElementById('stat-saved');
+        const errorsEl    = document.getElementById('stat-errors');
+        if (attemptedEl) attemptedEl.textContent = analytics.questionsAttempted ?? 0;
+        if (accuracyEl)  accuracyEl.textContent  = (analytics.currentAccuracy ?? 100) + '%';
+        if (savedEl)     savedEl.textContent     = analytics.savedQuestions ?? 0;
+        if (errorsEl)    errorsEl.textContent    = analytics.recentErrors ?? 0;
+
+        // FIX 1: countdown with expired-date handling
+        const rawDate = user.examDate || '2026-12-05';
+        // Parse as midnight local time to avoid timezone off-by-one
+        const [ey, em, ed] = rawDate.split('-').map(Number);
+        const examDate = new Date(ey, em - 1, ed);
+        const todayMidnight = new Date();
+        todayMidnight.setHours(0, 0, 0, 0);
+        const diffMs   = examDate - todayMidnight;
+        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+        const examLabel = examDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        const pillEl = document.getElementById('hero-countdown-pill');
+        if (pillEl) {
+          if (diffDays < 0) {
+            // Exam date has passed
+            pillEl.innerHTML = `<span class="cp-icon">📅</span><span>Your SAT date has passed — update it in <a href="/study-planner" style="color:var(--lav-accent);font-weight:700;">Study Planner</a></span>`;
+          } else if (diffDays === 0) {
+            pillEl.innerHTML = `<span class="cp-icon">🎯</span><span><strong>Today is your SAT!</strong> Good luck — ${examLabel}</span>`;
+          } else {
+            pillEl.innerHTML = `<span class="cp-icon">⏰</span><span><strong>${diffDays} day${diffDays !== 1 ? 's' : ''}</strong> until your SAT — ${examLabel}</span>`;
+          }
+        }
+
+      } catch (err) {
+        console.warn('Dashboard data load error:', err);
+        // Fallback: keep hardcoded placeholder values shown in HTML
+        const pillEl = document.getElementById('hero-countdown-pill');
+        if (pillEl) {
+          pillEl.innerHTML = `<span class="cp-icon">⏰</span><span>Set your exam date in Settings</span>`;
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDashboardData();
+    });
+  </script>
 </body>
 </html>
