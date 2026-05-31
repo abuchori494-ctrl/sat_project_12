@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OnePrep — Bug Report</title>
+  <meta name="description" content="Found a bug on OnePrep? Let us know so we can fix it quickly. Submit a detailed bug report and help us improve the platform." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background: #f0f4f8; font-family: 'Outfit', 'Plus Jakarta Sans', 'Inter', sans-serif; }
+
+    .page-wrap {
+      margin-left: 240px;
+      min-height: 100vh;
+      padding: 40px;
+      background: #f0f4f8;
+    }
+
+    .page-hero {
+      background: linear-gradient(135deg, #0f3446 0%, #1a3a5c 60%, #2d1b69 100%);
+      border-radius: 24px;
+      padding: 40px 48px;
+      color: #fff;
+      margin-bottom: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; top: -60px; right: -60px;
+      width: 260px; height: 260px;
+      border-radius: 50%; background: rgba(255,255,255,0.04);
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);
+      padding: 5px 14px; border-radius: 50px; font-size: 12px; font-weight: 700; margin-bottom: 14px;
+    }
+    .page-hero h1 { font-size: 34px; font-weight: 800; margin-bottom: 8px; }
+    .page-hero p  { font-size: 14px; opacity: 0.8; max-width: 500px; line-height: 1.6; }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* ── Form Card ── */
+    .form-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 40px;
+      border: 1px solid #e8eef3;
+      box-shadow: 0 2px 20px rgba(15,52,70,0.07);
+    }
+
+    .form-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+      margin-bottom: 16px;
+      margin-top: 28px;
+      padding-top: 28px;
+      border-top: 1px solid #f1f5f9;
+    }
+    .form-section-title:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+
+    .form-row { margin-bottom: 20px; }
+    .form-row label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 8px;
+    }
+    .required { color: #ef4444; }
+
+    .form-row input[type="text"],
+    .form-row input[type="email"],
+    .form-row input[type="url"],
+    .form-row select,
+    .form-row textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #0f3446;
+      font-family: inherit;
+      background: #f8fafc;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .form-row input:focus,
+    .form-row select:focus,
+    .form-row textarea:focus {
+      border-color: #3b82f6;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+    }
+    .form-row select { cursor: pointer; }
+    .form-row textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+
+    .form-row .hint {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 6px;
+    }
+
+    /* Severity selector */
+    .severity-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .sev-option { display: none; }
+    .sev-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 8px;
+      border: 2px solid #e2e8f0;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      text-align: center;
+    }
+    .sev-label .sev-emoji { font-size: 22px; }
+    .sev-option:checked + .sev-label {
+      border-color: #0f3446;
+      background: #f0f9ff;
+      color: #0f3446;
+    }
+
+    /* Steps to reproduce */
+    .steps-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .step-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .step-num {
+      width: 28px; height: 28px;
+      background: #0f3446;
+      color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .step-row input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      background: #f8fafc;
+      outline: none;
+      transition: all 0.2s;
+      color: #0f3446;
+    }
+    .step-row input:focus { border-color: #3b82f6; background: #fff; }
+    .btn-add-step {
+      background: none;
+      border: 2px dashed #e2e8f0;
+      border-radius: 10px;
+      padding: 10px;
+      color: #94a3b8;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s;
+    }
+    .btn-add-step:hover { border-color: #0f3446; color: #0f3446; }
+
+    /* Submit button */
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 28px;
+      letter-spacing: 0.02em;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(239,68,68,0.3); }
+
+    /* Success state */
+    .success-overlay {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 40px;
+    }
+    .success-overlay.show { display: flex; }
+    .form-card.submitted .form-inner { display: none; }
+    .form-card.submitted .success-overlay { display: flex; }
+    .success-icon { font-size: 56px; margin-bottom: 20px; animation: bounceIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes bounceIn { from { transform: scale(0); } to { transform: scale(1); } }
+    .success-title { font-size: 24px; font-weight: 800; color: #0f3446; margin-bottom: 10px; }
+    .success-sub { font-size: 14px; color: #64748b; line-height: 1.6; max-width: 380px; }
+    .btn-new-report {
+      margin-top: 24px;
+      padding: 12px 28px;
+      background: #0f3446;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-new-report:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(15,52,70,0.25); }
+
+    /* ── Sidebar ── */
+    .side-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .side-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid #e8eef3;
+      box-shadow: 0 2px 12px rgba(15,52,70,0.05);
+    }
+    .side-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f3446;
+      margin-bottom: 14px;
+    }
+
+    .tip-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .tip-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 13px;
+      color: #475569;
+      line-height: 1.5;
+    }
+    .tip-item .tip-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .status-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+    .status-row .s-name { color: #475569; font-weight: 600; }
+    .s-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 50px;
+    }
+    .s-badge.ok     { background: #d1fae5; color: #065f46; }
+    .s-badge.issue  { background: #fee2e2; color: #991b1b; }
+    .s-badge.maint  { background: #fef9c3; color: #713f12; }
+
+    /* Toast */
+    .toast-msg {
+      position: fixed; bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f3446; color: #fff;
+      padding: 12px 24px; border-radius: 50px;
+      font-weight: 700; font-size: 14px;
+      box-shadow: 0 8px 32px rgba(15,52,70,0.3);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      z-index: 9999;
+    }
+    .toast-msg.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 1000px) {
+      .content-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .page-wrap { margin-left: 0; padding: 20px; }
+      .severity-grid { grid-template-columns: repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body class="light" id="app-body">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <nav id="sidebar">
+    <div class="logo" onclick="window.location.href='/'">
+      <span class="logo-icon">🤖</span>
+      <span class="logo-text">OnePrep</span>
+    </div>
+    <select class="exam-selector"><option>SAT</option><option>ACT</option></select>
+    <ul class="nav-links">
+      <li><a href="/">🏠 Home</a></li>
+      <li><a href="/">🤖 Ask Preppy AI</a></li>
+      <li><a href="/study-planner">📅 Study Planner</a></li>
+      <li><a href="/analytics">📊 Analytics <span class="badge-new">New</span></a></li>
+      <li class="section-label">PRACTICE</li>
+      <li><a href="/question-bank">🔲 Question Bank</a></li>
+      <li><a href="/question-rush">⚡ Question Rush</a></li>
+      <li><a href="/challenge">🎯 Challenge Questions</a></li>
+      <li><a href="/predicted-tests">📝 Predicted Tests</a></li>
+      <li><a href="/vocab">📚 Vocab</a></li>
+      <li class="section-label">PROGRESS</li>
+      <li><a href="/">🔖 Saved</a></li>
+      <li><a href="/">❌ Mistakes Log</a></li>
+      <li class="section-label">COLLEGE</li>
+      <li><a href="/colleges">🎓 Browse Colleges</a></li>
+      <li class="section-label">SUPPORT</li>
+      <li><a href="chat-support.html">💬 Chat With Support</a></li>
+      <li><a href="bug-report.html" class="active">🐛 Bug Report</a></li>
+      <li><a href="feedback.html">⭐ Give Feedback</a></li>
+      <li class="section-label">OPPORTUNITIES</li>
+      <li><a href="tutor-apply.html">🧑‍🏫 Apply As A Tutor</a></li>
+      <li><a href="creator-program.html">🎨 Creator Program</a></li>
+      <li class="section-label">RESOURCES</li>
+      <li><a href="score-calculator.html">🧮 Score Calculator</a></li>
+      <li><a href="blog.html">📰 Blog</a></li>
+      <li class="section-label">SOCIAL</li>
+      <li><a href="https://discord.gg" target="_blank">🎮 Join Discord</a></li>
+      <li><a href="https://instagram.com" target="_blank">📸 Instagram</a></li>
+    </ul>
+    <div class="sidebar-bottom">
+      <button onclick="document.getElementById('app-body').classList.toggle('dark')">🌙 Switch To Dark</button>
+      <a href="#">⬆️ Upgrade</a>
+      <div class="user-profile">
+        <span class="avatar">A</span>
+        <span>Abdullah Abdus...</span>
+        <span>⚙️</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ MAIN ═══ -->
+  <div class="page-wrap">
+
+    <div class="page-hero">
+      <div class="hero-badge">🐛 Bug Report</div>
+      <h1>Report a Bug</h1>
+      <p>Found something broken? Help us squash it! Detailed bug reports help us fix issues faster and improve your experience.</p>
+    </div>
+
+    <div class="content-grid">
+
+      <!-- Form -->
+      <div class="form-card" id="bug-form-card">
+        <div class="form-inner">
+
+          <div class="form-section-title">📋 Bug Information</div>
+
+          <div class="form-row">
+            <label for="bug-title">Bug Title <span class="required">*</span></label>
+            <input type="text" id="bug-title" placeholder="Brief description of the issue" required />
+          </div>
+
+          <div class="form-row">
+            <label>Severity <span class="required">*</span></label>
+            <div class="severity-grid">
+              <div>
+                <input type="radio" name="severity" id="sev-low" value="low" class="sev-option" />
+                <label class="sev-label" for="sev-low">
+                  <span class="sev-emoji">🟢</span>Low
+                </label>
+              </div>
+              <div>
+                <input type="radio" name="severity" id="sev-medium" value="medium" class="sev-option" checked />
+                <label class="sev-label" for="sev-medium">
+                  <span class="sev-emoji">🟡</span>Medium
+                </label>
+              </div>
+              <div>
+                <input type="radio" name="severity" id="sev-high" value="high" class="sev-option" />
+                <label class="sev-label" for="sev-high">
+                  <span class="sev-emoji">🔴</span>High
+                </label>
+              </div>
+              <div>
+                <input type="radio" name="severity" id="sev-critical" value="critical" class="sev-option" />
+                <label class="sev-label" for="sev-critical">
+                  <span class="sev-emoji">💀</span>Critical
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="bug-page">Page / Feature <span class="required">*</span></label>
+            <select id="bug-page">
+              <option value="">Select the affected page…</option>
+              <option>Dashboard / Home</option>
+              <option>Question Bank</option>
+              <option>Question Rush</option>
+              <option>Study Planner</option>
+              <option>Analytics</option>
+              <option>Vocab Practice</option>
+              <option>Browse Colleges</option>
+              <option>Score Calculator</option>
+              <option>Ask Preppy AI</option>
+              <option>Login / Account</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="bug-desc">What happened? <span class="required">*</span></label>
+            <textarea id="bug-desc" rows="4" placeholder="Describe what went wrong. What did you see vs. what did you expect to see?"></textarea>
+          </div>
+
+          <div class="form-section-title">🔄 Steps to Reproduce</div>
+
+          <div class="steps-wrap" id="steps-wrap">
+            <div class="step-row">
+              <div class="step-num">1</div>
+              <input type="text" placeholder="e.g. Go to Question Bank" />
+            </div>
+            <div class="step-row">
+              <div class="step-num">2</div>
+              <input type="text" placeholder="e.g. Click 'Start Practice'" />
+            </div>
+            <div class="step-row">
+              <div class="step-num">3</div>
+              <input type="text" placeholder="e.g. The page goes blank" />
+            </div>
+          </div>
+          <button class="btn-add-step" onclick="addStep()">+ Add Another Step</button>
+
+          <div class="form-section-title">🖥️ Your Environment</div>
+
+          <div class="form-row">
+            <label for="bug-browser">Browser</label>
+            <select id="bug-browser">
+              <option>Chrome</option><option>Firefox</option><option>Safari</option>
+              <option>Edge</option><option>Other</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="bug-device">Device Type</label>
+            <select id="bug-device">
+              <option>Desktop / Laptop</option>
+              <option>Tablet</option>
+              <option>Mobile Phone</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="bug-url">Page URL (optional)</label>
+            <input type="url" id="bug-url" placeholder="https://oneprep.io/..." />
+          </div>
+
+          <div class="form-row">
+            <label for="bug-email">Your Email (for follow-up)</label>
+            <input type="email" id="bug-email" placeholder="you@example.com" />
+            <div class="hint">Optional — we'll only contact you if we need more info.</div>
+          </div>
+
+          <button class="btn-submit" onclick="submitBug()">🐛 Submit Bug Report</button>
+        </div>
+
+        <div class="success-overlay" id="success-overlay">
+          <div class="success-icon">✅</div>
+          <div class="success-title">Bug Report Submitted!</div>
+          <div class="success-sub">Thank you! Our engineering team will investigate this issue. We'll prioritize it based on severity and notify you if you provided your email.</div>
+          <button class="btn-new-report" onclick="resetForm()">Submit Another Report</button>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="side-cards">
+        <div class="side-card">
+          <div class="side-card-title">💡 Tips for a Good Bug Report</div>
+          <div class="tip-list">
+            <div class="tip-item"><span class="tip-icon">🎯</span> Be specific — include exact steps so we can reproduce the bug.</div>
+            <div class="tip-item"><span class="tip-icon">📸</span> Screenshots help a lot. Upload them if possible.</div>
+            <div class="tip-item"><span class="tip-icon">🔄</span> Check if the bug happens consistently or only sometimes.</div>
+            <div class="tip-item"><span class="tip-icon">🌐</span> Mention your browser — bugs often behave differently.</div>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <div class="side-card-title">🖥️ Platform Status</div>
+          <div class="status-list">
+            <div class="status-row"><span class="s-name">Question Bank</span><span class="s-badge ok">Operational</span></div>
+            <div class="status-row"><span class="s-name">Analytics</span><span class="s-badge ok">Operational</span></div>
+            <div class="status-row"><span class="s-name">AI Tutor</span><span class="s-badge ok">Operational</span></div>
+            <div class="status-row"><span class="s-name">Study Planner</span><span class="s-badge ok">Operational</span></div>
+            <div class="status-row"><span class="s-name">Score Sync</span><span class="s-badge maint">Maintenance</span></div>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <div class="side-card-title">⚡ Response Times</div>
+          <div class="tip-list">
+            <div class="tip-item"><span class="tip-icon">💀</span> <span><strong>Critical:</strong> Fixed within 4 hours</span></div>
+            <div class="tip-item"><span class="tip-icon">🔴</span> <span><strong>High:</strong> Addressed within 24 hours</span></div>
+            <div class="tip-item"><span class="tip-icon">🟡</span> <span><strong>Medium:</strong> Fixed within 1 week</span></div>
+            <div class="tip-item"><span class="tip-icon">🟢</span> <span><strong>Low:</strong> Scheduled in next release</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast-msg" id="toast"></div>
+
+  <script>
+    let stepCount = 3;
+
+    function addStep() {
+      if (stepCount >= 10) return;
+      stepCount++;
+      const wrap = document.getElementById('steps-wrap');
+      const row = document.createElement('div');
+      row.className = 'step-row';
+      row.innerHTML = `<div class="step-num">${stepCount}</div><input type="text" placeholder="Next step..." />`;
+      wrap.appendChild(row);
+    }
+
+    function submitBug() {
+      const title = document.getElementById('bug-title').value.trim();
+      const page  = document.getElementById('bug-page').value;
+      const desc  = document.getElementById('bug-desc').value.trim();
+
+      if (!title) { showToast('⚠️ Please enter a bug title'); return; }
+      if (!page)  { showToast('⚠️ Please select the affected page'); return; }
+      if (!desc)  { showToast('⚠️ Please describe what happened'); return; }
+
+      document.getElementById('bug-form-card').classList.add('submitted');
+      document.getElementById('success-overlay').classList.add('show');
+    }
+
+    function resetForm() {
+      document.getElementById('bug-form-card').classList.remove('submitted');
+      document.getElementById('success-overlay').classList.remove('show');
+      document.getElementById('bug-title').value = '';
+      document.getElementById('bug-desc').value  = '';
+      document.getElementById('bug-page').value  = '';
+      document.getElementById('bug-email').value = '';
+      document.getElementById('bug-url').value   = '';
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+  </script>
+</body>
+</html>

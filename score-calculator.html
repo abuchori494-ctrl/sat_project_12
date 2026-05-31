@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OnePrep — DSAT Score Calculator</title>
+  <meta name="description" content="Calculate your Digital SAT score from raw scores. Instantly convert Reading & Writing and Math raw scores to scaled section scores and a total score." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Page-specific overrides ── */
+    body { background: #f0f4f8; font-family: 'Outfit', 'Plus Jakarta Sans', 'Inter', sans-serif; }
+
+    .page-wrap {
+      margin-left: 240px;
+      min-height: 100vh;
+      padding: 40px 40px 60px;
+      background: #f0f4f8;
+    }
+
+    /* ── Page Header ── */
+    .page-hero {
+      background: linear-gradient(135deg, #0f3446 0%, #1a5c7a 60%, #0d8f9e 100%);
+      border-radius: 24px;
+      padding: 40px 48px;
+      color: #fff;
+      margin-bottom: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .page-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; right: 120px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 5px 14px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: 0.03em;
+    }
+    .page-hero h1 {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .page-hero p {
+      font-size: 15px;
+      opacity: 0.8;
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    /* ── Layout: two columns ── */
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* ── Input Panel ── */
+    .input-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .section-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 2px 16px rgba(15,52,70,0.06);
+      border: 1px solid #e8eef3;
+    }
+
+    .sc-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .sc-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .sc-icon.rw { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+    .sc-icon.math { background: linear-gradient(135deg, #ede9fe, #ddd6fe); }
+    .sc-title { font-size: 18px; font-weight: 700; color: #0f3446; }
+    .sc-sub   { font-size: 13px; color: #64748b; margin-top: 2px; }
+
+    .module-group {
+      margin-bottom: 20px;
+    }
+    .module-group:last-child { margin-bottom: 0; }
+
+    .module-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+      margin-bottom: 10px;
+    }
+
+    .score-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .score-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .score-field label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+    }
+    .score-field .input-wrap {
+      position: relative;
+    }
+    .score-field input[type="number"] {
+      width: 100%;
+      padding: 11px 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f3446;
+      font-family: inherit;
+      background: #f8fafc;
+      outline: none;
+      transition: all 0.2s;
+      -moz-appearance: textfield;
+    }
+    .score-field input[type="number"]::-webkit-inner-spin-button,
+    .score-field input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .score-field input[type="number"]:focus {
+      border-color: #3b82f6;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+    }
+    .score-field input[type="number"].invalid {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+    }
+    .max-label {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 11px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+    .score-field .hint {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    /* Range slider */
+    .slider-row {
+      margin-top: 12px;
+    }
+    .slider-row input[type="range"] {
+      width: 100%;
+      accent-color: #3b82f6;
+      cursor: pointer;
+    }
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: #f1f5f9;
+      margin: 20px 0;
+    }
+
+    /* ── Results Panel ── */
+    .results-panel {
+      position: sticky;
+      top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .score-display-card {
+      background: linear-gradient(160deg, #0f3446 0%, #1a5c7a 100%);
+      border-radius: 24px;
+      padding: 36px 32px;
+      color: #fff;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .score-display-card::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .sdc-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.6;
+      margin-bottom: 8px;
+    }
+    .sdc-total {
+      font-size: 72px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      position: relative;
+      z-index: 1;
+      transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .sdc-total.animate { transform: scale(1.12); }
+    .sdc-out-of {
+      font-size: 14px;
+      opacity: 0.5;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .sdc-bar-wrap {
+      background: rgba(255,255,255,0.1);
+      border-radius: 50px;
+      height: 8px;
+      margin: 20px 0 12px;
+      overflow: hidden;
+    }
+    .sdc-bar {
+      height: 100%;
+      border-radius: 50px;
+      background: linear-gradient(90deg, #22d3ee, #38bdf8, #60a5fa);
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sdc-percentile {
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0.8;
+    }
+
+    .section-scores-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 2px 16px rgba(15,52,70,0.06);
+      border: 1px solid #e8eef3;
+    }
+    .ss-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+    .ss-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .ss-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .ss-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f3446;
+    }
+    .ss-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .ss-dot.blue  { background: #3b82f6; }
+    .ss-dot.purple { background: #8b5cf6; }
+    .ss-score {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f3446;
+      transition: all 0.3s;
+    }
+    .ss-bar-mini {
+      width: 100%;
+      height: 4px;
+      background: #e2e8f0;
+      border-radius: 50px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .ss-bar-fill {
+      height: 100%;
+      border-radius: 50px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .ss-bar-fill.blue   { background: #3b82f6; }
+    .ss-bar-fill.purple { background: #8b5cf6; }
+
+    /* Percentile & ranking badge */
+    .ranking-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 2px 16px rgba(15,52,70,0.06);
+      border: 1px solid #e8eef3;
+    }
+    .rank-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .rank-item {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+    }
+    .rank-val {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0f3446;
+      display: block;
+    }
+    .rank-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* Score interpretation banner */
+    .interp-banner {
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+      transition: all 0.3s;
+    }
+    .interp-icon { font-size: 22px; flex-shrink: 0; }
+
+    /* ── Action Buttons ── */
+    .action-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .btn-calc {
+      flex: 1;
+      padding: 14px;
+      background: linear-gradient(135deg, #0f3446, #1a5c7a);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .btn-calc:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(15,52,70,0.25);
+    }
+    .btn-reset {
+      padding: 14px 20px;
+      background: #f1f5f9;
+      color: #64748b;
+      border: none;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-reset:hover { background: #e2e8f0; color: #0f3446; }
+
+    /* ── Reference table ── */
+    .ref-section {
+      margin-top: 28px;
+    }
+    .ref-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f3446;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ref-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .ref-tab {
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 2px solid #e2e8f0;
+      background: #fff;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .ref-tab.active {
+      background: #0f3446;
+      color: #fff;
+      border-color: #0f3446;
+    }
+    .ref-tab:hover:not(.active) { border-color: #0f3446; color: #0f3446; }
+
+    .ref-table-wrap {
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(15,52,70,0.06);
+      border: 1px solid #e8eef3;
+    }
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .ref-table thead th {
+      background: #0f3446;
+      color: #fff;
+      padding: 14px 20px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .ref-table tbody tr {
+      border-bottom: 1px solid #f1f5f9;
+      transition: background 0.15s;
+    }
+    .ref-table tbody tr:hover { background: #f8fafc; }
+    .ref-table tbody tr:last-child { border-bottom: none; }
+    .ref-table tbody td {
+      padding: 12px 20px;
+      color: #334155;
+      font-weight: 600;
+    }
+    .ref-table tbody td:first-child { color: #0f3446; font-weight: 700; }
+    .score-chip {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Toast */
+    .toast-msg {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f3446;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 8px 32px rgba(15,52,70,0.3);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      z-index: 9999;
+    }
+    .toast-msg.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 1100px) {
+      .calc-layout { grid-template-columns: 1fr; }
+      .results-panel { position: static; }
+    }
+    @media (max-width: 768px) {
+      .page-wrap { margin-left: 0; padding: 20px; }
+    }
+  </style>
+</head>
+<body class="light" id="app-body">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <nav id="sidebar">
+    <div class="logo" onclick="window.location.href='/'">
+      <span class="logo-icon">🤖</span>
+      <span class="logo-text">OnePrep</span>
+    </div>
+
+    <select class="exam-selector">
+      <option>SAT</option>
+      <option>ACT</option>
+    </select>
+
+    <ul class="nav-links">
+      <li><a href="/" data-page="home">🏠 Home</a></li>
+      <li><a href="/" data-page="ask-preppy">🤖 Ask Preppy AI</a></li>
+      <li><a href="/study-planner" data-page="study-planner">📅 Study Planner</a></li>
+      <li><a href="/analytics" data-page="analytics">📊 Analytics <span class="badge-new">New</span></a></li>
+
+      <li class="section-label">PRACTICE</li>
+      <li><a href="/question-bank" data-page="question-bank">🔲 Question Bank</a></li>
+      <li><a href="/question-rush" data-page="question-rush">⚡ Question Rush</a></li>
+      <li><a href="/challenge" data-page="challenge">🎯 Challenge Questions</a></li>
+      <li><a href="/predicted-tests" data-page="predicted-tests">📝 Predicted Tests</a></li>
+      <li><a href="/vocab" data-page="vocab">📚 Vocab</a></li>
+
+      <li class="section-label">PROGRESS</li>
+      <li><a href="/" data-page="saved">🔖 Saved</a></li>
+      <li><a href="/" data-page="mistakes">❌ Mistakes Log</a></li>
+
+      <li class="section-label">COLLEGE</li>
+      <li><a href="/colleges" data-page="colleges">🎓 Browse Colleges</a></li>
+
+      <li class="section-label">SUPPORT</li>
+      <li><a href="chat-support.html" data-page="chat-support">💬 Chat With Support</a></li>
+      <li><a href="bug-report.html" data-page="bug-report">🐛 Bug Report</a></li>
+      <li><a href="feedback.html" data-page="feedback">⭐ Give Feedback</a></li>
+
+      <li class="section-label">OPPORTUNITIES</li>
+      <li><a href="tutor-apply.html" data-page="tutor-apply">🧑‍🏫 Apply As A Tutor</a></li>
+      <li><a href="creator-program.html" data-page="creator-program">🎨 Creator Program</a></li>
+
+      <li class="section-label">RESOURCES</li>
+      <li><a href="score-calculator.html" data-page="score-calculator" class="active">🧮 Score Calculator</a></li>
+      <li><a href="blog.html" data-page="blog">📰 Blog</a></li>
+
+      <li class="section-label">SOCIAL</li>
+      <li><a href="https://discord.gg" target="_blank" data-page="discord">🎮 Join Discord</a></li>
+      <li><a href="https://instagram.com" target="_blank" data-page="instagram">📸 Instagram</a></li>
+    </ul>
+
+    <div class="sidebar-bottom">
+      <button onclick="toggleDark()">🌙 Switch To Dark</button>
+      <a href="#">⬆️ Upgrade</a>
+      <div class="user-profile">
+        <span class="avatar">A</span>
+        <span>Abdullah Abdus...</span>
+        <span>⚙️</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <div class="page-wrap">
+
+    <!-- Hero header -->
+    <div class="page-hero">
+      <div class="hero-badge">🧮 Interactive Tool</div>
+      <h1>DSAT Score Calculator</h1>
+      <p>Enter your raw scores from each module to instantly calculate your Digital SAT section scores and total composite score.</p>
+    </div>
+
+    <div class="calc-layout">
+
+      <!-- ─── Input Panel ─── -->
+      <div class="input-panel">
+
+        <!-- Reading & Writing -->
+        <div class="section-card">
+          <div class="sc-header">
+            <div class="sc-icon rw">📖</div>
+            <div>
+              <div class="sc-title">Reading & Writing</div>
+              <div class="sc-sub">2 modules • 54 questions total • 64 minutes</div>
+            </div>
+          </div>
+
+          <div class="module-group">
+            <div class="module-label">Module 1 (27 questions)</div>
+            <div class="score-inputs">
+              <div class="score-field">
+                <label for="rw-m1-correct">✅ Correct</label>
+                <div class="input-wrap">
+                  <input type="number" id="rw-m1-correct" min="0" max="27" value="" placeholder="0–27" oninput="onInputChange()" />
+                  <span class="max-label">/27</span>
+                </div>
+                <span class="hint">Number correct</span>
+              </div>
+              <div class="score-field">
+                <label for="rw-m1-omit">⭕ Omitted</label>
+                <div class="input-wrap">
+                  <input type="number" id="rw-m1-omit" min="0" max="27" value="" placeholder="0–27" oninput="onInputChange()" />
+                  <span class="max-label">/27</span>
+                </div>
+                <span class="hint">Left blank</span>
+              </div>
+            </div>
+            <div class="slider-row">
+              <input type="range" id="rw-m1-slider" min="0" max="27" value="0" oninput="syncSlider('rw-m1')" />
+              <div class="slider-labels"><span>0</span><span>27 correct</span></div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="module-group">
+            <div class="module-label">Module 2 (27 questions)</div>
+            <div class="score-inputs">
+              <div class="score-field">
+                <label for="rw-m2-correct">✅ Correct</label>
+                <div class="input-wrap">
+                  <input type="number" id="rw-m2-correct" min="0" max="27" value="" placeholder="0–27" oninput="onInputChange()" />
+                  <span class="max-label">/27</span>
+                </div>
+                <span class="hint">Number correct</span>
+              </div>
+              <div class="score-field">
+                <label for="rw-m2-omit">⭕ Omitted</label>
+                <div class="input-wrap">
+                  <input type="number" id="rw-m2-omit" min="0" max="27" value="" placeholder="0–27" oninput="onInputChange()" />
+                  <span class="max-label">/27</span>
+                </div>
+                <span class="hint">Left blank</span>
+              </div>
+            </div>
+            <div class="slider-row">
+              <input type="range" id="rw-m2-slider" min="0" max="27" value="0" oninput="syncSlider('rw-m2')" />
+              <div class="slider-labels"><span>0</span><span>27 correct</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Math -->
+        <div class="section-card">
+          <div class="sc-header">
+            <div class="sc-icon math">🧮</div>
+            <div>
+              <div class="sc-title">Mathematics</div>
+              <div class="sc-sub">2 modules • 44 questions total • 70 minutes</div>
+            </div>
+          </div>
+
+          <div class="module-group">
+            <div class="module-label">Module 1 (22 questions)</div>
+            <div class="score-inputs">
+              <div class="score-field">
+                <label for="math-m1-correct">✅ Correct</label>
+                <div class="input-wrap">
+                  <input type="number" id="math-m1-correct" min="0" max="22" value="" placeholder="0–22" oninput="onInputChange()" />
+                  <span class="max-label">/22</span>
+                </div>
+                <span class="hint">Number correct</span>
+              </div>
+              <div class="score-field">
+                <label for="math-m1-omit">⭕ Omitted</label>
+                <div class="input-wrap">
+                  <input type="number" id="math-m1-omit" min="0" max="22" value="" placeholder="0–22" oninput="onInputChange()" />
+                  <span class="max-label">/22</span>
+                </div>
+                <span class="hint">Left blank</span>
+              </div>
+            </div>
+            <div class="slider-row">
+              <input type="range" id="math-m1-slider" min="0" max="22" value="0" oninput="syncSlider('math-m1')" />
+              <div class="slider-labels"><span>0</span><span>22 correct</span></div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="module-group">
+            <div class="module-label">Module 2 (22 questions)</div>
+            <div class="score-inputs">
+              <div class="score-field">
+                <label for="math-m2-correct">✅ Correct</label>
+                <div class="input-wrap">
+                  <input type="number" id="math-m2-correct" min="0" max="22" value="" placeholder="0–22" oninput="onInputChange()" />
+                  <span class="max-label">/22</span>
+                </div>
+                <span class="hint">Number correct</span>
+              </div>
+              <div class="score-field">
+                <label for="math-m2-omit">⭕ Omitted</label>
+                <div class="input-wrap">
+                  <input type="number" id="math-m2-omit" min="0" max="22" value="" placeholder="0–22" oninput="onInputChange()" />
+                  <span class="max-label">/22</span>
+                </div>
+                <span class="hint">Left blank</span>
+              </div>
+            </div>
+            <div class="slider-row">
+              <input type="range" id="math-m2-slider" min="0" max="22" value="0" oninput="syncSlider('math-m2')" />
+              <div class="slider-labels"><span>0</span><span>22 correct</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn-calc" id="btn-calculate" onclick="calculate()">🧮 Calculate My Score</button>
+          <button class="btn-reset" onclick="resetAll()">↺ Reset</button>
+        </div>
+      </div>
+
+      <!-- ─── Results Panel ─── -->
+      <div class="results-panel">
+
+        <!-- Total score display -->
+        <div class="score-display-card">
+          <div class="sdc-label">Total Score</div>
+          <div class="sdc-total" id="total-score">—</div>
+          <div class="sdc-out-of">out of 1600</div>
+          <div class="sdc-bar-wrap">
+            <div class="sdc-bar" id="total-bar" style="width:0%"></div>
+          </div>
+          <div class="sdc-percentile" id="total-pct">Enter your scores to see results</div>
+        </div>
+
+        <!-- Section scores -->
+        <div class="section-scores-card">
+          <div class="ss-title">Section Scores</div>
+
+          <div class="ss-row">
+            <div>
+              <div class="ss-name"><span class="ss-dot blue"></span> Reading & Writing</div>
+              <div class="ss-bar-mini"><div class="ss-bar-fill blue" id="rw-bar" style="width:0%"></div></div>
+            </div>
+            <div class="ss-score" id="rw-score">—</div>
+          </div>
+
+          <div class="ss-row">
+            <div>
+              <div class="ss-name"><span class="ss-dot purple"></span> Mathematics</div>
+              <div class="ss-bar-mini"><div class="ss-bar-fill purple" id="math-bar" style="width:0%"></div></div>
+            </div>
+            <div class="ss-score" id="math-score">—</div>
+          </div>
+        </div>
+
+        <!-- Ranking info -->
+        <div class="ranking-card">
+          <div class="ss-title">Score Context</div>
+          <div class="rank-grid">
+            <div class="rank-item">
+              <span class="rank-val" id="ctx-percentile">—</span>
+              <span class="rank-label">Percentile</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-val" id="ctx-level">—</span>
+              <span class="rank-label">Level</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-val" id="ctx-avg">1060</span>
+              <span class="rank-label">Nat'l Average</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-val" id="ctx-needed">—</span>
+              <span class="rank-label">To 1400+</span>
+            </div>
+          </div>
+          <div class="interp-banner" id="interp-banner" style="background:#f1f5f9; color:#64748b;">
+            <span class="interp-icon">💡</span>
+            <span id="interp-text">Calculate your score to see personalized insights.</span>
+          </div>
+        </div>
+
+      </div><!-- /results-panel -->
+
+    </div><!-- /calc-layout -->
+
+    <!-- ─── Reference Conversion Tables ─── -->
+    <div class="ref-section">
+      <div class="ref-title">📋 Score Conversion Reference</div>
+      <div class="ref-tabs">
+        <button class="ref-tab active" id="tab-rw" onclick="showTable('rw')">Reading & Writing</button>
+        <button class="ref-tab" id="tab-math" onclick="showTable('math')">Mathematics</button>
+      </div>
+
+      <div class="ref-table-wrap">
+        <table class="ref-table" id="ref-table-rw">
+          <thead>
+            <tr>
+              <th>Raw Score (/ 54)</th>
+              <th>Scaled Score (/800)</th>
+              <th>Performance</th>
+            </tr>
+          </thead>
+          <tbody id="rw-table-body"></tbody>
+        </table>
+        <table class="ref-table" id="ref-table-math" style="display:none">
+          <thead>
+            <tr>
+              <th>Raw Score (/ 44)</th>
+              <th>Scaled Score (/800)</th>
+              <th>Performance</th>
+            </tr>
+          </thead>
+          <tbody id="math-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /page-wrap -->
+
+  <div class="toast-msg" id="toast"></div>
+
+  <script>
+    // ══════════════════════════════════════════════════
+    // DSAT Score Conversion Tables (approximate)
+    // Based on official College Board scoring curves
+    // ══════════════════════════════════════════════════
+
+    // R&W: raw 0–54 → scaled 200–800
+    const RW_TABLE = [
+      200, 200, 210, 220, 230, 240, 250, 260, 270, 290, // 0-9
+      300, 310, 320, 330, 340, 360, 370, 380, 390, 400, // 10-19
+      420, 430, 450, 460, 480, 490, 510, 530, 540, 560, // 20-29
+      570, 590, 600, 620, 630, 650, 660, 670, 680, 700, // 30-39
+      710, 720, 730, 740, 750, 760, 770, 780, 790, 800, // 40-49
+      800, 800, 800, 800, 800                             // 50-54
+    ];
+
+    // Math: raw 0–44 → scaled 200–800
+    const MATH_TABLE = [
+      200, 200, 210, 220, 240, 260, 280, 300, 320, 340, // 0-9
+      360, 380, 400, 420, 440, 460, 480, 500, 520, 540, // 10-19
+      560, 580, 600, 620, 640, 660, 680, 700, 710, 720, // 20-29
+      730, 740, 750, 760, 760, 770, 780, 790, 790, 800, // 30-39
+      800, 800, 800, 800, 800                             // 40-44
+    ];
+
+    // Approximate percentile lookup for total score
+    function getPercentile(total) {
+      if (total >= 1580) return 99;
+      if (total >= 1550) return 99;
+      if (total >= 1500) return 98;
+      if (total >= 1450) return 96;
+      if (total >= 1400) return 94;
+      if (total >= 1350) return 91;
+      if (total >= 1300) return 87;
+      if (total >= 1250) return 82;
+      if (total >= 1200) return 74;
+      if (total >= 1150) return 65;
+      if (total >= 1100) return 55;
+      if (total >= 1050) return 44;
+      if (total >= 1000) return 34;
+      if (total >= 950)  return 24;
+      if (total >= 900)  return 16;
+      if (total >= 850)  return 10;
+      if (total >= 800)  return 5;
+      return 1;
+    }
+
+    function getLevel(total) {
+      if (total >= 1400) return 'Elite';
+      if (total >= 1200) return 'Strong';
+      if (total >= 1000) return 'Average';
+      if (total >= 800)  return 'Developing';
+      return 'Beginner';
+    }
+
+    // ══ Sync slider ↔ input ══
+    function syncSlider(key) {
+      const slider = document.getElementById(key + '-slider');
+      const input  = document.getElementById(key + '-correct');
+      if (input) input.value = slider.value;
+      onInputChange();
+    }
+
+    function onInputChange() {
+      // Keep sliders in sync with number inputs
+      const pairs = [
+        ['rw-m1-correct',   'rw-m1-slider',   27],
+        ['rw-m2-correct',   'rw-m2-slider',   27],
+        ['math-m1-correct', 'math-m1-slider', 22],
+        ['math-m2-correct', 'math-m2-slider', 22],
+      ];
+      pairs.forEach(([inputId, sliderId, max]) => {
+        const inp = document.getElementById(inputId);
+        const sld = document.getElementById(sliderId);
+        let v = parseInt(inp.value);
+        if (!isNaN(v)) {
+          v = Math.min(max, Math.max(0, v));
+          sld.value = v;
+        }
+      });
+      // Auto-calc on every change
+      calculate();
+    }
+
+    function getVal(id) {
+      const v = parseInt(document.getElementById(id).value);
+      return isNaN(v) ? 0 : v;
+    }
+
+    function clamp(v, min, max) { return Math.min(max, Math.max(min, v)); }
+
+    function calculate() {
+      const rwRaw   = clamp(getVal('rw-m1-correct')   + getVal('rw-m2-correct'),   0, 54);
+      const mathRaw = clamp(getVal('math-m1-correct') + getVal('math-m2-correct'), 0, 44);
+
+      const rwScaled   = RW_TABLE[rwRaw]   || 200;
+      const mathScaled = MATH_TABLE[mathRaw] || 200;
+      const total      = rwScaled + mathScaled;
+
+      // Animate score
+      animateNumber('total-score', total);
+      animateNumber('rw-score',    rwScaled);
+      animateNumber('math-score',  mathScaled);
+
+      // Bars
+      document.getElementById('total-bar').style.width = ((total - 400) / 1200 * 100) + '%';
+      document.getElementById('rw-bar').style.width    = ((rwScaled - 200) / 600 * 100) + '%';
+      document.getElementById('math-bar').style.width  = ((mathScaled - 200) / 600 * 100) + '%';
+
+      // Percentile & context
+      const pct   = getPercentile(total);
+      const level = getLevel(total);
+      const needed = total < 1400 ? (1400 - total) : 0;
+
+      document.getElementById('total-pct').textContent     = `≈ ${pct}th percentile nationally`;
+      document.getElementById('ctx-percentile').textContent = `~${pct}th`;
+      document.getElementById('ctx-level').textContent      = level;
+      document.getElementById('ctx-needed').textContent     = needed > 0 ? `+${needed}` : '✓';
+
+      // Interpretation banner
+      const banner  = document.getElementById('interp-banner');
+      const textEl  = document.getElementById('interp-text');
+      let icon = '💡', bg = '#f1f5f9', fg = '#334155';
+      let msg = '';
+
+      if (total >= 1400) {
+        icon = '🏆'; bg = '#ecfdf5'; fg = '#065f46';
+        msg = `Outstanding! A score of ${total} puts you in the top ${100 - pct}% of all test-takers. You're highly competitive for elite universities.`;
+      } else if (total >= 1200) {
+        icon = '⚡'; bg = '#eff6ff'; fg = '#1e3a8a';
+        msg = `Strong performance! ${total} is well above the national average of 1060. Focus on your weak areas to push into the 1400+ range.`;
+      } else if (total >= 1000) {
+        icon = '📈'; bg = '#fffbeb'; fg = '#92400e';
+        msg = `You're near the national average. With targeted practice on OnePrep, you can realistically improve by 100–200 points.`;
+      } else {
+        icon = '🚀'; bg = '#fef2f2'; fg = '#991b1b';
+        msg = `You have significant room to grow. Consistent daily practice with OnePrep's question bank is your best path forward.`;
+      }
+
+      banner.style.background = bg;
+      banner.style.color = fg;
+      banner.innerHTML = `<span class="interp-icon">${icon}</span><span>${msg}</span>`;
+    }
+
+    function animateNumber(id, target) {
+      const el = document.getElementById(id);
+      const current = parseInt(el.textContent) || 0;
+      if (current === target) return;
+      el.textContent = target;
+      el.classList.remove('animate');
+      void el.offsetWidth; // force reflow
+      el.classList.add('animate');
+      setTimeout(() => el.classList.remove('animate'), 400);
+    }
+
+    function resetAll() {
+      ['rw-m1-correct','rw-m2-correct','math-m1-correct','math-m2-correct',
+       'rw-m1-omit','rw-m2-omit','math-m1-omit','math-m2-omit'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      ['rw-m1-slider','rw-m2-slider','math-m1-slider','math-m2-slider'].forEach(id => {
+        document.getElementById(id).value = 0;
+      });
+      document.getElementById('total-score').textContent = '—';
+      document.getElementById('rw-score').textContent    = '—';
+      document.getElementById('math-score').textContent  = '—';
+      document.getElementById('total-bar').style.width   = '0%';
+      document.getElementById('rw-bar').style.width      = '0%';
+      document.getElementById('math-bar').style.width    = '0%';
+      document.getElementById('total-pct').textContent   = 'Enter your scores to see results';
+      document.getElementById('ctx-percentile').textContent = '—';
+      document.getElementById('ctx-level').textContent   = '—';
+      document.getElementById('ctx-needed').textContent  = '—';
+      const banner = document.getElementById('interp-banner');
+      banner.style.background = '#f1f5f9';
+      banner.style.color = '#64748b';
+      banner.innerHTML = '<span class="interp-icon">💡</span><span id="interp-text">Calculate your score to see personalized insights.</span>';
+      showToast('Reset complete');
+    }
+
+    // ══ Reference Tables ══
+    function showTable(section) {
+      document.getElementById('ref-table-rw').style.display   = section === 'rw'   ? '' : 'none';
+      document.getElementById('ref-table-math').style.display  = section === 'math' ? '' : 'none';
+      document.getElementById('tab-rw').className   = 'ref-tab' + (section === 'rw'   ? ' active' : '');
+      document.getElementById('tab-math').className = 'ref-tab' + (section === 'math' ? ' active' : '');
+    }
+
+    function buildRefTables() {
+      const perfLabel = (score) => {
+        if (score >= 700) return '<span class="score-chip" style="background:#d1fae5;color:#065f46">Excellent</span>';
+        if (score >= 580) return '<span class="score-chip" style="background:#dbeafe;color:#1e40af">Good</span>';
+        if (score >= 450) return '<span class="score-chip" style="background:#fef9c3;color:#713f12">Average</span>';
+        return '<span class="score-chip" style="background:#fee2e2;color:#991b1b">Needs Work</span>';
+      };
+
+      let rwHTML = '';
+      for (let r = 0; r <= 54; r++) {
+        const s = RW_TABLE[r] || 200;
+        rwHTML += `<tr><td>${r}</td><td>${s}</td><td>${perfLabel(s)}</td></tr>`;
+      }
+      document.getElementById('rw-table-body').innerHTML = rwHTML;
+
+      let mathHTML = '';
+      for (let r = 0; r <= 44; r++) {
+        const s = MATH_TABLE[r] || 200;
+        mathHTML += `<tr><td>${r}</td><td>${s}</td><td>${perfLabel(s)}</td></tr>`;
+      }
+      document.getElementById('math-table-body').innerHTML = mathHTML;
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    function toggleDark() {
+      document.getElementById('app-body').classList.toggle('dark');
+    }
+
+    // Init
+    buildRefTables();
+  </script>
+</body>
+</html>

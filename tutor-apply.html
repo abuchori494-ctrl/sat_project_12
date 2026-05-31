@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OnePrep — Apply As A Tutor</title>
+  <meta name="description" content="Join OnePrep as a tutor. Help students ace the SAT while earning competitive pay. Apply today and make a difference." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background: #f0f4f8; font-family: 'Outfit', 'Plus Jakarta Sans', 'Inter', sans-serif; }
+    .page-wrap { margin-left: 240px; min-height: 100vh; padding: 40px; background: #f0f4f8; }
+
+    /* ── Hero ── */
+    .page-hero {
+      background: linear-gradient(135deg, #0f3446 0%, #1e3a8a 60%, #7c3aed 100%);
+      border-radius: 24px;
+      padding: 52px 48px;
+      color: #fff;
+      margin-bottom: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: ''; position: absolute; top: -80px; right: -80px;
+      width: 300px; height: 300px; border-radius: 50%; background: rgba(255,255,255,0.05);
+    }
+    .page-hero::after {
+      content: ''; position: absolute; bottom: -40px; right: 160px;
+      width: 180px; height: 180px; border-radius: 50%; background: rgba(255,255,255,0.03);
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);
+      padding: 5px 14px; border-radius: 50px; font-size: 12px; font-weight: 700; margin-bottom: 14px;
+    }
+    .page-hero h1 { font-size: 40px; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.02em; }
+    .page-hero p  { font-size: 16px; opacity: 0.85; max-width: 540px; line-height: 1.65; margin-bottom: 28px; }
+
+    .hero-benefits {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .hb-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 10px 18px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* ── Stats row ── */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .stat-card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 24px;
+      text-align: center;
+      border: 1px solid #e8eef3;
+      box-shadow: 0 2px 12px rgba(15,52,70,0.05);
+      transition: all 0.2s;
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(15,52,70,0.1); }
+    .stat-num { font-size: 32px; font-weight: 900; color: #0f3446; display: block; }
+    .stat-lbl { font-size: 12px; color: #64748b; font-weight: 600; margin-top: 4px; display: block; }
+
+    /* ── Two column layout ── */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* Application Form */
+    .form-card {
+      background: #fff; border-radius: 24px; padding: 40px;
+      border: 1px solid #e8eef3; box-shadow: 0 2px 20px rgba(15,52,70,0.07);
+    }
+    .form-title { font-size: 20px; font-weight: 800; color: #0f3446; margin-bottom: 6px; }
+    .form-sub   { font-size: 13px; color: #64748b; margin-bottom: 28px; line-height: 1.5; }
+
+    .form-section-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+      color: #94a3b8; margin: 28px 0 16px; padding-top: 28px; border-top: 1px solid #f1f5f9;
+    }
+
+    .form-row { margin-bottom: 18px; }
+    .form-row label { display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 7px; }
+    .required { color: #ef4444; }
+    .form-row input[type="text"],
+    .form-row input[type="email"],
+    .form-row input[type="tel"],
+    .form-row input[type="number"],
+    .form-row select,
+    .form-row textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #0f3446;
+      font-family: inherit;
+      background: #f8fafc;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+      border-color: #7c3aed; background: #fff; box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+    }
+    .form-row textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+    .form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* Subject chips */
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .subj-check { display: none; }
+    .subj-label {
+      display: flex; align-items: center; gap: 8px;
+      padding: 11px 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+    }
+    .subj-check:checked + .subj-label {
+      border-color: #7c3aed;
+      background: #faf5ff;
+      color: #7c3aed;
+    }
+
+    /* SAT score input with badge */
+    .sat-input-wrap {
+      position: relative;
+    }
+    .sat-input-wrap input { padding-right: 80px; }
+    .sat-badge {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: #0f3446; color: #fff; font-size: 11px; font-weight: 700;
+      padding: 3px 10px; border-radius: 50px;
+    }
+
+    /* Availability grid */
+    .avail-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .avail-check { display: none; }
+    .avail-label {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 12px 8px; border: 2px solid #e2e8f0; border-radius: 12px;
+      cursor: pointer; transition: all 0.15s; font-size: 11px; font-weight: 700;
+      color: #64748b; text-align: center;
+    }
+    .avail-check:checked + .avail-label { border-color: #7c3aed; background: #faf5ff; color: #7c3aed; }
+
+    /* Submit */
+    .btn-submit {
+      width: 100%; padding: 16px;
+      background: linear-gradient(135deg, #1e3a8a, #7c3aed);
+      color: #fff; border: none; border-radius: 14px;
+      font-size: 15px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: all 0.2s; margin-top: 28px;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(124,58,237,0.35); }
+
+    /* Success */
+    .success-overlay {
+      display: none; flex-direction: column; align-items: center;
+      justify-content: center; text-align: center; padding: 60px 40px;
+    }
+    .form-card.submitted .form-inner { display: none; }
+    .form-card.submitted .success-overlay { display: flex; }
+    .success-icon { font-size: 60px; margin-bottom: 20px; animation: bounceIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes bounceIn { from { transform: scale(0); } to { transform: scale(1); } }
+    .success-title { font-size: 26px; font-weight: 800; color: #0f3446; margin-bottom: 10px; }
+    .success-sub { font-size: 14px; color: #64748b; line-height: 1.7; max-width: 400px; }
+    .success-timeline {
+      margin-top: 24px; display: flex; flex-direction: column; gap: 12px; text-align: left;
+      background: #f8fafc; border-radius: 16px; padding: 20px 24px; width: 100%;
+      border: 1px solid #e8eef3;
+    }
+    .tl-item { display: flex; gap: 12px; align-items: center; font-size: 13px; font-weight: 600; color: #0f3446; }
+    .tl-step { width: 28px; height: 28px; background: #0f3446; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+
+    /* ── Right panel ── */
+    .side-panel { display: flex; flex-direction: column; gap: 16px; }
+    .side-card {
+      background: #fff; border-radius: 20px; padding: 24px;
+      border: 1px solid #e8eef3; box-shadow: 0 2px 12px rgba(15,52,70,0.05);
+    }
+    .side-card-title { font-size: 14px; font-weight: 700; color: #0f3446; margin-bottom: 14px; }
+
+    .perk-list { display: flex; flex-direction: column; gap: 12px; }
+    .perk-item { display: flex; gap: 12px; align-items: flex-start; }
+    .perk-icon {
+      width: 36px; height: 36px; border-radius: 10px; background: #f0f4f8;
+      display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+    }
+    .perk-title { font-size: 13px; font-weight: 700; color: #0f3446; }
+    .perk-sub   { font-size: 12px; color: #64748b; margin-top: 2px; line-height: 1.5; }
+
+    .process-steps { display: flex; flex-direction: column; gap: 0; }
+    .ps-item { display: flex; gap: 14px; padding-bottom: 16px; position: relative; }
+    .ps-item:last-child { padding-bottom: 0; }
+    .ps-item::before {
+      content: ''; position: absolute; left: 15px; top: 32px;
+      width: 2px; height: calc(100% - 16px); background: #e8eef3;
+    }
+    .ps-item:last-child::before { display: none; }
+    .ps-num {
+      width: 32px; height: 32px; border-radius: 50%; background: #0f3446; color: #fff;
+      display: flex; align-items: center; justify-content: center; font-size: 13px;
+      font-weight: 700; flex-shrink: 0; position: relative; z-index: 1;
+    }
+    .ps-title { font-size: 13px; font-weight: 700; color: #0f3446; }
+    .ps-sub   { font-size: 12px; color: #64748b; margin-top: 2px; }
+
+    .toast-msg {
+      position: fixed; bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f3446; color: #fff; padding: 12px 24px; border-radius: 50px;
+      font-weight: 700; font-size: 14px; box-shadow: 0 8px 32px rgba(15,52,70,0.3);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1); z-index: 9999;
+    }
+    .toast-msg.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 1100px) { .content-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) { .page-wrap { margin-left: 0; padding: 20px; } .stats-strip { grid-template-columns: 1fr 1fr; } .subjects-grid { grid-template-columns: 1fr 1fr; } .avail-grid { grid-template-columns: repeat(2,1fr); } }
+  </style>
+</head>
+<body class="light" id="app-body">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <nav id="sidebar">
+    <div class="logo" onclick="window.location.href='/'">
+      <span class="logo-icon">🤖</span>
+      <span class="logo-text">OnePrep</span>
+    </div>
+    <select class="exam-selector"><option>SAT</option><option>ACT</option></select>
+    <ul class="nav-links">
+      <li><a href="/">🏠 Home</a></li>
+      <li><a href="/">🤖 Ask Preppy AI</a></li>
+      <li><a href="/study-planner">📅 Study Planner</a></li>
+      <li><a href="/analytics">📊 Analytics <span class="badge-new">New</span></a></li>
+      <li class="section-label">PRACTICE</li>
+      <li><a href="/question-bank">🔲 Question Bank</a></li>
+      <li><a href="/question-rush">⚡ Question Rush</a></li>
+      <li><a href="/challenge">🎯 Challenge Questions</a></li>
+      <li><a href="/predicted-tests">📝 Predicted Tests</a></li>
+      <li><a href="/vocab">📚 Vocab</a></li>
+      <li class="section-label">PROGRESS</li>
+      <li><a href="/">🔖 Saved</a></li>
+      <li><a href="/">❌ Mistakes Log</a></li>
+      <li class="section-label">COLLEGE</li>
+      <li><a href="/colleges">🎓 Browse Colleges</a></li>
+      <li class="section-label">SUPPORT</li>
+      <li><a href="chat-support.html">💬 Chat With Support</a></li>
+      <li><a href="bug-report.html">🐛 Bug Report</a></li>
+      <li><a href="feedback.html">⭐ Give Feedback</a></li>
+      <li class="section-label">OPPORTUNITIES</li>
+      <li><a href="tutor-apply.html" class="active">🧑‍🏫 Apply As A Tutor</a></li>
+      <li><a href="creator-program.html">🎨 Creator Program</a></li>
+      <li class="section-label">RESOURCES</li>
+      <li><a href="score-calculator.html">🧮 Score Calculator</a></li>
+      <li><a href="blog.html">📰 Blog</a></li>
+      <li class="section-label">SOCIAL</li>
+      <li><a href="https://discord.gg" target="_blank">🎮 Join Discord</a></li>
+      <li><a href="https://instagram.com" target="_blank">📸 Instagram</a></li>
+    </ul>
+    <div class="sidebar-bottom">
+      <button onclick="document.getElementById('app-body').classList.toggle('dark')">🌙 Switch To Dark</button>
+      <a href="#">⬆️ Upgrade</a>
+      <div class="user-profile">
+        <span class="avatar">A</span>
+        <span>Abdullah Abdus...</span>
+        <span>⚙️</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ MAIN ═══ -->
+  <div class="page-wrap">
+
+    <div class="page-hero">
+      <div class="hero-badge">🧑‍🏫 Now Hiring</div>
+      <h1>Become a OnePrep Tutor</h1>
+      <p>Share your SAT expertise, help students reach their dream scores, and earn competitive pay — all on your own schedule.</p>
+      <div class="hero-benefits">
+        <div class="hb-item">💰 $25–$60/hr</div>
+        <div class="hb-item">⏰ Flexible Schedule</div>
+        <div class="hb-item">🌍 100% Remote</div>
+        <div class="hb-item">🎓 Students Love Us</div>
+      </div>
+    </div>
+
+    <!-- Stats strip -->
+    <div class="stats-strip">
+      <div class="stat-card"><span class="stat-num">340+</span><span class="stat-lbl">Active Tutors</span></div>
+      <div class="stat-card"><span class="stat-num">12,000+</span><span class="stat-lbl">Students Helped</span></div>
+      <div class="stat-card"><span class="stat-num">+180</span><span class="stat-lbl">Avg Score Increase</span></div>
+      <div class="stat-card"><span class="stat-num">4.9⭐</span><span class="stat-lbl">Tutor Satisfaction</span></div>
+    </div>
+
+    <div class="content-grid">
+
+      <!-- Application Form -->
+      <div class="form-card" id="tutor-form-card">
+        <div class="form-inner">
+          <div class="form-title">📋 Tutor Application</div>
+          <div class="form-sub">Complete this form and we'll review your application within 3–5 business days.</div>
+
+          <div class="form-section-title">👤 Personal Information</div>
+
+          <div class="form-2col">
+            <div class="form-row">
+              <label for="t-fname">First Name <span class="required">*</span></label>
+              <input type="text" id="t-fname" placeholder="First name" />
+            </div>
+            <div class="form-row">
+              <label for="t-lname">Last Name <span class="required">*</span></label>
+              <input type="text" id="t-lname" placeholder="Last name" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="t-email">Email Address <span class="required">*</span></label>
+            <input type="email" id="t-email" placeholder="you@example.com" />
+          </div>
+
+          <div class="form-row">
+            <label for="t-phone">Phone Number</label>
+            <input type="tel" id="t-phone" placeholder="+1 (555) 000-0000" />
+          </div>
+
+          <div class="form-section-title">📊 Your SAT Background</div>
+
+          <div class="form-row">
+            <label for="t-sat">Your SAT Score (or highest score) <span class="required">*</span></label>
+            <div class="sat-input-wrap">
+              <input type="number" id="t-sat" min="400" max="1600" step="10" placeholder="e.g. 1520" />
+              <span class="sat-badge">/ 1600</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="t-year">Year You Took the SAT</label>
+            <select id="t-year">
+              <option>2024</option><option>2023</option><option>2022</option>
+              <option>2021</option><option>2020 or earlier</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label>Subjects You Want to Teach <span class="required">*</span></label>
+            <div class="subjects-grid">
+              <div>
+                <input type="checkbox" id="s-rw1" class="subj-check" />
+                <label class="subj-label" for="s-rw1">📖 R&amp;W Module 1</label>
+              </div>
+              <div>
+                <input type="checkbox" id="s-rw2" class="subj-check" />
+                <label class="subj-label" for="s-rw2">📖 R&amp;W Module 2</label>
+              </div>
+              <div>
+                <input type="checkbox" id="s-m1" class="subj-check" />
+                <label class="subj-label" for="s-m1">🧮 Math Module 1</label>
+              </div>
+              <div>
+                <input type="checkbox" id="s-m2" class="subj-check" />
+                <label class="subj-label" for="s-m2">🧮 Math Module 2</label>
+              </div>
+              <div>
+                <input type="checkbox" id="s-vocab" class="subj-check" />
+                <label class="subj-label" for="s-vocab">📚 Vocabulary</label>
+              </div>
+              <div>
+                <input type="checkbox" id="s-strategy" class="subj-check" />
+                <label class="subj-label" for="s-strategy">🎯 Test Strategy</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section-title">🎓 Education & Experience</div>
+
+          <div class="form-row">
+            <label for="t-edu">Highest Education Level <span class="required">*</span></label>
+            <select id="t-edu">
+              <option value="">Select…</option>
+              <option>High School / GED</option>
+              <option>Some College</option>
+              <option>Bachelor's Degree</option>
+              <option>Master's Degree</option>
+              <option>Doctoral Degree</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="t-exp">Tutoring Experience <span class="required">*</span></label>
+            <select id="t-exp">
+              <option value="">Select…</option>
+              <option>No formal experience (first time)</option>
+              <option>Less than 1 year</option>
+              <option>1–2 years</option>
+              <option>3–5 years</option>
+              <option>5+ years</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="t-why">Why do you want to tutor for OnePrep? <span class="required">*</span></label>
+            <textarea id="t-why" rows="4" placeholder="Tell us about your passion for education and what makes you a great SAT tutor..."></textarea>
+          </div>
+
+          <div class="form-section-title">📅 Availability</div>
+
+          <div class="form-row">
+            <label>Which days are you available? <span class="required">*</span></label>
+            <div class="avail-grid">
+              <div><input type="checkbox" id="av-mon" class="avail-check" /><label class="avail-label" for="av-mon">📅<span>Mon</span></label></div>
+              <div><input type="checkbox" id="av-tue" class="avail-check" /><label class="avail-label" for="av-tue">📅<span>Tue</span></label></div>
+              <div><input type="checkbox" id="av-wed" class="avail-check" /><label class="avail-label" for="av-wed">📅<span>Wed</span></label></div>
+              <div><input type="checkbox" id="av-thu" class="avail-check" /><label class="avail-label" for="av-thu">📅<span>Thu</span></label></div>
+              <div><input type="checkbox" id="av-fri" class="avail-check" /><label class="avail-label" for="av-fri">📅<span>Fri</span></label></div>
+              <div><input type="checkbox" id="av-sat" class="avail-check" /><label class="avail-label" for="av-sat">📅<span>Sat</span></label></div>
+              <div><input type="checkbox" id="av-sun" class="avail-check" /><label class="avail-label" for="av-sun">📅<span>Sun</span></label></div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="t-hours">Hours available per week</label>
+            <select id="t-hours">
+              <option>1–5 hours</option>
+              <option>5–10 hours</option>
+              <option>10–20 hours</option>
+              <option>20+ hours</option>
+            </select>
+          </div>
+
+          <button class="btn-submit" onclick="submitTutor()">🧑‍🏫 Submit Application</button>
+        </div>
+
+        <div class="success-overlay" id="tutor-success">
+          <div class="success-icon">🎉</div>
+          <div class="success-title">Application Submitted!</div>
+          <div class="success-sub">Thank you for applying to be a OnePrep tutor! Here's what happens next:</div>
+          <div class="success-timeline">
+            <div class="tl-item"><div class="tl-step">1</div>We review your application (3–5 business days)</div>
+            <div class="tl-item"><div class="tl-step">2</div>Short video interview with our team</div>
+            <div class="tl-item"><div class="tl-step">3</div>Brief SAT knowledge assessment</div>
+            <div class="tl-item"><div class="tl-step">4</div>Onboarding & your first student match!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right panel -->
+      <div class="side-panel">
+        <div class="side-card">
+          <div class="side-card-title">🏆 Tutor Perks</div>
+          <div class="perk-list">
+            <div class="perk-item">
+              <div class="perk-icon">💰</div>
+              <div>
+                <div class="perk-title">Competitive Pay</div>
+                <div class="perk-sub">Earn $25–$60/hr based on experience and subject expertise.</div>
+              </div>
+            </div>
+            <div class="perk-item">
+              <div class="perk-icon">⏰</div>
+              <div>
+                <div class="perk-title">Flexible Hours</div>
+                <div class="perk-sub">Work whenever you want — evenings, weekends, or full-time.</div>
+              </div>
+            </div>
+            <div class="perk-item">
+              <div class="perk-icon">🌍</div>
+              <div>
+                <div class="perk-title">100% Remote</div>
+                <div class="perk-sub">Tutor from anywhere in the world with just a laptop.</div>
+              </div>
+            </div>
+            <div class="perk-item">
+              <div class="perk-icon">📈</div>
+              <div>
+                <div class="perk-title">Grow Your Career</div>
+                <div class="perk-sub">Build your reputation, earn reviews, and unlock higher pay tiers.</div>
+              </div>
+            </div>
+            <div class="perk-item">
+              <div class="perk-icon">🎓</div>
+              <div>
+                <div class="perk-title">Free Premium Access</div>
+                <div class="perk-sub">All tutors get full OnePrep Premium — for you and one student.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <div class="side-card-title">📋 Application Process</div>
+          <div class="process-steps">
+            <div class="ps-item"><div class="ps-num">1</div><div><div class="ps-title">Submit application</div><div class="ps-sub">Fill out this form — takes 5 minutes</div></div></div>
+            <div class="ps-item"><div class="ps-num">2</div><div><div class="ps-title">Application review</div><div class="ps-sub">We'll review within 3–5 business days</div></div></div>
+            <div class="ps-item"><div class="ps-num">3</div><div><div class="ps-title">Video interview</div><div class="ps-sub">15-minute call with our team</div></div></div>
+            <div class="ps-item"><div class="ps-num">4</div><div><div class="ps-title">Start tutoring!</div><div class="ps-sub">Get matched with your first student</div></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast-msg" id="toast"></div>
+
+  <script>
+    function submitTutor() {
+      const fname = document.getElementById('t-fname').value.trim();
+      const email = document.getElementById('t-email').value.trim();
+      const sat   = document.getElementById('t-sat').value.trim();
+      const edu   = document.getElementById('t-edu').value;
+      const exp   = document.getElementById('t-exp').value;
+      const why   = document.getElementById('t-why').value.trim();
+
+      if (!fname) { showToast('⚠️ Please enter your first name'); return; }
+      if (!email) { showToast('⚠️ Please enter your email'); return; }
+      if (!sat || parseInt(sat) < 400 || parseInt(sat) > 1600) { showToast('⚠️ Please enter a valid SAT score (400–1600)'); return; }
+      if (!edu)   { showToast('⚠️ Please select your education level'); return; }
+      if (!exp)   { showToast('⚠️ Please select your experience level'); return; }
+      if (!why)   { showToast('⚠️ Please tell us why you want to tutor'); return; }
+
+      document.getElementById('tutor-form-card').classList.add('submitted');
+      document.getElementById('tutor-success').classList.add('show');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+  </script>
+</body>
+</html>

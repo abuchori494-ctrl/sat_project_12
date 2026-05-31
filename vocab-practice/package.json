@@ -1,0 +1,15 @@
+{
+  "name": "oneprep-vocab-practice",
+  "version": "1.0.0",
+  "description": "Production-ready SAT Vocabulary Practice Module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "author": "Google Deepmind Team",
+  "license": "ISC"
+}

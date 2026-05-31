@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnePrep — Browse Colleges</title>
+  
+  <!-- Sora and DM Sans Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"DM Sans"', 'sans-serif'],
+            sora: ['"Sora"', 'sans-serif'],
+          },
+          colors: {
+            appTeal: '#1a3a4a',
+            pinkAccent: '#ec4899',
+            blueAccent: '#3b82f6',
+            lightCream: '#faf8f4'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #ffffff;
+      font-family: 'DM Sans', sans-serif;
+      color: #111827;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Sora', sans-serif;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f9fafb;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #e5e7eb;
+      border-radius: 6px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #d1d5db;
+    }
+
+    /* Staggered Card Fades */
+    .fade-in-card {
+      animation: fadeInCard 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes fadeInCard {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Bookmark Beat */
+    .heart-beat {
+      animation: heartBeat 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+    }
+    @keyframes heartBeat {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    /* Custom marking highlights */
+    mark {
+      background-color: #fef08a;
+      color: #854d0e;
+      font-weight: 700;
+      padding: 0 2px;
+      border-radius: 4px;
+    }
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="light">
+  <!-- ═══ VERTICAL SIDEBAR NAV (EXACT MOCKUP MATCH) ═══ -->
+  <nav id="sidebar">
+    <!-- Logo -->
+    <div class="logo" onclick="window.location.href='/'">
+      <span class="logo-icon">🤖</span>
+      <span class="logo-text">OnePrep</span>
+    </div>
+    
+    <!-- Exam Selector -->
+    <select class="exam-selector" onchange="showToast('Selected ' + this.value.toUpperCase())">
+      <option>SAT</option>
+      <option>ACT</option>
+    </select>
+
+    <!-- Nav Links -->
+    <ul class="nav-links">
+      <li><a href="/" data-page="home">🏠 Home</a></li>
+      <li><a href="/" onclick="window.location.href='/?chat=true'; return false;" data-page="ask-preppy">🤖 Ask Preppy AI</a></li>
+      <li><a href="/study-planner" data-page="study-planner">📅 Study Planner</a></li>
+      <li>
+        <a href="/analytics" data-page="analytics">
+          📊 Analytics <span class="badge-new">New</span>
+        </a>
+      </li>
+      
+      <li class="section-label">PRACTICE</li>
+      <li><a href="/question-bank" data-page="question-bank">🔲 Question Bank</a></li>
+      <li><a href="/question-rush" data-page="question-rush">⚡ Question Rush</a></li>
+      <li><a href="/challenge" data-page="challenge">🎯 Challenge Questions</a></li>
+      <li><a href="/predicted-tests" data-page="predicted-tests">📝 Predicted Tests</a></li>
+      <li><a href="/vocab" data-page="vocab">📚 Vocab</a></li>
+
+      <li class="section-label">PROGRESS</li>
+      <li><a href="/" data-page="saved">🔖 Saved</a></li>
+      <li><a href="/" data-page="mistakes">❌ Mistakes Log</a></li>
+      
+      <li class="section-label">COLLEGE</li>
+      <li><a href="/colleges" data-page="colleges" class="active">🎓 Browse Colleges</a></li>
+    </ul>
+
+    <!-- Bottom items -->
+    <div class="sidebar-bottom">
+      <a href="#" onclick="showToast('Join Us loaded!'); return false;">👥 Join Us</a>
+      <button onclick="toggleDark()">🌙 Switch To Dark</button>
+      <a href="#" onclick="showToast('Pro features unlocked!'); return false;">⬆️ Upgrade</a>
+      <a href="#" onclick="showToast('Other options'); return false;">⋯ Other</a>
+      <div class="user-profile" onclick="showToast('Settings')">
+        <span class="avatar">A</span>
+        <span>Abdullah Abdus...</span>
+        <span>⚙️</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <!-- ==========================================
+         VIEW 1: COLLEGE BROWSER (MAIN LIST)
+         ========================================== -->
+    <main id="view-browser" class="max-w-6xl mx-auto px-6 py-6 w-full flex-grow space-y-8">
+    
+    <!-- PAGE HEADER -->
+    <div class="space-y-1.5">
+      <h2 class="text-4xl font-extrabold text-black font-sora tracking-tight">Browse Colleges</h2>
+      <p class="text-sm text-gray-500 font-medium">Find and compare colleges with admission stats, SAT scores, and more</p>
+    </div>
+
+    <!-- STICKY FILTER BAR -->
+    <div class="bg-white/80 backdrop-blur-md py-4 border-b border-gray-100 sticky top-[69px] z-20 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
+      
+      <!-- Left Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
+        <button id="pill-all" onclick="setSavedFilter(false)" class="whitespace-nowrap px-4 py-2.5 rounded-full text-xs font-bold bg-white text-black shadow-sm border border-gray-150 transition-all">
+          All Colleges
+        </button>
+        <button id="pill-saved" onclick="setSavedFilter(true)" class="whitespace-nowrap px-4 py-2.5 rounded-full text-xs font-bold bg-gray-100/70 text-gray-500 hover:bg-gray-100 transition-all">
+          🔖 Saved Colleges
+        </button>
+        <button onclick="openFilterModal()" class="whitespace-nowrap px-4 py-2.5 rounded-full text-xs font-bold bg-gray-100/70 text-gray-500 hover:bg-gray-100 transition-all flex items-center gap-1">
+          🔽 Sort & filter
+        </button>
+      </div>
+
+      <!-- Right Search Box -->
+      <div class="relative flex-grow max-w-md">
+        <span class="absolute left-4 top-3.5 text-gray-400 text-sm">🔍</span>
+        <input type="text" id="college-search-input" oninput="handleSearchInput(event)" placeholder="Search colleges..." class="w-full bg-gray-100/70 text-xs font-bold text-black pl-10 pr-4 py-3 rounded-full border-none outline-none focus:bg-gray-100 transition-all placeholder-gray-400" />
+      </div>
+
+    </div>
+
+    <!-- Active filters indicator row -->
+    <div id="active-filters-row" class="hidden flex-wrap gap-2 items-center text-xs font-bold text-gray-500 bg-blue-50/50 p-3 rounded-2xl border border-blue-100/50">
+      <span>Active Filters:</span>
+      <div id="active-filters-chips" class="flex flex-wrap gap-1.5"></div>
+      <button onclick="resetAllFilters()" class="text-blue-600 hover:underline ml-auto">Reset All</button>
+    </div>
+
+    <!-- Search status counts -->
+    <div id="search-status-bar" class="hidden text-xs font-bold text-gray-400">
+      Showing <span id="search-count-label">0</span> results for '<span id="search-query-label"></span>'
+    </div>
+
+    <!-- COLLEGE GRID (2 Columns) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="colleges-grid">
+      <!-- Injected via Javascript -->
+    </div>
+
+    <!-- No results state container -->
+    <div id="no-results-state" class="hidden flex-col items-center justify-center text-center py-16 px-6 space-y-4">
+      <div class="text-5xl">🎓</div>
+      <h3 class="text-lg font-extrabold text-black font-sora">No colleges found</h3>
+      <p class="text-xs text-gray-400 font-medium">Try resetting your filter parameters or search queries.</p>
+      <button onclick="resetAllFilters()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-6 py-3 rounded-full active:scale-95 transition-all shadow">Reset Search & Filters</button>
+    </div>
+
+  </main>
+
+  <!-- ==========================================
+       VIEW 2: COLLEGE DETAIL PAGE
+       ========================================== -->
+  <main id="view-detail" class="hidden max-w-4xl mx-auto px-6 py-10 w-full flex-grow space-y-8">
+    
+    <!-- Navigation back breadcrumb -->
+    <button onclick="navigate('browser')" class="text-xs font-bold text-gray-400 hover:text-black flex items-center gap-1">
+      ← Back to Browse Colleges
+    </button>
+
+    <!-- College Hero Card -->
+    <div class="bg-white border border-gray-150 rounded-3xl p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-sm">
+      
+      <div class="flex items-center gap-5">
+        <!-- Logo block -->
+        <div id="detail-logo-box" class="w-20 h-20 rounded-2xl flex items-center justify-center text-white font-extrabold text-2xl font-sora shadow-sm border border-black/5">
+          <!-- Text abbreviated logo -->
+        </div>
+
+        <div class="space-y-1.5">
+          <h2 id="detail-college-name" class="text-2xl md:text-3xl font-extrabold text-black font-sora tracking-tight leading-tight">Harvard University</h2>
+          <p id="detail-college-subtitle" class="text-xs text-gray-400 font-bold">Cambridge, MA · Private Nonprofit</p>
+          
+          <!-- Tags list -->
+          <div id="detail-tags-box" class="flex flex-wrap gap-1.5 pt-1">
+            <!-- Dynamic badges -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Save toggle badge -->
+      <button id="detail-save-btn" onclick="toggleSavedDetail()" class="border border-gray-200 hover:border-black rounded-2xl p-4 flex items-center gap-2 font-bold text-xs bg-white text-gray-500 hover:text-black shadow-sm transition-all active:scale-95">
+        <span id="detail-save-icon">🔖</span> <span id="detail-save-label">Save College</span>
+      </button>
+
+    </div>
+
+    <!-- STATS GRID (4 Columns/Cards) -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      
+      <!-- Stat 1: Acceptance Rate -->
+      <div class="bg-white border border-gray-150 rounded-2xl p-5 space-y-2 shadow-sm">
+        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Acceptance Rate</span>
+        <div class="flex items-baseline gap-1.5">
+          <strong id="stat-rate" class="text-2xl font-black font-sora text-red-600">3%</strong>
+          <span class="text-xs text-gray-400 font-bold">↘ trend</span>
+        </div>
+        <p id="stat-rate-lbl" class="text-[9px] text-gray-400 font-bold font-sora uppercase">Highly Selective</p>
+      </div>
+
+      <!-- Stat 2: Median SAT -->
+      <div class="bg-white border border-gray-150 rounded-2xl p-5 space-y-2 shadow-sm">
+        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Median SAT</span>
+        <strong id="stat-sat" class="text-2xl font-black font-sora text-black">1580</strong>
+        <p id="stat-sat-range" class="text-[9px] text-gray-400 font-bold font-sora uppercase">25th–75th: 1500–1600</p>
+      </div>
+
+      <!-- Stat 3: SAT Score Range -->
+      <div class="bg-white border border-gray-150 rounded-2xl p-5 space-y-2 shadow-sm">
+        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">SAT Range</span>
+        <strong id="stat-range" class="text-2xl font-black font-sora text-black">1500–1600</strong>
+        <p class="text-[9px] text-gray-400 font-bold font-sora uppercase">25th to 75th percentile</p>
+      </div>
+
+      <!-- Stat 4: Ranking -->
+      <div class="bg-white border border-gray-150 rounded-2xl p-5 space-y-2 shadow-sm">
+        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">National Ranking</span>
+        <strong id="stat-rank" class="text-2xl font-black font-sora text-black">#1</strong>
+        <p class="text-[9px] text-gray-400 font-bold font-sora uppercase">US News 2024</p>
+      </div>
+
+    </div>
+
+    <!-- SAT SCORE COMPARISON WIDGET -->
+    <div class="bg-[#faf8f4] border border-amber-100 rounded-3xl p-6 md:p-8 space-y-6">
+      
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div class="space-y-1">
+          <h3 class="text-lg font-black text-black font-sora">How does your score compare?</h3>
+          <p class="text-xs text-gray-400 font-medium">Compare your SAT scores against this college's average cohorts.</p>
+        </div>
+
+        <!-- Editable User Score field -->
+        <div class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-2xl border border-gray-200">
+          <span class="text-xs font-bold text-gray-400">Your Score:</span>
+          <input type="number" id="widget-user-score-input" oninput="changeUserScoreWidget(event)" value="1220" min="400" max="1600" class="w-16 text-xs font-black text-black border-none outline-none text-center bg-gray-50 focus:bg-white rounded-md p-1" />
+        </div>
+      </div>
+
+      <!-- Visual comparative bar -->
+      <div class="space-y-6">
+        
+        <div class="relative pt-6 pb-2">
+          
+          <!-- Slider tracks split into zones -->
+          <div class="h-3 w-full rounded-full flex overflow-hidden">
+            <div class="h-full bg-red-400/90 flex-grow" style="width: 35%" title="Below Range"></div>
+            <div class="h-full bg-amber-400/90 flex-grow" style="width: 25%" title="In Lower Range"></div>
+            <div class="h-full bg-green-400/90 flex-grow" style="width: 25%" title="In Upper Range"></div>
+            <div class="h-full bg-emerald-600 flex-grow" style="width: 15%" title="Above Range"></div>
+          </div>
+
+          <!-- Comparative markers layered over track -->
+          <!-- 1. College Median Indicator -->
+          <div id="widget-median-indicator" class="absolute top-4 flex flex-col items-center" style="left: 75%">
+            <div class="w-[3px] h-7 bg-black rounded-full"></div>
+            <span class="text-[9px] font-black text-black font-sora bg-white px-2 py-0.5 rounded shadow border border-gray-150 mt-1 whitespace-nowrap">Median: <span id="widget-lbl-median">1580</span></span>
+          </div>
+
+          <!-- 2. User Score indicator dot -->
+          <div id="widget-user-indicator" class="absolute top-2.5 flex flex-col items-center transition-all duration-300" style="left: 55%">
+            <div class="w-4 h-4 rounded-full bg-blue-600 border-2 border-white shadow shadow-blue-500"></div>
+            <span class="text-[9px] font-black text-white bg-blue-600 px-2 py-0.5 rounded shadow mt-5 whitespace-nowrap">You: <span id="widget-lbl-user">1220</span></span>
+          </div>
+
+        </div>
+
+        <!-- Range zones guide -->
+        <div class="grid grid-cols-4 text-[9px] font-black text-gray-400 uppercase tracking-widest text-center pt-2">
+          <span class="text-red-600">Below range</span>
+          <span class="text-amber-600">Lower range</span>
+          <span class="text-green-600">Upper range</span>
+          <span class="text-emerald-700">Above range</span>
+        </div>
+
+      </div>
+
+      <!-- Result description card -->
+      <div id="widget-feedback-card" class="bg-white border border-gray-150 rounded-2xl p-4 text-xs font-bold leading-relaxed text-gray-700">
+        <!-- Javascript generated evaluation text -->
+      </div>
+
+    </div>
+
+    <!-- ADMISSION INFO SECTION -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-black text-black font-sora">Admission Information</h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <div class="bg-white border border-gray-150 p-4 rounded-2xl flex justify-between items-center text-xs shadow-sm">
+          <span class="text-gray-400 font-bold">📅 Application Deadline</span>
+          <strong id="adm-deadline" class="text-black font-extrabold">January 1 (Regular Decision)</strong>
+        </div>
+
+        <div class="bg-white border border-gray-150 p-4 rounded-2xl flex justify-between items-center text-xs shadow-sm">
+          <span class="text-gray-400 font-bold">📝 Test Policy</span>
+          <strong id="adm-policy" class="text-black font-extrabold">SAT/ACT Required</strong>
+        </div>
+
+        <div class="bg-white border border-gray-150 p-4 rounded-2xl flex justify-between items-center text-xs shadow-sm">
+          <span class="text-gray-400 font-bold">💰 Application Fee</span>
+          <strong id="adm-fee" class="text-black font-extrabold">$75</strong>
+        </div>
+
+        <div class="bg-white border border-gray-150 p-4 rounded-2xl flex justify-between items-center text-xs shadow-sm">
+          <span class="text-gray-400 font-bold">🎓 Degrees Offered</span>
+          <strong class="text-black font-extrabold">Bachelor's, Master's, Doctoral</strong>
+        </div>
+
+        <div class="bg-white border border-gray-150 p-4 rounded-2xl flex justify-between items-center text-xs shadow-sm">
+          <span class="text-gray-400 font-bold">📍 Setting</span>
+          <strong id="adm-setting" class="text-black font-extrabold">Urban</strong>
+        </div>
+
+        <div class="bg-white border border-gray-150 p-4 rounded-2xl flex justify-between items-center text-xs shadow-sm">
+          <span class="text-gray-400 font-bold">👥 Total Enrollment</span>
+          <strong id="adm-size" class="text-black font-extrabold">~21,000 students</strong>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SIMILAR COLLEGES SECTION -->
+    <div class="space-y-4 pt-4">
+      <h3 class="text-lg font-black text-black font-sora">Similar Colleges</h3>
+      
+      <!-- Horizontal Scrollable row of mini cards -->
+      <div id="similar-colleges-row" class="flex gap-4 overflow-x-auto pb-4 pt-1 snap-x scroll-smooth">
+        <!-- Javascript injected cards -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==========================================
+       SORT & FILTER MODAL
+       ========================================== -->
+  <div id="filter-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center p-4">
+    <div class="bg-white w-full max-w-xl rounded-t-3xl md:rounded-3xl p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto shadow-2xl relative">
+      
+      <!-- Modal Close button -->
+      <button onclick="closeFilterModal()" class="absolute right-6 top-6 text-gray-400 hover:text-black text-2xl font-black">×</button>
+
+      <h3 class="text-xl font-extrabold text-black font-sora border-b border-gray-100 pb-3">Sort & filter</h3>
+
+      <div class="space-y-5">
+        
+        <!-- A. SORT OPTIONS -->
+        <div class="space-y-2">
+          <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest">Sort Colleges By</h4>
+          <div class="grid grid-cols-2 gap-2 text-xs font-bold text-gray-700">
+            <label class="flex items-center gap-2 bg-gray-50 hover:bg-gray-100/70 p-3 rounded-2xl cursor-pointer">
+              <input type="radio" name="sort-group" value="name" checked class="accent-blueAccent" /> Name (A–Z)
+            </label>
+            <label class="flex items-center gap-2 bg-gray-50 hover:bg-gray-100/70 p-3 rounded-2xl cursor-pointer">
+              <input type="radio" name="sort-group" value="ranking" class="accent-blueAccent" /> National Ranking
+            </label>
+            <label class="flex items-center gap-2 bg-gray-50 hover:bg-gray-100/70 p-3 rounded-2xl cursor-pointer">
+              <input type="radio" name="sort-group" value="rate-low-high" class="accent-blueAccent" /> Acceptance Rate (Low → High)
+            </label>
+            <label class="flex items-center gap-2 bg-gray-50 hover:bg-gray-100/70 p-3 rounded-2xl cursor-pointer">
+              <input type="radio" name="sort-group" value="rate-high-low" class="accent-blueAccent" /> Acceptance Rate (High → Low)
+            </label>
+            <label class="flex items-center gap-2 bg-gray-50 hover:bg-gray-100/70 p-3 rounded-2xl cursor-pointer">
+              <input type="radio" name="sort-group" value="sat-high-low" class="accent-blueAccent" /> Median SAT (High → Low)
+            </label>
+            <label class="flex items-center gap-2 bg-gray-50 hover:bg-gray-100/70 p-3 rounded-2xl cursor-pointer">
+              <input type="radio" name="sort-group" value="sat-low-high" class="accent-blueAccent" /> Median SAT (Low → High)
+            </label>
+          </div>
+        </div>
+
+        <!-- B. TYPE SELECTOR -->
+        <div class="space-y-2">
+          <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest">Institution Type</h4>
+          <div class="flex gap-2">
+            <button type="button" id="btn-type-all" onclick="selectFilterType('All')" class="flex-1 bg-blue-600 text-white font-bold py-2.5 rounded-full text-center text-xs active:scale-95 transition-all">All</button>
+            <button type="button" id="btn-type-public" onclick="selectFilterType('Public')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-2.5 rounded-full text-center text-xs active:scale-95 transition-all">Public</button>
+            <button type="button" id="btn-type-private" onclick="selectFilterType('Private Nonprofit')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-2.5 rounded-full text-center text-xs active:scale-95 transition-all">Private</button>
+          </div>
+        </div>
+
+        <!-- C. ACCEPTANCE RATE SLIDER -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-gray-400">
+            <span class="uppercase tracking-widest">Acceptance Rate Range</span>
+            <span class="text-blue-600" id="lbl-rate-range">0% to 100%</span>
+          </div>
+          <div class="flex gap-3">
+            <input type="range" id="filter-rate-min" min="0" max="100" value="0" oninput="updateRateLabel()" class="flex-1 accent-blueAccent" />
+            <input type="range" id="filter-rate-max" min="0" max="100" value="100" oninput="updateRateLabel()" class="flex-1 accent-blueAccent" />
+          </div>
+        </div>
+
+        <!-- D. SAT SCORE SLIDER -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-gray-400">
+            <span class="uppercase tracking-widest">SAT Score Range</span>
+            <span class="text-blue-600" id="lbl-sat-range">800 to 1600</span>
+          </div>
+          <div class="flex gap-3">
+            <input type="range" id="filter-sat-min" min="800" max="1600" value="800" step="10" oninput="updateSATLabel()" class="flex-1 accent-blueAccent" />
+            <input type="range" id="filter-sat-max" min="800" max="1600" value="1600" step="10" oninput="updateSATLabel()" class="flex-1 accent-blueAccent" />
+          </div>
+        </div>
+
+        <!-- E. STATES CHECKBOX DROPDOWN -->
+        <div class="space-y-2">
+          <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest">Location (US States)</h4>
+          <div class="border border-gray-150 rounded-2xl p-3 bg-gray-50/50 max-h-32 overflow-y-auto grid grid-cols-3 gap-2 text-xs font-bold text-gray-600" id="states-checkboxes-grid">
+            <!-- Javascript dynamic checklist states -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action buttons -->
+      <div class="flex gap-3 border-t border-gray-100 pt-5">
+        <button onclick="applyFiltersAndSort()" class="flex-grow bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-2xl text-center active:scale-95 transition-all text-xs shadow">Apply Filters</button>
+        <button onclick="resetAllFilters()" class="px-6 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-3.5 rounded-2xl text-center active:scale-95 transition-all text-xs">Reset All</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================
+       JAVASCRIPT DRIVER
+       ========================================== -->
+  <script>
+    const API_BASE = '';
+    
+    // Application core state
+    let state = {
+      currentView: 'browser',
+      colleges: [],
+      savedOnly: false,
+      selectedCollegeId: null,
+      similarColleges: [],
+      
+      // Inline comparative widgets
+      userSATScore: 1220,
+
+      // Active filters parameters mapping
+      searchQuery: '',
+      filterType: 'All',
+      minSAT: 800,
+      maxSAT: 1600,
+      minRate: 0,
+      maxRate: 100,
+      selectedStates: new Set(),
+      activeSort: 'name'
+    };
+
+    // Debouncer mapping
+    let searchTimeout = null;
+
+    // LocalStorage syncing fallback
+    let localSavedSet = new Set(JSON.parse(localStorage.getItem('oneprep_saved_colleges') || '[]'));
+
+    // Start App
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchColleges();
+      buildStatesChecklist();
+      loadUserSATScore();
+    });
+
+    // ==========================================
+    // DATA FETCHING & RENDERING
+    // ==========================================
+    async function fetchColleges() {
+      // Build dynamic API queries parameters
+      const params = new URLSearchParams({
+        search: state.searchQuery,
+        type: state.filterType,
+        minSAT: state.minSAT,
+        maxSAT: state.maxSAT,
+        minRate: state.minRate,
+        maxRate: state.maxRate,
+        sort: state.activeSort
+      });
+
+      if (state.selectedStates.size > 0) {
+        params.append('state', Array.from(state.selectedStates).join(','));
+      }
+
+      let data = null;
+      try {
+        const response = await fetch(`${API_BASE}/api/colleges?${params.toString()}`);
+        if (!response.ok) throw new Error();
+        data = await response.json();
+        state.colleges = data.colleges;
+      } catch {
+        console.warn("[Offline] Fallback loaded colleges dataset client-side.");
+        state.colleges = getLocalFallbackColleges();
+      }
+
+      // Filter local saved list if necessary
+      if (state.savedOnly) {
+        state.colleges = state.colleges.filter(c => localSavedSet.has(c.id));
+      }
+
+      renderCollegesGrid();
+      renderActiveChips();
+    }
+
+    function renderCollegesGrid() {
+      const grid = document.getElementById('colleges-grid');
+      const emptyState = document.getElementById('no-results-state');
+
+      if (state.colleges.length === 0) {
+        grid.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      grid.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+
+      grid.innerHTML = state.colleges.map((c, index) => {
+        const saved = localSavedSet.has(c.id);
+        const savedClass = saved ? "text-pinkAccent bg-pink-50 border-pink-100" : "text-gray-400 bg-white border-gray-200 hover:border-black";
+        
+        // Highlight matching query tokens in name, city, state
+        const highlightedName = highlightText(c.name, state.searchQuery);
+        const highlightedLocation = highlightText(`${c.city}, ${c.state}`, state.searchQuery);
+
+        // Color coding Acceptance rate
+        let rateColor = "text-black";
+        let rateLabel = "Less Selective";
+        if (c.acceptanceRate <= 10) {
+          rateColor = "text-red-600";
+          rateLabel = "Highly Selective";
+        } else if (c.acceptanceRate <= 25) {
+          rateColor = "text-orange-500";
+          rateLabel = "Selective";
+        } else if (c.acceptanceRate <= 50) {
+          rateColor = "text-yellow-600";
+          rateLabel = "Moderately Selective";
+        }
+
+        // Custom logo display color branding
+        const logoBgColor = c.logoColor || '#6b7280';
+
+        return `
+          <div class="bg-white border border-gray-150 rounded-3xl p-6 shadow-sm hover:shadow-md hover:scale-[1.005] transition-all cursor-pointer flex justify-between items-start fade-in-card" style="animation-delay: ${index * 30}ms" onclick="viewCollegeDetail(${c.id})">
+            
+            <div class="flex items-start gap-4">
+              <!-- Logo colored block -->
+              <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-white font-extrabold text-sm tracking-wide font-sora shrink-0 border border-black/5" style="background-color: ${logoBgColor}">
+                ${c.logo}
+              </div>
+
+              <div class="space-y-1">
+                <h3 class="font-extrabold text-base text-[#111827] leading-snug tracking-tight">${highlightedName}</h3>
+                <p class="text-xs text-gray-400 font-bold">${highlightedLocation}</p>
+                <span class="inline-block text-[10px] font-bold text-gray-400 bg-gray-100 px-2.5 py-0.5 rounded-full">${c.type}</span>
+              </div>
+            </div>
+
+            <!-- Stats parameters right align -->
+            <div class="text-right flex flex-col justify-between h-full space-y-4 shrink-0" onclick="event.stopPropagation()">
+              
+              <!-- Save Bookmark toggler button -->
+              <button onclick="toggleSavedState(${c.id}, event)" class="self-end w-9 h-9 rounded-xl border flex items-center justify-center shadow-sm active:scale-95 transition-all ${savedClass}">
+                🔖
+              </button>
+
+              <div class="space-y-1">
+                <span class="text-[9px] text-gray-400 font-bold uppercase tracking-wider block leading-none">Acceptance Rate</span>
+                <strong class="text-sm font-black font-sora tracking-tight ${rateColor}">${c.acceptanceRate}%</strong>
+                
+                <span class="text-[9px] text-gray-400 font-bold uppercase tracking-wider block leading-none pt-1">Median SAT</span>
+                <strong class="text-sm font-black font-sora tracking-tight text-black">${c.medianSAT}</strong>
+              </div>
+
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ==========================================
+    // DETAIL VIEW HANDLERS
+    // ==========================================
+    async function viewCollegeDetail(id) {
+      state.selectedCollegeId = id;
+      let college = null;
+      let similar = [];
+
+      try {
+        const response = await fetch(`${API_BASE}/api/colleges/${id}`);
+        if (!response.ok) throw new Error();
+        const data = await response.json();
+        college = data.college;
+        similar = data.similar;
+      } catch {
+        console.warn("[Offline] Fallback detail generator mapping triggered.");
+        college = getLocalFallbackColleges().find(c => c.id === id);
+        similar = getLocalFallbackColleges().filter(c => c.id !== id && c.type === college.type).slice(0, 4);
+      }
+
+      state.similarColleges = similar;
+
+      // Populate college detail parameters
+      document.getElementById('detail-college-name').textContent = college.name;
+      document.getElementById('detail-college-subtitle').textContent = `${college.city}, ${college.state} · ${college.type}`;
+      
+      const logoBox = document.getElementById('detail-logo-box');
+      logoBox.textContent = college.logo;
+      logoBox.style.backgroundColor = college.logoColor || '#6b7280';
+
+      // Render Tags
+      document.getElementById('detail-tags-box').innerHTML = college.tags.map(t => `
+        <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-blue-100">${t}</span>
+      `).join('');
+
+      // Bookmark states sync
+      const saved = localSavedSet.has(college.id);
+      updateSaveDetailButtonState(saved);
+
+      // Render Stats cards
+      const rateColor = college.acceptanceRate <= 10 ? 'text-red-600' : college.acceptanceRate <= 25 ? 'text-orange-500' : college.acceptanceRate <= 50 ? 'text-yellow-600' : 'text-black';
+      const rateLbl = college.acceptanceRate <= 10 ? 'Highly Selective' : college.acceptanceRate <= 25 ? 'Selective' : college.acceptanceRate <= 50 ? 'Moderately Selective' : 'Less Selective';
+
+      document.getElementById('stat-rate').className = `text-2xl font-black font-sora ${rateColor}`;
+      document.getElementById('stat-rate').textContent = `${college.acceptanceRate}%`;
+      document.getElementById('stat-rate-lbl').textContent = rateLbl;
+
+      document.getElementById('stat-sat').textContent = college.medianSAT;
+      document.getElementById('stat-sat-range').textContent = `25th–75th: ${college.satRange.low}–${college.satRange.high}`;
+      document.getElementById('stat-range').textContent = `${college.satRange.low}–${college.satRange.high}`;
+      document.getElementById('stat-rank').textContent = `#${college.ranking}`;
+
+      // Set Admission dead-times parameters
+      document.getElementById('adm-deadline').textContent = college.acceptanceRate < 10 ? "January 1 (Regular Decision)" : "January 15 (Regular Decision)";
+      document.getElementById('adm-policy').textContent = college.medianSAT > 1400 ? "SAT/ACT Required" : "Test Optional";
+      document.getElementById('adm-fee').textContent = college.acceptanceRate < 10 ? "$90" : "$75";
+      document.getElementById('adm-setting').textContent = college.id % 2 === 0 ? "Urban" : college.id % 3 === 0 ? "Suburban" : "Rural";
+      document.getElementById('adm-size').textContent = `~${(college.acceptanceRate * 250 + 8000).toLocaleString()} students`;
+
+      // Render similar colleges
+      document.getElementById('similar-colleges-row').innerHTML = similar.map(s => `
+        <div onclick="viewCollegeDetail(${s.id})" class="snap-start w-56 shrink-0 bg-white border border-gray-150 p-4 rounded-2xl hover:border-black cursor-pointer space-y-3 transition-all flex flex-col">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-extrabold text-xs font-sora border border-black/5" style="background-color: ${s.logoColor || '#6b7280'}">
+              ${s.logo}
+            </div>
+            <div class="leading-tight truncate flex-grow">
+              <strong class="text-xs font-extrabold text-[#111827] truncate block">${s.name}</strong>
+              <span class="text-[10px] text-gray-400 font-bold truncate block">${s.city}, ${s.state}</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center text-[10px] font-bold text-gray-500 pt-1 border-t border-gray-50 mt-auto">
+            <span>SAT: <strong>${s.medianSAT}</strong></span>
+            <span>Rate: <strong>${s.acceptanceRate}%</strong></span>
+          </div>
+        </div>
+      `).join('');
+
+      // Draw SAT widget range comparative bar values
+      drawSATComparisonWidget(college);
+
+      navigate('detail');
+    }
+
+    // ==========================================
+    // SAT SCORE COMPARATIVE WIDGET
+    // ==========================================
+    function drawSATComparisonWidget(college) {
+      document.getElementById('widget-lbl-median').textContent = college.medianSAT;
+      document.getElementById('widget-lbl-user').textContent = state.userSATScore;
+
+      // Position indicators: convert scores (800-1600) into proportional percentage positions (0% to 100%)
+      const calcPercent = (score) => {
+        const clamped = Math.max(800, Math.min(1600, score));
+        return ((clamped - 800) / 800) * 100;
+      };
+
+      const medianPercent = calcPercent(college.medianSAT);
+      const userPercent = calcPercent(state.userSATScore);
+
+      document.getElementById('widget-median-indicator').style.left = `${medianPercent}%`;
+      document.getElementById('widget-user-indicator').style.left = `${userPercent}%`;
+
+      // Produce comparative text notifications
+      const feedback = document.getElementById('widget-feedback-card');
+      
+      const satLow = college.satRange.low;
+      const satHigh = college.satRange.high;
+      const score = state.userSATScore;
+
+      if (score >= satHigh) {
+        feedback.innerHTML = `🎉 <span class="text-emerald-700 font-extrabold">Above Range:</span> Your score of <strong>${score}</strong> is above this college's typical range (25th–75th: ${satLow}–${satHigh}). You are an exceptionally competitive applicant here!`;
+        feedback.className = "bg-emerald-50 border border-emerald-150 rounded-2xl p-4 text-xs font-bold leading-relaxed text-emerald-800";
+      } else if (score >= college.medianSAT) {
+        feedback.innerHTML = `✅ <span class="text-green-700 font-extrabold">Competitive:</span> Your score of <strong>${score}</strong> is in the upper competitive range for ${college.name}. Consider maintaining your stellar performance!`;
+        feedback.className = "bg-green-50 border border-green-150 rounded-2xl p-4 text-xs font-bold leading-relaxed text-green-800";
+      } else if (score >= satLow) {
+        feedback.innerHTML = `⚠️ <span class="text-amber-700 font-extrabold">Lower Range:</span> Your score of <strong>${score}</strong> lies within the lower range of accepted cohorts at this college. A higher score of 100+ points would significantly boost your chances.`;
+        feedback.className = "bg-amber-50 border border-amber-150 rounded-2xl p-4 text-xs font-bold leading-relaxed text-amber-800";
+      } else {
+        feedback.innerHTML = `📚 <span class="text-red-700 font-extrabold">Below Range:</span> Your score of <strong>${score}</strong> is currently below this college's historical 25th percentile. We highly recommend practicing with OnePrep Question Rush or targeted practice topics.`;
+        feedback.className = "bg-red-50 border border-red-150 rounded-2xl p-4 text-xs font-bold leading-relaxed text-red-800";
+      }
+    }
+
+    function changeUserScoreWidget(e) {
+      let val = parseInt(e.target.value);
+      if (isNaN(val)) return;
+      if (val < 400) val = 400;
+      if (val > 1600) val = 1600;
+
+      state.userSATScore = val;
+      localStorage.setItem('oneprep_user_sat_score', val);
+
+      // Re-draw comparative indicator dot
+      const college = colleges.find(c => c.id === state.selectedCollegeId);
+      if (college) {
+        drawSATComparisonWidget(college);
+      }
+    }
+
+    function loadUserSATScore() {
+      const score = localStorage.getItem('oneprep_user_sat_score');
+      if (score) {
+        state.userSATScore = parseInt(score);
+        document.getElementById('widget-user-score-input').value = state.userSATScore;
+      }
+    }
+
+    // ==========================================
+    // FILTERS, SEARCH, AND STATE MANAGEMENT
+    // ==========================================
+    function setSavedFilter(savedOnly) {
+      state.savedOnly = savedOnly;
+
+      const pillAll = document.getElementById('pill-all');
+      const pillSaved = document.getElementById('pill-saved');
+
+      if (savedOnly) {
+        pillSaved.className = "whitespace-nowrap px-4 py-2.5 rounded-full text-xs font-bold bg-white text-black shadow-sm border border-gray-150 transition-all";
+        pillAll.className = "whitespace-nowrap px-4 py-2.5 rounded-full text-xs font-bold bg-gray-100/70 text-gray-500 hover:bg-gray-100 transition-all";
+      } else {
+        pillAll.className = "whitespace-nowrap px-4 py-2.5 rounded-full text-xs font-bold bg-white text-black shadow-sm border border-gray-150 transition-all";
+        pillSaved.className = "whitespace-nowrap px-4 py-2.5 rounded-full text-xs font-bold bg-gray-100/70 text-gray-500 hover:bg-gray-100 transition-all";
+      }
+
+      fetchColleges();
+    }
+
+    function handleSearchInput(e) {
+      const text = e.target.value;
+      state.searchQuery = text;
+
+      // Debounce inputs 300ms
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        const bar = document.getElementById('search-status-bar');
+        if (state.searchQuery.trim() !== '') {
+          bar.classList.remove('hidden');
+          document.getElementById('search-query-label').textContent = state.searchQuery;
+        } else {
+          bar.classList.add('hidden');
+        }
+
+        fetchColleges().then(() => {
+          document.getElementById('search-count-label').textContent = state.colleges.length;
+        });
+      }, 300);
+    }
+
+    // Sort & Filter Modal operations
+    function openFilterModal() {
+      document.getElementById('filter-modal').classList.remove('hidden');
+      syncFilterModalInputs();
+    }
+
+    function closeFilterModal() {
+      document.getElementById('filter-modal').classList.add('hidden');
+    }
+
+    function syncFilterModalInputs() {
+      // Sync sorting radios
+      const radios = document.getElementsByName('sort-group');
+      radios.forEach(r => {
+        if (r.value === state.activeSort) r.checked = true;
+      });
+
+      // Sync type button highlights
+      selectFilterType(state.filterType, false);
+
+      // Sync range sliders
+      document.getElementById('filter-rate-min').value = state.minRate;
+      document.getElementById('filter-rate-max').value = state.maxRate;
+      updateRateLabel();
+
+      document.getElementById('filter-sat-min').value = state.minSAT;
+      document.getElementById('filter-sat-max').value = state.maxSAT;
+      updateSATLabel();
+
+      // Sync state checkboxes checklist
+      const checkboxes = document.querySelectorAll('.state-checkbox');
+      checkboxes.forEach(box => {
+        box.checked = state.selectedStates.has(box.value);
+      });
+    }
+
+    function selectFilterType(type, triggerSync = true) {
+      state.filterType = type;
+
+      const btnAll = document.getElementById('btn-type-all');
+      const btnPub = document.getElementById('btn-type-public');
+      const btnPriv = document.getElementById('btn-type-private');
+
+      [btnAll, btnPub, btnPriv].forEach(btn => {
+        btn.className = "flex-grow bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-2.5 rounded-full text-center text-xs active:scale-95 transition-all";
+      });
+
+      if (type === 'All') {
+        btnAll.className = "flex-grow bg-blue-600 text-white font-bold py-2.5 rounded-full text-center text-xs active:scale-95 transition-all";
+      } else if (type === 'Public') {
+        btnPub.className = "flex-grow bg-blue-600 text-white font-bold py-2.5 rounded-full text-center text-xs active:scale-95 transition-all";
+      } else {
+        btnPriv.className = "flex-grow bg-blue-600 text-white font-bold py-2.5 rounded-full text-center text-xs active:scale-95 transition-all";
+      }
+    }
+
+    function updateRateLabel() {
+      const min = document.getElementById('filter-rate-min').value;
+      const max = document.getElementById('filter-rate-max').value;
+      document.getElementById('lbl-rate-range').textContent = `${min}% to ${max}%`;
+    }
+
+    function updateSATLabel() {
+      const min = document.getElementById('filter-sat-min').value;
+      const max = document.getElementById('filter-sat-max').value;
+      document.getElementById('lbl-sat-range').textContent = `${min} to ${max}`;
+    }
+
+    function buildStatesChecklist() {
+      // Extract unique states sorted
+      const rawStates = Array.from(new Set(getLocalFallbackColleges().map(c => c.state))).sort();
+      const grid = document.getElementById('states-checkboxes-grid');
+
+      grid.innerHTML = rawStates.map(st => `
+        <label class="flex items-center gap-2 hover:text-black cursor-pointer">
+          <input type="checkbox" value="${st}" class="state-checkbox accent-blueAccent" onchange="toggleStateCheckbox('${st}', this)" />
+          ${st}
+        </label>
+      `).join('');
+    }
+
+    function toggleStateCheckbox(st, checkbox) {
+      if (checkbox.checked) {
+        state.selectedStates.add(st);
+      } else {
+        state.selectedStates.delete(st);
+      }
+    }
+
+    function applyFiltersAndSort() {
+      // Extract values from inputs
+      const radios = document.getElementsByName('sort-group');
+      radios.forEach(r => {
+        if (r.checked) state.activeSort = r.value;
+      });
+
+      state.minRate = parseInt(document.getElementById('filter-rate-min').value);
+      state.maxRate = parseInt(document.getElementById('filter-rate-max').value);
+
+      state.minSAT = parseInt(document.getElementById('filter-sat-min').value);
+      state.maxSAT = parseInt(document.getElementById('filter-sat-max').value);
+
+      closeFilterModal();
+      fetchColleges();
+    }
+
+    function resetAllFilters() {
+      state.filterType = 'All';
+      state.minRate = 0;
+      state.maxRate = 100;
+      state.minSAT = 800;
+      state.maxSAT = 1600;
+      state.selectedStates.clear();
+      state.activeSort = 'name';
+      state.searchQuery = '';
+      
+      document.getElementById('college-search-input').value = '';
+      document.getElementById('search-status-bar').classList.add('hidden');
+
+      closeFilterModal();
+      fetchColleges();
+    }
+
+    function renderActiveChips() {
+      const chips = document.getElementById('active-filters-chips');
+      const row = document.getElementById('active-filters-row');
+
+      let elements = [];
+
+      if (state.filterType !== 'All') {
+        elements.push(`Type: ${state.filterType}`);
+      }
+      if (state.minRate > 0 || state.maxRate < 100) {
+        elements.push(`Rate: ${state.minRate}%–${state.maxRate}%`);
+      }
+      if (state.minSAT > 800 || state.maxSAT < 1600) {
+        elements.push(`SAT: ${state.minSAT}–${state.maxSAT}`);
+      }
+      if (state.selectedStates.size > 0) {
+        elements.push(`States: ${Array.from(state.selectedStates).join(', ')}`);
+      }
+      if (state.activeSort !== 'name') {
+        elements.push(`Sorted`);
+      }
+
+      if (elements.length > 0) {
+        row.classList.remove('hidden');
+        chips.innerHTML = elements.map(el => `
+          <span class="bg-blue-100/80 text-blue-600 px-2.5 py-0.5 rounded-full text-[10px] font-black">${el}</span>
+        `).join('');
+      } else {
+        row.classList.add('hidden');
+      }
+    }
+
+    // ==========================================
+    // BOOKMARK SAVES & SYNCING
+    // ==========================================
+    async function toggleSavedState(id, e) {
+      if (e) e.stopPropagation();
+
+      // Trigger bookmark animation
+      const btn = e ? e.currentTarget : null;
+      if (btn) {
+        btn.classList.add('heart-beat');
+        setTimeout(() => btn.classList.remove('heart-beat'), 350);
+      }
+
+      // Sync state and local storage
+      if (localSavedSet.has(id)) {
+        localSavedSet.delete(id);
+      } else {
+        localSavedSet.add(id);
+      }
+      
+      localStorage.setItem('oneprep_saved_colleges', JSON.stringify(Array.from(localSavedSet)));
+
+      // Sync with server
+      try {
+        await fetch(`${API_BASE}/api/colleges/${id}/save`, { method: 'POST' });
+      } catch {
+        console.warn("[Offline] Save status persisted locally.");
+      }
+
+      // Re-draw matrix grids
+      fetchColleges();
+    }
+
+    async function toggleSavedDetail() {
+      const id = state.selectedCollegeId;
+      
+      const btn = document.getElementById('detail-save-btn');
+      btn.classList.add('heart-beat');
+      setTimeout(() => btn.classList.remove('heart-beat'), 350);
+
+      if (localSavedSet.has(id)) {
+        localSavedSet.delete(id);
+      } else {
+        localSavedSet.add(id);
+      }
+
+      localStorage.setItem('oneprep_saved_colleges', JSON.stringify(Array.from(localSavedSet)));
+
+      try {
+        await fetch(`${API_BASE}/api/colleges/${id}/save`, { method: 'POST' });
+      } catch {
+        console.warn("[Offline] Persisted locally.");
+      }
+
+      const saved = localSavedSet.has(id);
+      updateSaveDetailButtonState(saved);
+      
+      // Update browser view behind detail
+      fetchColleges();
+    }
+
+    function updateSaveDetailButtonState(saved) {
+      const btn = document.getElementById('detail-save-btn');
+      const label = document.getElementById('detail-save-label');
+      
+      if (saved) {
+        btn.className = "border border-pink-200 hover:border-pink-300 rounded-2xl p-4 flex items-center gap-2 font-bold text-xs bg-pink-50 text-pinkAccent shadow-sm transition-all active:scale-95";
+        label.textContent = "Saved";
+      } else {
+        btn.className = "border border-gray-200 hover:border-black rounded-2xl p-4 flex items-center gap-2 font-bold text-xs bg-white text-gray-500 hover:text-black shadow-sm transition-all active:scale-95";
+        label.textContent = "Save College";
+      }
+    }
+
+    // ==========================================
+    // UTILITY HELPER FUNCTIONS
+    // ==========================================
+    function navigate(viewId) {
+      document.getElementById('view-browser').classList.add('hidden');
+      document.getElementById('view-detail').classList.add('hidden');
+
+      document.getElementById(`view-${viewId}`).classList.remove('hidden');
+      state.currentView = viewId;
+      window.scrollTo(0, 0);
+    }
+
+    function highlightText(text, query) {
+      if (!query || query.trim() === '') return text;
+      
+      const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+      const regex = new RegExp(`(${escapedQuery})`, 'gi');
+      return text.replace(regex, '<mark>$1</mark>');
+    }
+
+    // ==========================================
+    // BACKEND FALLBACK DATABASE FOR OFFLINE
+    // ==========================================
+    function getLocalFallbackColleges() {
+      const base = [
+        // IVY LEAGUE & TOP ELITE
+        { id: 1,  name: "Harvard University",           city: "Cambridge", state: "MA", type: "Private Nonprofit", acceptanceRate: 3,  medianSAT: 1580, logo: "H",  logoColor: "#A51C30" },
+        { id: 2,  name: "MIT",                          city: "Cambridge", state: "MA", type: "Private Nonprofit", acceptanceRate: 4,  medianSAT: 1570, logo: "MIT",logoColor: "#750014" },
+        { id: 3,  name: "Stanford University",          city: "Stanford",  state: "CA", type: "Private Nonprofit", acceptanceRate: 4,  medianSAT: 1570, logo: "S",  logoColor: "#8C1515" },
+        { id: 4,  name: "Yale University",              city: "New Haven", state: "CT", type: "Private Nonprofit", acceptanceRate: 5,  medianSAT: 1560, logo: "Y",  logoColor: "#00356B" },
+        { id: 5,  name: "Princeton University",         city: "Princeton", state: "NJ", type: "Private Nonprofit", acceptanceRate: 4,  medianSAT: 1570, logo: "P",  logoColor: "#E87722" },
+        { id: 6,  name: "Columbia University",          city: "New York",  state: "NY", type: "Private Nonprofit", acceptanceRate: 4,  medianSAT: 1560, logo: "C",  logoColor: "#003DA5" },
+        { id: 7,  name: "UPenn",                        city: "Philadelphia", state: "PA", type: "Private Nonprofit", acceptanceRate: 7, medianSAT: 1530, logo: "UP", logoColor: "#011F5B" },
+        { id: 8,  name: "Brown University",             city: "Providence", state: "RI", type: "Private Nonprofit", acceptanceRate: 5,  medianSAT: 1530, logo: "B",  logoColor: "#4E3629" },
+        { id: 9,  name: "Dartmouth College",            city: "Hanover",   state: "NH", type: "Private Nonprofit", acceptanceRate: 6,  medianSAT: 1540, logo: "D",  logoColor: "#00693E" },
+        { id: 10, name: "Cornell University",           city: "Ithaca",    state: "NY", type: "Private Nonprofit", acceptanceRate: 9,  medianSAT: 1520, logo: "C",  logoColor: "#B31B1B" },
+
+        // TOP LIBERAL ARTS & RESEARCH
+        { id: 11, name: "Duke University",              city: "Durham",    state: "NC", type: "Private Nonprofit", acceptanceRate: 7,  medianSAT: 1540, logo: "D",  logoColor: "#003087" },
+        { id: 12, name: "Northwestern University",      city: "Evanston",  state: "IL", type: "Private Nonprofit", acceptanceRate: 7,  medianSAT: 1540, logo: "N",  logoColor: "#4E2A84" },
+        { id: 13, name: "Johns Hopkins University",     city: "Baltimore", state: "MD", type: "Private Nonprofit", acceptanceRate: 8,  medianSAT: 1540, logo: "JH", logoColor: "#002D72" },
+        { id: 14, name: "Vanderbilt University",        city: "Nashville", state: "TN", type: "Private Nonprofit", acceptanceRate: 8,  medianSAT: 1540, logo: "V",  logoColor: "#866D4B" },
+        { id: 15, name: "Rice University",              city: "Houston",   state: "TX", type: "Private Nonprofit", acceptanceRate: 9,  medianSAT: 1545, logo: "R",  logoColor: "#002469" },
+        { id: 16, name: "Washington University in St. Louis", city: "St. Louis", state: "MO", type: "Private Nonprofit", acceptanceRate: 13, medianSAT: 1540, logo: "WU", logoColor: "#A51417" },
+        { id: 17, name: "Notre Dame University",        city: "Notre Dame", state: "IN", type: "Private Nonprofit", acceptanceRate: 13, medianSAT: 1510, logo: "ND", logoColor: "#0C2340" },
+        { id: 18, name: "Georgetown University",        city: "Washington", state: "DC", type: "Private Nonprofit", acceptanceRate: 14, medianSAT: 1490, logo: "G",  logoColor: "#041E42" },
+        { id: 19, name: "Emory University",             city: "Atlanta",   state: "GA", type: "Private Nonprofit", acceptanceRate: 17, medianSAT: 1480, logo: "E",  logoColor: "#012169" },
+        { id: 20, name: "Carnegie Mellon University",   city: "Pittsburgh",state: "PA", type: "Private Nonprofit", acceptanceRate: 14, medianSAT: 1540, logo: "CM", logoColor: "#C41230" },
+
+        // TOP PUBLIC UNIVERSITIES
+        { id: 21, name: "UC Berkeley",                  city: "Berkeley",  state: "CA", type: "Public",            acceptanceRate: 14, medianSAT: 1445, logo: "B",  logoColor: "#003262" },
+        { id: 22, name: "UCLA",                         city: "Los Angeles", state: "CA", type: "Public",          acceptanceRate: 9,  medianSAT: 1415, logo: "UCLA",logoColor: "#2774AE" },
+        { id: 23, name: "University of Michigan",       city: "Ann Arbor", state: "MI", type: "Public",            acceptanceRate: 18, medianSAT: 1460, logo: "M",  logoColor: "#00274C" },
+        { id: 24, name: "University of Virginia",       city: "Charlottesville", state: "VA", type: "Public",      acceptanceRate: 19, medianSAT: 1430, logo: "UVA",logoColor: "#232D4B" },
+        { id: 25, name: "University of North Carolina", city: "Chapel Hill", state: "NC", type: "Public",          acceptanceRate: 19, medianSAT: 1380, logo: "UNC",logoColor: "#4B9CD3" },
+        { id: 26, name: "Georgia Tech",                 city: "Atlanta",   state: "GA", type: "Public",            acceptanceRate: 17, medianSAT: 1490, logo: "GT", logoColor: "#B3A369" },
+        { id: 27, name: "University of Texas Austin",   city: "Austin",    state: "TX", type: "Public",            acceptanceRate: 32, medianSAT: 1330, logo: "UT", logoColor: "#BF5700" },
+        { id: 28, name: "University of Wisconsin",      city: "Madison",   state: "WI", type: "Public",            acceptanceRate: 49, medianSAT: 1370, logo: "W",  logoColor: "#C5050C" },
+        { id: 29, name: "University of Illinois",       city: "Urbana-Champaign", state: "IL", type: "Public",     acceptanceRate: 45, medianSAT: 1390, logo: "I",  logoColor: "#13294B" },
+        { id: 30, name: "Ohio State University",        city: "Columbus",  state: "OH", type: "Public",            acceptanceRate: 54, medianSAT: 1340, logo: "OSU",logoColor: "#BA0C2F" },
+
+        // MORE TOP SCHOOLS
+        { id: 31, name: "Tufts University",             city: "Medford",   state: "MA", type: "Private Nonprofit", acceptanceRate: 10, medianSAT: 1500, logo: "T",  logoColor: "#3E8EDE" },
+        { id: 32, name: "Boston College",               city: "Chestnut Hill", state: "MA", type: "Private Nonprofit", acceptanceRate: 19, medianSAT: 1460, logo: "BC", logoColor: "#98002E" },
+        { id: 33, name: "Boston University",            city: "Boston",    state: "MA", type: "Private Nonprofit", acceptanceRate: 19, medianSAT: 1430, logo: "BU", logoColor: "#CC0000" },
+        { id: 34, name: "Northeastern University",      city: "Boston",    state: "MA", type: "Private Nonprofit", acceptanceRate: 7,  medianSAT: 1510, logo: "N",  logoColor: "#C8102E" },
+        { id: 35, name: "NYU",                          city: "New York",  state: "NY", type: "Private Nonprofit", acceptanceRate: 12, medianSAT: 1480, logo: "NYU",logoColor: "#57068C" },
+        { id: 36, name: "USC",                          city: "Los Angeles", state: "CA", type: "Private Nonprofit", acceptanceRate: 12, medianSAT: 1475, logo: "SC", logoColor: "#990000" },
+        { id: 37, name: "Wake Forest University",       city: "Winston-Salem", state: "NC", type: "Private Nonprofit", acceptanceRate: 22, medianSAT: 1430, logo: "WF", logoColor: "#9E7E38" },
+        { id: 38, name: "Tulane University",            city: "New Orleans", state: "LA", type: "Private Nonprofit", acceptanceRate: 13, medianSAT: 1450, logo: "T",  logoColor: "#006747" },
+        { id: 39, name: "Lehigh University",            city: "Bethlehem", state: "PA", type: "Private Nonprofit", acceptanceRate: 34, medianSAT: 1410, logo: "L",  logoColor: "#653400" },
+        { id: 40, name: "George Washington University", city: "Washington", state: "DC", type: "Private Nonprofit", acceptanceRate: 45, medianSAT: 1380, logo: "GW", logoColor: "#033C5A" },
+        { id: 41, name: "Purdue University",            city: "West Lafayette", state: "IN", type: "Public",       acceptanceRate: 67, medianSAT: 1320, logo: "P",  logoColor: "#CEB888" },
+        { id: 42, name: "Penn State University",        city: "University Park", state: "PA", type: "Public",      acceptanceRate: 57, medianSAT: 1260, logo: "PSU",logoColor: "#1E407C" },
+        { id: 43, name: "Indiana University",           city: "Bloomington", state: "IN", type: "Public",          acceptanceRate: 80, medianSAT: 1230, logo: "IU", logoColor: "#990000" },
+        { id: 44, name: "University of Florida",        city: "Gainesville", state: "FL", type: "Public",          acceptanceRate: 24, medianSAT: 1380, logo: "UF", logoColor: "#0021A5" },
+        { id: 45, name: "University of Georgia",        city: "Athens",    state: "GA", type: "Public",            acceptanceRate: 45, medianSAT: 1290, logo: "UGA",logoColor: "#BA0C2F" },
+        { id: 46, name: "University of Washington",     city: "Seattle",   state: "WA", type: "Public",            acceptanceRate: 49, medianSAT: 1330, logo: "W",  logoColor: "#4B2E83" },
+        { id: 47, name: "Michigan State University",    city: "East Lansing", state: "MI", type: "Public",         acceptanceRate: 76, medianSAT: 1210, logo: "MSU",logoColor: "#18453B" },
+        { id: 48, name: "Rutgers University",           city: "New Brunswick", state: "NJ", type: "Public",        acceptanceRate: 66, medianSAT: 1250, logo: "R",  logoColor: "#CC0033" },
+        { id: 49, name: "University of Minnesota",      city: "Minneapolis", state: "MN", type: "Public",          acceptanceRate: 57, medianSAT: 1310, logo: "M",  logoColor: "#7A0019" },
+        { id: 50, name: "University of Pittsburgh",     city: "Pittsburgh", state: "PA", type: "Public",           acceptanceRate: 52, medianSAT: 1320, logo: "UP", logoColor: "#003594" },
+
+        { id: 51, name: "Case Western Reserve",         city: "Cleveland", state: "OH", type: "Private Nonprofit", acceptanceRate: 30, medianSAT: 1480, logo: "CW", logoColor: "#0A304E" },
+        { id: 52, name: "Brandeis University",          city: "Waltham",   state: "MA", type: "Private Nonprofit", acceptanceRate: 35, medianSAT: 1430, logo: "B",  logoColor: "#003478" },
+        { id: 53, name: "Rochester University",         city: "Rochester", state: "NY", type: "Private Nonprofit", acceptanceRate: 29, medianSAT: 1470, logo: "R",  logoColor: "#003B71" },
+        { id: 54, name: "Rensselaer Polytechnic",       city: "Troy",      state: "NY", type: "Private Nonprofit", acceptanceRate: 49, medianSAT: 1450, logo: "RPI",logoColor: "#E2231A" },
+        { id: 55, name: "Santa Clara University",       city: "Santa Clara", state: "CA", type: "Private Nonprofit", acceptanceRate: 46, medianSAT: 1380, logo: "SC", logoColor: "#862633" },
+        { id: 56, name: "Villanova University",         city: "Villanova", state: "PA", type: "Private Nonprofit", acceptanceRate: 23, medianSAT: 1420, logo: "V",  logoColor: "#00205B" },
+        { id: 57, name: "Fordham University",           city: "New York",  state: "NY", type: "Private Nonprofit", acceptanceRate: 46, medianSAT: 1350, logo: "F",  logoColor: "#6B2737" },
+        { id: 58, name: "American University",          city: "Washington", state: "DC", type: "Private Nonprofit", acceptanceRate: 36, medianSAT: 1310, logo: "AU", logoColor: "#C8102E" },
+        { id: 59, name: "University of Denver",         city: "Denver",    state: "CO", type: "Private Nonprofit", acceptanceRate: 75, medianSAT: 1270, logo: "DU", logoColor: "#CE1141" },
+        { id: 60, name: "Drexel University",            city: "Philadelphia", state: "PA", type: "Private Nonprofit", acceptanceRate: 75, medianSAT: 1290, logo: "D",  logoColor: "#07294D" },
+
+        { id: 61, name: "UC San Diego",                 city: "La Jolla",  state: "CA", type: "Public",            acceptanceRate: 24, medianSAT: 1390, logo: "UCSD",logoColor: "#00629B" },
+        { id: 62, name: "UC Davis",                     city: "Davis",     state: "CA", type: "Public",            acceptanceRate: 39, medianSAT: 1330, logo: "UCD",logoColor: "#022851" },
+        { id: 63, name: "UC Santa Barbara",             city: "Santa Barbara", state: "CA", type: "Public",        acceptanceRate: 26, medianSAT: 1340, logo: "UCSB",logoColor: "#003660" },
+        { id: 64, name: "UC Irvine",                    city: "Irvine",    state: "CA", type: "Public",            acceptanceRate: 21, medianSAT: 1310, logo: "UCI",logoColor: "#003764" },
+        { id: 65, name: "University of Maryland",       city: "College Park", state: "MD", type: "Public",         acceptanceRate: 44, medianSAT: 1390, logo: "UM", logoColor: "#E03A3E" },
+        { id: 66, name: "Virginia Tech",                city: "Blacksburg", state: "VA", type: "Public",           acceptanceRate: 57, medianSAT: 1310, logo: "VT", logoColor: "#630031" },
+        { id: 67, name: "University of Colorado",       city: "Boulder",   state: "CO", type: "Public",            acceptanceRate: 84, medianSAT: 1230, logo: "CU", logoColor: "#CFB87C" },
+        { id: 68, name: "Clemson University",           city: "Clemson",   state: "SC", type: "Public",            acceptanceRate: 43, medianSAT: 1270, logo: "C",  logoColor: "#F66733" },
+        { id: 69, name: "University of Arizona",        city: "Tucson",    state: "AZ", type: "Public",            acceptanceRate: 85, medianSAT: 1180, logo: "UA", logoColor: "#AB0520" },
+        { id: 70, name: "University of Iowa",           city: "Iowa City", state: "IA", type: "Public",            acceptanceRate: 84, medianSAT: 1230, logo: "UI", logoColor: "#FFCD00" },
+
+        { id: 71, name: "Babson College",               city: "Wellesley", state: "MA", type: "Private Nonprofit", acceptanceRate: 24, medianSAT: 1390, logo: "B",  logoColor: "#00563F" },
+        { id: 72, name: "Colgate University",           city: "Hamilton",  state: "NY", type: "Private Nonprofit", acceptanceRate: 22, medianSAT: 1460, logo: "C",  logoColor: "#821019" },
+        { id: 73, name: "Wesleyan University",          city: "Middletown",state: "CT", type: "Private Nonprofit", acceptanceRate: 16, medianSAT: 1480, logo: "W",  logoColor: "#C8102E" },
+        { id: 74, name: "Hamilton College",             city: "Clinton",   state: "NY", type: "Private Nonprofit", acceptanceRate: 17, medianSAT: 1460, logo: "H",  logoColor: "#0047AB" },
+        { id: 75, name: "Bowdoin College",              city: "Brunswick", state: "ME", type: "Private Nonprofit", acceptanceRate: 9,  medianSAT: 1500, logo: "B",  logoColor: "#000000" },
+        { id: 76, name: "Middlebury College",           city: "Middlebury",state: "VT", type: "Private Nonprofit", acceptanceRate: 14, medianSAT: 1480, logo: "M",  logoColor: "#004F97" },
+        { id: 77, name: "Williams College",             city: "Williamstown",state:"MA", type: "Private Nonprofit", acceptanceRate: 9, medianSAT: 1510, logo: "W",  logoColor: "#512888" },
+        { id: 78, name: "Amherst College",              city: "Amherst",   state: "MA", type: "Private Nonprofit", acceptanceRate: 9,  medianSAT: 1510, logo: "A",  logoColor: "#3E1F8E" },
+        { id: 79, name: "Swarthmore College",           city: "Swarthmore",state: "PA", type: "Private Nonprofit", acceptanceRate: 8,  medianSAT: 1520, logo: "S",  logoColor: "#CF102D" },
+        { id: 80, name: "Carleton College",             city: "Northfield",state: "MN", type: "Private Nonprofit", acceptanceRate: 17, medianSAT: 1490, logo: "C",  logoColor: "#002B5C" },
+
+        { id: 81, name: "Harvey Mudd College",          city: "Claremont", state: "CA", type: "Private Nonprofit", acceptanceRate: 10, medianSAT: 1560, logo: "HM", logoColor: "#F9A21B" },
+        { id: 82, name: "Pomona College",               city: "Claremont", state: "CA", type: "Private Nonprofit", acceptanceRate: 7,  medianSAT: 1510, logo: "P",  logoColor: "#0057A8" },
+        { id: 83, name: "Claremont McKenna College",    city: "Claremont", state: "CA", type: "Private Nonprofit", acceptanceRate: 9,  medianSAT: 1490, logo: "CM", logoColor: "#8B0000" },
+        { id: 84, name: "Davidson College",             city: "Davidson",  state: "NC", type: "Private Nonprofit", acceptanceRate: 17, medianSAT: 1440, logo: "D",  logoColor: "#CC0000" },
+        { id: 85, name: "Grinnell College",             city: "Grinnell",  state: "IA", type: "Private Nonprofit", acceptanceRate: 13, medianSAT: 1470, logo: "G",  logoColor: "#CC0000" },
+        { id: 86, name: "Oberlin College",              city: "Oberlin",   state: "OH", type: "Private Nonprofit", acceptanceRate: 33, medianSAT: 1420, logo: "O",  logoColor: "#B1242A" },
+        { id: 87, name: "Colorado College",             city: "Colorado Springs", state: "CO", type: "Private Nonprofit", acceptanceRate: 15, medianSAT: 1430, logo: "CC", logoColor: "#1D3557" },
+        { id: 88, name: "Smith College",                city: "Northampton",state: "MA", type: "Private Nonprofit", acceptanceRate: 32, medianSAT: 1380, logo: "S",  logoColor: "#002855" },
+        { id: 89, name: "Wellesley College",            city: "Wellesley", state: "MA", type: "Private Nonprofit", acceptanceRate: 14, medianSAT: 1460, logo: "W",  logoColor: "#005596" },
+        { id: 90, name: "Barnard College",              city: "New York",  state: "NY", type: "Private Nonprofit", acceptanceRate: 11, medianSAT: 1470, logo: "B",  logoColor: "#C8102E" },
+
+        { id: 91,  name: "Abilene Christian University",  city: "Abilene",     state: "TX", type: "Private Nonprofit", acceptanceRate: 64, medianSAT: 1170, logo: "ACU",logoColor: "#5B2C8D" },
+        { id: 92,  name: "Adelphi University",             city: "Garden City", state: "NY", type: "Private Nonprofit", acceptanceRate: 78, medianSAT: 1210, logo: "A",  logoColor: "#B45309" },
+        { id: 93,  name: "Agnes Scott College",            city: "Decatur",     state: "GA", type: "Private Nonprofit", acceptanceRate: 62, medianSAT: 1250, logo: "A",  logoColor: "#6B7280" },
+        { id: 94,  name: "Alabama A&M University",         city: "Normal",      state: "AL", type: "Public",            acceptanceRate: 66, medianSAT: 940,  logo: "A",  logoColor: "#8B0000" },
+        { id: 95,  name: "Alabama State University",       city: "Montgomery",  state: "AL", type: "Public",            acceptanceRate: 96, medianSAT: 900,  logo: "ASU",logoColor: "#000000" },
+        { id: 96,  name: "Alaska Pacific University",      city: "Anchorage",   state: "AK", type: "Private Nonprofit", acceptanceRate: 86, medianSAT: 1020, logo: "A",  logoColor: "#1E3A5F" },
+        { id: 97,  name: "Abraham Baldwin Agricultural",   city: "Tifton",      state: "GA", type: "Public",            acceptanceRate: 77, medianSAT: 1000, logo: "A",  logoColor: "#374151" },
+        { id: 98,  name: "Adrian College",                 city: "Adrian",      state: "MI", type: "Private Nonprofit", acceptanceRate: 68, medianSAT: 1000, logo: "A",  logoColor: "#8B6914" },
+        { id: 99,  name: "Florida State University",       city: "Tallahassee", state: "FL", type: "Public",            acceptanceRate: 25, medianSAT: 1310, logo: "FSU",logoColor: "#782F40" },
+        { id: 100, name: "Arizona State University",       city: "Tempe",       state: "AZ", type: "Public",            acceptanceRate: 88, medianSAT: 1210, logo: "ASU",logoColor: "#8C1D40" }
+      ];
+
+      return base.map(c => {
+        const tags = [];
+        if (c.id <= 10) tags.push("Ivy League");
+        if (c.type === "Public") tags.push("Public");
+        if (c.type === "Private Nonprofit") tags.push("Private");
+        if (c.medianSAT >= 1500) tags.push("STEM");
+        if (c.id > 70 && c.id <= 90) tags.push("Liberal Arts");
+        if (c.id <= 50) tags.push("Research");
+        
+        return {
+          ...c,
+          ranking: c.id,
+          saved: false,
+          satRange: { low: c.medianSAT - 80, high: c.medianSAT + 80 },
+          tags: tags
+        };
+      });
+    }
+  </script>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

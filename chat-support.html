@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OnePrep — Chat With Support</title>
+  <meta name="description" content="Get instant help from the OnePrep support team. Chat with us about your account, features, or any questions you have about the platform." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background: #f0f4f8; font-family: 'Outfit', 'Plus Jakarta Sans', 'Inter', sans-serif; }
+
+    .page-wrap {
+      margin-left: 240px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 40px;
+      background: #f0f4f8;
+    }
+
+    /* ── Hero ── */
+    .page-hero {
+      background: linear-gradient(135deg, #0f3446 0%, #1a5c7a 60%, #0d8f9e 100%);
+      border-radius: 24px;
+      padding: 36px 48px;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -40px;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 5px 14px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .page-hero h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
+    .page-hero p  { font-size: 14px; opacity: 0.8; max-width: 420px; line-height: 1.6; }
+    .hero-status {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 16px;
+      padding: 20px 28px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .status-dot {
+      display: inline-block;
+      width: 10px; height: 10px;
+      background: #22c55e;
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: pulse-green 2s infinite;
+    }
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+      50%       { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+    }
+    .status-text { font-size: 13px; font-weight: 600; }
+    .status-sub  { font-size: 11px; opacity: 0.7; margin-top: 4px; }
+
+    /* ── Chat Layout ── */
+    .chat-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 24px;
+      flex: 1;
+    }
+
+    /* Chat Window */
+    .chat-window {
+      background: #fff;
+      border-radius: 24px;
+      border: 1px solid #e8eef3;
+      box-shadow: 0 2px 20px rgba(15,52,70,0.07);
+      display: flex;
+      flex-direction: column;
+      height: 600px;
+    }
+
+    .chat-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .agent-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0f3446, #1a5c7a);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .agent-online {
+      position: absolute;
+      bottom: 1px; right: 1px;
+      width: 10px; height: 10px;
+      background: #22c55e;
+      border: 2px solid #fff;
+      border-radius: 50%;
+    }
+    .agent-name  { font-size: 15px; font-weight: 700; color: #0f3446; }
+    .agent-role  { font-size: 12px; color: #64748b; }
+    .chat-tags { margin-left: auto; display: flex; gap: 6px; }
+    .ctag {
+      background: #f0fdf4;
+      color: #16a34a;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 50px;
+      border: 1px solid #bbf7d0;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
+
+    .msg {
+      display: flex;
+      gap: 10px;
+      max-width: 78%;
+    }
+    .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+
+    .msg-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .msg.support .msg-avatar { background: linear-gradient(135deg,#0f3446,#1a5c7a); }
+    .msg.user    .msg-avatar { background: linear-gradient(135deg,#3b82f6,#8b5cf6); }
+
+    .msg-bubble {
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+    .msg.support .msg-bubble {
+      background: #f8fafc;
+      color: #1e293b;
+      border-bottom-left-radius: 4px;
+      border: 1px solid #e8eef3;
+    }
+    .msg.user .msg-bubble {
+      background: linear-gradient(135deg,#0f3446,#1a5c7a);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .msg-time {
+      font-size: 10px;
+      color: #94a3b8;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+    .msg.user .msg-time { text-align: right; }
+
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 4px;
+    }
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .typing-dots span {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #94a3b8;
+      animation: typingDot 1.2s infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingDot {
+      0%, 80%, 100% { transform: scale(0.8); opacity: 0.4; }
+      40%            { transform: scale(1.1); opacity: 1; }
+    }
+
+    .chat-input-bar {
+      padding: 16px 20px;
+      border-top: 1px solid #f1f5f9;
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    .chat-input-bar textarea {
+      flex: 1;
+      border: 2px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 500;
+      resize: none;
+      outline: none;
+      line-height: 1.5;
+      color: #0f3446;
+      transition: border-color 0.2s;
+      min-height: 48px;
+      max-height: 120px;
+    }
+    .chat-input-bar textarea:focus { border-color: #3b82f6; }
+    .chat-input-bar textarea::placeholder { color: #94a3b8; }
+
+    .btn-send {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, #0f3446, #1a5c7a);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .btn-send:hover { transform: scale(1.05); box-shadow: 0 4px 16px rgba(15,52,70,0.3); }
+
+    /* Quick replies */
+    .quick-replies {
+      padding: 0 20px 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .qr-btn {
+      background: #f0f9ff;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+      border-radius: 50px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .qr-btn:hover { background: #0369a1; color: #fff; border-color: #0369a1; }
+
+    /* ── Sidebar panel ── */
+    .info-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .info-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid #e8eef3;
+      box-shadow: 0 2px 12px rgba(15,52,70,0.05);
+    }
+    .ic-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+
+    .faq-item {
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+      cursor: pointer;
+    }
+    .faq-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .faq-q {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f3446;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .faq-a {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 6px;
+      line-height: 1.5;
+      display: none;
+    }
+    .faq-item.open .faq-a { display: block; }
+    .faq-item.open .faq-q { color: #3b82f6; }
+
+    .contact-alt {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .ca-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      background: #f8fafc;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #0f3446;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.15s;
+      border: 1px solid #e8eef3;
+    }
+    .ca-link:hover { background: #0f3446; color: #fff; }
+    .ca-icon { font-size: 18px; }
+
+    /* Toast */
+    .toast-msg {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f3446;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 8px 32px rgba(15,52,70,0.3);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      z-index: 9999;
+    }
+    .toast-msg.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 1000px) {
+      .chat-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .page-wrap { margin-left: 0; padding: 20px; }
+    }
+  </style>
+</head>
+<body class="light" id="app-body">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <nav id="sidebar">
+    <div class="logo" onclick="window.location.href='/'">
+      <span class="logo-icon">🤖</span>
+      <span class="logo-text">OnePrep</span>
+    </div>
+    <select class="exam-selector"><option>SAT</option><option>ACT</option></select>
+    <ul class="nav-links">
+      <li><a href="/" data-page="home">🏠 Home</a></li>
+      <li><a href="/" data-page="ask-preppy">🤖 Ask Preppy AI</a></li>
+      <li><a href="/study-planner" data-page="study-planner">📅 Study Planner</a></li>
+      <li><a href="/analytics" data-page="analytics">📊 Analytics <span class="badge-new">New</span></a></li>
+      <li class="section-label">PRACTICE</li>
+      <li><a href="/question-bank">🔲 Question Bank</a></li>
+      <li><a href="/question-rush">⚡ Question Rush</a></li>
+      <li><a href="/challenge">🎯 Challenge Questions</a></li>
+      <li><a href="/predicted-tests">📝 Predicted Tests</a></li>
+      <li><a href="/vocab">📚 Vocab</a></li>
+      <li class="section-label">PROGRESS</li>
+      <li><a href="/">🔖 Saved</a></li>
+      <li><a href="/">❌ Mistakes Log</a></li>
+      <li class="section-label">COLLEGE</li>
+      <li><a href="/colleges">🎓 Browse Colleges</a></li>
+      <li class="section-label">SUPPORT</li>
+      <li><a href="chat-support.html" class="active">💬 Chat With Support</a></li>
+      <li><a href="bug-report.html">🐛 Bug Report</a></li>
+      <li><a href="feedback.html">⭐ Give Feedback</a></li>
+      <li class="section-label">OPPORTUNITIES</li>
+      <li><a href="tutor-apply.html">🧑‍🏫 Apply As A Tutor</a></li>
+      <li><a href="creator-program.html">🎨 Creator Program</a></li>
+      <li class="section-label">RESOURCES</li>
+      <li><a href="score-calculator.html">🧮 Score Calculator</a></li>
+      <li><a href="blog.html">📰 Blog</a></li>
+      <li class="section-label">SOCIAL</li>
+      <li><a href="https://discord.gg" target="_blank">🎮 Join Discord</a></li>
+      <li><a href="https://instagram.com" target="_blank">📸 Instagram</a></li>
+    </ul>
+    <div class="sidebar-bottom">
+      <button onclick="document.getElementById('app-body').classList.toggle('dark')">🌙 Switch To Dark</button>
+      <a href="#">⬆️ Upgrade</a>
+      <div class="user-profile">
+        <span class="avatar">A</span>
+        <span>Abdullah Abdus...</span>
+        <span>⚙️</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ MAIN ═══ -->
+  <div class="page-wrap">
+
+    <div class="page-hero">
+      <div>
+        <div class="hero-badge">💬 Live Support</div>
+        <h1>Chat With Support</h1>
+        <p>Our support team is here to help you with account issues, feature questions, and anything else you need.</p>
+      </div>
+      <div class="hero-status">
+        <div><span class="status-dot"></span><span class="status-text">Support Online</span></div>
+        <div class="status-sub">Avg. response: ~2 minutes</div>
+      </div>
+    </div>
+
+    <div class="chat-layout">
+
+      <!-- Chat Window -->
+      <div class="chat-window">
+        <div class="chat-header">
+          <div class="agent-avatar">🎓<span class="agent-online"></span></div>
+          <div>
+            <div class="agent-name">OnePrep Support</div>
+            <div class="agent-role">Support Specialist · Online now</div>
+          </div>
+          <div class="chat-tags">
+            <span class="ctag">✓ Verified</span>
+          </div>
+        </div>
+
+        <div class="chat-messages" id="chat-messages">
+          <div class="msg support">
+            <div class="msg-avatar">🎓</div>
+            <div>
+              <div class="msg-bubble">Hey there! 👋 Welcome to OnePrep support. I'm here to help you with anything — account issues, features, study plans, or general questions. What can I help you with today?</div>
+              <div class="msg-time">Support · just now</div>
+            </div>
+          </div>
+          <div class="msg support">
+            <div class="msg-avatar">🎓</div>
+            <div>
+              <div class="msg-bubble">Feel free to also use the quick reply buttons below if you have a common question! ⬇️</div>
+              <div class="msg-time">Support · just now</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quick-replies">
+          <button class="qr-btn" onclick="quickReply('How do I reset my password?')">🔑 Reset password</button>
+          <button class="qr-btn" onclick="quickReply('How does the score calculator work?')">🧮 Score calculator</button>
+          <button class="qr-btn" onclick="quickReply('I found a bug on the platform')">🐛 Report a bug</button>
+          <button class="qr-btn" onclick="quickReply('Tell me about Premium plans')">⬆️ Premium plans</button>
+        </div>
+
+        <div class="chat-input-bar">
+          <textarea id="chat-input" rows="1" placeholder="Type your message..." onkeydown="handleKey(event)"></textarea>
+          <button class="btn-send" onclick="sendMsg()" title="Send message">➤</button>
+        </div>
+      </div>
+
+      <!-- Info Panel -->
+      <div class="info-panel">
+
+        <div class="info-card">
+          <div class="ic-title">📚 Common Questions</div>
+          <div id="faq-list">
+            <div class="faq-item" onclick="toggleFaq(this)">
+              <div class="faq-q">🔑 How do I reset my password?</div>
+              <div class="faq-a">Go to the login page and click "Forgot Password". We'll send a reset link to your email within 1 minute.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+              <div class="faq-q">📊 How is my score calculated?</div>
+              <div class="faq-a">Your score is based on accuracy, consistency, and improvement over time. Check the Score Calculator page for raw-to-scaled conversions.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+              <div class="faq-q">⚡ Why is Question Rush not working?</div>
+              <div class="faq-a">Make sure you're on a stable internet connection. If the issue persists, clear your browser cache or try a different browser.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+              <div class="faq-q">💎 What does Premium include?</div>
+              <div class="faq-a">Premium unlocks unlimited practice sessions, AI explanations, detailed analytics, and priority support access.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="ic-title">📞 Other Channels</div>
+          <div class="contact-alt">
+            <a class="ca-link" href="mailto:support@oneprep.io">
+              <span class="ca-icon">📧</span> Email us
+            </a>
+            <a class="ca-link" href="https://discord.gg" target="_blank">
+              <span class="ca-icon">🎮</span> Join Discord
+            </a>
+            <a class="ca-link" href="bug-report.html">
+              <span class="ca-icon">🐛</span> Report a Bug
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast-msg" id="toast"></div>
+
+  <script>
+    const supportReplies = [
+      "Great question! Let me look into that for you. 🔍",
+      "I completely understand. Here's what I'd recommend: try refreshing the page and clearing your browser cache first.",
+      "Thanks for reaching out! I can definitely help with that. Could you give me a bit more detail?",
+      "That's a known issue we're working on fixing. Our engineering team has a fix scheduled for next week. Sorry for the inconvenience!",
+      "Absolutely! Here's how you can do that: go to your profile settings and look for the option in the Account tab.",
+      "Good news — that feature is already available! Go to the Study Planner and click the '+' button to create a custom session.",
+      "I've flagged this for our tech team. You should receive an email update within 24 hours. Is there anything else I can help you with?",
+      "That's a great suggestion! I'll add it to our feature request list. We genuinely value student feedback. 🙏"
+    ];
+
+    let replyIdx = 0;
+
+    function sendMsg() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      addMsg(text, 'user');
+      input.value = '';
+      input.style.height = 'auto';
+
+      // Show typing indicator
+      showTyping();
+
+      setTimeout(() => {
+        removeTyping();
+        const reply = supportReplies[replyIdx % supportReplies.length];
+        replyIdx++;
+        addMsg(reply, 'support');
+      }, 1200 + Math.random() * 800);
+    }
+
+    function quickReply(text) {
+      document.getElementById('chat-input').value = text;
+      sendMsg();
+    }
+
+    function addMsg(text, role) {
+      const wrap = document.getElementById('chat-messages');
+      const now = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      const avatarContent = role === 'user' ? '👤' : '🎓';
+      const msgHtml = `
+        <div class="msg ${role}">
+          <div class="msg-avatar">${avatarContent}</div>
+          <div>
+            <div class="msg-bubble">${escapeHtml(text)}</div>
+            <div class="msg-time">${role === 'user' ? 'You' : 'Support'} · ${now}</div>
+          </div>
+        </div>`;
+      wrap.insertAdjacentHTML('beforeend', msgHtml);
+      wrap.scrollTop = wrap.scrollHeight;
+    }
+
+    function showTyping() {
+      const wrap = document.getElementById('chat-messages');
+      wrap.insertAdjacentHTML('beforeend', `
+        <div class="typing-indicator" id="typing">
+          <div class="msg-avatar" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#0f3446,#1a5c7a);display:flex;align-items:center;justify-content:center;font-size:14px;">🎓</div>
+          <div class="typing-dots"><span></span><span></span><span></span></div>
+          <span style="font-size:12px;color:#94a3b8;font-weight:500">Support is typing...</span>
+        </div>`);
+      wrap.scrollTop = wrap.scrollHeight;
+    }
+
+    function removeTyping() {
+      const t = document.getElementById('typing');
+      if (t) t.remove();
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMsg();
+      }
+    }
+
+    function toggleFaq(el) {
+      el.classList.toggle('open');
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+  </script>
+</body>
+</html>

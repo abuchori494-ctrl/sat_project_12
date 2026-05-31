@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OnePrep – Digital SAT Prep Platform</title>
+  <meta name="description" content="Prepare for the Digital SAT with expert practice questions, timed modules, and instant AI feedback." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="light" id="app-body">
+
+  <!-- ═══ VERTICAL SIDEBAR NAV (EXACT MOCKUP MATCH) ═══ -->
+  <nav id="sidebar">
+    <!-- Logo -->
+    <div class="logo" onclick="show('dashboard')">
+      <span class="logo-icon">🤖</span>
+      <span class="logo-text">OnePrep</span>
+    </div>
+    
+    <!-- Exam Selector -->
+    <select class="exam-selector" onchange="showToast('Selected ' + this.value.toUpperCase())">
+      <option>SAT</option>
+      <option>ACT</option>
+    </select>
+
+    <!-- Nav Links -->
+    <ul class="nav-links">
+      <li><a href="/" onclick="show('dashboard'); return false;" data-page="home" class="active">🏠 Home</a></li>
+      <li><a href="/" onclick="show('chat'); return false;" data-page="ask-preppy">🤖 Ask Preppy AI</a></li>
+      <li><a href="/study-planner" data-page="study-planner">📅 Study Planner</a></li>
+      <li>
+        <a href="/analytics" data-page="analytics">
+          📊 Analytics <span class="badge-new">New</span>
+        </a>
+      </li>
+      
+      <li class="section-label">PRACTICE</li>
+      <li><a href="/question-bank" data-page="question-bank">🔲 Question Bank</a></li>
+      <li><a href="/question-rush" data-page="question-rush">⚡ Question Rush</a></li>
+      <li><a href="/challenge" data-page="challenge">🎯 Challenge Questions</a></li>
+      <li><a href="/predicted-tests" data-page="predicted-tests">📝 Predicted Tests</a></li>
+      <li><a href="/vocab" data-page="vocab">📚 Vocab</a></li>
+
+      <li class="section-label">PROGRESS</li>
+      <li><a href="/" onclick="show('dashboard'); return false;" data-page="saved">🔖 Saved</a></li>
+      <li><a href="/" onclick="show('review'); return false;" data-page="mistakes">❌ Mistakes Log</a></li>
+      
+      <li class="section-label">COLLEGE</li>
+      <li><a href="/colleges" data-page="colleges">🎓 Browse Colleges</a></li>
+    </ul>
+
+    <!-- Bottom items -->
+    <div class="sidebar-bottom">
+      <a href="#" onclick="showToast('Join Us loaded!'); return false;">👥 Join Us</a>
+      <button onclick="toggleDark()">🌙 Switch To Dark</button>
+      <a href="#" onclick="showToast('Pro features unlocked!'); return false;">⬆️ Upgrade</a>
+      <a href="#" onclick="showToast('Other options'); return false;">⋯ Other</a>
+      <div class="user-profile" onclick="showToast('Settings')">
+        <span class="avatar">A</span>
+        <span>Abdullah Abdus...</span>
+        <span>⚙️</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ VIEWS WRAPPER ═══ -->
+  <div class="views-wrap">
+
+    <!-- ══ VIEW: LANDING ══ -->
+    <section id="v-landing" class="view active">
+      <div class="hero">
+        <div class="hero-content">
+          <div class="hero-badge">✨ June 2024 Exam Now Available</div>
+          <h1 class="hero-h1">The #1 Digital SAT<br><span class="grad-text">Prep Platform</span></h1>
+          <p class="hero-sub">Thousands of real questions, timed practice, and instant explanations — built for the Bluebook era.</p>
+          <div class="hero-btns">
+            <button class="btn-primary btn-lg" onclick="show('dashboard')">Start Practicing</button>
+            <button class="btn-ghost btn-lg" onclick="show('simulator')">Try Simulator</button>
+          </div>
+          <div class="hero-stats">
+            <div class="hs"><strong>4</strong><span>Modules</span></div>
+            <div class="hs-div"></div>
+            <div class="hs"><strong>80+</strong><span>Questions</span></div>
+            <div class="hs-div"></div>
+            <div class="hs"><strong>100%</strong><span>Free</span></div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hv-card">
+            <div class="hv-tag">Reading &amp; Writing</div>
+            <div class="hv-score">720</div>
+            <div class="hv-bar-wrap">
+              <div class="hv-bar" style="--w:90%"></div>
+            </div>
+            <div class="hv-tag hv-tag2">Mathematics</div>
+            <div class="hv-score">700</div>
+            <div class="hv-bar-wrap">
+              <div class="hv-bar hv-bar2" style="--w:82%"></div>
+            </div>
+            <div class="hv-total">Total: <strong>1420</strong> / 1600</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="social-proof">
+        <p class="sp-title">Trusted by students at top universities</p>
+        <div class="sp-logos">
+          <span>🏛 Columbia</span>
+          <span>🏛 MIT</span>
+          <span>🏛 Caltech</span>
+          <span>🏛 UChicago</span>
+          <span>🏛 Dartmouth</span>
+        </div>
+      </div>
+
+      <div class="features-grid">
+        <div class="feat-card">
+          <div class="feat-icon">📝</div>
+          <h3>Real Exam Questions</h3>
+          <p>Practice with authentic Digital SAT questions from official June 2024 test.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">⏱️</div>
+          <h3>Timed Modules</h3>
+          <p>Simulate real exam conditions with module-by-module countdown timers.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">💡</div>
+          <h3>Instant Explanations</h3>
+          <p>Every question has a detailed explanation to reinforce the underlying concept.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">📊</div>
+          <h3>Track Progress</h3>
+          <p>See your accuracy, weak spots, and progress over time in the Analytics view.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ VIEW: DASHBOARD ══ -->
+    <section id="v-dashboard" class="view active">
+      <!-- Header row matching mockup perfectly -->
+      <div class="dash-header-row">
+        <div class="dhr-search">
+          <span>🔍</span>
+          <input type="text" placeholder="Search..." />
+        </div>
+        <div class="dhr-badges">
+          <div class="dhr-badge streak">🔥 0</div>
+          <div class="dhr-badge coins">💎 80</div>
+        </div>
+      </div>
+      
+      <!-- Welcome Section -->
+      <div class="welcome-container">
+        <div class="welcome-left">
+          <h1 class="welcome-greeting">Good morning, <span class="wg-username">abdullah</span></h1>
+          <p class="welcome-subtitle">Let's start by creating a study plan</p>
+          <button class="btn-create-plan" onclick="createStudyPlan()">Create my study plan</button>
+        </div>
+        
+        <!-- Timer countdown card -->
+        <div class="timer-countdown-card">
+          <span class="tcc-label">Time left to SAT exam</span>
+          <div class="tcc-timer-row">
+            <div class="tcc-seg"><strong id="tcc-days">189</strong><small>days</small></div>
+            <div class="tcc-seg"><strong id="tcc-hours">15</strong><small>hrs</small></div>
+            <div class="tcc-seg"><strong id="tcc-minutes">46</strong><small>min</small></div>
+          </div>
+          <div class="tcc-footer">
+            <span class="tcc-date">Saturday, December 5</span>
+            <button class="tcc-switch-btn" onclick="switchTestDate()">⚙️ Switch test date</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Score Report Banner -->
+      <div class="score-report-banner">
+        <div class="srb-left">
+          <span class="srb-mascot">🤖</span>
+          <p class="srb-text">Got your May SAT score? Turn your score report into a personalized study plan</p>
+        </div>
+        <button class="srb-upload-btn" onclick="uploadScoreReport()">Upload score report</button>
+      </div>
+      
+      <!-- Analytics Section -->
+      <div class="dash-analytics-section">
+        <div class="das-header">
+          <h2>📊 Analytics</h2>
+          <button class="das-view-all" onclick="show('analytics')">View all analytics</button>
+        </div>
+        <div class="das-grid">
+          <!-- Card 1 -->
+          <div class="das-card watermark-check">
+            <span class="das-card-label">Questions Attempted</span>
+            <strong class="das-card-val">6</strong>
+          </div>
+          <!-- Card 2 -->
+          <div class="das-card watermark-bars">
+            <span class="das-card-label">Current Accuracy</span>
+            <strong class="das-card-val text-green">100%</strong>
+          </div>
+          <!-- Card 3 -->
+          <div class="das-card has-btn">
+            <span class="das-card-label">Saved Questions</span>
+            <strong class="das-card-val">0</strong>
+            <button class="das-card-btn" onclick="show('exams')">View Saved</button>
+          </div>
+          <!-- Card 4 -->
+          <div class="das-card has-btn">
+            <span class="das-card-label">Recent Errors</span>
+            <strong class="das-card-val">0</strong>
+            <button class="das-card-btn" onclick="show('review')">View Errors</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Today's Study Plan Section -->
+      <div class="dash-study-plan-section">
+        <h2> Today's Study Plan</h2>
+        <div class="dsps-grid">
+          <!-- Left Large Card -->
+          <div class="dsps-create-card">
+            <!-- Cute CSS Mascot -->
+            <div class="cute-mascots-box">
+              <div class="mascot pink">
+                <div class="mascot-eye"></div>
+                <div class="mascot-eye"></div>
+              </div>
+              <div class="mascot green">
+                <div class="mascot-eye"></div>
+                <div class="mascot-eye"></div>
+              </div>
+              <div class="mascot blue">
+                <div class="mascot-eye"></div>
+                <div class="mascot-eye"></div>
+              </div>
+            </div>
+            <h3>Create a study plan</h3>
+            <p>Get a personalized study plan based on your test date and skill level.</p>
+            <button class="btn-create-plan-solid" onclick="createStudyPlan()">Create my study plan</button>
+          </div>
+          
+          <!-- Right Stats Grid -->
+          <div class="dsps-stats-col">
+            <!-- Card 1: Current Score -->
+            <div class="dsps-score-card">
+              <div class="dsps-score-info">
+                <span>Current Score</span>
+                <strong>1220</strong>
+              </div>
+              <div class="dsps-target-box">
+                <div class="dsps-target-vector">🎯</div>
+              </div>
+            </div>
+            
+            <!-- Cards row (Goal Score & Days until exam) -->
+            <div class="dsps-small-row">
+              <div class="dsps-small-card purple-bg">
+                <span>Goal Score</span>
+                <strong>1560</strong>
+              </div>
+              <div class="dsps-small-card yellow-bg">
+                <span>Days Until Exam</span>
+                <strong>190</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ VIEW: PAST EXAMS ══ -->
+    <!-- ══ VIEW: PAST EXAMS (EXACT MOCKUP MATCH) ══ -->
+    <section id="v-exams" class="view">
+      
+      <!-- Top header layout -->
+      <div class="exams-header-bar">
+        <div class="ehb-left">
+          <div class="ehb-title-row">
+            <span class="ehb-logo-cap">🎓</span>
+            <div>
+              <h1 class="ehb-title">SAT Mastery Platform</h1>
+              <p class="ehb-subtitle">Dashboard - Past Exams</p>
+            </div>
+          </div>
+          <p class="ehb-quote">"Pick your subject. Master one module a time. Save words. Get better."</p>
+        </div>
+        
+        <!-- Theme Switcher and Search -->
+        <div class="ehb-right">
+          <div class="theme-toggle-row">
+            <button class="theme-toggle-switch" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+              <span class="tts-icon sun">☀️</span>
+              <span class="tts-icon moon">🌙</span>
+            </button>
+          </div>
+          <div class="search-pill-box">
+            <span class="spb-icon-left">🔍</span>
+            <input type="text" id="exam-search" placeholder="Search exams, e.g., June 2024, Module 1" oninput="filterExams(this.value)" />
+            <span class="spb-icon-right">🎯</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exams-columns-layout">
+        
+        <!-- COLUMN 1: English & Reading -->
+        <div class="ecl-column">
+          <div class="ecl-header">
+            <span class="ecl-icon">📖</span>
+            <div>
+              <h3>English & Reading</h3>
+              <p>Focus on comprehension & language</p>
+            </div>
+          </div>
+          
+          <div class="ecl-cards-list" id="english-list"></div>
+        </div>
+        
+        <!-- COLUMN 2: Math -->
+        <div class="ecl-column">
+          <div class="ecl-header">
+            <span class="ecl-icon">🧮</span>
+            <div>
+              <h3>Math</h3>
+              <p>Master modules 1 & 2</p>
+            </div>
+          </div>
+          <div class="ecl-cards-list" id="math-list"></div>
+        </div>
+        
+        <!-- COLUMN 3: Vocabulary Bank -->
+        <div class="ecl-column">
+          <div class="ecl-header">
+            <span class="ecl-icon">🌿</span>
+            <div>
+              <h3>Vocabulary Bank</h3>
+              <p id="vocab-count">5 words mastered • 15 to go</p>
+            </div>
+          </div>
+          
+          <div class="ecl-cards-list">
+            
+            <!-- Daily Challenge Card -->
+            <div class="daily-challenge-card">
+              <div class="dcc-info">
+                <strong>📖 Daily Challenge</strong>
+                <p>Learn 3 new words today</p>
+                <button class="dcc-btn" onclick="launchQuiz()">ACCEPT</button>
+              </div>
+              <div class="dcc-bulb">💡</div>
+            </div>
+            
+            <!-- Dynamic Words list -->
+            <div id="vocab-list" class="vocab-words-feed">
+              <!-- JS will populate word cards with customized icons -->
+            </div>
+            
+            <!-- Custom Add word form -->
+            <button class="btn-add-word-solid" id="btn-add" onclick="toggleAddForm()">+ ADD NEW WORD</button>
+            
+            <div class="add-form-glass" id="add-form" style="display:none">
+              <input type="text" id="f-word" placeholder="Word *" />
+              <input type="text" id="f-pos"  placeholder="Part of speech (adj, noun...)" />
+              <textarea id="f-def"  placeholder="Definition *" rows="2"></textarea>
+              <input type="text" id="f-src"  placeholder="Source (e.g. Q5, June 2024)" />
+              <div class="add-form-actions">
+                <button class="btn-save-word" onclick="saveWord()">Save Word</button>
+                <button class="btn-cancel-word" onclick="toggleAddForm()">Cancel</button>
+              </div>
+            </div>
+            
+            <!-- Quiz bottom banner card -->
+            <div class="quiz-banner-card" onclick="launchQuiz()">
+              <div class="qbc-icon">📚</div>
+              <div class="qbc-info">
+                <strong>Vocabulary Quiz</strong>
+                <p>Challenge yourself with flashcards & learn faster</p>
+              </div>
+              <div class="qbc-arrow">➔</div>
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+    </section>
+
+    <!-- ══ VIEW: SIMULATOR ══ -->
+    <section id="v-simulator" class="view">
+      <!-- Welcome Screen -->
+      <div id="sim-welcome" class="sim-welcome">
+        <div class="sw-content">
+          <div class="sw-icon">🖥️</div>
+          <h2>Digital SAT Simulator</h2>
+          <p>Select a module from Past Exams to begin a timed practice session.</p>
+          <div class="sw-modules">
+            <button class="sw-mod-btn sw-blue" onclick="startModule('english_m1')">
+              <strong>R&amp;W Module 1</strong><small>27q · 32min</small>
+            </button>
+            <button class="sw-mod-btn sw-blue" onclick="startModule('english_m2')">
+              <strong>R&amp;W Module 2</strong><small>7q · 32min</small>
+            </button>
+            <button class="sw-mod-btn sw-purple" onclick="startModule('math_m1')">
+              <strong>Math Module 1</strong><small>5q · 35min</small>
+            </button>
+            <button class="sw-mod-btn sw-purple" onclick="startModule('math_m2')">
+              <strong>Math Module 2</strong><small>5q · 35min</small>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Test Screen -->
+      <div id="sim-active" style="display:none">
+        <!-- Sim Header -->
+        <div class="sim-header">
+          <div class="sh-left">
+            <span id="sh-title">Module</span>
+          </div>
+          <div class="sh-center">
+            <div class="sh-timer" id="sh-timer">35:00</div>
+          </div>
+          <div class="sh-right">
+            <button class="sh-btn" id="sh-flag" onclick="toggleFlag()">🚩 Flag</button>
+            <button class="sh-btn sh-quit" onclick="quitSim()">✕ Quit</button>
+          </div>
+        </div>
+
+        <!-- Sim Body -->
+        <div class="sim-body">
+          <!-- Passage -->
+          <div class="sim-passage-pane">
+            <div class="sp-badge" id="sp-badge">Question 1 of 5</div>
+            <div class="sp-content" id="sp-content"></div>
+          </div>
+          <!-- Answer Pane -->
+          <div class="sim-answer-pane">
+            <p class="sim-question" id="sim-q"></p>
+            <div class="sim-options" id="sim-opts"></div>
+            <div class="grid-in" id="grid-in" style="display:none">
+              <label>Enter your answer:</label>
+              <input type="text" id="grid-input" placeholder="Type answer..." />
+              <button class="btn-primary" onclick="submitGridIn()">Submit</button>
+            </div>
+            <div class="expl-box" id="expl-box" style="display:none">
+              <div class="expl-header">
+                <span id="expl-verdict"></span>
+                <button onclick="nextQuestion()" class="btn-sm btn-next-expl">Next →</button>
+              </div>
+              <p id="expl-text"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigator -->
+        <div class="sim-nav-bar">
+          <div class="snb-nodes" id="snb-nodes"></div>
+          <div class="snb-actions">
+            <button class="btn-ghost btn-sm" id="btn-back" onclick="goQuestion(-1)">← Back</button>
+            <button class="btn-primary btn-sm" id="btn-next" onclick="nextQuestion()">Next →</button>
+            <button class="btn-finish" id="btn-finish" onclick="finishModule()" style="display:none">Finish →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Screen -->
+      <div id="sim-results" style="display:none" class="sim-results">
+        <div class="sr-content">
+          <div class="sr-icon">🎉</div>
+          <h2>Module Complete!</h2>
+          <div class="sr-score">
+            <span id="sr-correct">0</span>/<span id="sr-total">0</span>
+            <small>correct</small>
+          </div>
+          <div class="sr-pct" id="sr-pct">0%</div>
+          <div class="sr-btns">
+            <button class="btn-primary" onclick="show('simulator')">Try Again</button>
+            <button class="btn-ghost" onclick="show('review')">Review Mistakes</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ VIEW: ANALYTICS ══ -->
+    <section id="v-analytics" class="view">
+      <div class="analytics-layout">
+        
+        <!-- LEFT PANEL (Know your weak spots) -->
+        <div class="alc-card alc-main">
+          <div class="alc-header">
+            <h2>Know your weak spots</h2>
+            <p>See weekly activity, accuracy by topic, and time share by difficulty so you know exactly what to practice.</p>
+          </div>
+          
+          <!-- CHART 1: Stacked Bar Chart -->
+          <div class="weekly-activity-box">
+            <div class="y-axis-labels">
+              <span>80</span>
+              <span>60</span>
+              <span>40</span>
+              <span>20</span>
+              <span>0</span>
+            </div>
+            <div class="bars-container" id="stacked-bars-container">
+              <!-- JS will populate beautifully designed stacked bars here -->
+            </div>
+          </div>
+          
+          <!-- MIDDLE SECTION: Accuracy by Topic (2 columns) -->
+          <div class="accuracy-topics-grid">
+            <!-- Column 1: English & Reading -->
+            <div class="at-col">
+              <div class="topic-row">
+                <div class="tr-info">
+                  <strong>Information and Ideas</strong>
+                  <small>48 attempts</small>
+                </div>
+                <div class="tr-slider-wrapper">
+                  <div class="tr-slider-track">
+                    <div class="tr-slider-fill red-fill" style="width: 40%"></div>
+                    <div class="tr-slider-fill orange-fill" style="width: 30%"></div>
+                    <div class="tr-slider-fill green-fill" style="width: 30%"></div>
+                    <div class="tr-slider-thumb" style="left: 72%"></div>
+                  </div>
+                </div>
+                <span class="tr-pct">72%</span>
+              </div>
+              
+              <div class="topic-row">
+                <div class="tr-info">
+                  <strong>Craft and Structure</strong>
+                  <small>41 attempts</small>
+                </div>
+                <div class="tr-slider-wrapper">
+                  <div class="tr-slider-track">
+                    <div class="tr-slider-fill red-fill" style="width: 50%"></div>
+                    <div class="tr-slider-fill orange-fill" style="width: 25%"></div>
+                    <div class="tr-slider-fill green-fill" style="width: 25%"></div>
+                    <div class="tr-slider-thumb" style="left: 58%"></div>
+                  </div>
+                </div>
+                <span class="tr-pct">58%</span>
+              </div>
+              
+              <div class="topic-row">
+                <div class="tr-info">
+                  <strong>Standard English Con...</strong>
+                  <small>36 attempts</small>
+                </div>
+                <div class="tr-slider-wrapper">
+                  <div class="tr-slider-track">
+                    <div class="tr-slider-fill red-fill" style="width: 20%"></div>
+                    <div class="tr-slider-fill orange-fill" style="width: 30%"></div>
+                    <div class="tr-slider-fill green-fill" style="width: 50%"></div>
+                    <div class="tr-slider-thumb" style="left: 81%"></div>
+                  </div>
+                </div>
+                <span class="tr-pct">81%</span>
+              </div>
+            </div>
+            
+            <!-- Column 2: Math -->
+            <div class="at-col">
+              <div class="topic-row">
+                <div class="tr-info">
+                  <strong>Algebra</strong>
+                  <small>52 attempts</small>
+                </div>
+                <div class="tr-slider-wrapper">
+                  <div class="tr-slider-track">
+                    <div class="tr-slider-fill red-fill" style="width: 30%"></div>
+                    <div class="tr-slider-fill orange-fill" style="width: 40%"></div>
+                    <div class="tr-slider-fill green-fill" style="width: 30%"></div>
+                    <div class="tr-slider-thumb" style="left: 64%"></div>
+                  </div>
+                </div>
+                <span class="tr-pct">64%</span>
+              </div>
+              
+              <div class="topic-row">
+                <div class="tr-info">
+                  <strong>Advanced Math</strong>
+                  <small>38 attempts</small>
+                </div>
+                <div class="tr-slider-wrapper">
+                  <div class="tr-slider-track">
+                    <div class="tr-slider-fill red-fill" style="width: 45%"></div>
+                    <div class="tr-slider-fill orange-fill" style="width: 35%"></div>
+                    <div class="tr-slider-fill green-fill" style="width: 20%"></div>
+                    <div class="tr-slider-thumb" style="left: 47%"></div>
+                  </div>
+                </div>
+                <span class="tr-pct">47%</span>
+              </div>
+              
+              <div class="topic-row">
+                <div class="tr-info">
+                  <strong>Problem-Solving and ...</strong>
+                  <small>28 attempts</small>
+                </div>
+                <div class="tr-slider-wrapper">
+                  <div class="tr-slider-track">
+                    <div class="tr-slider-fill red-fill" style="width: 20%"></div>
+                    <div class="tr-slider-fill orange-fill" style="width: 30%"></div>
+                    <div class="tr-slider-fill green-fill" style="width: 50%"></div>
+                    <div class="tr-slider-thumb" style="left: 76%"></div>
+                  </div>
+                </div>
+                <span class="tr-pct">76%</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- BOTTOM SECTION: Time share by difficulty (2 Donut charts & legends) -->
+          <div class="donut-shares-grid">
+            <!-- Donut 1 -->
+            <div class="donut-box">
+              <div class="donut-wrapper">
+                <svg viewBox="0 0 36 36" class="circular-chart">
+                  <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="circle green-seg" stroke-dasharray="25, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="circle orange-seg" stroke-dasharray="40, 100" stroke-dashoffset="-25" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="circle red-seg" stroke-dasharray="35, 100" stroke-dashoffset="-65" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <div class="donut-center">
+                  <strong>2m 12s</strong>
+                  <small>avg</small>
+                </div>
+              </div>
+              <div class="donut-legend">
+                <div class="dl-item"><span class="bullet bullet-green"></span> Easy <span class="dl-val">46s <small>avg 1m 11s</small></span></div>
+                <div class="dl-item"><span class="bullet bullet-orange"></span> Medium <span class="dl-val">1m 14s <small>avg 1m 23s</small></span></div>
+                <div class="dl-item"><span class="bullet bullet-red"></span> Hard <span class="dl-val">2m 52s <small>avg 2m 23s</small></span></div>
+              </div>
+            </div>
+            
+            <!-- Donut 2 -->
+            <div class="donut-box">
+              <div class="donut-wrapper">
+                <svg viewBox="0 0 36 36" class="circular-chart">
+                  <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="circle green-seg" stroke-dasharray="30, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="circle orange-seg" stroke-dasharray="35, 100" stroke-dashoffset="-30" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="circle red-seg" stroke-dasharray="35, 100" stroke-dashoffset="-65" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <div class="donut-center">
+                  <strong>1m 58s</strong>
+                  <small>avg</small>
+                </div>
+              </div>
+              <div class="donut-legend">
+                <div class="dl-item"><span class="bullet bullet-green"></span> Easy <span class="dl-val">55s <small>avg 1m 8s</small></span></div>
+                <div class="dl-item"><span class="bullet bullet-orange"></span> Medium <span class="dl-val">1m 35s <small>avg 1m 31s</small></span></div>
+                <div class="dl-item"><span class="bullet bullet-red"></span> Hard <span class="dl-val">3m 8s <small>avg 2m 36s</small></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- RIGHT PANEL (Pacing & Heatmap activity) -->
+        <div class="alc-sidebar">
+          
+          <!-- Pacing Card -->
+          <div class="alc-card pacing-card">
+            <div class="pacing-chart-box">
+              <div class="pacing-y-labels">
+                <span>1m</span>
+                <span>45s</span>
+                <span>30s</span>
+                <span>15s</span>
+                <span>0s</span>
+              </div>
+              <div class="pacing-bars-container">
+                <!-- Platform Range Pill bars with "Your time" hollow white dots -->
+                <div class="pacing-bar-wrapper">
+                  <div class="pacing-track-range" style="bottom: 30%; height: 50%">
+                    <div class="pacing-user-dot" style="bottom: 40%"></div>
+                  </div>
+                </div>
+                <div class="pacing-bar-wrapper">
+                  <div class="pacing-track-range" style="bottom: 25%; height: 55%">
+                    <div class="pacing-user-dot" style="bottom: 35%"></div>
+                  </div>
+                </div>
+                <div class="pacing-bar-wrapper">
+                  <div class="pacing-track-range" style="bottom: 35%; height: 45%">
+                    <div class="pacing-user-dot" style="bottom: 60%"></div>
+                  </div>
+                </div>
+                <div class="pacing-bar-wrapper">
+                  <div class="pacing-track-range" style="bottom: 15%; height: 65%">
+                    <div class="pacing-user-dot" style="bottom: 70%"></div>
+                  </div>
+                </div>
+                <div class="pacing-bar-wrapper">
+                  <div class="pacing-track-range" style="bottom: 40%; height: 35%">
+                    <div class="pacing-user-dot" style="bottom: 20%"></div>
+                  </div>
+                </div>
+                <div class="pacing-bar-wrapper">
+                  <div class="pacing-track-range" style="bottom: 30%; height: 50%">
+                    <div class="pacing-user-dot" style="bottom: 35%"></div>
+                  </div>
+                </div>
+                <div class="pacing-bar-wrapper">
+                  <div class="pacing-track-range" style="bottom: 10%; height: 80%">
+                    <div class="pacing-user-dot" style="bottom: 90%"></div>
+                  </div>
+                </div>
+                <div class="pacing-bar-wrapper">
+                  <div class="pacing-track-range" style="bottom: 30%; height: 45%">
+                    <div class="pacing-user-dot" style="bottom: 50%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pacing-legend">
+              <span><span class="legend-rect"></span> Platform range</span>
+              <span><span class="legend-circle"></span> Your time</span>
+            </div>
+            
+            <div class="pacing-info">
+              <h3>See how you pace</h3>
+              <p>Compare your pacing to thousands of other students on the platform to see where you stand.</p>
+            </div>
+          </div>
+          
+          <!-- Activity Heatmap Card -->
+          <div class="alc-card heatmap-card">
+            <div class="heatmap-calendars-row">
+              <div class="hm-month-box">
+                <span class="hm-month-name">Apr 2026</span>
+                <div class="hm-days-header">
+                  <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                </div>
+                <div class="hm-grid" id="heatmap-april-grid"></div>
+              </div>
+              <div class="hm-month-box">
+                <span class="hm-month-name">May 2026</span>
+                <div class="hm-days-header">
+                  <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                </div>
+                <div class="hm-grid" id="heatmap-may-grid"></div>
+              </div>
+            </div>
+            <div class="heatmap-legend">
+              <span>Less</span>
+              <span class="hm-box hmb-0"></span>
+              <span class="hm-box hmb-1"></span>
+              <span class="hm-box hmb-2"></span>
+              <span class="hm-box hmb-3"></span>
+              <span class="hm-box hmb-4"></span>
+              <span>More</span>
+            </div>
+            <div class="heatmap-info">
+              <h3>Track your daily activity</h3>
+              <p>See how daily practice adds up over time.</p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ VIEW: REVIEW MISTAKES ══ -->
+    <section id="v-review" class="view">
+      <div class="page-header">
+        <h1 class="page-title">Review Mistakes ❌</h1>
+        <p class="page-sub">Understand every wrong answer deeply</p>
+      </div>
+      <div class="review-grid">
+        <!-- List -->
+        <div class="review-list" id="review-list"></div>
+        <!-- Detail -->
+        <div class="review-detail" id="review-detail">
+          <div class="rd-placeholder">👈 Select a mistake to review</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ VIEW: ASK PREPPY AI (GEMINI-POWERED) ══ -->
+    <section id="v-chat" class="view">
+      <div class="chat-wrapper">
+        <div class="chat-header-bar">
+          <div class="chb-left">
+            <span class="chb-avatar">🤖</span>
+            <div>
+              <h2>Ask Preppy AI</h2>
+              <p>Your expert personal SAT Prep Tutor</p>
+            </div>
+          </div>
+          <div class="chb-right">
+            <span class="chb-model-badge">Gemini 1.5 Pro</span>
+          </div>
+        </div>
+        
+        <div class="chat-box-body" id="chat-box-body">
+          <div class="chat-message preppy">
+            <div class="cm-avatar">🤖</div>
+            <div class="cm-content">
+              <strong>Preppy AI</strong>
+              <p>Hello! I'm Preppy, your expert SAT tutor. I'm here to help you master SAT Math, Reading, and Writing! Ask me any questions, paste a difficult problem, or ask for a study plan. Let's get that 1600! 🎯</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="chat-input-area">
+          <textarea id="chat-msg-input" placeholder="Ask Preppy a question, e.g. Solve: x^2 - 6x + 9 = 0 step-by-step..." rows="2" onkeydown="handleChatKey(event)"></textarea>
+          <button class="chat-send-btn" id="chat-send-btn" onclick="sendChatMessage()">Send ➔</button>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /views-wrap -->
+
+  <!-- Vocab Quiz Modal -->
+  <div class="modal-overlay" id="quiz-modal" style="display:none" onclick="closeQuiz()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeQuiz()">✕</button>
+      <div id="quiz-content"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="june2024Data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics Dashboard - OnePrep</title>
+  
+  <!-- DM Sans Font -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"DM Sans"', 'sans-serif'],
+          },
+          colors: {
+            appBg: '#f9fafb',
+            pinkAccent: '#ec4899',
+            blueAccent: '#3b82f6',
+            greenLight: '#22c55e',
+            greenDark: '#16a34a',
+            redLight: '#f87171',
+            redDark: '#ef4444',
+            orangeMedium: '#fb923c',
+            creamBg: '#faf8f4',
+            textPrimary: '#111827',
+            textSecondary: '#6b7280',
+            borderGray: '#e5e7eb',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #f9fafb;
+      font-family: 'DM Sans', sans-serif;
+      color: #111827;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Staggered entrance animations */
+    .fade-up-card {
+      animation: cardSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes cardSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Donut chart spin animation */
+    @keyframes spinDonut {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Skeleton loader pulse */
+    .skeleton {
+      background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+      background-size: 200% 100%;
+      animation: loading-pulse 1.5s infinite;
+    }
+    @keyframes loading-pulse {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Pro locked blurred states */
+    .pro-locked-row {
+      filter: blur(5px);
+      pointer-events: none;
+      user-select: none;
+      opacity: 0.6;
+    }
+
+    /* Target dot animations */
+    .accuracy-dot {
+      transition: left 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8 max-w-7xl mx-auto space-y-6 relative min-h-screen pb-24">
+
+  <!-- ==========================================
+       SKELETON LOADER SCREEN
+       ========================================== -->
+  <div id="skeleton-loader" class="space-y-6">
+    <div class="flex justify-between items-center">
+      <div class="h-10 w-44 skeleton rounded-lg"></div>
+      <div class="h-10 w-28 skeleton rounded-full"></div>
+    </div>
+    <div class="h-28 w-full skeleton rounded-2xl"></div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="h-24 skeleton rounded-2xl"></div>
+      <div class="h-24 skeleton rounded-2xl"></div>
+      <div class="h-24 skeleton rounded-2xl"></div>
+      <div class="h-24 skeleton rounded-2xl"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="col-span-2 h-96 skeleton rounded-2xl"></div>
+      <div class="h-96 skeleton rounded-2xl"></div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MAIN CONTENT WRAPPER
+       ========================================== -->
+  <div id="main-content" class="hidden space-y-6">
+
+    <!-- Title Header -->
+    <header class="flex justify-between items-center fade-up-card" style="animation-delay: 0.05s">
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight flex items-center gap-2">
+        <span>📊</span> Analytics
+      </h1>
+      <button onclick="alert('Simulated Pro Upgraded Successfully! 🎉')" class="bg-black hover:bg-gray-800 text-white text-xs font-bold px-5 py-3 rounded-full shadow transition-all active:scale-95">
+        Unlock Pro
+      </button>
+    </header>
+
+    <!-- Pink Pro Upgrade banner -->
+    <div class="bg-[#fce7f3] rounded-3xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative overflow-hidden fade-up-card border border-pink-200" style="animation-delay: 0.1s">
+      <div class="space-y-1 z-10">
+        <h3 class="text-lg md:text-xl font-black text-[#ec4899] leading-snug">Unlock the full report with Pro.</h3>
+        <p class="text-sm font-extrabold text-[#ec4899]">Every number, topic, and chart.</p>
+      </div>
+      <!-- SVG ghost mascot character -->
+      <svg class="absolute right-4 bottom-[-10px] w-24 h-24 text-[#ec4899] opacity-10 pointer-events-none" viewBox="0 0 100 100" fill="currentColor">
+        <path d="M30,12 C55,2 75,8 88,26 C100,44 96,72 82,86 C64,100 32,96 16,81 C0,62 8,24 30,12 Z" />
+      </svg>
+      <button onclick="alert('Redirecting to Checkout...')" class="bg-[#ec4899] hover:bg-[#db2777] text-white text-xs font-bold px-6 py-3.5 rounded-full z-10 transition-all active:scale-95 shadow-sm">
+        Upgrade to Pro
+      </button>
+    </div>
+
+    <!-- 4 Stat cards in a row -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 fade-up-card" style="animation-delay: 0.15s">
+      <!-- Card 1 -->
+      <div class="bg-white border border-gray-200 rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[110px] shadow-sm">
+        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Questions Attempted</span>
+        <strong id="stat-attempted" class="text-3xl font-black text-black">6</strong>
+        <span class="absolute right-4 bottom-4 text-3xl opacity-10 select-none">✓</span>
+      </div>
+      <!-- Card 2 -->
+      <div class="bg-white border border-gray-200 rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[110px] shadow-sm">
+        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Current Accuracy</span>
+        <strong id="stat-accuracy" class="text-3xl font-black text-black">100%</strong>
+        <span class="absolute right-4 bottom-4 text-3xl opacity-10 select-none">📊</span>
+      </div>
+      <!-- Card 3 -->
+      <div class="bg-white border border-gray-200 rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[110px] shadow-sm">
+        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Saved Questions</span>
+        <div class="flex items-baseline justify-between w-full">
+          <strong id="stat-saved" class="text-3xl font-black text-black">0</strong>
+          <button onclick="alert('No questions saved yet.')" class="text-[10px] font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition-all">View Saved</button>
+        </div>
+        <span class="absolute right-4 bottom-4 text-3xl opacity-10 select-none">🔖</span>
+      </div>
+      <!-- Card 4 -->
+      <div class="bg-white border border-gray-200 rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[110px] shadow-sm">
+        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Study Streak</span>
+        <strong id="stat-streak" class="text-3xl font-black text-black">0</strong>
+        <span class="absolute right-4 bottom-4 text-3xl opacity-10 select-none">🔥</span>
+      </div>
+    </div>
+
+    <!-- Light blue diagnostic card -->
+    <div class="bg-[#e0f2fe] rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden border border-[#bae6fd] fade-up-card" style="animation-delay: 0.2s">
+      <div class="space-y-4 text-left z-10 flex-1">
+        <h3 class="text-xl md:text-2xl font-black text-black leading-snug">Take the diagnostic to see your predicted score.</h3>
+        <p class="text-xs text-gray-500 font-extrabold flex items-center gap-1.5">
+          <span>🎯</span> 20 questions · ~20 min
+        </p>
+        <button onclick="alert('Launching Diagnostic session... ⏱️')" class="bg-[#3b82f6] hover:bg-[#2563eb] text-white text-xs font-bold px-6 py-3.5 rounded-full shadow transition-all active:scale-95">
+          Start diagnostic
+        </button>
+      </div>
+
+      <!-- 3 Cute CSS blob mascots right side -->
+      <div class="relative w-48 h-32 flex-shrink-0 flex items-center justify-center">
+        <!-- Large Purple Blob (holds giant crystal ball) -->
+        <div class="absolute w-24 h-24 bg-purple-500 rounded-full flex items-center justify-center text-white top-2 left-6 drop-shadow" style="border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%">
+          <!-- Eyes -->
+          <span class="absolute top-8 left-6 w-2.5 h-2.5 bg-black rounded-full"></span>
+          <span class="absolute top-8 left-12 w-2.5 h-2.5 bg-black rounded-full"></span>
+          <!-- Blush -->
+          <span class="absolute top-10 left-4 w-3.5 h-1.5 bg-pink-400 rounded-full opacity-60"></span>
+          <span class="absolute top-10 left-14 w-3.5 h-1.5 bg-pink-400 rounded-full opacity-60"></span>
+          <!-- Crystal Ball -->
+          <div class="w-14 h-14 bg-indigo-900 border-2 border-purple-300 rounded-full z-10 translate-y-6 translate-x-2 flex items-center justify-center opacity-95">
+            <span class="text-[10px] font-bold text-cyan-200 animate-pulse">🔮</span>
+          </div>
+        </div>
+
+        <!-- Small Green Blob -->
+        <div class="absolute w-12 h-12 bg-green-400 rounded-full top-10 left-0" style="border-radius: 60% 40% 30% 70%">
+          <!-- Eyes -->
+          <span class="absolute top-4 left-3 w-1.5 h-1.5 bg-black rounded-full"></span>
+          <span class="absolute top-4 left-7 w-1.5 h-1.5 bg-black rounded-full"></span>
+        </div>
+
+        <!-- Small Pink Blob -->
+        <div class="absolute w-14 h-14 bg-pink-400 rounded-full top-8 right-2 flex items-center justify-center" style="border-radius: 50% 50% 30% 70%">
+          <!-- Eyes -->
+          <span class="absolute top-5 left-4 w-1.5 h-1.5 bg-black rounded-full"></span>
+          <span class="absolute top-5 left-8 w-1.5 h-1.5 bg-black rounded-full"></span>
+          <!-- "GO" Badge on cheek -->
+          <span class="absolute bg-white text-[7px] text-pink-600 px-1 py-0.5 rounded font-black border border-pink-100 top-8">GO</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         2-COLUMN ANALYTICS LAYOUT
+         ========================================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- LEFT COLUMN (SPAN 2): PRIMARY CHARTS & TOPICS -->
+      <div class="lg:col-span-2 space-y-6">
+
+        <!-- SECTION 2: ACTIVITY TREND CARD -->
+        <div class="bg-white border border-gray-200 rounded-3xl p-6 space-y-6 shadow-sm fade-up-card" style="animation-delay: 0.25s">
+          <div class="space-y-1">
+            <h3 class="text-xl font-extrabold text-black">Activity trend</h3>
+            <p class="text-xs text-gray-500 leading-relaxed font-medium">Wrong in red, correct in green. Harder questions look darker and sit below easier ones in each color. Each bar is one week.</p>
+          </div>
+
+          <!-- Legend -->
+          <div class="flex items-center gap-4 text-xs font-bold text-gray-600">
+            <span class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-green-500"></span> 6 Correct
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-red-500"></span> 0 Wrong
+            </span>
+          </div>
+
+          <!-- Canvas 2D Activity Trend Chart -->
+          <div class="relative w-full h-[220px] flex items-center justify-center">
+            <canvas id="trendCanvas" class="w-full h-full"></canvas>
+          </div>
+        </div>
+
+        <!-- SECTION 3: ENGLISH ACCURACY BY TOPIC -->
+        <div class="bg-white border border-gray-200 rounded-3xl p-6 space-y-6 shadow-sm fade-up-card" style="animation-delay: 0.3s">
+          <div class="flex justify-between items-start">
+            <div class="space-y-1">
+              <h3 class="text-xl font-extrabold text-black">English</h3>
+              <p class="text-xs text-gray-500 font-medium">Accuracy by topic</p>
+            </div>
+            <!-- Legend indicators -->
+            <div class="flex items-center gap-3 text-[10px] font-bold text-gray-500">
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span> ≥ 85%</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-orange-400"></span> 60–84%</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500"></span> &lt; 60%</span>
+            </div>
+          </div>
+
+          <!-- Rows -->
+          <div class="space-y-5" id="english-topics-list">
+            <!-- Dynamically populated rows (Row 1 Correct; Rows 2-4 blurred locked) -->
+          </div>
+        </div>
+
+        <!-- SECTION 4: MATH ACCURACY BY TOPIC -->
+        <div class="bg-white border border-gray-200 rounded-3xl p-6 space-y-6 shadow-sm relative overflow-hidden fade-up-card" style="animation-delay: 0.35s">
+          <div class="flex justify-between items-start">
+            <div class="space-y-1">
+              <h3 class="text-xl font-extrabold text-black">Math</h3>
+              <p class="text-xs text-gray-500 font-medium">Accuracy by topic</p>
+            </div>
+            <div class="flex items-center gap-3 text-[10px] font-bold text-gray-500">
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span> ≥ 85%</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-orange-400"></span> 60–84%</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500"></span> &lt; 60%</span>
+            </div>
+          </div>
+
+          <div class="space-y-5" id="math-topics-list">
+            <!-- Dynamically populated rows -->
+          </div>
+
+          <!-- SECTION 4 EMPTY STATE OVERLAY (Visible because questionsAttempted = 6 < 15) -->
+          <div id="math-empty-overlay" class="absolute inset-0 bg-white/95 z-20 flex flex-col items-center justify-center gap-2 p-6 text-center">
+            <div class="text-4xl text-gray-300">📊</div>
+            <strong class="text-base font-extrabold text-[#111827]">Not enough data yet</strong>
+            <p class="text-xs text-gray-500 font-medium">Answer ~15 questions to unlock.</p>
+          </div>
+        </div>
+
+        <!-- SECTION 5: KNOW YOUR WEAK SPOTS (CREAM WIDE CARD) -->
+        <div class="bg-creamBg border border-orange-100 rounded-3xl p-6 md:p-8 space-y-8 shadow-sm fade-up-card" style="animation-delay: 0.4s">
+          <div class="space-y-1">
+            <h3 class="text-2xl font-black text-black">Know your weak spots</h3>
+            <p class="text-xs text-gray-500 leading-relaxed font-medium">See weekly activity, accuracy by topic, and time share by difficulty so you know exactly what to practice.</p>
+          </div>
+
+          <!-- Stacked bubble/pill bar chart (SVG implementation) -->
+          <div class="space-y-2">
+            <div id="stacked-svg-chart" class="w-full h-[220px]">
+              <!-- Dynamic SVG stacked bubbles injected here -->
+            </div>
+          </div>
+
+          <!-- 2-Column Topic Accuracy Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 pt-4 border-t border-orange-100" id="weak-spots-grid">
+            <!-- Filled dynamically -->
+          </div>
+
+          <!-- 2 Time Analysis cards side-by-side -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+            
+            <!-- Left Card: English Donuts -->
+            <div class="bg-white border border-gray-150 rounded-2xl p-5 flex flex-col sm:flex-row gap-5 items-center">
+              <div class="relative w-28 h-28 flex-shrink-0 flex items-center justify-center">
+                <!-- CSS conic-gradient Donut Chart -->
+                <div class="w-full h-full rounded-full" style="background: conic-gradient(#22c55e 0% 65%, #fb923c 65% 85%, #f87171 85% 100%);"></div>
+                <!-- Inner circle block -->
+                <div class="absolute w-20 h-20 bg-white rounded-full flex flex-col justify-center items-center text-center">
+                  <strong class="text-xs font-black text-black leading-none">2m 12s</strong>
+                  <span class="text-[8px] font-bold text-gray-400">avg</span>
+                </div>
+              </div>
+              
+              <div class="flex-1 space-y-1 w-full">
+                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">English Pace</span>
+                <ul class="text-[11px] font-bold text-gray-600 space-y-1">
+                  <li class="flex justify-between">
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span> Easy:</span> 
+                    <span>46s <span class="text-gray-400 font-medium">/ avg 1m 11s</span></span>
+                  </li>
+                  <li class="flex justify-between">
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-orange-400"></span> Medium:</span> 
+                    <span>1m 14s <span class="text-gray-400 font-medium">/ avg 1m 23s</span></span>
+                  </li>
+                  <li class="flex justify-between">
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500"></span> Hard:</span> 
+                    <span>2m 52s <span class="text-gray-400 font-medium">/ avg 2m 23s</span></span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Right Card: Math Donuts (Locked overlay state) -->
+            <div class="bg-white border border-gray-150 rounded-2xl p-5 relative overflow-hidden flex flex-col sm:flex-row gap-5 items-center">
+              
+              <div class="relative w-28 h-28 flex-shrink-0 flex items-center justify-center opacity-25">
+                <div class="w-full h-full rounded-full" style="background: conic-gradient(#e5e7eb 0% 100%);"></div>
+                <div class="absolute w-20 h-20 bg-white rounded-full flex flex-col justify-center items-center">
+                  <strong class="text-xs font-black text-gray-400">1m 58s</strong>
+                  <span class="text-[8px] font-bold text-gray-400">avg</span>
+                </div>
+              </div>
+              
+              <div class="flex-1 space-y-1 w-full opacity-25">
+                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Math Pace</span>
+                <ul class="text-[11px] font-bold text-gray-600 space-y-1">
+                  <li>● Easy: --</li>
+                  <li>● Medium: --</li>
+                  <li>● Hard: --</li>
+                </ul>
+              </div>
+
+              <!-- Locked data overlay -->
+              <div class="absolute inset-0 bg-white/95 flex flex-col items-center justify-center p-4 text-center gap-1">
+                <span class="text-xl">⏱️</span>
+                <strong class="text-xs font-extrabold text-black">Not enough data yet</strong>
+                <p class="text-[10px] text-gray-400 font-medium leading-relaxed">Shows after a few timed questions.</p>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN (SPAN 1): SIDEBAR PANELS -->
+      <div class="space-y-6">
+
+        <!-- SECTION 6: SEE HOW YOU PACE Lollipop chart -->
+        <div class="bg-white border border-gray-200 rounded-3xl p-6 space-y-6 shadow-sm fade-up-card" style="animation-delay: 0.45s">
+          <div class="space-y-1">
+            <h3 class="text-xl font-extrabold text-black">See how you pace</h3>
+            <p class="text-xs text-gray-500 leading-relaxed font-medium font-medium">Compare your pacing to thousands of other students on the platform to see where you stand.</p>
+          </div>
+
+          <!-- SVG Lollipop Chart container -->
+          <div id="lollipop-svg-chart" class="w-full h-[180px]">
+            <!-- Lollipop SVG elements go here -->
+          </div>
+        </div>
+
+        <!-- SECTION 7: TRACK YOUR DAILY ACTIVITY Heatmap -->
+        <div class="bg-white border border-gray-200 rounded-3xl p-6 space-y-6 shadow-sm fade-up-card" style="animation-delay: 0.5s">
+          <div class="space-y-1">
+            <h3 class="text-xl font-extrabold text-black">Track your daily activity</h3>
+            <p class="text-xs text-gray-500 font-medium">See how daily practice adds up over time.</p>
+          </div>
+
+          <!-- Heatmap render grid -->
+          <div id="mini-heatmap-container" class="space-y-4">
+            <!-- Dynamic Apr / May 2026 calendars inside -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SECTION 8: YOUR PRACTICE ACTIVITY HEATMAP GRID -->
+    <div class="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 space-y-6 shadow-sm fade-up-card" style="animation-delay: 0.55s">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div class="space-y-1">
+          <h3 class="text-2xl font-black text-black">Your practice activity</h3>
+          <p class="text-xs text-gray-500 font-medium">Most active: <strong class="text-blue-600 font-black">Saturday</strong>.</p>
+        </div>
+        <div class="text-xs text-gray-500 font-extrabold" id="foot-attempts-label">6 questions answered.</div>
+      </div>
+
+      <!-- 10-Month Heatmap grid layout -->
+      <div id="ten-month-heatmap" class="grid grid-cols-1 md:grid-cols-5 gap-6 pt-4 border-t border-gray-100">
+        <!-- Rendered dynamically (Aug 2025 -> May 2026) -->
+      </div>
+
+      <!-- Bottom Heatmap Legend -->
+      <div class="flex items-center gap-2 justify-end text-[10px] font-bold text-gray-400">
+        <span>Less</span>
+        <span class="w-3.5 h-3.5 bg-gray-200 rounded-sm"></span>
+        <span class="w-3.5 h-3.5 bg-blue-200 rounded-sm"></span>
+        <span class="w-3.5 h-3.5 bg-blue-300 rounded-sm"></span>
+        <span class="w-3.5 h-3.5 bg-blue-400 rounded-sm"></span>
+        <span class="w-3.5 h-3.5 bg-blue-700 rounded-sm"></span>
+        <span>More</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STICKY PRO FOOTER UPGRADE BANNER -->
+  <div id="sticky-upgrade-banner" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-xl bg-pink-500 text-white rounded-full px-6 py-4 flex items-center justify-between shadow-2xl z-40 popover-enter">
+    <div class="text-xs font-bold leading-tight">
+      Unlock the full report with Pro.
+    </div>
+    <button onclick="alert('Checkout loaded!')" class="bg-white hover:bg-pink-50 text-pink-600 text-[10px] font-black px-4 py-2 rounded-full transition-all shadow active:scale-95">
+      Upgrade to Pro
+    </button>
+  </div>
+
+  <!-- ==========================================
+       JAVASCRIPT DYNAMICS MOTOR
+       ========================================== -->
+  <script>
+    const API_BASE = 'http://localhost:3000';
+
+    // State fallbacks for offline execution
+    let offlineFallback = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Setup sticky upgrade banner triggers
+      window.addEventListener('scroll', () => {
+        const banner = document.getElementById('sticky-upgrade-banner');
+        if (window.scrollY > 250) {
+          banner.classList.remove('hidden');
+        } else {
+          banner.classList.add('hidden');
+        }
+      });
+
+      loadDashboardData();
+    });
+
+    async function fetchFromApi(endpoint) {
+      try {
+        const response = await fetch(`${API_BASE}${endpoint}`);
+        if (!response.ok) throw new Error("API server responded with error");
+        return await response.json();
+      } catch (err) {
+        console.warn(`[Connection Failure] falling back to client-side data calculations. Target: ${endpoint}`);
+        offlineFallback = true;
+        return handleOfflineFallback(endpoint);
+      }
+    }
+
+    async function loadDashboardData() {
+      try {
+        // Parallel requests
+        const [summary, trend, accuracy, timing, pacing, heatmap, weakSpots] = await Promise.all([
+          fetchFromApi('/api/analytics/summary'),
+          fetchFromApi('/api/analytics/activity-trend'),
+          fetchFromApi('/api/analytics/accuracy-by-topic'),
+          fetchFromApi('/api/analytics/time-by-difficulty'),
+          fetchFromApi('/api/analytics/pacing'),
+          fetchFromApi('/api/analytics/heatmap?months=10'),
+          fetchFromApi('/api/analytics/weak-spots')
+        ]);
+
+        // Hide loader & show dashboard
+        document.getElementById('skeleton-loader').classList.add('hidden');
+        document.getElementById('main-content').classList.remove('hidden');
+
+        // Render sections
+        renderSummary(summary);
+        renderActivityTrendChart(trend);
+        renderAccuracyByTopic(accuracy);
+        renderWeakSpotsChart(weakSpots);
+        renderLollipopPacingChart(pacing);
+        renderHeatmaps(heatmap);
+
+      } catch (err) {
+        console.error("Dashboard compilation failed", err);
+      }
+    }
+
+    // SECTION 1: Summary Stats
+    function renderSummary(summary) {
+      document.getElementById('stat-attempted').textContent = summary.questionsAttempted;
+      document.getElementById('stat-accuracy').textContent = `${summary.currentAccuracy}%`;
+      document.getElementById('stat-saved').textContent = summary.savedQuestions;
+      document.getElementById('stat-streak').textContent = summary.studyStreak;
+
+      document.getElementById('foot-attempts-label').textContent = `${summary.questionsAttempted} questions answered.`;
+      
+      // Control empty state overlays
+      const overlay = document.getElementById('math-empty-overlay');
+      if (summary.questionsAttempted >= 15) {
+        overlay.classList.add('hidden');
+      } else {
+        overlay.classList.remove('hidden');
+      }
+    }
+
+    // SECTION 2: Canvas Activity Trend Chart
+    function renderActivityTrendChart(trend) {
+      const canvas = document.getElementById('trendCanvas');
+      if (!canvas) return;
+
+      // Make responsive high DPI
+      const rect = canvas.parentNode.getBoundingClientRect();
+      canvas.width = rect.width * 2;
+      canvas.height = 220 * 2;
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `220px`;
+
+      const ctx = canvas.getContext('2d');
+      ctx.scale(2, 2);
+
+      // Clean canvas
+      ctx.clearRect(0, 0, rect.width, 220);
+
+      const chartHeight = 160;
+      const startX = 40;
+      const startY = 180;
+      const barWidth = 40;
+      const gap = (rect.width - 80 - (6 * barWidth)) / 5;
+
+      // Draw Grid Y lines
+      ctx.strokeStyle = '#f3f4f6';
+      ctx.lineWidth = 1;
+      ctx.fillStyle = '#9ca3af';
+      ctx.font = '10px DM Sans, sans-serif';
+      ctx.textAlign = 'right';
+
+      const yTicks = [0, 2, 4, 6, 8];
+      yTicks.forEach(tick => {
+        const yVal = startY - (tick / 8 * chartHeight);
+        ctx.beginPath();
+        ctx.moveTo(startX, yVal);
+        ctx.lineTo(rect.width - 20, yVal);
+        ctx.stroke();
+        ctx.fillText(tick, startX - 10, yVal + 3);
+      });
+
+      // Draw stacked bars
+      trend.forEach((item, index) => {
+        const xVal = startX + index * (barWidth + gap);
+        
+        // Sum total bar elements
+        const total = item.easyCorrect + item.hardCorrect + item.easyWrong + item.hardWrong;
+        if (total === 0) {
+          // Empty state placeholder dash line
+          ctx.strokeStyle = '#e5e7eb';
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.moveTo(xVal + barWidth/2, startY);
+          ctx.lineTo(xVal + barWidth/2, startY - 10);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        } else {
+          // Render stacks bottom-to-top: Hard wrong (dark red), Easy wrong (light red), Hard correct (dark green), Easy correct (light green)
+          const heights = {
+            hardWrong: (item.hardWrong / 8) * chartHeight,
+            easyWrong: (item.easyWrong / 8) * chartHeight,
+            hardCorrect: (item.hardCorrect / 8) * chartHeight,
+            easyCorrect: (item.easyCorrect / 8) * chartHeight
+          };
+
+          let currentY = startY;
+
+          // Render Hard wrong
+          if (heights.hardWrong > 0) {
+            ctx.fillStyle = '#ef4444'; // RedDark
+            ctx.fillRect(xVal, currentY - heights.hardWrong, barWidth, heights.hardWrong);
+            currentY -= heights.hardWrong;
+          }
+          // Easy wrong
+          if (heights.easyWrong > 0) {
+            ctx.fillStyle = '#f87171'; // RedLight
+            ctx.fillRect(xVal, currentY - heights.easyWrong, barWidth, heights.easyWrong);
+            currentY -= heights.easyWrong;
+          }
+          // Hard correct
+          if (heights.hardCorrect > 0) {
+            ctx.fillStyle = '#16a34a'; // GreenDark
+            ctx.fillRect(xVal, currentY - heights.hardCorrect, barWidth, heights.hardCorrect);
+            currentY -= heights.hardCorrect;
+          }
+          // Easy correct
+          if (heights.easyCorrect > 0) {
+            ctx.fillStyle = '#22c55e'; // GreenLight
+            // Rounded corners on top-most stack only
+            const topHeight = heights.easyCorrect;
+            ctx.fillStyle = '#22c55e';
+            ctx.beginPath();
+            ctx.roundRect(xVal, currentY - topHeight, barWidth, topHeight, [6, 6, 0, 0]);
+            ctx.fill();
+          }
+        }
+
+        // Draw X tick label
+        ctx.fillStyle = '#6b7280';
+        ctx.textAlign = 'center';
+        ctx.font = '10px DM Sans, sans-serif';
+        ctx.fillText(item.week, xVal + barWidth / 2, startY + 20);
+      });
+    }
+
+    // SECTION 3 & 4: Accuracy lists
+    function renderAccuracyByTopic(accuracy) {
+      // English topic render
+      const engList = document.getElementById('english-topics-list');
+      engList.innerHTML = accuracy.english.map(topic => {
+        if (topic.locked) {
+          return `
+            <div class="relative overflow-hidden">
+              <div class="flex justify-between items-center text-xs font-bold text-gray-400 pro-locked-row">
+                <span>${escapeHtml(topic.topic)}</span>
+                <span>0 attempts</span>
+              </div>
+              <div class="w-full bg-gray-150 h-3 rounded-full mt-2 overflow-hidden pro-locked-row">
+                <div class="h-full bg-gray-200" style="width: 100%"></div>
+              </div>
+              <!-- Lock overlay bubble -->
+              <div class="absolute inset-0 flex items-center justify-center bg-white/40 text-[10px] font-black text-pink-600 gap-1">
+                🔒 Unlock with Pro
+              </div>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-xs font-bold text-black">
+                <span>${escapeHtml(topic.topic)}</span>
+                <span class="text-gray-400 font-medium">${topic.attempts} attempts</span>
+              </div>
+              
+              <!-- 3-Color zone bar -->
+              <div class="relative w-full h-3 rounded-full overflow-hidden flex">
+                <div class="bg-red-400/80 w-[60%] h-full"></div>
+                <div class="bg-orange-300 w-[25%] h-full"></div>
+                <div class="bg-green-400 w-[15%] h-full"></div>
+                
+                <!-- Dot indicator absolute positioned at 100% accuracy -->
+                <div class="absolute w-3.5 h-3.5 rounded-full border-2 border-white bg-green-500 shadow-sm top-1/2 -translate-y-1/2 accuracy-dot" style="left: calc(${topic.accuracy}% - 7px)"></div>
+              </div>
+              <div class="flex justify-end text-xs font-black text-green-600 mt-1">${topic.accuracy}%</div>
+            </div>
+          `;
+        }
+      }).join('');
+
+      // Math topic render
+      const mathList = document.getElementById('math-topics-list');
+      mathList.innerHTML = accuracy.math.map(topic => {
+        if (topic.locked) {
+          return `
+            <div class="relative overflow-hidden">
+              <div class="flex justify-between items-center text-xs font-bold text-gray-400 pro-locked-row">
+                <span>${escapeHtml(topic.topic)}</span>
+                <span>0 attempts</span>
+              </div>
+              <div class="w-full bg-gray-150 h-3 rounded-full mt-2 overflow-hidden pro-locked-row">
+                <div class="h-full bg-gray-200" style="width: 100%"></div>
+              </div>
+              <div class="absolute inset-0 flex items-center justify-center bg-white/40 text-[10px] font-black text-pink-600 gap-1">
+                🔒 Unlock with Pro
+              </div>
+            </div>
+          `;
+        } else {
+          let dotColor = "bg-red-500";
+          if (topic.accuracy >= 85) dotColor = "bg-green-500";
+          else if (topic.accuracy >= 60) dotColor = "bg-orange-400";
+
+          return `
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-xs font-bold text-black">
+                <span>${escapeHtml(topic.topic)}</span>
+                <span class="text-gray-400 font-medium">${topic.attempts} attempts</span>
+              </div>
+              
+              <!-- 3-Color zone bar -->
+              <div class="relative w-full h-3 rounded-full overflow-hidden flex">
+                <div class="bg-red-400/80 w-[60%] h-full"></div>
+                <div class="bg-orange-300 w-[25%] h-full"></div>
+                <div class="bg-green-400 w-[15%] h-full"></div>
+                
+                <!-- Dot indicator absolute positioned -->
+                <div class="absolute w-3.5 h-3.5 rounded-full border-2 border-white ${dotColor} shadow-sm top-1/2 -translate-y-1/2 accuracy-dot" style="left: calc(${topic.accuracy}% - 7px)"></div>
+              </div>
+              <div class="flex justify-end text-xs font-black text-gray-600 mt-1">${topic.accuracy}%</div>
+            </div>
+          `;
+        }
+      }).join('');
+    }
+
+    // SECTION 5: Cream Weak Spots card SVG
+    function renderWeakSpotsChart(weakSpots) {
+      const container = document.getElementById('stacked-svg-chart');
+      if (!container) return;
+
+      const rect = container.getBoundingClientRect();
+      const chartWidth = rect.width;
+      const chartHeight = 220;
+
+      const startX = 40;
+      const startY = 180;
+      const plotWidth = chartWidth - startX - 20;
+      const plotHeight = startY - 30;
+
+      const barWidth = 14;
+      const count = weakSpots.weeklyBars.length;
+      const gap = (plotWidth - (count * barWidth)) / (count - 1);
+
+      // Y line guides (0, 20, 40, 60, 80)
+      let svgLines = '';
+      const ticks = [0, 20, 40, 60, 80];
+      ticks.forEach(tick => {
+        const yVal = startY - (tick / 80 * plotHeight);
+        svgLines += `
+          <line x1="${startX}" y1="${yVal}" x2="${chartWidth - 20}" y2="${yVal}" stroke="#f3ece0" stroke-width="1.5" />
+          <text x="${startX - 10}" y="${yVal + 3}" fill="#a39683" font-size="9" font-weight="bold" text-anchor="end">${tick}</text>
+        `;
+      });
+
+      // Render Stacked bubble pills
+      let svgBars = '';
+      weakSpots.weeklyBars.forEach((bar, index) => {
+        const xVal = startX + index * (barWidth + gap);
+        
+        // Stack segments bottom-to-top: red, lightGreen, darkGreen
+        const redH = (bar.redHeight / 80) * plotHeight;
+        const lgH = (bar.lightGreenHeight / 80) * plotHeight;
+        const dgH = (bar.darkGreenHeight / 80) * plotHeight;
+        const totalHeight = redH + lgH + dgH;
+
+        const xCenter = xVal + barWidth/2;
+
+        // Render single continuous pill with layered segments
+        svgBars += `
+          <!-- Bottom segment: Coral Red -->
+          <rect x="${xVal}" y="${startY - redH}" width="${barWidth}" height="${redH}" rx="${barWidth/2}" fill="#f87171" />
+          
+          <!-- Middle segment: Light Green -->
+          <rect x="${xVal}" y="${startY - redH - lgH}" width="${barWidth}" height="${lgH + barWidth/2}" rx="${barWidth/2}" fill="#86efac" />
+          
+          <!-- Top segment: Dark Green -->
+          <rect x="${xVal}" y="${startY - totalHeight}" width="${barWidth}" height="${dgH + barWidth/2}" rx="${barWidth/2}" fill="#16a34a" />
+
+          <!-- X axis Label -->
+          <text x="${xCenter}" y="${startY + 20}" fill="#8c7d6b" font-size="9" font-weight="bold" text-anchor="middle">${bar.label}</text>
+        `;
+      });
+
+      container.innerHTML = `
+        <svg width="100%" height="100%" viewBox="0 0 ${chartWidth} ${chartHeight}">
+          ${svgLines}
+          ${svgBars}
+        </svg>
+      `;
+
+      // Fill 2-Column Topic Accuracy grid
+      const grid = document.getElementById('weak-spots-grid');
+      const leftCol = [];
+      const rightCol = [];
+
+      weakSpots.topicAccuracy.forEach(topic => {
+        const rowHtml = `
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center text-xs font-bold text-black">
+              <span class="truncate max-w-[200px]">${escapeHtml(topic.topic)}</span>
+              <span class="text-gray-400 font-medium">${topic.attempts} attempts</span>
+            </div>
+            
+            <div class="relative w-full h-2 rounded-full overflow-hidden flex bg-orange-100/50">
+              <div class="bg-red-400/80 w-[60%] h-full"></div>
+              <div class="bg-orange-300 w-[25%] h-full"></div>
+              <div class="bg-green-400 w-[15%] h-full"></div>
+              
+              <!-- Dot position pointer -->
+              <div class="absolute w-2.5 h-2.5 rounded-full border border-white bg-orange-400 shadow-sm top-1/2 -translate-y-1/2" style="left: calc(${topic.accuracy}% - 5px)"></div>
+            </div>
+            <div class="flex justify-end text-[11px] font-black text-black">${topic.accuracy}%</div>
+          </div>
+        `;
+        if (topic.subject === 'english') {
+          leftCol.push(rowHtml);
+        } else {
+          rightCol.push(rowHtml);
+        }
+      });
+
+      grid.innerHTML = `
+        <div class="space-y-5">${leftCol.join('')}</div>
+        <div class="space-y-5">${rightCol.join('')}</div>
+      `;
+    }
+
+    // SECTION 6: Lollipop range pacing chart SVG
+    function renderLollipopPacingChart(pacing) {
+      const container = document.getElementById('lollipop-svg-chart');
+      if (!container) return;
+
+      const rect = container.getBoundingClientRect();
+      const chartWidth = rect.width;
+      const chartHeight = 180;
+
+      const startX = 40;
+      const startY = 140;
+      const plotWidth = chartWidth - startX - 20;
+      const plotHeight = startY - 20;
+
+      const count = pacing.length;
+      const gap = plotWidth / (count - 1);
+
+      // Y Line guides (0s, 15s, 30s, 45s, 1m)
+      let svgLines = '';
+      const labels = [
+        { label: "0s", val: 0 },
+        { label: "15s", val: 15 },
+        { label: "30s", val: 30 },
+        { label: "45s", val: 45 },
+        { label: "1m", val: 60 }
+      ];
+
+      labels.forEach(tick => {
+        const yVal = startY - (tick.val / 60 * plotHeight);
+        svgLines += `
+          <line x1="${startX}" y1="${yVal}" x2="${chartWidth - 20}" y2="${yVal}" stroke="#f3f4f6" stroke-width="1.5" />
+          <text x="${startX - 10}" y="${yVal + 3}" fill="#9ca3af" font-size="9" font-weight="bold" text-anchor="end">${tick.label}</text>
+        `;
+      });
+
+      // Platform range vertical bars + blue circle dot
+      let svgData = '';
+      pacing.forEach((item, index) => {
+        const xVal = startX + index * gap;
+        
+        // Range bar
+        const yMax = startY - (item.platformMax / 60 * plotHeight);
+        const yMin = startY - (item.platformMin / 60 * plotHeight);
+        
+        // Your dot time
+        const yDot = startY - (item.yourTime / 60 * plotHeight);
+
+        svgData += `
+          <!-- Range bar -->
+          <line x1="${xVal}" y1="${yMin}" x2="${xVal}" y2="${yMax}" stroke="#bfdbfe" stroke-width="6" stroke-linecap="round" opacity="0.6" />
+          
+          <!-- Your time dot -->
+          <circle cx="${xVal}" cy="${yDot}" r="4.5" fill="#3b82f6" stroke="#ffffff" stroke-width="1.5" />
+
+          <!-- X axis Label -->
+          <text x="${xVal}" y="${startY + 20}" fill="#6b7280" font-size="9" font-weight="bold" text-anchor="middle">${item.week}</text>
+        `;
+      });
+
+      container.innerHTML = `
+        <svg width="100%" height="100%" viewBox="0 0 ${chartWidth} ${chartHeight}">
+          ${svgLines}
+          ${svgData}
+        </svg>
+        
+        <!-- Legend beneath -->
+        <div class="flex justify-center gap-4 text-[9px] font-bold text-gray-400 pt-2">
+          <span class="flex items-center gap-1"><span class="w-3.5 h-1.5 rounded-full bg-blue-100"></span> Platform range</span>
+          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Your time</span>
+        </div>
+      `;
+    }
+
+    // SECTION 7 & 8: heatmaps
+    function renderHeatmaps(heatmap) {
+      // 1. Mini 2-Month Heatmap Calendar (Apr & May 2026)
+      const miniContainer = document.getElementById('mini-heatmap-container');
+      
+      const weeksArr = ["M", "T", "W", "T", "F", "S", "S"];
+      
+      const aprGrid = generateMonthGrid(2026, 3, heatmap); // 0-indexed month
+      const mayGrid = generateMonthGrid(2026, 4, heatmap);
+
+      miniContainer.innerHTML = `
+        <div class="grid grid-cols-2 gap-4">
+          <!-- April -->
+          <div class="space-y-2 text-center">
+            <h4 class="text-xs font-bold text-black">Apr 2026</h4>
+            <div class="grid grid-cols-7 gap-1">
+              ${weeksArr.map(w => `<span class="text-[8px] font-bold ${w === 'S' && weeksArr.indexOf(w) === 5 ? 'text-blue-500' : 'text-gray-400'}">${w}</span>`).join('')}
+              ${aprGrid}
+            </div>
+          </div>
+          <!-- May -->
+          <div class="space-y-2 text-center">
+            <h4 class="text-xs font-bold text-black">May 2026</h4>
+            <div class="grid grid-cols-7 gap-1">
+              ${weeksArr.map(w => `<span class="text-[8px] font-bold ${w === 'S' && weeksArr.indexOf(w) === 5 ? 'text-blue-500' : 'text-gray-400'}">${w}</span>`).join('')}
+              ${mayGrid}
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-1.5 justify-center text-[9px] font-bold text-gray-400 pt-2 border-t border-gray-100">
+          <span>Less</span>
+          <span class="w-2.5 h-2.5 bg-gray-200 rounded-sm"></span>
+          <span class="w-2.5 h-2.5 bg-blue-200 rounded-sm"></span>
+          <span class="w-2.5 h-2.5 bg-blue-300 rounded-sm"></span>
+          <span class="w-2.5 h-2.5 bg-blue-400 rounded-sm"></span>
+          <span class="w-2.5 h-2.5 bg-blue-700 rounded-sm"></span>
+          <span>More</span>
+        </div>
+      `;
+
+      // 2. 10-Month Heatmap grid layout (Aug 2025 -> May 2026)
+      const tenMonthGrid = document.getElementById('ten-month-heatmap');
+      
+      const monthsList = [
+        { year: 2025, month: 7, name: "August 2025" },
+        { year: 2025, month: 8, name: "September 2025" },
+        { year: 2025, month: 9, name: "October 2025" },
+        { year: 2025, month: 10, name: "November 2025" },
+        { year: 2025, month: 11, name: "December 2025" },
+        { year: 2026, month: 0, name: "January 2026" },
+        { year: 2026, month: 1, name: "February 2026" },
+        { year: 2026, month: 2, name: "March 2026" },
+        { year: 2026, month: 3, name: "April 2026" },
+        { year: 2026, month: 4, name: "May 2026" }
+      ];
+
+      tenMonthGrid.innerHTML = monthsList.map(m => {
+        const daysHeaders = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+        const gridSquares = generateMonthGrid(m.year, m.month, heatmap);
+        
+        return `
+          <div class="space-y-2 text-center bg-gray-50/50 p-2.5 rounded-xl border border-gray-100">
+            <h4 class="text-[10px] font-extrabold text-black uppercase tracking-wider">${m.name}</h4>
+            <div class="grid grid-cols-7 gap-1">
+              ${daysHeaders.map(d => `<span class="text-[7px] font-bold ${d === 'Sa' ? 'text-blue-500' : 'text-gray-400'}">${d}</span>`).join('')}
+              ${gridSquares}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Helper month grid squares builder
+    function generateMonthGrid(year, monthIndex, heatmap) {
+      // Days count inside target month
+      const daysCount = new Date(year, monthIndex + 1, 0).getDate();
+      // First day of month (convert Sunday 0 to Saturday index alignment)
+      let firstDay = new Date(year, monthIndex, 1).getDay();
+      firstDay = firstDay === 0 ? 6 : firstDay - 1; // Align to Mon-Sun index
+
+      const squares = [];
+      
+      // Blank placeholders for pre-first day spacing
+      for (let i = 0; i < firstDay; i++) {
+        squares.push(`<div class="w-1.5 h-1.5 bg-transparent rounded-sm"></div>`);
+      }
+
+      // Populate squares
+      for (let d = 1; d <= daysCount; d++) {
+        const dateString = `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const count = heatmap[dateString] || 0;
+
+        let color = "bg-gray-200"; // 0
+        if (count >= 11) color = "bg-blue-700";
+        else if (count >= 7) color = "bg-blue-400";
+        else if (count >= 4) color = "bg-blue-300";
+        else if (count >= 1) color = "bg-blue-200";
+
+        squares.push(`
+          <div class="w-1.5 h-1.5 ${color} rounded-sm cursor-pointer hover:ring-1 hover:ring-black" title="${dateString}: ${count} questions"></div>
+        `);
+      }
+
+      return squares.join('');
+    }
+
+    // Graceful offline fallback loader mockups
+    function handleOfflineFallback(endpoint) {
+      if (endpoint.includes('summary')) {
+        return { questionsAttempted: 6, currentAccuracy: 100, savedQuestions: 0, studyStreak: 0, totalCorrect: 6, totalWrong: 0 };
+      }
+      if (endpoint.includes('activity-trend')) {
+        return [
+          { week: "Aug 11, '25", easyCorrect: 5, hardCorrect: 1, easyWrong: 0, hardWrong: 0 },
+          { week: "Sep 29, '25", easyCorrect: 0, hardCorrect: 0, easyWrong: 0, hardWrong: 0 },
+          { week: "Nov 17, '25", easyCorrect: 0, hardCorrect: 0, easyWrong: 0, hardWrong: 0 },
+          { week: "Jan 5, '26", easyCorrect: 0, hardCorrect: 0, easyWrong: 0, hardWrong: 0 },
+          { week: "Feb 23, '26", easyCorrect: 0, hardCorrect: 0, easyWrong: 0, hardWrong: 0 },
+          { week: "Apr 13, '26", easyCorrect: 0, hardCorrect: 0, easyWrong: 0, hardWrong: 0 }
+        ];
+      }
+      if (endpoint.includes('accuracy-by-topic')) {
+        return {
+          english: [
+            { topic: "Standard English Conventions", attempts: 6, accuracy: 100, locked: false },
+            { topic: "Information and Ideas", attempts: 0, accuracy: null, locked: true },
+            { topic: "Craft and Structure", attempts: 0, accuracy: null, locked: true },
+            { topic: "Expression of Ideas", attempts: 0, accuracy: null, locked: true }
+          ],
+          math: [
+            { topic: "Algebra", attempts: 31, accuracy: 58, locked: false },
+            { topic: "Advanced Math", attempts: 35, accuracy: 41, locked: false },
+            { topic: "Problem Solving and Data Analysis", attempts: 0, accuracy: null, locked: true },
+            { topic: "Geometry", attempts: 0, accuracy: null, locked: true }
+          ]
+        };
+      }
+      if (endpoint.includes('time-by-difficulty')) {
+        return {
+          english: { avgTotal: "2m 12s", easy: { yourTime: "46s", platformAvg: "1m 11s" }, medium: { yourTime: "1m 14s", platformAvg: "1m 23s" }, hard: { yourTime: "2m 52s", platformAvg: "2m 23s" } },
+          math: { avgTotal: "1m 58s", easy: { yourTime: "55s", platformAvg: "1m 8s" }, medium: { yourTime: "1m 35s", platformAvg: "1m 31s" }, hard: { yourTime: "3m 8s", platformAvg: "2m 23s" } }
+        };
+      }
+      if (endpoint.includes('pacing')) {
+        return [
+          { week: "Mar 24", yourTime: 32, platformMin: 20, platformMax: 50 },
+          { week: "Mar 31", yourTime: 28, platformMin: 18, platformMax: 48 },
+          { week: "Apr 7",  yourTime: 40, platformMin: 24, platformMax: 55 },
+          { week: "Apr 14", yourTime: 38, platformMin: 25, platformMax: 50 },
+          { week: "Apr 21", yourTime: 30, platformMin: 20, platformMax: 44 },
+          { week: "Apr 28", yourTime: 31, platformMin: 18, platformMax: 45 },
+          { week: "May 5",  yourTime: 52, platformMin: 28, platformMax: 58 }
+        ];
+      }
+      if (endpoint.includes('heatmap')) {
+        const heatmap = {};
+        const today = new Date();
+        for (let i = 0; i < 300; i++) {
+          const d = new Date();
+          d.setDate(today.getDate() - i);
+          heatmap[d.toISOString().split('T')[0]] = 0;
+        }
+        heatmap["2025-08-16"] = 6;
+        heatmap["2026-04-12"] = 2;
+        heatmap["2026-04-18"] = 5;
+        heatmap["2026-04-25"] = 9;
+        heatmap["2026-05-02"] = 12;
+        heatmap["2026-05-16"] = 7;
+        heatmap["2026-05-23"] = 4;
+        return heatmap;
+      }
+      if (endpoint.includes('weak-spots')) {
+        return {
+          weeklyBars: [
+            { label: "Mar 24", redHeight: 18, lightGreenHeight: 22, darkGreenHeight: 15 },
+            { label: "Mar 31", redHeight: 15, lightGreenHeight: 20, darkGreenHeight: 14 },
+            { label: "Apr 7",  redHeight: 22, lightGreenHeight: 28, darkGreenHeight: 18 },
+            { label: "Apr 14", redHeight: 20, lightGreenHeight: 26, darkGreenHeight: 13 },
+            { label: "Apr 21", redHeight: 28, lightGreenHeight: 30, darkGreenHeight: 16 },
+            { label: "Apr 28", redHeight: 15, lightGreenHeight: 22, darkGreenHeight: 30 },
+            { label: "May 5",  redHeight: 38, lightGreenHeight: 28, darkGreenHeight: 15 },
+            { label: "May 12", redHeight: 23, lightGreenHeight: 24, darkGreenHeight: 28 },
+            { label: "May 19", redHeight: 30, lightGreenHeight: 20, darkGreenHeight: 31 },
+            { label: "May 26", redHeight: 24, lightGreenHeight: 22, darkGreenHeight: 34 },
+            { label: "Jun 2",  redHeight: 22, lightGreenHeight: 25, darkGreenHeight: 34 }
+          ],
+          topicAccuracy: [
+            { topic: "Information and Ideas", attempts: 48, accuracy: 72, subject: "english" },
+            { topic: "Craft and Structure", attempts: 41, accuracy: 58, subject: "english" },
+            { topic: "Standard English Con...", attempts: 36, accuracy: 81, subject: "english" },
+            { topic: "Algebra", attempts: 52, accuracy: 64, subject: "math" },
+            { topic: "Advanced Math", attempts: 38, accuracy: 47, subject: "math" },
+            { topic: "Problem-Solving...", attempts: 28, accuracy: 76, subject: "math" }
+          ]
+        };
+      }
+      return {};
+    }
+
+    // Helper escape strings
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>

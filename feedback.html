@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OnePrep — Give Feedback</title>
+  <meta name="description" content="Share your feedback about OnePrep. Rate your experience, suggest features, and help us build the best SAT prep platform for students." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background: #f0f4f8; font-family: 'Outfit', 'Plus Jakarta Sans', 'Inter', sans-serif; }
+
+    .page-wrap {
+      margin-left: 240px;
+      min-height: 100vh;
+      padding: 40px;
+      background: #f0f4f8;
+    }
+
+    .page-hero {
+      background: linear-gradient(135deg, #0f3446 0%, #0e7490 60%, #06b6d4 100%);
+      border-radius: 24px;
+      padding: 40px 48px;
+      color: #fff;
+      margin-bottom: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: ''; position: absolute; top: -60px; right: -60px;
+      width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.05);
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);
+      padding: 5px 14px; border-radius: 50px; font-size: 12px; font-weight: 700; margin-bottom: 14px;
+    }
+    .page-hero h1 { font-size: 34px; font-weight: 800; margin-bottom: 8px; }
+    .page-hero p  { font-size: 14px; opacity: 0.8; max-width: 480px; line-height: 1.6; }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .form-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 40px;
+      border: 1px solid #e8eef3;
+      box-shadow: 0 2px 20px rgba(15,52,70,0.07);
+    }
+
+    .form-section-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+      color: #94a3b8; margin-bottom: 16px; margin-top: 28px; padding-top: 28px;
+      border-top: 1px solid #f1f5f9;
+    }
+    .form-section-title:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+
+    .form-row { margin-bottom: 20px; }
+    .form-row label { display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 8px; }
+    .required { color: #ef4444; }
+
+    .form-row input[type="text"],
+    .form-row input[type="email"],
+    .form-row select,
+    .form-row textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #0f3446;
+      font-family: inherit;
+      background: #f8fafc;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+      border-color: #06b6d4; background: #fff; box-shadow: 0 0 0 3px rgba(6,182,212,0.1);
+    }
+    .form-row textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
+
+    /* ── Star Rating ── */
+    .star-section {
+      margin-bottom: 24px;
+    }
+    .star-label {
+      font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 12px; display: block;
+    }
+    .stars {
+      display: flex;
+      gap: 8px;
+    }
+    .star {
+      font-size: 36px;
+      cursor: pointer;
+      transition: all 0.15s;
+      filter: grayscale(1) opacity(0.3);
+      line-height: 1;
+    }
+    .star.hovered, .star.selected {
+      filter: grayscale(0) opacity(1);
+      transform: scale(1.15);
+    }
+    .star-caption {
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-top: 8px;
+      min-height: 18px;
+      transition: all 0.2s;
+    }
+
+    /* ── Feature ratings ── */
+    .feature-ratings {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .feat-rate-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .feat-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      min-width: 160px;
+    }
+    .mini-stars {
+      display: flex;
+      gap: 4px;
+    }
+    .mini-star {
+      font-size: 20px;
+      cursor: pointer;
+      filter: grayscale(1) opacity(0.3);
+      transition: all 0.1s;
+      line-height: 1;
+    }
+    .mini-star.on { filter: grayscale(0) opacity(1); }
+
+    /* ── NPS ── */
+    .nps-row {
+      display: flex;
+      gap: 6px;
+    }
+    .nps-btn {
+      flex: 1;
+      padding: 10px 0;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      background: #f8fafc;
+      color: #64748b;
+      transition: all 0.15s;
+    }
+    .nps-btn:hover    { border-color: #06b6d4; color: #0e7490; }
+    .nps-btn.selected { background: #0f3446; color: #fff; border-color: #0f3446; }
+
+    .nps-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    /* Tags selector */
+    .tags-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag-chip {
+      padding: 7px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      background: #f8fafc;
+      color: #64748b;
+      transition: all 0.15s;
+    }
+    .tag-chip.selected { background: #0f3446; color: #fff; border-color: #0f3446; }
+    .tag-chip:hover:not(.selected) { border-color: #0f3446; color: #0f3446; }
+
+    /* Submit */
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #0e7490, #06b6d4);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 28px;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(14,116,144,0.35); }
+
+    /* Success */
+    .success-overlay {
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 60px 40px;
+    }
+    .form-card.submitted .form-inner { display: none; }
+    .form-card.submitted .success-overlay { display: flex; }
+    .success-icon { font-size: 56px; margin-bottom: 20px; animation: bounceIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes bounceIn { from { transform: scale(0); } to { transform: scale(1); } }
+    .success-title { font-size: 24px; font-weight: 800; color: #0f3446; margin-bottom: 10px; }
+    .success-sub { font-size: 14px; color: #64748b; line-height: 1.6; max-width: 360px; }
+    .btn-new { margin-top: 24px; padding: 12px 28px; background: #0f3446; color: #fff; border: none; border-radius: 50px; font-weight: 700; font-size: 14px; font-family: inherit; cursor: pointer; transition: all 0.2s; }
+    .btn-new:hover { box-shadow: 0 6px 20px rgba(15,52,70,0.25); }
+
+    /* ── Side cards ── */
+    .side-cards { display: flex; flex-direction: column; gap: 16px; }
+    .side-card {
+      background: #fff; border-radius: 20px; padding: 24px;
+      border: 1px solid #e8eef3; box-shadow: 0 2px 12px rgba(15,52,70,0.05);
+    }
+    .side-card-title { font-size: 13px; font-weight: 700; color: #0f3446; margin-bottom: 14px; }
+
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stat-box { background: #f8fafc; border-radius: 12px; padding: 16px; text-align: center; border: 1px solid #e8eef3; }
+    .stat-val { font-size: 22px; font-weight: 800; color: #0f3446; display: block; }
+    .stat-lbl { font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; display: block; }
+
+    .recent-fb { display: flex; flex-direction: column; gap: 12px; }
+    .fb-item { background: #f8fafc; border-radius: 12px; padding: 14px; border: 1px solid #e8eef3; }
+    .fb-stars { font-size: 13px; margin-bottom: 4px; }
+    .fb-text { font-size: 12px; color: #475569; line-height: 1.5; font-weight: 500; }
+    .fb-author { font-size: 11px; color: #94a3b8; font-weight: 600; margin-top: 6px; }
+
+    .toast-msg {
+      position: fixed; bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f3446; color: #fff; padding: 12px 24px; border-radius: 50px;
+      font-weight: 700; font-size: 14px; box-shadow: 0 8px 32px rgba(15,52,70,0.3);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1); z-index: 9999;
+    }
+    .toast-msg.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 1000px) { .content-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) { .page-wrap { margin-left: 0; padding: 20px; } }
+  </style>
+</head>
+<body class="light" id="app-body">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <nav id="sidebar">
+    <div class="logo" onclick="window.location.href='/'">
+      <span class="logo-icon">🤖</span>
+      <span class="logo-text">OnePrep</span>
+    </div>
+    <select class="exam-selector"><option>SAT</option><option>ACT</option></select>
+    <ul class="nav-links">
+      <li><a href="/">🏠 Home</a></li>
+      <li><a href="/">🤖 Ask Preppy AI</a></li>
+      <li><a href="/study-planner">📅 Study Planner</a></li>
+      <li><a href="/analytics">📊 Analytics <span class="badge-new">New</span></a></li>
+      <li class="section-label">PRACTICE</li>
+      <li><a href="/question-bank">🔲 Question Bank</a></li>
+      <li><a href="/question-rush">⚡ Question Rush</a></li>
+      <li><a href="/challenge">🎯 Challenge Questions</a></li>
+      <li><a href="/predicted-tests">📝 Predicted Tests</a></li>
+      <li><a href="/vocab">📚 Vocab</a></li>
+      <li class="section-label">PROGRESS</li>
+      <li><a href="/">🔖 Saved</a></li>
+      <li><a href="/">❌ Mistakes Log</a></li>
+      <li class="section-label">COLLEGE</li>
+      <li><a href="/colleges">🎓 Browse Colleges</a></li>
+      <li class="section-label">SUPPORT</li>
+      <li><a href="chat-support.html">💬 Chat With Support</a></li>
+      <li><a href="bug-report.html">🐛 Bug Report</a></li>
+      <li><a href="feedback.html" class="active">⭐ Give Feedback</a></li>
+      <li class="section-label">OPPORTUNITIES</li>
+      <li><a href="tutor-apply.html">🧑‍🏫 Apply As A Tutor</a></li>
+      <li><a href="creator-program.html">🎨 Creator Program</a></li>
+      <li class="section-label">RESOURCES</li>
+      <li><a href="score-calculator.html">🧮 Score Calculator</a></li>
+      <li><a href="blog.html">📰 Blog</a></li>
+      <li class="section-label">SOCIAL</li>
+      <li><a href="https://discord.gg" target="_blank">🎮 Join Discord</a></li>
+      <li><a href="https://instagram.com" target="_blank">📸 Instagram</a></li>
+    </ul>
+    <div class="sidebar-bottom">
+      <button onclick="document.getElementById('app-body').classList.toggle('dark')">🌙 Switch To Dark</button>
+      <a href="#">⬆️ Upgrade</a>
+      <div class="user-profile">
+        <span class="avatar">A</span>
+        <span>Abdullah Abdus...</span>
+        <span>⚙️</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ MAIN ═══ -->
+  <div class="page-wrap">
+
+    <div class="page-hero">
+      <div class="hero-badge">⭐ Feedback</div>
+      <h1>Give Us Feedback</h1>
+      <p>Your honest feedback shapes OnePrep. Tell us what you love, what needs improvement, and what features you want next.</p>
+    </div>
+
+    <div class="content-grid">
+
+      <!-- Form -->
+      <div class="form-card" id="fb-form-card">
+        <div class="form-inner">
+
+          <div class="form-section-title">⭐ Overall Rating</div>
+
+          <div class="star-section">
+            <span class="star-label">How would you rate your experience with OnePrep? <span class="required">*</span></span>
+            <div class="stars" id="star-row">
+              <span class="star" data-val="1" onmouseenter="hoverStars(1)" onmouseleave="unhoverStars()" onclick="selectStars(1)">⭐</span>
+              <span class="star" data-val="2" onmouseenter="hoverStars(2)" onmouseleave="unhoverStars()" onclick="selectStars(2)">⭐</span>
+              <span class="star" data-val="3" onmouseenter="hoverStars(3)" onmouseleave="unhoverStars()" onclick="selectStars(3)">⭐</span>
+              <span class="star" data-val="4" onmouseenter="hoverStars(4)" onmouseleave="unhoverStars()" onclick="selectStars(4)">⭐</span>
+              <span class="star" data-val="5" onmouseenter="hoverStars(5)" onmouseleave="unhoverStars()" onclick="selectStars(5)">⭐</span>
+            </div>
+            <div class="star-caption" id="star-caption">Click to rate</div>
+          </div>
+
+          <div class="form-section-title">🎯 Rate Specific Features</div>
+
+          <div class="feature-ratings">
+            <div class="feat-rate-row">
+              <span class="feat-name">📝 Question Quality</span>
+              <div class="mini-stars" data-feat="q-quality"></div>
+            </div>
+            <div class="feat-rate-row">
+              <span class="feat-name">📊 Analytics Dashboard</span>
+              <div class="mini-stars" data-feat="analytics"></div>
+            </div>
+            <div class="feat-rate-row">
+              <span class="feat-name">🤖 Preppy AI Tutor</span>
+              <div class="mini-stars" data-feat="ai-tutor"></div>
+            </div>
+            <div class="feat-rate-row">
+              <span class="feat-name">📅 Study Planner</span>
+              <div class="mini-stars" data-feat="planner"></div>
+            </div>
+            <div class="feat-rate-row">
+              <span class="feat-name">🎨 Design & Ease of Use</span>
+              <div class="mini-stars" data-feat="ux"></div>
+            </div>
+          </div>
+
+          <div class="form-section-title">💡 Recommendation</div>
+
+          <div class="form-row">
+            <label>How likely are you to recommend OnePrep to a friend? (0 = Not likely, 10 = Definitely) <span class="required">*</span></label>
+            <div class="nps-row" id="nps-row">
+              <!-- Built by JS -->
+            </div>
+            <div class="nps-labels"><span>Not Likely</span><span>Very Likely</span></div>
+          </div>
+
+          <div class="form-section-title">📝 Your Thoughts</div>
+
+          <div class="form-row">
+            <label>What's working well? <span class="required">*</span></label>
+            <textarea id="fb-good" rows="3" placeholder="Tell us what you love about OnePrep..."></textarea>
+          </div>
+
+          <div class="form-row">
+            <label>What could be better?</label>
+            <textarea id="fb-bad" rows="3" placeholder="What would you like us to improve?"></textarea>
+          </div>
+
+          <div class="form-row">
+            <label>Feature requests — what would you love to see next?</label>
+            <div class="tags-wrap" id="tags-wrap">
+              <button class="tag-chip" onclick="toggleTag(this)">🧠 AI explanations</button>
+              <button class="tag-chip" onclick="toggleTag(this)">⏱️ Mock full tests</button>
+              <button class="tag-chip" onclick="toggleTag(this)">📱 Mobile app</button>
+              <button class="tag-chip" onclick="toggleTag(this)">👥 Study groups</button>
+              <button class="tag-chip" onclick="toggleTag(this)">🎮 Gamification</button>
+              <button class="tag-chip" onclick="toggleTag(this)">📖 More passages</button>
+              <button class="tag-chip" onclick="toggleTag(this)">📊 More analytics</button>
+              <button class="tag-chip" onclick="toggleTag(this)">🔔 Reminders</button>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="fb-email">Your Email (optional)</label>
+            <input type="email" id="fb-email" placeholder="you@example.com" />
+          </div>
+
+          <button class="btn-submit" onclick="submitFeedback()">⭐ Submit Feedback</button>
+        </div>
+
+        <div class="success-overlay" id="fb-success">
+          <div class="success-icon">🙏</div>
+          <div class="success-title">Thank You!</div>
+          <div class="success-sub">Your feedback means the world to us. We read every submission and use them to constantly improve OnePrep for students like you.</div>
+          <button class="btn-new" onclick="resetFeedback()">Submit More Feedback</button>
+        </div>
+      </div>
+
+      <!-- Side -->
+      <div class="side-cards">
+        <div class="side-card">
+          <div class="side-card-title">📈 Community Stats</div>
+          <div class="stat-grid">
+            <div class="stat-box">
+              <span class="stat-val">4.8⭐</span>
+              <span class="stat-lbl">Avg Rating</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-val">2,847</span>
+              <span class="stat-lbl">Reviews</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-val">94%</span>
+              <span class="stat-lbl">Would Recommend</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-val">78</span>
+              <span class="stat-lbl">NPS Score</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <div class="side-card-title">💬 Recent Feedback</div>
+          <div class="recent-fb">
+            <div class="fb-item">
+              <div class="fb-stars">⭐⭐⭐⭐⭐</div>
+              <div class="fb-text">"The analytics dashboard is incredible. I can see exactly where I'm losing points!"</div>
+              <div class="fb-author">— Amara K., SAT 1490</div>
+            </div>
+            <div class="fb-item">
+              <div class="fb-stars">⭐⭐⭐⭐⭐</div>
+              <div class="fb-text">"Preppy AI explained a hard math problem better than my tutor did. Game changer."</div>
+              <div class="fb-author">— Jamal T., SAT 1380 → 1510</div>
+            </div>
+            <div class="fb-item">
+              <div class="fb-stars">⭐⭐⭐⭐</div>
+              <div class="fb-text">"Would love a full-length practice test mode. Otherwise it's amazing!"</div>
+              <div class="fb-author">— Sofia R., SAT 1340</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast-msg" id="toast"></div>
+
+  <script>
+    let selectedStars = 0;
+    let selectedNPS = null;
+    const featRatings = {};
+
+    const starCaptions = ['', '😞 Poor', '😐 Fair', '🙂 Good', '😊 Great', '🤩 Excellent!'];
+
+    function hoverStars(n) {
+      document.querySelectorAll('#star-row .star').forEach((s, i) => {
+        s.classList.toggle('hovered', i < n);
+        s.classList.remove('selected');
+      });
+      document.getElementById('star-caption').textContent = starCaptions[n];
+    }
+    function unhoverStars() {
+      document.querySelectorAll('#star-row .star').forEach((s, i) => {
+        s.classList.remove('hovered');
+        s.classList.toggle('selected', i < selectedStars);
+      });
+      document.getElementById('star-caption').textContent = selectedStars ? starCaptions[selectedStars] : 'Click to rate';
+    }
+    function selectStars(n) {
+      selectedStars = n;
+      unhoverStars();
+    }
+
+    // Build mini-stars for feature ratings
+    document.querySelectorAll('.mini-stars').forEach(container => {
+      const feat = container.dataset.feat;
+      featRatings[feat] = 0;
+      for (let i = 1; i <= 5; i++) {
+        const s = document.createElement('span');
+        s.className = 'mini-star';
+        s.textContent = '⭐';
+        s.dataset.val = i;
+        s.addEventListener('click', () => {
+          featRatings[feat] = i;
+          container.querySelectorAll('.mini-star').forEach((ms, idx) => {
+            ms.classList.toggle('on', idx < i);
+          });
+        });
+        container.appendChild(s);
+      }
+    });
+
+    // NPS
+    const npsRow = document.getElementById('nps-row');
+    for (let i = 0; i <= 10; i++) {
+      const b = document.createElement('button');
+      b.className = 'nps-btn';
+      b.textContent = i;
+      b.onclick = () => {
+        selectedNPS = i;
+        document.querySelectorAll('.nps-btn').forEach(btn => btn.classList.remove('selected'));
+        b.classList.add('selected');
+      };
+      npsRow.appendChild(b);
+    }
+
+    function toggleTag(el) { el.classList.toggle('selected'); }
+
+    function submitFeedback() {
+      if (!selectedStars) { showToast('⚠️ Please give an overall rating'); return; }
+      const good = document.getElementById('fb-good').value.trim();
+      if (!good)  { showToast('⚠️ Please tell us what\'s working well'); return; }
+      document.getElementById('fb-form-card').classList.add('submitted');
+      document.getElementById('fb-success').classList.add('show');
+    }
+
+    function resetFeedback() {
+      selectedStars = 0;
+      selectedNPS = null;
+      document.getElementById('fb-form-card').classList.remove('submitted');
+      document.getElementById('fb-success').classList.remove('show');
+      document.getElementById('fb-good').value = '';
+      document.getElementById('fb-bad').value = '';
+      document.querySelectorAll('.star').forEach(s => s.classList.remove('selected','hovered'));
+      document.getElementById('star-caption').textContent = 'Click to rate';
+      document.querySelectorAll('.nps-btn').forEach(b => b.classList.remove('selected'));
+      document.querySelectorAll('.tag-chip').forEach(t => t.classList.remove('selected'));
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+  </script>
+</body>
+</html>
