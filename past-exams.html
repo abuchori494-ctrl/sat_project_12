@@ -90,89 +90,88 @@
   <div class="views-wrap">
     <section id="v-past-exams" class="view active">
       
-      <!-- Top header layout -->
-      <div class="exams-header-bar">
-        <div class="ehb-left">
-          <div class="ehb-title-row">
-            <span class="ehb-logo-cap">🎓</span>
-            <div>
-              <h1 class="ehb-title">SAT Mastery Platform</h1>
-              <p class="ehb-subtitle">Dashboard - Past Exams</p>
+      <div class="main-content-layout">
+        
+        <!-- Top header layout -->
+        <div class="exams-header-bar">
+          <div class="ehb-left">
+            <div class="ehb-title-row">
+              <span class="ehb-logo-cap">🎓</span>
+              <div>
+                <h1 class="ehb-title">SAT Mastery Platform</h1>
+                <p class="ehb-subtitle">Dashboard - Past Exams</p>
+              </div>
+            </div>
+            <p class="ehb-quote">"Pick your subject. Master one module a time. Save words. Get better."</p>
+          </div>
+
+          <!-- Theme Switcher and Search -->
+          <div class="ehb-right">
+            <div class="theme-toggle-row">
+              <button class="theme-toggle-switch" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                <span class="tts-icon sun">☀️</span>
+                <span class="tts-icon moon">🌙</span>
+              </button>
+            </div>
+            <div class="search-pill-box">
+              <span class="spb-icon-left">🔍</span>
+              <input type="text" id="exam-search" placeholder="Search exams, e.g., June 2024, Module 1" oninput="renderExams()" />
+              <span class="spb-icon-right">🎯</span>
             </div>
           </div>
-          <p class="ehb-quote">"Pick your subject. Master one module a time. Save words. Get better."</p>
         </div>
 
-        <!-- Theme Switcher and Search -->
-        <div class="ehb-right">
-          <div class="theme-toggle-row">
-            <button class="theme-toggle-switch" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
-              <span class="tts-icon sun">☀️</span>
-              <span class="tts-icon moon">🌙</span>
-            </button>
-          </div>
-          <div class="search-pill-box">
-            <span class="spb-icon-left">🔍</span>
-            <input type="text" id="exam-search" placeholder="Search exams, e.g., June 2024, Module 1" oninput="renderExams()" />
-            <span class="spb-icon-right">🎯</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- DASHBOARD CONTROLS: Stats, Highlight, Filters -->
-      <div class="dashboard-controls-area">
-        
-        <!-- ARCHIVE STATISTICS -->
-        <div class="archive-stats-row" id="archive-stats">
-           <div class="stat-box"><span class="sb-label">Official SAT Exams</span><strong class="sb-val" id="stat-exams">0</strong></div>
-           <div class="stat-box"><span class="sb-label">Exam Versions</span><strong class="sb-val" id="stat-versions">0</strong></div>
-           <div class="stat-box"><span class="sb-label">Sections Available</span><strong class="sb-val" id="stat-sections">0</strong></div>
-        </div>
-
-        <div class="dashboard-controls-main">
+        <!-- DASHBOARD CONTROLS: Stats, Highlight, Filters -->
+        <div class="dashboard-controls-area">
           
-          <div class="dashboard-controls-columns">
-            <!-- LATEST ADMINISTRATION HIGHLIGHT -->
-            <div class="latest-admin-highlight" id="latest-highlight">
+          <!-- ARCHIVE STATISTICS -->
+          <div class="archive-stats-row" id="archive-stats">
+             <div class="stat-box"><span class="sb-label">Official SAT Exams</span><strong class="sb-val" id="stat-exams">0</strong></div>
+             <div class="stat-box"><span class="sb-label">Exam Versions</span><strong class="sb-val" id="stat-versions">0</strong></div>
+             <div class="stat-box"><span class="sb-label">Sections Available</span><strong class="sb-val" id="stat-sections">0</strong></div>
+          </div>
+
+          <div class="dashboard-controls-main">
+            <!-- LATEST ADMINISTRATION HIGHLIGHT & INLINE FILTERS -->
+            <div class="latest-admin-highlight" id="latest-highlight" style="flex: 1;">
                <div class="lah-header">
-                  <h2 id="latest-title">🔥 Latest Administration</h2>
-                  <button class="btn-primary" onclick="alert('Launching Full Test...')">Take Full Test</button>
+                  <div style="display: flex; align-items: center; gap: 16px;">
+                    <h2 id="latest-title">🔥 Latest Administration</h2>
+                    <!-- FILTERING SYSTEM (Inline) -->
+                    <div class="filter-toolbar" style="display: flex; gap: 12px; margin-left: auto;">
+                      <div class="filter-group-inline">
+                        <label>Year:</label>
+                        <select onchange="setFilter('year', this.value)">
+                          <option value="all">All</option>
+                          <option value="2026">2026</option>
+                          <option value="2025">2025</option>
+                          <option value="2024">2024</option>
+                        </select>
+                      </div>
+                      <div class="filter-group-inline">
+                        <label>Region:</label>
+                        <select onchange="setFilter('region', this.value)">
+                          <option value="all">All</option>
+                          <option value="Int">Int</option>
+                          <option value="US">US</option>
+                        </select>
+                      </div>
+                      <div class="filter-group-inline">
+                        <label>Status:</label>
+                        <select onchange="setFilter('status', this.value)">
+                          <option value="all">All</option>
+                          <option value="completed">Completed</option>
+                          <option value="not_started">Not Started</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                </div>
                <div class="lah-versions" id="latest-versions"></div>
             </div>
-
-            <!-- FILTERING SYSTEM -->
-            <div class="exam-filters-container">
-               <div class="filter-group">
-                  <label>Year</label>
-                  <div class="filter-pills" id="filter-year">
-                     <button class="filter-pill active" onclick="setFilter('year', 'all', this)">All</button>
-                     <button class="filter-pill" onclick="setFilter('year', '2026', this)">2026</button>
-                     <button class="filter-pill" onclick="setFilter('year', '2025', this)">2025</button>
-                     <button class="filter-pill" onclick="setFilter('year', '2024', this)">2024</button>
-                  </div>
-               </div>
-               <div class="filter-group">
-                  <label>Region</label>
-                  <div class="filter-pills" id="filter-region">
-                     <button class="filter-pill active" onclick="setFilter('region', 'all', this)">All</button>
-                     <button class="filter-pill" onclick="setFilter('region', 'Int', this)">Int</button>
-                     <button class="filter-pill" onclick="setFilter('region', 'US', this)">US</button>
-                  </div>
-               </div>
-               <div class="filter-group">
-                  <label>Status</label>
-                  <div class="filter-pills" id="filter-status">
-                     <button class="filter-pill active" onclick="setFilter('status', 'all', this)">All</button>
-                     <button class="filter-pill" onclick="setFilter('status', 'completed', this)">Completed</button>
-                     <button class="filter-pill" onclick="setFilter('status', 'not_started', this)">Not Started</button>
-                  </div>
-               </div>
-            </div>
           </div>
-        </div>
 
-      </div>
+        </div>
 
       <div class="exams-columns-layout">
 
@@ -235,6 +234,7 @@
         </div>
 
       </div>
+      <!-- END .main-content-layout -->
 
     </section>
   </div>
@@ -247,11 +247,8 @@
       status: 'all'
     };
 
-    function setFilter(type, val, btnElem) {
+    function setFilter(type, val) {
       currentFilters[type] = val;
-      const parent = btnElem.parentElement;
-      parent.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
-      btnElem.classList.add('active');
       renderExams();
     }
 
