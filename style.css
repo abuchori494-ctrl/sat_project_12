@@ -147,11 +147,14 @@ body.dark .sidebar-nav {
 }
 .sidebar-select {
   width: 100%;
-  background: #3D3570;
+  background: #3D3570 url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 8px center;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   color: #ffffff;
-  border: 1px solid #3D3570;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-sm);
-  padding: 10px 14px;
+  padding: 10px 32px 10px 14px;
   font-size: 13.5px;
   font-weight: 600;
   font-family: inherit;
@@ -177,6 +180,7 @@ body.dark .sidebar-nav {
   color: var(--secondary);
   letter-spacing: 0.05em;
   padding: 14px 12px 6px;
+  margin-top: 20px;
   text-transform: uppercase;
 }
 
@@ -391,7 +395,7 @@ body.dark .sidebar-nav {
   display: none;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px 40px;
+  padding: 0 24px 80px;
   animation: viewFade 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .view.active {
@@ -1018,9 +1022,14 @@ body.dark .theme-toggle-switch::after {
 /* Three Columns Grid Layout */
 .exams-columns-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 24px;
   align-items: start;
+}
+@media (min-width: 1024px) {
+  .exams-columns-layout {
+    grid-template-columns: 1.2fr 1.2fr 1fr;
+  }
 }
 
 .ecl-column {
@@ -1041,7 +1050,7 @@ body.dark .theme-toggle-switch::after {
   font-size: 24px;
 }
 .ecl-header h3 {
-  font-size: 16px;
+  font-size: 18.5px;
   font-weight: 800;
   color: var(--text-main);
 }
@@ -1054,7 +1063,7 @@ body.dark .theme-toggle-switch::after {
 .ecl-cards-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 /* ecl-card glass card styling */
@@ -1130,12 +1139,12 @@ body.dark .ecl-card.ecl-card-math {
   letter-spacing: 0.02em;
 }
 .ecl-badge.official {
-  background: var(--primary-light);
-  color: var(--purple);
+  background: #c4b5fd;
+  color: #4c1d95;
 }
 
 .ecl-card-body {
-  padding: 24px;
+  padding: 18px 24px;
   position: relative;
 }
 
@@ -1146,7 +1155,7 @@ body.dark .ecl-card.ecl-card-math {
   top: 50%;
   transform: translateY(-50%);
   font-size: 72px;
-  opacity: 0.04;
+  opacity: 0.02;
   font-weight: 900;
   pointer-events: none;
   z-index: 1;
@@ -1222,9 +1231,8 @@ body.dark .ecl-card.ecl-card-math {
   border-radius: 50px;
   cursor: pointer;
   border: 1px solid var(--border);
-  background: var(--bg-card);
-  background: var(--purple-light);
-  color: var(--purple);
+  background: #ddd6fe;
+  color: #5b21b6;
   border-color: transparent;
   transition: var(--transition);
 }
@@ -3475,4 +3483,182 @@ body.dark .chat-msg-input {
 body.dark .main-content {
   background: var(--bg-app);
   color: #cbd5e1;
+}
+
+/* --- MEGA UPDATE CSS --- */
+
+/* Dashboard Controls */
+.dashboard-controls-area {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+/* Stats Row */
+.archive-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+.stat-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+.sb-label {
+  font-size: 11px;
+  color: var(--text-sub);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.sb-val {
+  font-size: 24px;
+  color: var(--text-main);
+  font-weight: 800;
+}
+
+/* Dashboard Controls Main (Highlight + Filters) */
+.dashboard-controls-main {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+}
+.dashboard-controls-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .dashboard-controls-columns {
+    grid-template-columns: 1fr 1.5fr;
+  }
+}
+
+/* Latest Highlight */
+.latest-admin-highlight {
+  background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+  border: 1px solid #fecdd3;
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  box-shadow: 0 4px 15px rgba(225, 29, 72, 0.05);
+}
+body.dark .latest-admin-highlight {
+  background: linear-gradient(135deg, #4c0519, #280b15);
+  border-color: rgba(225, 29, 72, 0.2);
+}
+.lah-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.lah-header h2 {
+  font-size: 18px;
+  font-weight: 800;
+  color: #e11d48;
+}
+body.dark .lah-header h2 {
+  color: #fb7185;
+}
+.lah-versions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.version-pill {
+  background: white;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 700;
+}
+body.dark .version-pill {
+  background: #881337;
+  color: white;
+  border-color: #9f1239;
+}
+
+/* Filters Container */
+.exam-filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+}
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.filter-group label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-sub);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.filter-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.filter-pill {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-sub);
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+.filter-pill:hover {
+  background: var(--bg-app);
+}
+.filter-pill.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* Score Badge */
+.score-badge {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 3px 8px;
+  background-color: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 750;
+  width: fit-content;
+}
+body.dark .score-badge {
+  background-color: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+}
+
+/* Card Disabled State */
+.card-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Interactive Hover States */
+.sidebar-menu .nl {
+  transition: all 0.2s ease-in-out;
 }

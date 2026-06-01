@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Past Exams - SAT Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Specific overrides for standalone page if needed, but relying on style.css */
+    #v-past-exams {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 28px 60px;
+    }
+  </style>
+</head>
+
+<body class="light" id="app-body">
+
+  <!-- SIDEBAR NAV -->
+  <nav class="sidebar-nav" id="sidebar">
+    <div class="sidebar-brand" onclick="window.location.href='/'">
+      <span class="brand-robot">🤖</span>
+      <span class="brand-text">SAT Platform</span>
+    </div>
+
+    <div class="sidebar-dropdown-box">
+      <select class="sidebar-select">
+        <option>SAT</option>
+        <option>ACT</option>
+      </select>
+    </div>
+
+    <div class="sidebar-menu">
+      <button class="nl" onclick="window.location.href='/'">
+        <span class="sbm-icon">🏠</span>
+        <span class="sbm-label">Home</span>
+      </button>
+      <button class="nl" onclick="window.location.href='/study-planner.html'">
+        <span class="sbm-icon">📅</span>
+        <span class="sbm-label">Study Planner</span>
+      </button>
+      <button class="nl" onclick="window.location.href='/analytics.html'">
+        <span class="sbm-icon">📊</span>
+        <span class="sbm-label">Analytics</span>
+        <span class="sbm-new-badge">NEW</span>
+      </button>
+
+      <div class="menu-section-header">PRACTICE</div>
+      <button class="nl" onclick="window.location.href='/question-bank.html'">
+        <span class="sbm-icon">🔲</span>
+        <span class="sbm-label">Question Bank</span>
+      </button>
+      <button class="nl active" onclick="window.location.href='/past-exams.html'">
+        <span class="sbm-icon">📝</span>
+        <span class="sbm-label">Past Exams</span>
+      </button>
+      <button class="nl" onclick="window.location.href='/vocab.html'">
+        <span class="sbm-icon">📚</span>
+        <span class="sbm-label">Vocab</span>
+      </button>
+
+      <div class="menu-section-header">COLLEGE</div>
+      <button class="nl" onclick="window.location.href='/colleges.html'">
+        <span class="sbm-icon">🎓</span>
+        <span class="sbm-label">Browse Colleges</span>
+      </button>
+    </div>
+    
+    <!-- Sidebar Footer Profile -->
+    <div class="sidebar-footer">
+      <div class="sidebar-profile-box">
+        <div class="profile-avatar">
+          A
+          <div class="avatar-status-dot"></div>
+        </div>
+        <div class="profile-meta">
+          <strong>Abdullah A.</strong>
+          <span style="font-size:10px; color:#A78BFA;">Pro Member</span>
+        </div>
+        <span class="profile-settings-gear">⚙️</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- VIEWS WRAPPER -->
+  <div class="views-wrap">
+    <section id="v-past-exams" class="view active">
+      
+      <!-- Top header layout -->
+      <div class="exams-header-bar">
+        <div class="ehb-left">
+          <div class="ehb-title-row">
+            <span class="ehb-logo-cap">🎓</span>
+            <div>
+              <h1 class="ehb-title">SAT Mastery Platform</h1>
+              <p class="ehb-subtitle">Dashboard - Past Exams</p>
+            </div>
+          </div>
+          <p class="ehb-quote">"Pick your subject. Master one module a time. Save words. Get better."</p>
+        </div>
+
+        <!-- Theme Switcher and Search -->
+        <div class="ehb-right">
+          <div class="theme-toggle-row">
+            <button class="theme-toggle-switch" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+              <span class="tts-icon sun">☀️</span>
+              <span class="tts-icon moon">🌙</span>
+            </button>
+          </div>
+          <div class="search-pill-box">
+            <span class="spb-icon-left">🔍</span>
+            <input type="text" id="exam-search" placeholder="Search exams, e.g., June 2024, Module 1" oninput="renderExams()" />
+            <span class="spb-icon-right">🎯</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD CONTROLS: Stats, Highlight, Filters -->
+      <div class="dashboard-controls-area">
+        
+        <!-- ARCHIVE STATISTICS -->
+        <div class="archive-stats-row" id="archive-stats">
+           <div class="stat-box"><span class="sb-label">Official SAT Exams</span><strong class="sb-val" id="stat-exams">0</strong></div>
+           <div class="stat-box"><span class="sb-label">Exam Versions</span><strong class="sb-val" id="stat-versions">0</strong></div>
+           <div class="stat-box"><span class="sb-label">Sections Available</span><strong class="sb-val" id="stat-sections">0</strong></div>
+        </div>
+
+        <div class="dashboard-controls-main">
+          
+          <div class="dashboard-controls-columns">
+            <!-- LATEST ADMINISTRATION HIGHLIGHT -->
+            <div class="latest-admin-highlight" id="latest-highlight">
+               <div class="lah-header">
+                  <h2 id="latest-title">🔥 Latest Administration</h2>
+                  <button class="btn-primary" onclick="alert('Launching Full Test...')">Take Full Test</button>
+               </div>
+               <div class="lah-versions" id="latest-versions"></div>
+            </div>
+
+            <!-- FILTERING SYSTEM -->
+            <div class="exam-filters-container">
+               <div class="filter-group">
+                  <label>Year</label>
+                  <div class="filter-pills" id="filter-year">
+                     <button class="filter-pill active" onclick="setFilter('year', 'all', this)">All</button>
+                     <button class="filter-pill" onclick="setFilter('year', '2026', this)">2026</button>
+                     <button class="filter-pill" onclick="setFilter('year', '2025', this)">2025</button>
+                     <button class="filter-pill" onclick="setFilter('year', '2024', this)">2024</button>
+                  </div>
+               </div>
+               <div class="filter-group">
+                  <label>Region</label>
+                  <div class="filter-pills" id="filter-region">
+                     <button class="filter-pill active" onclick="setFilter('region', 'all', this)">All</button>
+                     <button class="filter-pill" onclick="setFilter('region', 'Int', this)">Int</button>
+                     <button class="filter-pill" onclick="setFilter('region', 'US', this)">US</button>
+                  </div>
+               </div>
+               <div class="filter-group">
+                  <label>Status</label>
+                  <div class="filter-pills" id="filter-status">
+                     <button class="filter-pill active" onclick="setFilter('status', 'all', this)">All</button>
+                     <button class="filter-pill" onclick="setFilter('status', 'completed', this)">Completed</button>
+                     <button class="filter-pill" onclick="setFilter('status', 'not_started', this)">Not Started</button>
+                  </div>
+               </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="exams-columns-layout">
+
+        <!-- COLUMN 1: English & Reading -->
+        <div class="ecl-column">
+          <div class="ecl-header">
+            <span class="ecl-icon">📖</span>
+            <div>
+              <h3>English &amp; Reading</h3>
+              <p>Focus on comprehension &amp; language</p>
+            </div>
+          </div>
+          <div class="ecl-cards-list" id="english-list"></div>
+        </div>
+
+        <!-- COLUMN 2: Math -->
+        <div class="ecl-column">
+          <div class="ecl-header">
+            <span class="ecl-icon">🧮</span>
+            <div>
+              <h3>Math</h3>
+              <p>Master modules 1 &amp; 2</p>
+            </div>
+          </div>
+          <div class="ecl-cards-list" id="math-list"></div>
+        </div>
+
+        <!-- COLUMN 3: Vocabulary Bank -->
+        <div class="ecl-column">
+          <div class="ecl-header">
+            <span class="ecl-icon">🌿</span>
+            <div>
+              <h3>Vocabulary Bank</h3>
+              <p id="vocab-count">5 words mastered • 15 to go</p>
+            </div>
+          </div>
+
+          <div class="ecl-cards-list">
+            <p style="font-size: 11.5px; color: var(--text-sub); margin-bottom: 8px;">Start saving words from practice tests to build your bank.</p>
+            <!-- Daily Challenge Card -->
+            <div class="ecl-card ecl-card-english daily-challenge-card" style="padding: 16px; border-radius: var(--radius-md);">
+              <div class="dcc-info">
+                <strong style="color: var(--text-main); font-size: 13.5px;">📖 Daily Challenge</strong>
+                <p style="color: var(--text-sub); font-size: 11px; margin: 4px 0 12px;">Learn 3 new words today</p>
+                <button class="btn-practice-pill" onclick="alert('Launch Quiz!')">▶ ACCEPT</button>
+              </div>
+              <div class="dcc-bulb" style="position: absolute; right: 16px; top: 16px; font-size: 32px;">💡</div>
+            </div>
+
+            <!-- Vocabulary Quiz Card -->
+            <div class="ecl-card ecl-card-english quiz-banner-card" style="padding: 16px; border-radius: var(--radius-md); display: flex; align-items: center; cursor: pointer;" onclick="alert('Launch Quiz!')">
+              <div class="qbc-icon" style="font-size: 24px; margin-right: 12px;">📚</div>
+              <div class="qbc-info" style="flex: 1;">
+                <strong style="color: var(--text-main); font-size: 13.5px;">Vocabulary Quiz</strong>
+                <p style="color: var(--text-sub); font-size: 10px; line-height: 1.3; margin-top: 2px;">Challenge yourself with flashcards &amp; learn faster</p>
+              </div>
+              <div class="qbc-arrow" style="color: var(--primary); font-weight: bold;">➔</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+  </div>
+
+  <script src="pastExamsData.js"></script>
+  <script>
+    let currentFilters = {
+      year: 'all',
+      region: 'all',
+      status: 'all'
+    };
+
+    function setFilter(type, val, btnElem) {
+      currentFilters[type] = val;
+      const parent = btnElem.parentElement;
+      parent.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
+      btnElem.classList.add('active');
+      renderExams();
+    }
+
+    function toggleTheme() {
+      const isDark = document.body.classList.contains('dark');
+      const newTheme = isDark ? 'light' : 'dark';
+      document.body.className = newTheme;
+      localStorage.setItem('oneprep_theme', newTheme);
+    }
+
+    // Sync theme on load
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('oneprep_theme') || 'light';
+      document.body.className = savedTheme;
+      renderExams();
+    });
+
+    function renderExams() {
+      const englishList = document.getElementById('english-list');
+      const mathList = document.getElementById('math-list');
+      const searchQuery = document.getElementById('exam-search').value.toLowerCase();
+      
+      englishList.innerHTML = '';
+      mathList.innerHTML = '';
+
+      let stats = { exams: 0, versions: 0, sections: 0 };
+      let latestExam = null;
+
+      pastExamsData.forEach(exam => {
+        
+        // Find latest exam purely for highlight header
+        if (!latestExam) latestExam = exam; 
+
+        // Filter Logic
+        if (currentFilters.year !== 'all' && exam.year.toString() !== currentFilters.year) return;
+
+        let hasMatchingRegion = false;
+
+        exam.regions.forEach(region => {
+          if (currentFilters.region !== 'all' && region.name !== currentFilters.region) return;
+          hasMatchingRegion = true;
+          
+          region.versions.forEach(v => {
+            const cardName = `${exam.month} ${exam.year} ${region.name}-${v.name} ebrw english reading writing math`.toLowerCase();
+            if (searchQuery && !cardName.includes(searchQuery)) return;
+
+            stats.exams = pastExamsData.length; // Count total exams in array (or could be unique months)
+            stats.versions += 1;
+            stats.sections += 2; // Math + EBRW
+
+            // Generate deterministic progress based on ID so status filters work logically
+            const progress1 = (v.id.charCodeAt(0) + v.id.charCodeAt(1)) % 100; // Fake deterministic score 0-100
+            const progress2 = (progress1 * 2) % 100;
+            
+            const isCompleted = progress1 > 70;
+            if (currentFilters.status === 'completed' && !isCompleted) return;
+            if (currentFilters.status === 'not_started' && isCompleted) return;
+
+            const badgeClass = region.name === 'US' ? 'style="background: var(--blue-glow); color: var(--blue);"' : '';
+            
+            // Score calculations
+            const m1Score = Math.floor((progress1 / 100) * 22);
+            const m2Score = Math.floor((progress2 / 100) * 22);
+            
+            // Module 2 locked logic
+            const isM2Locked = progress1 < 40;
+            const m2Class = isM2Locked ? 'card-disabled' : '';
+            const m2BtnText = isM2Locked ? '🔒 LOCKED' : '▶ TRY NOW';
+            const m2BtnClick = isM2Locked ? '' : `onclick="window.location.href='/past-exams/${exam.year}/${exam.month.toLowerCase()}/${v.id}/math'"`;
+
+            // EBRW CARD
+            const ebrwLink = `/past-exams/${exam.year}/${exam.month.toLowerCase()}/${v.id}/ebrw`;
+            const englishHtml = `
+              <article class="ecl-card ecl-card-english">
+                <div class="ecl-card-header">
+                  <div>
+                    <h4>📄 ${exam.month} ${exam.year} (${v.name})</h4>
+                  </div>
+                  <span class="ecl-badge official" ${badgeClass}>OFFICIAL</span>
+                </div>
+                
+                <div class="ecl-card-body">
+                  <div class="ecl-bg-illustration">📖</div>
+                  
+                  <div class="ecl-row">
+                    <div class="ecl-row-info">
+                      <strong>📖 Reading Comprehension</strong>
+                      <small>52 min • 52 questions</small>
+                      <div class="score-badge">${Math.floor((progress1 / 100) * 52)}/52 Correct</div>
+                      <div class="ecl-row-btns" style="margin-top: 12px;">
+                        <button class="btn-practice-pill" onclick="window.location.href='${ebrwLink}'">▶ PRACTICE</button>
+                        <button class="btn-review-pill">REVIEW</button>
+                      </div>
+                    </div>
+                    <div class="progress-ring-box" style="--p:${progress1}">
+                      <svg viewBox="0 0 36 36" class="pr-svg">
+                        <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="pr-fill" stroke-dasharray="${progress1}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      </svg>
+                      <span>${progress1}%</span>
+                    </div>
+                  </div>
+                  
+                  <div class="ecl-divider"></div>
+                  
+                  <div class="ecl-row">
+                    <div class="ecl-row-info">
+                      <strong>📖 Writing & Language</strong>
+                      <small>35 min • 44 questions</small>
+                      <div class="score-badge">${Math.floor((progress2 / 100) * 44)}/44 Correct</div>
+                      <div class="ecl-row-btns" style="margin-top: 12px;">
+                        <button class="btn-practice-pill" onclick="window.location.href='${ebrwLink}'">▶ PRACTICE</button>
+                        <button class="btn-review-pill">REVIEW</button>
+                      </div>
+                    </div>
+                    <div class="progress-ring-box" style="--p:${progress2}">
+                      <svg viewBox="0 0 36 36" class="pr-svg">
+                        <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="pr-fill" stroke-dasharray="${progress2}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      </svg>
+                      <span>${progress2}%</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            `;
+            englishList.insertAdjacentHTML('beforeend', englishHtml);
+
+            // MATH CARD
+            const mathHtml = `
+              <article class="ecl-card ecl-card-english">
+                <div class="ecl-card-header">
+                  <div>
+                    <h4>🧮 ${exam.month} ${exam.year}</h4>
+                  </div>
+                  <span class="ecl-badge official btn-math" ${badgeClass}>OFFICIAL</span>
+                </div>
+                
+                <div class="ecl-card-body">
+                  
+                  <div class="ecl-row">
+                    <div class="ecl-row-info">
+                      <strong>🧩 Module 1</strong>
+                      <small>Q1-22 · Algebra & Functions</small>
+                      <div class="score-badge">${m1Score}/22 Correct</div>
+                      <div class="ecl-row-btns" style="margin-top: 12px;">
+                        <button class="btn-practice-pill btn-math" onclick="window.location.href='/past-exams/${exam.year}/${exam.month.toLowerCase()}/${v.id}/math'">▶ TRY NOW</button>
+                        <button class="btn-review-pill">REVIEW</button>
+                      </div>
+                    </div>
+                    <div class="progress-ring-box math-ring" style="--p:${progress1}">
+                      <svg viewBox="0 0 36 36" class="pr-svg">
+                        <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="pr-fill" stroke-dasharray="${progress1}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      </svg>
+                      <span>${progress1}%</span>
+                    </div>
+                  </div>
+                  
+                  <div class="ecl-divider"></div>
+                  
+                  <div class="ecl-row ${m2Class}">
+                    <div class="ecl-row-info">
+                      <strong>🧩 Module 2</strong>
+                      <small>Q23-38 · Geometry & Trigonometry</small>
+                      <div class="score-badge">${m2Score}/22 Correct</div>
+                      <div class="ecl-row-btns" style="margin-top: 12px;">
+                        <button class="btn-practice-pill btn-math" ${m2BtnClick}>${m2BtnText}</button>
+                        <button class="btn-review-pill">REVIEW</button>
+                      </div>
+                    </div>
+                    <div class="progress-ring-box math-ring" style="--p:${progress2}">
+                      <svg viewBox="0 0 36 36" class="pr-svg">
+                        <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="pr-fill" stroke-dasharray="${progress2}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      </svg>
+                      <span>${progress2}%</span>
+                    </div>
+                  </div>
+
+                </div>
+              </article>
+            `;
+            mathList.insertAdjacentHTML('beforeend', mathHtml);
+          });
+        });
+      });
+
+      // Update Stats
+      document.getElementById('stat-exams').innerText = stats.exams;
+      document.getElementById('stat-versions').innerText = stats.versions;
+      document.getElementById('stat-sections').innerText = stats.sections;
+
+      // Update Latest Highlight
+      if (latestExam) {
+        document.getElementById('latest-title').innerText = `🔥 Latest Administration: ${latestExam.month} ${latestExam.year}`;
+        let pillsHtml = '';
+        latestExam.regions.forEach(r => {
+          r.versions.forEach(v => {
+            pillsHtml += `<span class="version-pill">${r.name}-${v.name}</span>`;
+          });
+        });
+        document.getElementById('latest-versions').innerHTML = pillsHtml;
+      }
+    }
+  </script>
+</body>
+</html>
