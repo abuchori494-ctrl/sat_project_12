@@ -357,22 +357,15 @@
       </div>
 
       <!-- Dynamic Container for Active Study Plan vs New Setup -->
-      <div id="existing-plan-container" class="hidden bg-lavCard rounded-[16px] border border-lavBorder shadow-lav p-8 flex flex-col items-start gap-4">
-        <div class="w-12 h-12 rounded-full bg-lavLight text-lavAccent flex items-center justify-center">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+      <div id="existing-plan-container" class="hidden" style="background:white;border-radius:16px;border:1px solid #EDE9FE;border-left:4px solid #7C6FE0;padding:2rem;box-shadow:0 2px 12px rgba(124,111,224,0.08);">
+        <div style="width:44px;height:44px;background:#F0EFFE;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+          <svg style="width:22px;height:22px;" fill="none" stroke="#7C6FE0" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
         </div>
-
-        <div class="space-y-1">
-          <h3 class="text-xl font-bold text-lavDark">You already have an active study plan</h3>
-          <p class="text-sm text-lavGray">Your personalized study plan is currently active. You can continue following it or create a new one.</p>
-        </div>
-        <div class="flex gap-3 mt-2">
-          <button onclick="viewActivePlan()" class="bg-lavAccent text-white text-sm font-bold px-6 py-3 rounded-[10px] hover:bg-opacity-90 transition-all">
-            View My Plan
-          </button>
-          <button onclick="startOverPlan()" class="border-2 border-lavAccent text-lavAccent text-sm font-bold px-6 py-3 rounded-[10px] hover:bg-lavAccent hover:text-white transition-all">
-            Start Over
-          </button>
+        <h3 style="font-size:1.3rem;font-weight:800;color:#1A1035;margin-bottom:6px;">You already have an active study plan</h3>
+        <p style="color:#6B7280;font-size:0.95rem;margin-bottom:1.5rem;">Your personalized study plan is currently active. You can continue following it or create a new one.</p>
+        <div style="display:flex;gap:12px;">
+          <button onclick="viewActivePlan()" style="background:#7C6FE0;color:white;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">View My Plan</button>
+          <button onclick="startOverPlan()" style="background:transparent;color:#7C6FE0;border:2px solid #7C6FE0;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Start Over</button>
         </div>
       </div>
 
@@ -477,8 +470,10 @@
         <button onclick="closeModal('modal-days')" class="absolute top-5 right-5 text-gray-400 hover:text-black font-bold text-lg p-1">✕</button>
         
         <!-- Step label -->
-        <span class="absolute top-5 left-5 text-[11px] font-extrabold text-gray-400 uppercase tracking-widest">Step 1 of 1</span>
+        <span class="absolute top-5 left-5 text-[11px] font-extrabold text-gray-400 uppercase tracking-widest" id="modal-step-label">Step 1 of 2</span>
 
+        <!-- Step 1 Content -->
+        <div id="modal-step-1" class="flex flex-col md:flex-row gap-8 w-full">
         <!-- Left Side Content -->
         <div class="md:w-2/5 space-y-4 pt-4">
           <h2 class="text-2xl md:text-3xl font-bold tracking-tight text-lavDark leading-snug">Which days do you want to study?</h2>
@@ -557,12 +552,97 @@
           </div>
 
           <!-- Bottom controls -->
-          <div class="flex justify-end pt-8 border-t border-lavBorder">
+          <div class="flex items-center justify-between pt-8 border-t border-lavBorder" id="step1-controls">
+            <div id="mock-exam-container" class="hidden items-center gap-2">
+              <label class="text-xs font-bold text-lavDark">Mock Exam Day:</label>
+              <select id="mock-exam-day" class="border border-lavBorder rounded-[8px] p-2 text-xs outline-none focus:border-lavAccent"></select>
+            </div>
+            <button id="btn-next-step" onclick="goToStep2()" disabled class="bg-gray-300 text-gray-500 text-xs font-bold px-8 py-4 rounded-[10px] transition-all cursor-not-allowed shadow-sm ml-auto">
+              Next →
+            </button>
+          </div>
+
+        </div>
+        </div>
+
+        <!-- Step 2 Content -->
+        <div id="modal-step-2" class="hidden flex-col w-full gap-6 pt-4">
+          <div class="space-y-2">
+            <h2 class="text-2xl md:text-3xl font-bold tracking-tight text-lavDark leading-snug">How do you want to structure your daily practice?</h2>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Option 1 -->
+            <div id="card-alternating" onclick="selectStudyMode('alternating')" class="cursor-pointer bg-white border-2 border-lavBorder rounded-[16px] p-6 relative transition-all flex flex-col gap-3">
+              <div class="flex justify-between items-start">
+                <svg class="w-8 h-8 text-lavAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                <span class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-full">Balanced</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-lavDark text-base">Alternating Focus</h3>
+                <p class="text-xs text-lavGray mt-1">One day Math, next day English — with Vocabulary practiced every single day.</p>
+              </div>
+            </div>
+
+            <!-- Option 2 -->
+            <div id="card-full_coverage" onclick="selectStudyMode('full_coverage')" class="cursor-pointer bg-white border-2 border-lavBorder rounded-[16px] p-6 relative transition-all flex flex-col gap-3">
+              <div class="flex justify-between items-start">
+                <svg class="w-8 h-8 text-lavAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full">Comprehensive</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-lavDark text-base">Full Coverage</h3>
+                <p class="text-xs text-lavGray mt-1">Practice Math, English, and Vocabulary every day in equal balanced amounts.</p>
+              </div>
+            </div>
+
+            <!-- Option 3 -->
+            <div id="card-custom" onclick="selectStudyMode('custom')" class="cursor-pointer bg-white border-2 border-lavBorder rounded-[16px] p-6 relative transition-all flex flex-col gap-3">
+              <div class="flex justify-between items-start">
+                <svg class="w-8 h-8 text-lavAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                <span class="bg-purple-100 text-purple-700 text-[10px] font-bold px-2 py-0.5 rounded-full">Personalized</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-lavDark text-base">Custom Mix</h3>
+                <p class="text-xs text-lavGray mt-1">You decide how many questions per subject each day. Vocabulary is always included.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Custom Inputs -->
+          <div id="custom-inputs-section" class="hidden bg-lavLight p-4 rounded-[12px] grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="flex flex-col gap-1">
+              <label class="text-xs font-bold text-lavDark">Math questions per day</label>
+              <input type="number" id="custom-math" value="20" min="5" max="100" class="border border-lavBorder rounded-[8px] p-2 text-sm outline-none focus:border-lavAccent">
+            </div>
+            <div class="flex flex-col gap-1">
+              <label class="text-xs font-bold text-lavDark">English questions per day</label>
+              <input type="number" id="custom-english" value="20" min="5" max="100" class="border border-lavBorder rounded-[8px] p-2 text-sm outline-none focus:border-lavAccent">
+            </div>
+            <div class="flex flex-col gap-1">
+              <label class="text-xs font-bold text-lavDark">Vocab words per day</label>
+              <input type="number" id="custom-vocab" value="10" min="5" max="30" class="border border-lavBorder rounded-[8px] p-2 text-sm outline-none focus:border-lavAccent">
+            </div>
+          </div>
+
+          <!-- Alternating Focus Inputs -->
+          <div id="alternating-inputs-section" class="hidden bg-[#F8F7FF] border border-[#EDE9FE] rounded-[16px] p-4 flex-col gap-4">
+            <div id="alternating-days-container" class="flex flex-wrap gap-2">
+              <!-- Dynamically populated -->
+            </div>
+            <div class="text-[11px] font-bold text-lavGray pt-2 border-t border-[#EDE9FE]">
+              📚 Vocabulary is practiced every day automatically
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center pt-6 border-t border-lavBorder mt-4">
+            <button onclick="goToStep1()" class="text-lavGray hover:text-lavDark text-sm font-bold transition-all px-4 py-2">
+              ← Back
+            </button>
             <button id="btn-create-plan" onclick="submitDaysPlan()" disabled class="bg-gray-300 text-gray-500 text-xs font-bold px-8 py-4 rounded-[10px] transition-all cursor-not-allowed shadow-sm">
               Create Plan →
             </button>
           </div>
-
         </div>
 
       </div>
@@ -671,45 +751,72 @@
     <!-- ==========================================
          SCREEN 4: DYNAMIC STUDY PLAN VIEW
          ========================================== -->
-    <section id="view-dashboard" class="hidden space-y-8 stagger-in max-w-4xl mx-auto">
+    <section id="view-dashboard" class="hidden space-y-8 stagger-in max-w-3xl mx-auto">
       
-      <!-- Plan Hero Dashboard Header -->
-      <div class="bg-lavCard rounded-[16px] shadow-lav p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-lavBorder">
-        <div class="space-y-2">
-          <div class="flex items-center gap-2">
-            <span class="bg-lavLight text-lavAccent text-[10px] font-bold uppercase px-2 py-0.5 rounded tracking-widest">Active Plan</span>
-            <span class="text-xs text-lavGray font-bold" id="dash-plan-id">ID: plan_xyz789</span>
+      <!-- Header Card -->
+      <div class="bg-white rounded-2xl shadow-sm p-6 md:p-8 flex flex-col md:flex-row justify-between items-start gap-6 border border-gray-100 border-l-4 border-l-[#7C6FE0]">
+        <div class="space-y-4 flex-1 w-full">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Your Personalized SAT Prep Plan</h2>
+            <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-500 font-medium mt-2">
+              <span class="flex items-center gap-1"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Goal: <strong class="text-gray-900" id="dash-goal-score">1520</strong></span>
+              <span class="flex items-center gap-1"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> <strong class="text-gray-900" id="dash-exam-date">Dec 5</strong></span>
+              <span class="flex items-center gap-1"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> <strong class="text-gray-900" id="dash-days-left">--</strong> Days Left</span>
+              <span class="flex items-center gap-1"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg> Mode: <strong class="text-gray-900" id="dash-study-mode">Custom</strong></span>
+            </div>
           </div>
-          <h2 class="text-2xl md:text-3xl font-bold text-lavDark">Your Personalized SAT Prep Plan</h2>
-          <p class="text-sm text-lavGray font-medium">Goal SAT Score: <strong class="text-lavDark" id="dash-goal-score">1520</strong> • Next Exam: <strong class="text-lavDark" id="dash-exam-date">December 5</strong></p>
-        </div>
 
-        <button onclick="navigate('landing')" class="border border-lavBorder text-xs font-bold text-lavDark px-5 py-3 rounded-[10px] hover:bg-lavLight transition-all">
-          Start Over
-        </button>
+          <div class="space-y-1.5 w-full max-w-md pt-2">
+            <div class="flex justify-between items-center text-xs font-bold text-gray-700">
+              <span id="dash-week-progress-text">Week 1 of 4</span>
+              <span id="dash-total-progress-text">0% Complete</span>
+            </div>
+            <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+              <div id="dash-total-progress-bar" class="bg-[#7C6FE0] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Personalized AI recommendations box (revealed on uploads) -->
-      <div id="ai-recs-container" class="hidden border border-lavBorder bg-lavLight p-6 rounded-[16px] space-y-3">
-        <h4 class="text-sm font-bold text-lavAccent flex items-center gap-1.5">
+      <div id="ai-recs-container" class="hidden bg-[#F8F7FF] p-6 rounded-2xl space-y-3 border border-[#EDE9FE]">
+        <h4 class="text-sm font-bold text-[#7C6FE0] flex items-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
           AI Recommendations
         </h4>
-        <ul class="text-xs text-lavGray space-y-1.5 list-disc pl-4 font-medium" id="ai-recs-list">
+        <ul class="text-sm text-gray-600 space-y-1.5 list-disc pl-4 font-medium" id="ai-recs-list">
           <!-- Injected dynamically -->
         </ul>
       </div>
 
-      <!-- Weekly Schedule Calendar Grid -->
-      <div class="space-y-4">
-        <h3 class="text-xl font-bold text-lavDark flex items-center gap-2">
-          <svg class="w-5 h-5 text-lavAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-          4-Week Schedule Checklist
-        </h3>
-        
-        <div id="schedule-calendar" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Week Navigation -->
+      <div class="flex gap-2 border-b border-gray-200 overflow-x-auto hide-scrollbar" id="week-tabs">
+        <!-- Injected dynamically -->
+      </div>
+
+      <!-- Daily Plan Cards List -->
+      <div class="space-y-4" id="schedule-calendar">
           <!-- Injected dynamically -->
+      </div>
+
+      <!-- Weekly Summary Bar -->
+      <div class="bg-white border border-[#EDE9FE] rounded-2xl p-5 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex-1 w-full space-y-2">
+          <div class="flex justify-between text-xs font-bold text-gray-700">
+            <span id="weekly-completed-text">0 of 5 tasks completed this week</span>
+            <span id="weekly-motivational-text" class="text-[#7C6FE0]">Great start! Keep going 🔥</span>
+          </div>
+          <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+            <div id="weekly-progress-bar" class="bg-[#10B981] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
         </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-8 border-t border-gray-200 mt-8">
+        <span class="text-[10px] text-gray-400 font-medium hidden" id="dash-plan-id">ID: plan_xyz789</span>
+        <button onclick="startOverPlan()" class="border border-gray-300 hover:border-black text-xs font-bold text-gray-600 hover:text-black transition-all px-6 py-2.5 rounded-full shadow-sm ml-auto">
+          Start Over
+        </button>
       </div>
 
     </section>
@@ -729,6 +836,9 @@
     let currentView = 'landing';
     let studyDaysState = {}; // { Mon: "standard", Wed: "extended" }
     let activeDropdownDay = null;
+    let studyModeState = null;
+    let alternatingDaysState = {};
+    const weekDaysOrder = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     
     // File upload states
     let selectedFileObject = null;
@@ -798,7 +908,7 @@
         const data = await res.json();
         if (data.studyPlan) {
           const p = data.studyPlan;
-          renderSchedulePlan(p.planId, p.schedule || p.plan, p.targetScore, p.examDate, p.analysis);
+          renderSchedulePlan(p.planId, p.schedule || p.plan, p.targetScore, p.examDate, p.analysis, p.studyMode);
           return;
         }
       } catch (err) {
@@ -808,7 +918,7 @@
       const planId = Object.keys(offlinePlans)[0];
       if (planId) {
         const planObj = offlinePlans[planId];
-        renderSchedulePlan(planObj.planId, planObj.plan, planObj.targetScore, planObj.examDate, planObj.analysis);
+        renderSchedulePlan(planObj.planId, planObj.plan, planObj.targetScore, planObj.examDate, planObj.analysis, planObj.studyMode);
       } else {
         navigate('dashboard');
       }
@@ -839,6 +949,34 @@
       });
       document.getElementById('day-dropdown').classList.add('hidden');
       updateCreateButtonState();
+
+      // Reset Step 2
+      document.getElementById('modal-step-label').textContent = 'Step 1 of 2';
+      const step1 = document.getElementById('modal-step-1');
+      const step2 = document.getElementById('modal-step-2');
+      if (step1) step1.classList.remove('hidden');
+      if (step2) {
+          step2.classList.add('hidden');
+          step2.classList.remove('flex');
+      }
+
+      studyModeState = null;
+      alternatingDaysState = {};
+      ['alternating', 'full_coverage', 'custom'].forEach(c => {
+          const el = document.getElementById(`card-${c}`);
+          if (el) {
+              el.style.border = '2px solid #EDE9FE';
+              el.style.backgroundColor = '#FFFFFF';
+          }
+      });
+      const cis = document.getElementById('custom-inputs-section');
+      if (cis) cis.classList.add('hidden');
+      const ais = document.getElementById('alternating-inputs-section');
+      if (ais) {
+          ais.classList.add('hidden');
+          ais.classList.remove('flex');
+      }
+      updateCreatePlanButtonState();
 
       setTimeout(() => {
         card.classList.remove('scale-95', 'opacity-0');
@@ -911,16 +1049,129 @@
     }
 
     function updateCreateButtonState() {
-      const btn = document.getElementById('btn-create-plan');
+      const btn = document.getElementById('btn-next-step');
       const keys = Object.keys(studyDaysState);
       
+      const mockContainer = document.getElementById('mock-exam-container');
+      const mockSelect = document.getElementById('mock-exam-day');
+
       if (keys.length > 0) {
         btn.disabled = false;
-        btn.className = "bg-lavAccent hover:bg-opacity-90 text-white text-xs font-bold px-8 py-4 rounded-[10px] transition-all shadow-sm cursor-pointer active:scale-95";
+        btn.className = "bg-lavAccent hover:bg-opacity-90 text-white text-xs font-bold px-8 py-4 rounded-[10px] transition-all shadow-sm cursor-pointer active:scale-95 ml-auto";
+        
+        mockContainer.classList.remove('hidden');
+        mockContainer.classList.add('flex');
+        const oldVal = mockSelect.value;
+        mockSelect.innerHTML = keys.map(k => `<option value="${k}">${k}</option>`).join('');
+        if (keys.includes(oldVal)) mockSelect.value = oldVal;
       } else {
         btn.disabled = true;
-        btn.className = "bg-gray-300 text-gray-500 text-xs font-bold px-8 py-4 rounded-full transition-all cursor-not-allowed shadow-sm";
+        btn.className = "bg-gray-300 text-gray-500 text-xs font-bold px-8 py-4 rounded-[10px] transition-all cursor-not-allowed shadow-sm ml-auto";
+        mockContainer.classList.add('hidden');
+        mockContainer.classList.remove('flex');
       }
+    }
+
+    function goToStep2() {
+        document.getElementById('modal-step-1').classList.add('hidden');
+        document.getElementById('modal-step-2').classList.remove('hidden');
+        document.getElementById('modal-step-2').classList.add('flex');
+        document.getElementById('modal-step-label').textContent = 'Step 2 of 2';
+
+        if (studyModeState === 'alternating') {
+            renderAlternatingDays();
+        }
+    }
+
+    function goToStep1() {
+        document.getElementById('modal-step-2').classList.add('hidden');
+        document.getElementById('modal-step-2').classList.remove('flex');
+        document.getElementById('modal-step-1').classList.remove('hidden');
+        document.getElementById('modal-step-label').textContent = 'Step 1 of 2';
+    }
+
+    function selectStudyMode(mode) {
+        studyModeState = mode;
+        const cards = ['alternating', 'full_coverage', 'custom'];
+        cards.forEach(c => {
+            const el = document.getElementById(`card-${c}`);
+            if (c === mode) {
+                el.style.border = '2px solid #7C6FE0';
+                el.style.backgroundColor = '#F0EFFE';
+            } else {
+                el.style.border = '2px solid #EDE9FE';
+                el.style.backgroundColor = '#FFFFFF';
+            }
+        });
+
+        if (mode === 'custom') {
+            document.getElementById('custom-inputs-section').classList.remove('hidden');
+        } else {
+            document.getElementById('custom-inputs-section').classList.add('hidden');
+        }
+
+        if (mode === 'alternating') {
+            document.getElementById('alternating-inputs-section').classList.remove('hidden');
+            document.getElementById('alternating-inputs-section').classList.add('flex');
+            renderAlternatingDays();
+        } else {
+            document.getElementById('alternating-inputs-section').classList.add('hidden');
+            document.getElementById('alternating-inputs-section').classList.remove('flex');
+        }
+
+        updateCreatePlanButtonState();
+    }
+
+    function updateCreatePlanButtonState() {
+        const btn = document.getElementById('btn-create-plan');
+        if (studyModeState) {
+            btn.disabled = false;
+            btn.className = "bg-lavAccent hover:bg-opacity-90 text-white text-xs font-bold px-8 py-4 rounded-[10px] transition-all shadow-sm cursor-pointer active:scale-95";
+        } else {
+            btn.disabled = true;
+            btn.className = "bg-gray-300 text-gray-500 text-xs font-bold px-8 py-4 rounded-[10px] transition-all cursor-not-allowed shadow-sm";
+        }
+    }
+
+    function renderAlternatingDays() {
+        const container = document.getElementById('alternating-days-container');
+        if (!container) return;
+
+        const selectedDays = Object.keys(studyDaysState).sort((a, b) => weekDaysOrder.indexOf(a) - weekDaysOrder.indexOf(b));
+        
+        const currentKeys = Object.keys(alternatingDaysState);
+        const keysMatch = selectedDays.length === currentKeys.length && selectedDays.every(d => currentKeys.includes(d));
+
+        if (!keysMatch) {
+            alternatingDaysState = {};
+            let isMath = true;
+            selectedDays.forEach(day => {
+                alternatingDaysState[day] = isMath ? 'Math' : 'English';
+                isMath = !isMath;
+            });
+        }
+
+        container.innerHTML = selectedDays.map(day => {
+            const subject = alternatingDaysState[day];
+            const isMath = subject === 'Math';
+            const bgClass = isMath ? 'bg-[#EFF6FF]' : 'bg-[#F0EFFE]';
+            const textClass = isMath ? 'text-[#3B82F6]' : 'text-[#7C6FE0]';
+            
+            return `
+                <button onclick="toggleAlternatingDay('${day}')" class="px-4 py-2 rounded-full font-bold text-xs transition-all ${bgClass} ${textClass} border border-transparent hover:border-current">
+                    ${day} — ${subject}
+                </button>
+            `;
+        }).join('');
+    }
+
+    function toggleAlternatingDay(day) {
+        if (alternatingDaysState[day] === 'Math') {
+            alternatingDaysState[day] = 'English';
+        } else {
+            alternatingDaysState[day] = 'Math';
+        }
+        renderAlternatingDays();
     }
 
     // API Post submission
@@ -928,9 +1179,20 @@
       try {
         const payload = {
           days: studyDaysState,
+          studyMode: studyModeState,
+          customQuestions: {
+            math: parseInt(document.getElementById('custom-math').value) || 20,
+            english: parseInt(document.getElementById('custom-english').value) || 20,
+            vocab: parseInt(document.getElementById('custom-vocab').value) || 10
+          },
+          mockExamDay: document.getElementById('mock-exam-day').value,
           targetScore: 1500,
           examDate: "2026-12-05"
         };
+
+        if (studyModeState === 'alternating') {
+            payload.dayAssignments = alternatingDaysState;
+        }
 
         const response = await fetch(`${API_BASE}/api/planner/create`, {
           method: 'POST',
@@ -945,6 +1207,7 @@
         offlinePlans[resData.plan.planId] = {
           planId: resData.plan.planId,
           daysSelected: studyDaysState,
+          studyMode: studyModeState,
           targetScore: resData.plan.targetScore,
           examDate: resData.plan.examDate,
           plan: resData.plan.schedule
@@ -955,16 +1218,21 @@
         closeModal('modal-days');
 
         // Render created plan inside view-dashboard
-        renderSchedulePlan(resData.plan.planId, resData.plan.schedule, resData.plan.targetScore, resData.plan.examDate);
+        renderSchedulePlan(resData.plan.planId, resData.plan.schedule, resData.plan.targetScore, resData.plan.examDate, null, studyModeState);
       } catch (err) {
         console.warn("Backend unavailable. Falling back to local offline mode.");
         offlineMode = true;
         const fakePlanId = "plan_offline_" + Date.now();
-        const fakePlan = generateOfflinePlan(studyDaysState);
+        const fakePlan = generateOfflinePlan(studyDaysState, studyModeState, alternatingDaysState, {
+            math: parseInt(document.getElementById('custom-math').value) || 20,
+            english: parseInt(document.getElementById('custom-english').value) || 20,
+            vocab: parseInt(document.getElementById('custom-vocab').value) || 10
+        }, document.getElementById('mock-exam-day').value, "2026-12-05");
         
         offlinePlans[fakePlanId] = {
           planId: fakePlanId,
           daysSelected: studyDaysState,
+          studyMode: studyModeState,
           targetScore: 1500,
           examDate: "2026-12-05",
           plan: fakePlan
@@ -973,7 +1241,7 @@
 
         showToast("Your study plan has been created! 🎉");
         closeModal('modal-days');
-        renderSchedulePlan(fakePlanId, fakePlan, 1500, "2026-12-05");
+        renderSchedulePlan(fakePlanId, fakePlan, 1500, "2026-12-05", null, studyModeState);
       }
     }
 
@@ -1132,6 +1400,7 @@
           targetScore: fullPlan.targetScore || 1520,
           examDate: fullPlan.examDate || "2026-12-05",
           plan: fullPlan.schedule || fullPlan.plan,
+            studyMode: fullPlan.studyMode || "custom",
           analysis: fullPlan.analysis
         };
         localStorage.setItem('oneprep_offline_plans', JSON.stringify(offlinePlans));
@@ -1146,7 +1415,7 @@
         setTimeout(() => {
           const fakePlanId = "plan_personalized_offline_" + Date.now();
           const presetDays = { Mon: "standard", Wed: "standard", Fri: "standard", Sat: "extended" };
-          const fakePlan = generateOfflinePlan(presetDays);
+          const fakePlan = generateOfflinePlan(presetDays, "custom", {}, { math: 30, english: 30, vocab: 15 }, "Sat", "2026-12-05");
           
           const fakeAnalysis = {
             totalScore: 1220,
@@ -1163,6 +1432,7 @@
             daysSelected: presetDays,
             targetScore: 1520,
             examDate: "2026-12-05",
+            studyMode: "custom",
             plan: fakePlan,
             analysis: fakeAnalysis
           };
@@ -1196,11 +1466,314 @@
     // ==========================================
     // DYNAMIC STUDY PLAN DASHBOARD RENDERER
     // ==========================================
-    function renderSchedulePlan(planId, plan, goalScore, examDate, analysis = null) {
+    let currentPlanData = null;
+    let currentPlanId = null;
+    let currentWeek = 1;
+
+    function renderWeekTabs(totalWeeks) {
+      if (!document.getElementById('week-tabs-wrapper')) {
+          const originalTabs = document.getElementById('week-tabs');
+          if (originalTabs) {
+              originalTabs.outerHTML = `
+                <div class="relative flex items-center border-b border-gray-200 pb-3" id="week-tabs-wrapper">
+                    <button onclick="document.getElementById('week-tabs').scrollBy({left:-200, behavior:'smooth'})" class="hidden md:flex absolute left-0 z-10 w-8 h-8 bg-white shadow flex items-center justify-center -ml-3 rounded-full hover:bg-gray-50 text-[#7C6FE0] font-bold border border-gray-100">&lt;</button>
+                    <div class="flex gap-2 overflow-x-auto hide-scrollbar flex-1 scroll-smooth px-2" id="week-tabs" style="scrollbar-width: none;"></div>
+                    <button onclick="document.getElementById('week-tabs').scrollBy({left:200, behavior:'smooth'})" class="hidden md:flex absolute right-0 z-10 w-8 h-8 bg-white shadow flex items-center justify-center -mr-3 rounded-full hover:bg-gray-50 text-[#7C6FE0] font-bold border border-gray-100">&gt;</button>
+                </div>
+              `;
+          }
+      }
+      const tabsContainer = document.getElementById('week-tabs');
+      if (!tabsContainer) return;
+
+      tabsContainer.innerHTML = '';
+      for (let i = 1; i <= totalWeeks; i++) {
+        const btn = document.createElement('button');
+        btn.id = `tab-week-${i}`;
+        btn.onclick = () => switchWeek(i);
+        btn.className = "px-5 py-2.5 text-sm font-bold bg-[#F0EFFE] text-[#7C6FE0] hover:bg-[#E0DEFD] rounded-full transition-all whitespace-nowrap";
+        btn.textContent = `Week ${i}`;
+        tabsContainer.appendChild(btn);
+      }
+    }
+
+    function switchWeek(weekNum) {
+      currentWeek = weekNum;
+      const totalWeeks = currentPlanData.length > 0 ? Math.max(...currentPlanData.map(d => d.week)) : 1;
+      for(let i=1; i<=totalWeeks; i++) {
+        const tab = document.getElementById(`tab-week-${i}`);
+        if(!tab) continue;
+        if(i === weekNum) {
+          tab.className = "px-5 py-2.5 text-sm font-bold bg-[#7C6FE0] text-white rounded-full transition-all whitespace-nowrap";
+        } else {
+          tab.className = "px-5 py-2.5 text-sm font-bold bg-[#F0EFFE] text-[#7C6FE0] hover:bg-[#E0DEFD] rounded-full transition-all whitespace-nowrap";
+        }
+      }
+      renderCalendar();
+    }
+
+    function calculateDaysLeft(examDateStr) {
+      if (!examDateStr) return "--";
+      const ed = new Date(examDateStr);
+      const diff = ed - new Date();
+      return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+    }
+    
+    function formatStudyMode(mode) {
+      if (mode === 'alternating') return 'Alternating Focus';
+      if (mode === 'full_coverage') return 'Full Coverage';
+      if (mode === 'custom') return 'Custom Mix';
+      return 'Standard';
+    }
+
+    function getTaskStyling(type) {
+        if (type === 'Math') return { border: '#3B82F6', badgeBg: '#EFF6FF', badgeText: '#3B82F6', icon: '📐' };
+        if (type === 'English') return { border: '#7C6FE0', badgeBg: '#F0EFFE', badgeText: '#7C6FE0', icon: '📖' };
+        if (type === 'Vocab') return { border: '#10B981', badgeBg: '#ECFDF5', badgeText: '#10B981', icon: '📚' };
+        if (type === 'Mock Exam') return { border: '#F59E0B', badgeBg: '#FEF3C7', badgeText: '#F59E0B', icon: '📝' };
+        return { border: '#9CA3AF', badgeBg: '#F3F4F6', badgeText: '#6B7280', icon: '🧘' };
+    }
+
+    function renderCalendar() {
+      const calendar = document.getElementById('schedule-calendar');
+      calendar.innerHTML = '';
+
+      let checkedTasks = JSON.parse(localStorage.getItem('oneprep_plan_checks')) || {};
+
+      const weekDays = currentPlanData.filter(item => item.week === currentWeek);
+      
+      if (weekDays.length > 0) {
+          const weekHeader = document.createElement('div');
+          weekHeader.className = "mb-6 border-l-4 border-[#7C6FE0] pl-4";
+          const startDay = weekDays[0];
+          const endDay = weekDays[weekDays.length - 1];
+          
+          const startDate = new Date();
+          startDate.setHours(0,0,0,0);
+          const weekStart = new Date(startDate);
+          weekStart.setDate(startDate.getDate() + (currentWeek - 1) * 7);
+          const weekEnd = new Date(weekStart);
+          weekEnd.setDate(weekStart.getDate() + 6);
+          const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+          const weekDateRange = `${monthNames[weekStart.getMonth()]} ${weekStart.getDate()} – ${monthNames[weekEnd.getMonth()]} ${weekEnd.getDate()}, ${weekEnd.getFullYear()}`;
+          
+          weekHeader.innerHTML = `
+            <h1 class="text-[1.6rem] font-[800] text-[#1A1035] tracking-tight">WEEK ${currentWeek}</h1>
+            <p class="text-sm font-semibold text-[#6B7280] mt-1">${weekDateRange}</p>
+          `;
+          calendar.appendChild(weekHeader);
+      }
+
+      weekDays.forEach((dayObj) => {
+        const trueDayIndex = dayObj.dayIndex;
+        
+        const dayHeader = document.createElement('div');
+        dayHeader.className = "mt-8 mb-4 flex items-center gap-3";
+        dayHeader.innerHTML = `
+            <h3 class="text-[1rem] font-[700] text-[#4A4580] uppercase tracking-wide">DAY ${trueDayIndex + 1} — <span class="text-[#6B7280] capitalize">${dayObj.fullDateStr}</span></h3>
+            ${dayObj.isToday ? '<span class="bg-[#7C6FE0] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Today</span>' : ''}
+        `;
+        calendar.appendChild(dayHeader);
+
+        dayObj.tasks.forEach((task, taskIdx) => {
+            const taskId = `${currentPlanId}_day${trueDayIndex}_task${taskIdx}`;
+            
+            // Fallback for old single-task data
+            const oldTaskId = `${currentPlanId}_${trueDayIndex}`;
+            const isChecked = checkedTasks[taskId] || (taskIdx === 0 && checkedTasks[oldTaskId]);
+
+            const style = getTaskStyling(task.type);
+            const isRest = task.type === 'Rest';
+            const isMock = task.type === 'Mock Exam';
+
+            const card = document.createElement('div');
+            card.className = `mb-3 bg-white rounded-[12px] p-5 shadow-sm transition-all ${isChecked && !isRest ? 'opacity-60' : 'hover:shadow-md'} ${isRest ? 'bg-[#F9FAFB]' : ''}`;
+            card.style.border = `1px solid #EDE9FE`;
+            card.style.borderLeft = `4px solid ${style.border}`;
+            
+            let actionHtml = '';
+            if (isRest) {
+                // No action
+            } else if (isMock) {
+                actionHtml = `<button onclick="window.location.href='/mock-exam'" class="bg-[#F59E0B] text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-opacity-90 transition-all">Start Exam →</button>`;
+            } else {
+                actionHtml = `
+                    <div class="relative flex items-center justify-center w-6 h-6 cursor-pointer" onclick="togglePlanCheck(this, '${currentPlanId}', ${trueDayIndex}, ${taskIdx}, '${style.border}')">
+                      <div class="checkbox-box w-6 h-6 rounded-md border-2 transition-all flex items-center justify-center" style="border-color: ${isChecked ? style.border : '#D1D5DB'}; background-color: ${isChecked ? style.border : 'transparent'};">
+                        <svg class="checkmark w-4 h-4 text-white transition-all ${isChecked ? 'opacity-100' : 'opacity-0'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                      </div>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+              <div class="flex justify-between items-center gap-4">
+                <div class="space-y-1.5 flex-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded tracking-wider" style="background-color: ${style.badgeBg}; color: ${style.badgeText};">
+                      ${style.icon} ${task.type}
+                    </span>
+                    <h4 class="task-title text-sm font-bold text-[#1A1035] truncate max-w-[280px] ${isChecked && !isRest ? 'line-through text-gray-500' : ''}">${escapeHtml(task.topic)}</h4>
+                  </div>
+                  
+                  ${!isRest && !isMock ? `
+                    <p class="text-[11px] text-[#6B7280] font-semibold flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        ${task.questionCount} questions 
+                        <span class="text-gray-300">•</span> 
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        ${task.estimatedMinutes} mins
+                    </p>
+                  ` : ''}
+                  ${isMock ? `
+                    <p class="text-[11px] text-[#6B7280] font-semibold flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Full SAT Length • 134 mins
+                    </p>
+                  ` : ''}
+                  ${isRest ? `
+                    <p class="text-[11px] text-[#6B7280] font-semibold">Take a break today to prevent burnout.</p>
+                  ` : ''}
+                </div>
+                <div>
+                  ${actionHtml}
+                </div>
+              </div>
+            `;
+            calendar.appendChild(card);
+        });
+      });
+
+      updateProgressBars();
+    }
+
+    function updateProgressBars() {
+      let checkedTasks = JSON.parse(localStorage.getItem('oneprep_plan_checks')) || {};
+      let totalTasksThisWeek = 0;
+      let completedTasksThisWeek = 0;
+      let totalTasksAll = 0;
+      let completedTasksAll = 0;
+
+      const weekDays = currentPlanData.filter(item => item.week === currentWeek);
+      weekDays.forEach(day => {
+          day.tasks.forEach((t, tIdx) => {
+              if (t.type !== 'Rest') {
+                  totalTasksThisWeek++;
+                  if (checkedTasks[`${currentPlanId}_day${day.dayIndex}_task${tIdx}`] || (tIdx===0 && checkedTasks[`${currentPlanId}_${day.dayIndex}`])) completedTasksThisWeek++;
+              }
+          });
+      });
+
+      currentPlanData.forEach(day => {
+          day.tasks.forEach((t, tIdx) => {
+              if (t.type !== 'Rest') {
+                  totalTasksAll++;
+                  if (checkedTasks[`${currentPlanId}_day${day.dayIndex}_task${tIdx}`] || (tIdx===0 && checkedTasks[`${currentPlanId}_${day.dayIndex}`])) completedTasksAll++;
+              }
+          });
+      });
+
+      const weeklyText = document.getElementById('weekly-completed-text');
+      if (weeklyText) weeklyText.textContent = `${completedTasksThisWeek} of ${totalTasksThisWeek} tasks completed this week`;
+      
+      const pct = totalTasksThisWeek === 0 ? 0 : Math.round((completedTasksThisWeek / totalTasksThisWeek) * 100);
+      const weeklyBar = document.getElementById('weekly-progress-bar');
+      if (weeklyBar) weeklyBar.style.width = `${pct}%`;
+      
+      let msg = "Let's get started! 🚀";
+      if (pct > 0) msg = "Great start! Keep going 🔥";
+      if (pct > 40) msg = "You're doing amazing! 🌟";
+      if (pct > 80) msg = "Almost done for the week! 💪";
+      if (pct === 100 && totalTasksThisWeek > 0) msg = "Perfect week! You crushed it! 🏆";
+      const motText = document.getElementById('weekly-motivational-text');
+      if (motText) motText.textContent = msg;
+
+      const totalPct = totalTasksAll === 0 ? 0 : Math.round((completedTasksAll / totalTasksAll) * 100);
+      const totalText = document.getElementById('dash-total-progress-text');
+      if (totalText) totalText.textContent = `${totalPct}% Complete`;
+      const totalBar = document.getElementById('dash-total-progress-bar');
+      if (totalBar) totalBar.style.width = `${totalPct}%`;
+      
+      const weekProgressText = document.getElementById('dash-week-progress-text');
+      if(weekProgressText) weekProgressText.textContent = `Week ${currentWeek} of ${Math.max(...currentPlanData.map(d => d.week))}`;
+    }
+
+    function renderSchedulePlan(planId, plan, goalScore, examDate, analysis = null, studyMode = 'Standard') {
+      currentPlanId = planId;
+
+      if (!plan || !Array.isArray(plan)) {
+        console.error("Invalid plan array passed to renderSchedulePlan", plan);
+        const mockDay = document.getElementById('mock-exam-day') ? document.getElementById('mock-exam-day').value : null;
+        const cQs = {
+            math: parseInt(document.getElementById('custom-math')?.value) || 20,
+            english: parseInt(document.getElementById('custom-english')?.value) || 20,
+            vocab: parseInt(document.getElementById('custom-vocab')?.value) || 10
+        };
+        plan = generateOfflinePlan(studyDaysState || {}, studyMode, alternatingDaysState || {}, cQs, mockDay, examDate);
+      }
+
+      // Upgrade old flat plan structure to nested tasks if necessary
+      const startDate = new Date();
+      startDate.setHours(0,0,0,0);
+
+      if (plan.length > 0) {
+          plan = plan.map((item, i) => {
+              const dayIndex = item.dayIndex !== undefined ? item.dayIndex : i;
+              const dayDate = new Date(startDate);
+              dayDate.setDate(startDate.getDate() + dayIndex);
+
+              const dayNameList = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+              const fullDayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+              const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+              
+              let tasks = item.tasks;
+              if (!tasks) {
+                  const isRest = item.type === 'rest';
+                  const isMock = item.section === 'Mock Exam' || item.type === 'mock_exam';
+                  
+                  tasks = [];
+                  if (isRest) {
+                      tasks.push({ type: "Rest", topic: "Relax & Recharge 🧘", questionCount: 0, estimatedMinutes: 0 });
+                  } else if (isMock) {
+                      tasks.push({ type: "Mock Exam", topic: "Full SAT Simulator — 4 Modules — Timed", questionCount: 98, estimatedMinutes: 134 });
+                  } else {
+                      tasks.push({ type: item.section || (i%2===0?"Math":"English"), topic: item.topic || "Practice", questionCount: item.questionCount || 20, estimatedMinutes: item.estimatedMinutes || 30 });
+                  }
+              }
+
+              tasks = tasks.map(t => ({
+                  type: t.type || t.section || "Practice",
+                  topic: t.topic || "Practice",
+                  questionCount: t.questionCount || 0,
+                  estimatedMinutes: t.estimatedMinutes || 0,
+                  section: t.section || t.type
+              }));
+
+              return {
+                  dayIndex: dayIndex,
+                  week: item.week || Math.floor(dayIndex / 7) + 1,
+                  dayName: dayNameList[dayDate.getDay()],
+                  fullDayName: fullDayNames[dayDate.getDay()],
+                  dateStr: `${monthNames[dayDate.getMonth()]} ${dayDate.getDate()}`,
+                  fullDateStr: dayDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }),
+                  isToday: dayIndex === 0,
+                  isRest: tasks.length === 1 && tasks[0].type === 'Rest',
+                  isMock: tasks.length === 1 && tasks[0].type === 'Mock Exam',
+                  tasks: tasks
+              };
+          });
+      }
+
+      currentPlanData = plan;
+
       // Update variables
-      document.getElementById('dash-plan-id').textContent = `ID: ${planId}`;
       document.getElementById('dash-goal-score').textContent = goalScore;
       document.getElementById('dash-exam-date').textContent = examDate;
+      document.getElementById('dash-days-left').textContent = calculateDaysLeft(examDate);
+      document.getElementById('dash-study-mode').textContent = formatStudyMode(studyMode);
+      
+      const planIdEl = document.getElementById('dash-plan-id');
+      if (planIdEl) planIdEl.classList.add('hidden');
 
       // AI Recommendations block
       const recsContainer = document.getElementById('ai-recs-container');
@@ -1213,98 +1786,135 @@
         recsContainer.classList.add('hidden');
       }
 
-      // Schedule cards
-      const calendar = document.getElementById('schedule-calendar');
-      calendar.innerHTML = '';
-
-      let checkedTasks = JSON.parse(localStorage.getItem('oneprep_plan_checks')) || {};
-
-      plan.forEach((item, index) => {
-        const isRest = item.type === 'rest';
-        const isChecked = checkedTasks[`${planId}_${index}`] ? 'checked' : '';
-        
-        let headerColor = "bg-lavAccent";
-        if (item.type === 'extended') headerColor = "bg-lavAccent2";
-        if (isRest) headerColor = "bg-gray-400 opacity-60";
-
-        const card = document.createElement('div');
-        card.className = `bg-lavCard rounded-[16px] p-5 border border-lavBorder shadow-lav flex justify-between items-start gap-4 transition-all ${isRest ? 'opacity-70' : 'lift-hover'}`;
-        card.innerHTML = `
-          <div class="space-y-2 flex-1">
-            <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full ${isRest ? 'bg-gray-300' : (item.type === 'extended' ? 'bg-lavAccent2 animate-pulse' : 'bg-lavAccent')}"></span>
-              <strong class="text-xs font-bold text-lavGray">Day ${index + 1} (${item.day})</strong>
-            </div>
-            
-            <h4 class="text-sm font-bold text-lavDark truncate max-w-[240px]">${escapeHtml(item.topic)}</h4>
-            ${!isRest ? `
-              <p class="text-[11px] text-lavGray font-medium">${item.questionCount} Questions • Est: ${item.estimatedMinutes} mins</p>
-            ` : `
-              <p class="text-[11px] text-lavGray font-medium">Recharge your battery today.</p>
-            `}
-          </div>
-
-          <div class="flex flex-col items-end justify-between h-full min-h-[50px]">
-            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded tracking-wider ${isRest ? 'bg-gray-100 text-gray-400' : 'bg-lavLight text-lavAccent'}">
-              ${item.section}
-            </span>
-            ${!isRest ? `
-              <input type="checkbox" class="w-5 h-5 rounded border-lavBorder text-lavAccent focus:ring-lavAccent cursor-pointer" onclick="togglePlanCheck(this, '${planId}', ${index})" ${isChecked}>
-            ` : ''}
-          </div>
-        `;
-        calendar.appendChild(card);
-      });
+      const totalWeeks = Math.max(...plan.map(d => d.week));
+      renderWeekTabs(totalWeeks);
+      switchWeek(1); // Renders calendar for week 1
 
       // Shift view
       navigate('dashboard');
     }
 
-    function togglePlanCheck(cb, planId, dayIndex) {
+    function togglePlanCheck(el, planId, dayIndex, taskIdx, borderColor) {
       let checkedTasks = JSON.parse(localStorage.getItem('oneprep_plan_checks')) || {};
-      checkedTasks[`${planId}_${dayIndex}`] = cb.checked;
+      let taskId = taskIdx !== undefined ? `${planId}_day${dayIndex}_task${taskIdx}` : `${planId}_${dayIndex}`;
+      
+      const isCurrentlyChecked = !!checkedTasks[taskId];
+      const willBeChecked = !isCurrentlyChecked;
+      
+      checkedTasks[taskId] = willBeChecked;
       localStorage.setItem('oneprep_plan_checks', JSON.stringify(checkedTasks));
 
-      if (cb.checked) {
-        showToast("Session completed! Keep crushing your plan! 🔥");
+      const box = el.querySelector('.checkbox-box');
+      const checkmark = el.querySelector('.checkmark');
+      const card = el.closest('.bg-white');
+      const title = card.querySelector('.task-title');
+
+      if (willBeChecked) {
+        showToast("Task completed! Keep crushing your plan! 🔥");
+        box.style.backgroundColor = borderColor;
+        box.style.borderColor = borderColor;
+        checkmark.classList.remove('opacity-0');
+        checkmark.classList.add('opacity-100');
+        card.classList.add('opacity-60');
+        if(title) title.classList.add('line-through', 'text-gray-500');
+      } else {
+        box.style.backgroundColor = 'transparent';
+        box.style.borderColor = '#D1D5DB';
+        checkmark.classList.remove('opacity-100');
+        checkmark.classList.add('opacity-0');
+        card.classList.remove('opacity-60');
+        if(title) title.classList.remove('line-through', 'text-gray-500');
       }
+
+      updateProgressBars();
     }
 
     // ==========================================
     // OFFLINE PLAN SEED GENERATOR
     // ==========================================
-    function generateOfflinePlan(selectedDays) {
+    function generateOfflinePlan(selectedDays, studyMode, alternatingDays, customQ, mockDay, examDate) {
+      console.log('studyMode:', studyMode, 'customQuestions:', customQ, 'dayAssignments:', alternatingDays);
       const plan = [];
-      const mathTopics = ["Heart of Algebra", "Advanced Math", "Data Analysis", "Geometry"];
-      const readingTopics = ["Central Details", "Inferences", "Command of Evidence", "Vocab context"];
-      const writingTopics = ["Colons & Semicolons", "Logical Transitions", "Sentence Flow"];
-      const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const mathTopics = ["Heart of Algebra", "Advanced Math", "Problem Solving & Data Analysis", "Geometry & Trigonometry"];
+      const englishTopics = ["Reading Comprehension", "Central Ideas & Details", "Command of Evidence", "Rhetorical Synthesis", "Standard English Conventions"];
+      const dayNameList = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const fullDayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-      for (let i = 0; i < 28; i++) {
-        const dayName = dayNames[i % 7];
-        if (selectedDays[dayName]) {
-          const type = selectedDays[dayName];
-          const section = i % 3 === 0 ? "Math" : (i % 3 === 1 ? "Reading" : "Writing");
-          const topic = section === "Math" ? mathTopics[i % mathTopics.length] : (section === "Reading" ? readingTopics[i % readingTopics.length] : writingTopics[i % writingTopics.length]);
-          
-          plan.push({
-            day: dayName,
-            type: type,
-            section: section,
-            topic: topic,
-            questionCount: type === 'extended' ? 20 : 10,
-            estimatedMinutes: type === 'extended' ? 40 : 20
-          });
+      let weeks = 4;
+      if (examDate) {
+        const ed = new Date(examDate);
+        const diff = ed - new Date();
+        const daysLeft = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+        weeks = Math.max(1, Math.ceil(daysLeft / 7));
+      }
+
+      let currentDate = new Date();
+      currentDate.setHours(0,0,0,0);
+      const todayTime = currentDate.getTime();
+      let globalStudyDayIndex = 0;
+
+      for (let i = 0; i < weeks * 7; i++) {
+        const d = new Date(currentDate);
+        d.setDate(d.getDate() + i);
+        const dayName = dayNameList[d.getDay()];
+        const fullDayName = fullDayNames[d.getDay()];
+            const dateStr = `${monthNames[d.getMonth()].substring(0,3)} ${d.getDate()}`;
+        const weekNum = Math.floor(i / 7) + 1;
+        const isToday = d.getTime() === todayTime;
+
+        let dayObj = {
+           dayIndex: i,
+           week: weekNum,
+           dayName: dayName,
+           fullDayName: fullDayName,
+           dateStr: dateStr,
+               fullDateStr: `${fullDayName}, ${monthNames[d.getMonth()]} ${d.getDate()}`,
+           isToday: isToday,
+           tasks: []
+        };
+
+        const isStudyDay = selectedDays && selectedDays[dayName];
+        const isMockExamDay = isStudyDay && dayName === mockDay;
+
+        if (isMockExamDay) {
+           dayObj.isMock = true;
+           dayObj.tasks.push({
+               type: "Mock Exam", topic: "Full SAT Simulator — 4 Modules — Timed", questionCount: 98, estimatedMinutes: 134
+           });
+        } else if (isStudyDay) {
+           const type = selectedDays[dayName]; // 'standard' or 'extended'
+           
+           if (studyMode === 'alternating') {
+               const subject = (alternatingDays && alternatingDays[dayName]) ? alternatingDays[dayName] : (globalStudyDayIndex % 2 === 0 ? 'Math' : 'English');
+               const topic = subject === 'Math' ? mathTopics[globalStudyDayIndex % mathTopics.length] : englishTopics[globalStudyDayIndex % englishTopics.length];
+               dayObj.tasks.push({ type: subject, topic: topic, questionCount: 20, estimatedMinutes: 30 });
+               dayObj.tasks.push({ type: "Vocab", section: "Vocab", topic: "Daily Vocabulary", questionCount: 10, estimatedMinutes: 15 });
+           } else if (studyMode === 'full_coverage') {
+               dayObj.tasks.push({ type: 'Math', topic: mathTopics[globalStudyDayIndex % mathTopics.length], questionCount: 22, estimatedMinutes: 35 });
+               dayObj.tasks.push({ type: 'English', topic: englishTopics[globalStudyDayIndex % englishTopics.length], questionCount: 27, estimatedMinutes: 32 });
+               dayObj.tasks.push({ type: "Vocab", section: "Vocab", topic: "Daily Vocabulary", questionCount: 10, estimatedMinutes: 15 });
+           } else if (studyMode === 'custom') {
+               const mathQ = customQ?.math || 20;
+               const engQ = customQ?.english || 20;
+               const vocQ = customQ?.vocab || 10;
+               dayObj.tasks.push({ type: 'Math', topic: mathTopics[globalStudyDayIndex % mathTopics.length], questionCount: mathQ, estimatedMinutes: Math.round(mathQ * 1.5) });
+               dayObj.tasks.push({ type: 'English', topic: englishTopics[globalStudyDayIndex % englishTopics.length], questionCount: engQ, estimatedMinutes: Math.round(engQ * 1.5) });
+               dayObj.tasks.push({ type: "Vocab", section: "Vocab", topic: "Daily Vocabulary", questionCount: vocQ, estimatedMinutes: Math.round(vocQ * 2) });
+           } else {
+               const subject = globalStudyDayIndex % 2 === 0 ? 'Math' : 'English';
+               const topic = subject === 'Math' ? mathTopics[globalStudyDayIndex % mathTopics.length] : englishTopics[globalStudyDayIndex % englishTopics.length];
+               const qCount = type === 'extended' ? 30 : 20;
+               dayObj.tasks.push({ type: subject, topic: topic, questionCount: qCount, estimatedMinutes: Math.round(qCount * 1.5) });
+               dayObj.tasks.push({ type: "Vocab", section: "Vocab", topic: "Daily Vocabulary", questionCount: 10, estimatedMinutes: 15 });
+           }
+           globalStudyDayIndex++;
         } else {
-          plan.push({
-            day: dayName,
-            type: "rest",
-            section: "Rest",
-            topic: "Relax & Recharge 🧘",
-            questionCount: 0,
-            estimatedMinutes: 0
-          });
+           dayObj.isRest = true;
+           dayObj.tasks.push({ type: "Rest", topic: "Relax & Recharge 🧘", questionCount: 0, estimatedMinutes: 0 });
         }
+
+        plan.push(dayObj);
       }
       return plan;
     }

@@ -952,26 +952,81 @@ app.get('/api/questions/remix/:id', (req, res) => {
 // STUDY PLANNER API
 // ==========================================================
 app.post('/api/planner/create', (req, res) => {
-  const { days, targetScore, examDate } = req.body;
+  const { days, targetScore, examDate, studyMode, dayAssignments, customQuestions, mockExamDay } = req.body;
   const planId = `plan_${Date.now()}`;
 
-  // Generate simulated premium calendar plan
+  const ed = new Date(examDate || '2026-12-05');
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const diffDays = Math.max(1, Math.ceil((ed - today) / (1000 * 60 * 60 * 24)));
+  const totalWeeks = Math.max(1, Math.ceil(diffDays / 7));
+
   const plan = {
     planId,
-    days: parseInt(days || 30),
     targetScore: parseInt(targetScore || 1500),
     examDate: examDate || '2025-12-05',
+    studyMode: studyMode || 'custom',
     schedule: []
   };
 
-  for (let i = 1; i <= plan.days; i++) {
+  const mathTopics = ["Heart of Algebra", "Advanced Math", "Data Analysis", "Geometry"];
+  const englishTopics = ["Reading Comprehension", "Central Ideas & Details", "Command of Evidence", "Rhetorical Synthesis", "Standard English Conventions"];
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  let globalStudyDayIndex = 0;
+  let currentDate = new Date();
+
+  for (let i = 0; i < totalWeeks * 7; i++) {
+    const iterDate = new Date(currentDate);
+    iterDate.setDate(currentDate.getDate() + i);
+    const dayName = dayNames[iterDate.getDay()];
+    const weekNum = Math.floor(i / 7) + 1;
+    
+    const isStudyDay = days && !!days[dayName];
+    const isMockExamDay = isStudyDay && dayName === mockExamDay;
+
+    let dailyTasks = [];
+
+    if (!isStudyDay) {
+      dailyTasks.push({ type: "rest", section: "Rest", topic: "Rest Day 🧘", questionCount: 0, estimatedMinutes: 0 });
+    } else if (isMockExamDay) {
+      dailyTasks.push({ type: "mock_exam", section: "Mock Exam", topic: "Full SAT Simulator — 4 Modules — Timed", questionCount: 98, estimatedMinutes: 134 });
+    } else {
+      const vocabCount = customQuestions?.vocab || 10;
+      if (studyMode === 'alternating') {
+        const subj = dayAssignments?.[dayName] || (globalStudyDayIndex % 2 === 0 ? "Math" : "English");
+        if (subj === 'Math') {
+           dailyTasks.push({ type: "Math", section: "Math", topic: mathTopics[globalStudyDayIndex % mathTopics.length], questionCount: 20, estimatedMinutes: 30 });
+        } else {
+           dailyTasks.push({ type: "English", section: "English", topic: englishTopics[globalStudyDayIndex % englishTopics.length], questionCount: 20, estimatedMinutes: 30 });
+        }
+        dailyTasks.push({ type: "Vocab", section: "Vocab", topic: "Daily Vocabulary", questionCount: 10, estimatedMinutes: 15 });
+      } else if (studyMode === 'full_coverage') {
+         dailyTasks.push({ type: "Math", section: "Math", topic: mathTopics[globalStudyDayIndex % mathTopics.length], questionCount: 22, estimatedMinutes: 35 });
+         dailyTasks.push({ type: "English", section: "English", topic: englishTopics[globalStudyDayIndex % englishTopics.length], questionCount: 27, estimatedMinutes: 32 });
+         dailyTasks.push({ type: "Vocab", section: "Vocab", topic: "Daily Vocabulary", questionCount: 10, estimatedMinutes: 15 });
+      } else {
+         const mCount = customQuestions?.math || 20;
+         const eCount = customQuestions?.english || 20;
+         dailyTasks.push({ type: "Math", section: "Math", topic: mathTopics[globalStudyDayIndex % mathTopics.length], questionCount: mCount, estimatedMinutes: Math.round(mCount * 1.5) });
+         dailyTasks.push({ type: "English", section: "English", topic: englishTopics[globalStudyDayIndex % englishTopics.length], questionCount: eCount, estimatedMinutes: Math.round(eCount * 1.5) });
+         dailyTasks.push({ type: "Vocab", section: "Vocab", topic: "Daily Vocabulary", questionCount: vocabCount, estimatedMinutes: Math.round(vocabCount * 2) });
+      }
+    }
+
+    const yy = iterDate.getFullYear();
+    const mm = String(iterDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(iterDate.getDate()).padStart(2, '0');
+    const dateStr = `${yy}-${mm}-${dd}`;
+
     plan.schedule.push({
-      day: i,
-      subject: i % 2 === 0 ? "Math" : "Reading & Writing",
-      topic: i % 2 === 0 ? "Algebra" : "Standard English Conventions",
-      durationMinutes: 30,
-      status: i === 1 ? "completed" : "pending"
+      week: weekNum,
+      day: dayName,
+      date: dateStr,
+      tasks: dailyTasks
     });
+    
+    if (isStudyDay) globalStudyDayIndex++;
   }
 
   store.planner.plans[planId] = plan;
@@ -985,12 +1040,18 @@ app.get('/api/planner/agenda', (req, res) => {
   }
   const plan = store.planner.plans[activePlanId];
   
-  const pendingTasks = plan.schedule.filter(t => t.status === 'pending');
+  const pendingTasks = [];
+  plan.schedule.forEach(d => {
+    d.tasks.forEach(t => {
+      if (t.type !== 'rest') pendingTasks.push(t);
+    });
+  });
+
   const agendaTasks = pendingTasks.slice(0, 2).map(task => ({ // Show 2 tasks
       topic: task.topic,
-      subject: task.subject,
-      questions: task.subject === 'Math' ? 22 : 27,
-      time: task.durationMinutes
+      subject: task.section || task.subject,
+      questions: task.questionCount || 20,
+      time: task.estimatedMinutes || 30
   }));
 
   res.json({ tasks: agendaTasks });
