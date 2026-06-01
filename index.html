@@ -1278,11 +1278,26 @@
         <h2>Today's Study Plan</h2>
 
         <!-- Empty state — shown when no plan exists -->
-        <div class="dsps-create-card dsps-empty-card">
+        <div id="dash-plan-empty" class="dsps-create-card dsps-empty-card">
           <div class="dsps-empty-icon">📅</div>
           <h3>Create a study plan</h3>
           <p>Get a personalized study plan based on your test date and skill level. Practice smarter, not harder.</p>
-          <button class="btn-create-plan-solid" onclick="createStudyPlan()">Create my study plan</button>
+          <button class="btn-create-plan-solid" onclick="window.location.href='/study-planner'">Create my study plan</button>
+        </div>
+
+        <!-- Active state -->
+        <div id="dash-plan-active" class="hidden bg-white border border-gray-200 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-sm">
+          <div class="space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="bg-green-100 text-green-700 text-[10px] font-bold uppercase px-2 py-0.5 rounded tracking-widest">Active</span>
+              <span class="text-xs text-gray-500 font-bold" id="dash-plan-status-id"></span>
+            </div>
+            <h3 class="text-xl font-extrabold text-black">Your Study Plan is Active</h3>
+            <p class="text-sm text-gray-500 font-medium">Head over to the planner to see your daily modules and track your progress.</p>
+          </div>
+          <button onclick="window.location.href='/study-planner'" class="bg-[#7C6FE0] hover:bg-[#6a5ed4] text-white text-sm font-bold px-6 py-3.5 rounded-xl transition-all shadow-sm">
+            View Today's Tasks →
+          </button>
         </div>
       </div>
 
@@ -1849,6 +1864,18 @@
           } else {
             pillEl.innerHTML = `<span class="cp-icon">⏰</span><span><strong>${diffDays} day${diffDays !== 1 ? 's' : ''}</strong> until your SAT — ${examLabel}</span>`;
           }
+        }
+
+        // --- Active Study Plan status ---
+        if (data.studyPlan || localStorage.getItem('oneprep_offline_plans')) {
+          document.getElementById('dash-plan-empty').classList.add('hidden');
+          document.getElementById('dash-plan-active').classList.remove('hidden');
+          const idEl = document.getElementById('dash-plan-status-id');
+          if (idEl && data.studyPlan) idEl.textContent = `ID: ${data.studyPlan.planId}`;
+          else if (idEl) idEl.textContent = `ID: Active Plan`;
+        } else {
+          document.getElementById('dash-plan-empty').classList.remove('hidden');
+          document.getElementById('dash-plan-active').classList.add('hidden');
         }
 
       } catch (err) {

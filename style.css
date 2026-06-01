@@ -3257,7 +3257,7 @@ body.dark .chat-input-area {
   background: #1a1722;
 }
 .chat-msg-input {
-  flex: 1;it -
+  flex: 1;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 12px 16px;
