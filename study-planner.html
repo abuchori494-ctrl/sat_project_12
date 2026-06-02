@@ -754,15 +754,18 @@
     <section id="view-dashboard" class="hidden space-y-8 stagger-in max-w-3xl mx-auto">
       
       <!-- Header Card -->
-      <div class="bg-white rounded-2xl shadow-sm p-6 md:p-8 flex flex-col md:flex-row justify-between items-start gap-6 border border-gray-100 border-l-4 border-l-[#7C6FE0]">
+      <div class="bg-white rounded-2xl p-8 md:p-10 flex flex-col md:flex-row justify-between items-start gap-6 border border-gray-100 border-l-4 border-l-[#7C6FE0]" style="box-shadow: 0 4px 24px -4px rgba(108, 71, 255, 0.06), 0 12px 48px -12px rgba(0, 0, 0, 0.04);">
         <div class="space-y-4 flex-1 w-full">
           <div>
             <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Your Personalized SAT Prep Plan</h2>
-            <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-500 font-medium mt-2">
-              <span class="flex items-center gap-1"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Goal: <strong class="text-gray-900" id="dash-goal-score">1520</strong></span>
-              <span class="flex items-center gap-1"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> <strong class="text-gray-900" id="dash-exam-date">Dec 5</strong></span>
-              <span class="flex items-center gap-1"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> <strong class="text-gray-900" id="dash-days-left">--</strong> Days Left</span>
-              <span class="flex items-center gap-1"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg> Mode: <strong class="text-gray-900" id="dash-study-mode">Custom</strong></span>
+            <div class="flex flex-wrap items-center justify-start gap-x-4 gap-y-2 text-sm text-gray-500 font-medium mt-2 leading-none">
+              <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Goal: <strong class="text-gray-900" id="dash-goal-score">1520</strong></span>
+              <span class="text-gray-300 hidden md:inline self-center -translate-y-[1px]">|</span>
+              <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> <strong class="text-gray-900" id="dash-exam-date">Dec 5</strong></span>
+              <span class="text-gray-300 hidden md:inline self-center -translate-y-[1px]">|</span>
+              <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> <strong class="text-gray-900" id="dash-days-left">--</strong> Days Left</span>
+              <span class="text-gray-300 hidden md:inline self-center -translate-y-[1px]">|</span>
+              <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg> Mode: <strong class="text-gray-900" id="dash-study-mode">Custom</strong></span>
             </div>
           </div>
 
@@ -771,7 +774,7 @@
               <span id="dash-week-progress-text">Week 1 of 4</span>
               <span id="dash-total-progress-text">0% Complete</span>
             </div>
-            <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+            <div class="w-full bg-[#EDE9FE] h-2 rounded-full overflow-hidden">
               <div id="dash-total-progress-bar" class="bg-[#7C6FE0] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
             </div>
           </div>
@@ -795,7 +798,7 @@
       </div>
 
       <!-- Daily Plan Cards List -->
-      <div class="space-y-4" id="schedule-calendar">
+      <div class="space-y-4 !mt-4" id="schedule-calendar">
           <!-- Injected dynamically -->
       </div>
 
@@ -806,7 +809,7 @@
             <span id="weekly-completed-text">0 of 5 tasks completed this week</span>
             <span id="weekly-motivational-text" class="text-[#7C6FE0]">Great start! Keep going 🔥</span>
           </div>
-          <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+          <div class="w-full bg-[#ecfdf5] h-2 rounded-full overflow-hidden">
             <div id="weekly-progress-bar" class="bg-[#10B981] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
           </div>
         </div>
@@ -1475,10 +1478,10 @@
           const originalTabs = document.getElementById('week-tabs');
           if (originalTabs) {
               originalTabs.outerHTML = `
-                <div class="relative flex items-center border-b border-gray-200 pb-3" id="week-tabs-wrapper">
-                    <button onclick="document.getElementById('week-tabs').scrollBy({left:-200, behavior:'smooth'})" class="hidden md:flex absolute left-0 z-10 w-8 h-8 bg-white shadow flex items-center justify-center -ml-3 rounded-full hover:bg-gray-50 text-[#7C6FE0] font-bold border border-gray-100">&lt;</button>
-                    <div class="flex gap-2 overflow-x-auto hide-scrollbar flex-1 scroll-smooth px-2" id="week-tabs" style="scrollbar-width: none;"></div>
-                    <button onclick="document.getElementById('week-tabs').scrollBy({left:200, behavior:'smooth'})" class="hidden md:flex absolute right-0 z-10 w-8 h-8 bg-white shadow flex items-center justify-center -mr-3 rounded-full hover:bg-gray-50 text-[#7C6FE0] font-bold border border-gray-100">&gt;</button>
+                <div class="relative flex items-center border-b border-gray-200 pb-1" id="week-tabs-wrapper">
+                    <button onclick="document.getElementById('week-tabs').scrollBy({left:-200, behavior:'smooth'})" class="hidden md:flex absolute left-0 z-10 w-10 h-10 bg-white shadow-sm flex items-center justify-center -ml-4 rounded-full hover:bg-[#F8F7FF] hover:border-[#7C6FE0] text-[#7C6FE0] hover:text-[#5B21B6] font-bold border-2 border-[#EDE9FE] transition-all"><span class="-translate-x-[1px]">&lt;</span></button>
+                    <div class="flex gap-2 overflow-x-auto hide-scrollbar flex-1 scroll-smooth px-4" id="week-tabs" style="scrollbar-width: none;"></div>
+                    <button onclick="document.getElementById('week-tabs').scrollBy({left:200, behavior:'smooth'})" class="hidden md:flex absolute right-0 z-10 w-10 h-10 bg-white shadow-sm flex items-center justify-center -mr-4 rounded-full hover:bg-[#F8F7FF] hover:border-[#7C6FE0] text-[#7C6FE0] hover:text-[#5B21B6] font-bold border-2 border-[#EDE9FE] transition-all"><span class="translate-x-[1px]">&gt;</span></button>
                 </div>
               `;
           }
@@ -1537,6 +1540,10 @@
     function renderCalendar() {
       const calendar = document.getElementById('schedule-calendar');
       calendar.innerHTML = '';
+      calendar.className = 'space-y-4 !mt-4'; // Reset from Kanban
+      
+      const headerContainer = document.getElementById('board-header-container');
+      if (headerContainer) headerContainer.remove();
 
       let checkedTasks = JSON.parse(localStorage.getItem('oneprep_plan_checks')) || {};
 
@@ -1568,10 +1575,10 @@
         const trueDayIndex = dayObj.dayIndex;
         
         const dayHeader = document.createElement('div');
-        dayHeader.className = "mt-8 mb-4 flex items-center gap-3";
+        dayHeader.className = "mt-8 mb-4 flex items-center justify-start gap-3 leading-none";
         dayHeader.innerHTML = `
-            <h3 class="text-[1rem] font-[700] text-[#4A4580] uppercase tracking-wide">DAY ${trueDayIndex + 1} — <span class="text-[#6B7280] capitalize">${dayObj.fullDateStr}</span></h3>
-            ${dayObj.isToday ? '<span class="bg-[#7C6FE0] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Today</span>' : ''}
+            <h3 class="text-[0.95rem] font-[600] text-slate-500 uppercase tracking-widest flex items-center gap-2">DAY ${trueDayIndex + 1} <span class="text-slate-300">|</span> <span class="text-slate-600 capitalize font-medium tracking-normal">${dayObj.fullDateStr}</span></h3>
+            ${dayObj.isToday ? '<span class="bg-[#7C6FE0] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider self-center">Today</span>' : ''}
         `;
         calendar.appendChild(dayHeader);
 
@@ -1587,8 +1594,7 @@
             const isMock = task.type === 'Mock Exam';
 
             const card = document.createElement('div');
-            card.className = `mb-3 bg-white rounded-[12px] p-5 shadow-sm transition-all ${isChecked && !isRest ? 'opacity-60' : 'hover:shadow-md'} ${isRest ? 'bg-[#F9FAFB]' : ''}`;
-            card.style.border = `1px solid #EDE9FE`;
+            card.className = `group mb-4 bg-white rounded-xl px-6 py-5 border border-[#EDE9FE] transition-all duration-300 ${isChecked && !isRest ? 'opacity-60' : 'hover:shadow-[0_8px_30px_rgba(108,71,255,0.06),0_4px_12px_rgba(0,0,0,0.03)] hover:border-[#C4B5FD] hover:-translate-y-[2px]'} ${isRest ? 'bg-[#F9FAFB]' : ''}`;
             card.style.borderLeft = `4px solid ${style.border}`;
             
             let actionHtml = '';
@@ -1599,7 +1605,7 @@
             } else {
                 actionHtml = `
                     <div class="relative flex items-center justify-center w-6 h-6 cursor-pointer" onclick="togglePlanCheck(this, '${currentPlanId}', ${trueDayIndex}, ${taskIdx}, '${style.border}')">
-                      <div class="checkbox-box w-6 h-6 rounded-md border-2 transition-all flex items-center justify-center" style="border-color: ${isChecked ? style.border : '#D1D5DB'}; background-color: ${isChecked ? style.border : 'transparent'};">
+                      <div class="checkbox-box w-6 h-6 rounded border-[3px] transition-all group-hover:border-[#7C6FE0] hover:bg-[#F0EFFE] flex items-center justify-center" style="border-color: ${isChecked ? style.border : '#A78BFA'}; background-color: ${isChecked ? style.border : 'transparent'};">
                         <svg class="checkmark w-4 h-4 text-white transition-all ${isChecked ? 'opacity-100' : 'opacity-0'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                       </div>
                     </div>
@@ -1610,7 +1616,7 @@
               <div class="flex justify-between items-center gap-4">
                 <div class="space-y-1.5 flex-1">
                   <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded tracking-wider" style="background-color: ${style.badgeBg}; color: ${style.badgeText};">
+                    <span class="text-[10px] font-bold uppercase px-3 py-1 rounded-md tracking-widest" style="background-color: ${style.badgeBg}; color: ${style.badgeText};">
                       ${style.icon} ${task.type}
                     </span>
                     <h4 class="task-title text-sm font-bold text-[#1A1035] truncate max-w-[280px] ${isChecked && !isRest ? 'line-through text-gray-500' : ''}">${escapeHtml(task.topic)}</h4>
@@ -1892,7 +1898,9 @@
                dayObj.tasks.push({ type: "Vocab", section: "Vocab", topic: "Daily Vocabulary", questionCount: 10, estimatedMinutes: 15 });
            } else if (studyMode === 'full_coverage') {
                dayObj.tasks.push({ type: 'Math', topic: mathTopics[globalStudyDayIndex % mathTopics.length], questionCount: 22, estimatedMinutes: 35 });
+               dayObj.tasks.push({ type: 'Math', topic: mathTopics[(globalStudyDayIndex + 1) % mathTopics.length], questionCount: 22, estimatedMinutes: 35 });
                dayObj.tasks.push({ type: 'English', topic: englishTopics[globalStudyDayIndex % englishTopics.length], questionCount: 27, estimatedMinutes: 32 });
+               dayObj.tasks.push({ type: 'English', topic: englishTopics[(globalStudyDayIndex + 1) % englishTopics.length], questionCount: 27, estimatedMinutes: 32 });
                dayObj.tasks.push({ type: "Vocab", section: "Vocab", topic: "Daily Vocabulary", questionCount: 10, estimatedMinutes: 15 });
            } else if (studyMode === 'custom') {
                const mathQ = customQ?.math || 20;

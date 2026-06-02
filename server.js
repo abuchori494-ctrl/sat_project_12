@@ -1003,7 +1003,9 @@ app.post('/api/planner/create', (req, res) => {
         dailyTasks.push({ type: "Vocab", section: "Vocab", topic: "Daily Vocabulary", questionCount: 10, estimatedMinutes: 15 });
       } else if (studyMode === 'full_coverage') {
          dailyTasks.push({ type: "Math", section: "Math", topic: mathTopics[globalStudyDayIndex % mathTopics.length], questionCount: 22, estimatedMinutes: 35 });
+         dailyTasks.push({ type: "Math", section: "Math", topic: mathTopics[(globalStudyDayIndex + 1) % mathTopics.length], questionCount: 22, estimatedMinutes: 35 });
          dailyTasks.push({ type: "English", section: "English", topic: englishTopics[globalStudyDayIndex % englishTopics.length], questionCount: 27, estimatedMinutes: 32 });
+         dailyTasks.push({ type: "English", section: "English", topic: englishTopics[(globalStudyDayIndex + 1) % englishTopics.length], questionCount: 27, estimatedMinutes: 32 });
          dailyTasks.push({ type: "Vocab", section: "Vocab", topic: "Daily Vocabulary", questionCount: 10, estimatedMinutes: 15 });
       } else {
          const mCount = customQuestions?.math || 20;

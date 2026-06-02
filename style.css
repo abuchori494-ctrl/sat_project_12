@@ -3,7 +3,7 @@
    ========================================================================== */
 
 :root {
-  --bg-app: #F8F7FF;
+  --bg-app: #F3F4F6;
   --bg-card: #ffffff;
   --border: #EDE9FE;
   --text-main: #1A1035;
@@ -3412,12 +3412,12 @@ body.dark .chat-msg-input {
   font-weight: 700;
   color: #64748b;
   letter-spacing: 0.08em;
-  padding: 12px 24px 4px;
+  padding: 12px 16px 4px 42px;
   text-transform: uppercase;
 }
 
 #sidebar .badge-new {
-  background: var(--accent);
+  background: #10B981;
   color: #fff;
   font-size: 0.65rem;
   font-weight: 700;
