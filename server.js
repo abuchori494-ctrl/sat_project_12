@@ -67,6 +67,11 @@ const store = {
 // PERSISTENCE LAYER (To survive Nodemon / Laptop restarts)
 // ==========================================================
 const DB_PATH = path.join(__dirname, 'db.json');
+const EXAM_QUESTIONS_PATH = path.join(__dirname, 'examQuestions.json');
+const ATTEMPTS_PATH = path.join(__dirname, 'examAttempts.json');
+
+let examQuestionsDb = {};
+let examAttempts = {};
 
 try {
   if (fs.existsSync(DB_PATH)) {
@@ -80,6 +85,24 @@ try {
   console.error("Failed to load db.json on startup", err);
 }
 
+try {
+  if (fs.existsSync(EXAM_QUESTIONS_PATH)) {
+    const qData = fs.readFileSync(EXAM_QUESTIONS_PATH, 'utf-8');
+    examQuestionsDb = JSON.parse(qData);
+  }
+} catch (err) {
+  console.error("Failed to load examQuestions.json on startup", err);
+}
+
+try {
+  if (fs.existsSync(ATTEMPTS_PATH)) {
+    const aData = fs.readFileSync(ATTEMPTS_PATH, 'utf-8');
+    examAttempts = JSON.parse(aData);
+  }
+} catch (err) {
+  console.error("Failed to load examAttempts.json on startup", err);
+}
+
 function persistPlans() {
   try {
     fs.writeFileSync(DB_PATH, JSON.stringify(store.planner.plans, null, 2));
@@ -87,6 +110,15 @@ function persistPlans() {
     console.error("Failed to write to db.json", err);
   }
 }
+
+function persistAttempts() {
+  try {
+    fs.writeFileSync(ATTEMPTS_PATH, JSON.stringify(examAttempts, null, 2));
+  } catch (err) {
+    console.error("Failed to write to examAttempts.json", err);
+  }
+}
+
 
 // ==========================================================
 // SEEDS: 100 COLLEGES
@@ -683,12 +715,124 @@ app.get('/question-bank', (req, res) => res.sendFile(path.join(__dirname, 'quest
 app.get('/study-planner', (req, res) => res.sendFile(path.join(__dirname, 'study-planner.html')));
 app.get('/vocab', (req, res) => res.sendFile(path.join(__dirname, 'vocab.html')));
 
+// Route to serve the exam simulator for specific past exam subject versions
+app.get('/past-exams/:year/:month/:version/:subject', (req, res) => {
+  res.sendFile(path.join(__dirname, 'exam.html'));
+});
+
 // Fallback handles routing data views nicely
 app.get('/question-rush', (req, res) => res.sendFile(path.join(__dirname, 'question-bank.html')));
 app.get('/challenge', (req, res) => res.sendFile(path.join(__dirname, 'question-bank.html')));
 app.get('/predicted-tests', (req, res) => res.sendFile(path.join(__dirname, 'question-bank.html')));
 app.get('/saved', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/mistakes', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+
+// ==========================================================
+// EXAM SIMULATOR API
+// ==========================================================
+app.get('/api/exams/:examId/questions', (req, res) => {
+  const { examId } = req.params;
+  const targetModule = req.query.module || 'ebrw1';
+  if (examQuestionsDb && examQuestionsDb.examId === examId) {
+    if (examQuestionsDb.modules && examQuestionsDb.modules[targetModule]) {
+      const mod = examQuestionsDb.modules[targetModule];
+      return res.json({
+        examId,
+        module: targetModule,
+        moduleName: mod.moduleName,
+        totalQuestions: mod.totalQuestions,
+        timeLimit: mod.timeLimit,
+        questions: mod.questions
+      });
+    } else {
+      if (examQuestionsDb.questions) {
+        return res.json(examQuestionsDb);
+      }
+      return res.status(404).json({ error: `Module ${targetModule} not found for exam ${examId}.` });
+    }
+  }
+  res.status(404).json({ error: `Questions for exam ${examId} not found.` });
+});
+
+app.post('/api/exams/:examId/submit', (req, res) => {
+  const { examId } = req.params;
+  const { answers, timeSpent, module: bodyModule } = req.body;
+  const targetModule = bodyModule || req.query.module || 'ebrw1';
+
+  if (examQuestionsDb && examQuestionsDb.examId === examId) {
+    let questions = [];
+    if (examQuestionsDb.modules && examQuestionsDb.modules[targetModule]) {
+      questions = examQuestionsDb.modules[targetModule].questions;
+    } else if (examQuestionsDb.questions) {
+      questions = examQuestionsDb.questions;
+    }
+
+    if (!questions || questions.length === 0) {
+      return res.status(400).json({ error: `No questions found for module ${targetModule}` });
+    }
+
+    let correctCount = 0;
+    const results = [];
+
+    questions.forEach(q => {
+      const userAnswer = answers[q.questionNumber];
+      let isCorrect = false;
+      if (userAnswer !== undefined && userAnswer !== null) {
+        const cleanedUser = String(userAnswer).trim().toLowerCase();
+        const cleanedCorrect = String(q.correctAnswer).trim().toLowerCase();
+        isCorrect = cleanedUser === cleanedCorrect;
+      }
+      if (isCorrect) correctCount++;
+
+      results.push({
+        questionNumber: q.questionNumber,
+        userAnswer,
+        correctAnswer: q.correctAnswer,
+        isCorrect,
+        explanation: q.explanation
+      });
+
+      // Log answer in global history
+      store.questions.answered.push({
+        questionId: q.id,
+        correct: isCorrect,
+        timeSpent: Math.round(timeSpent / questions.length) || 15,
+        topic: q.module || targetModule,
+        subject: targetModule.includes('math') ? 'math' : 'reading',
+        date: new Date().toISOString().split('T')[0]
+      });
+    });
+
+    const total = questions.length;
+    const percentage = Math.round((correctCount / total) * 100);
+
+    const attemptKey = `${examId}-${targetModule}`;
+    examAttempts[attemptKey] = {
+      score: correctCount,
+      total,
+      percentage,
+      answers,
+      timestamp: new Date().toISOString()
+    };
+    persistAttempts();
+    updateStreak();
+
+    return res.json({
+      success: true,
+      score: correctCount,
+      total,
+      percentage,
+      results
+    });
+  }
+
+  res.status(404).json({ error: `Exam ${examId} not found.` });
+});
+
+app.get('/api/exams/attempts', (req, res) => {
+  res.json(examAttempts);
+});
+
 
 // ==========================================================
 // USER API
