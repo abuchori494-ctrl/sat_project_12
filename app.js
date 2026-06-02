@@ -126,6 +126,10 @@ function show(viewId) {
   const activeBtn = document.getElementById(`nl-${viewId}`);
   if (activeBtn) activeBtn.classList.add('active');
   
+  if (viewId === 'dashboard' && typeof renderDailyAgenda === 'function') {
+      renderDailyAgenda(); // Sync visually when returning to home dashboard
+  }
+
   // Custom headers & clean states
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -1220,25 +1224,81 @@ async function renderDailyAgenda() {
     const res = await fetch(API_BASE + '/api/planner/agenda');
     if (!res.ok) throw new Error('Failed to fetch agenda');
     const data = await res.json();
+    let tasks = data.tasks;
+
+    if (!tasks || tasks.length === 0) {
+      const offlinePlans = JSON.parse(localStorage.getItem('oneprep_offline_plans')) || {};
+      const planId = Object.keys(offlinePlans)[0];
+      if (planId) {
+        const planObj = offlinePlans[planId];
+        const todayStr = new Date().toISOString().split('T')[0];
+        let todaySchedule = planObj.plan.find(s => s.date === todayStr);
+        if (!todaySchedule && planObj.plan.length > 0) todaySchedule = planObj.plan[0];
+        
+        if (todaySchedule) {
+          const dayIndex = planObj.plan.indexOf(todaySchedule);
+          tasks = todaySchedule.tasks.filter(t => t.type !== 'rest').map((t, idx) => ({
+            taskId: `${planId}_day${dayIndex}_task${idx}`,
+            topic: t.topic,
+            subject: t.section || t.subject || 'Unknown',
+            questions: t.questionCount || 20,
+            time: t.estimatedMinutes || 30
+          }));
+        }
+      }
+    }
 
     const container = document.getElementById('daily-agenda-tasks');
     if (!container) return;
 
-    if (data.tasks.length === 0) {
+    if (!tasks || tasks.length === 0) {
       container.innerHTML = `<p class="dac-prompt">Create a study plan to get your daily agenda.</p>`;
       return;
     }
 
-    container.innerHTML = data.tasks.map(task => `
-      <div class="da-task-card">
-        <h4>${task.topic}</h4>
-        <div class="da-meta">
-          <span class="da-meta-pill">${task.questions} Questions</span>
-          <span class="da-meta-pill">~${task.time} min</span>
+    const checkedTasks = JSON.parse(localStorage.getItem('oneprep_plan_checks')) || {};
+
+    container.innerHTML = tasks.map(task => {
+      let badgeStyle = 'background: #DBEAFE; color: #1D4ED8;'; // Blue (Math default)
+      let subjectText = (task.subject || 'Math').toUpperCase();
+      
+      if (subjectText.includes('ENGLISH') || subjectText.includes('READING')) {
+        badgeStyle = 'background: #FAE8FF; color: #A21CAF;'; // Fuchsia
+        subjectText = 'ENGLISH';
+      } else if (subjectText.includes('VOCAB')) {
+        badgeStyle = 'background: #FEF3C7; color: #B45309;'; // Amber
+        subjectText = 'VOCAB';
+      } else {
+        subjectText = 'MATH';
+      }
+
+      const isChecked = !!checkedTasks[task.taskId];
+      const cbBg = isChecked ? '#7C6FE0' : '#fff';
+      const cbBorder = isChecked ? '#7C6FE0' : '#cbd5e1';
+      const checkOp = isChecked ? '1' : '0';
+      const titleStyle = isChecked ? 'text-decoration: line-through; color: #94a3b8;' : '';
+
+      return `
+        <div class="da-task-card ${isChecked ? 'completed' : ''}" onclick="startPracticeTopic('${task.topic}')" style="margin-bottom: 10px;">
+          <div class="da-task-info">
+            <div style="margin-bottom: 4px;">
+              <span style="${badgeStyle} font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.05em;">${subjectText}</span>
+            </div>
+            <h4 style="${titleStyle}">${task.topic}</h4>
+            <div class="da-meta">
+              <span class="da-meta-pill">${task.questions} Questions</span>
+              <span class="da-meta-pill">~${task.time} min</span>
+            </div>
+          </div>
+          <div class="da-task-action" style="display: flex; align-items: center; gap: 12px;">
+            <div class="da-task-checkbox" onclick="toggleAgendaTask(this, event, '${task.taskId}')" style="width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid ${cbBorder}; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; background: ${cbBg};">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="check-icon" style="opacity: ${checkOp}; transition: opacity 0.2s;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
         </div>
-        <a href="#" class="da-start-link" onclick="startPracticeTopic('${task.topic}'); return false;">Start practice →</a>
-      </div>
-    `).join('');
+      `;
+    }).join('');
 
   } catch (error) {
     console.error("Error rendering daily agenda:", error);
@@ -1246,6 +1306,39 @@ async function renderDailyAgenda() {
     if(container) container.innerHTML = `<p class="dac-prompt">Could not load agenda.</p>`;
   }
 }
+
+window.toggleAgendaTask = function(el, e, taskId) {
+  e.stopPropagation(); // CRITICAL FE FIX: Prevent parent onclick navigation
+  
+  let checkedTasks = JSON.parse(localStorage.getItem('oneprep_plan_checks')) || {};
+  const isCurrentlyChecked = !!checkedTasks[taskId];
+  const willBeChecked = !isCurrentlyChecked;
+  
+  checkedTasks[taskId] = willBeChecked;
+  localStorage.setItem('oneprep_plan_checks', JSON.stringify(checkedTasks));
+
+  const card = el.closest('.da-task-card');
+  const isCompleted = el.classList.toggle('completed');
+  
+  const checkIcon = el.querySelector('.check-icon');
+  const title = card.querySelector('h4');
+  
+  if (willBeChecked) {
+    el.style.background = '#7C6FE0';
+    el.style.borderColor = '#7C6FE0';
+    checkIcon.style.opacity = '1';
+    
+    title.style.textDecoration = 'line-through';
+    title.style.color = '#94a3b8'; // slate-400
+  } else {
+    el.style.background = '#fff';
+    el.style.borderColor = '#cbd5e1';
+    checkIcon.style.opacity = '0';
+    
+    title.style.textDecoration = 'none';
+    title.style.color = ''; // Revert to default
+  }
+};
 
 function startPracticeTopic(topic) {
   // This could navigate to the question bank view filtered by topic
@@ -1511,13 +1604,16 @@ async function loadUserData() {
 
 function toggleDark() {
   document.documentElement.classList.toggle('dark');
-  localStorage.setItem('darkMode', 
-    document.documentElement.classList.contains('dark'));
+  document.body.classList.toggle('dark');
+  const isDark = document.documentElement.classList.contains('dark');
+  localStorage.setItem('darkMode', isDark);
+  localStorage.setItem('oneprep_theme', isDark ? 'dark' : 'light');
 }
 
 // Apply saved dark mode
-if (localStorage.getItem('darkMode') === 'true') {
+if (localStorage.getItem('darkMode') === 'true' || localStorage.getItem('oneprep_theme') === 'dark') {
   document.documentElement.classList.add('dark');
+  document.body.classList.add('dark');
 }
 
 function showToast(message, type = 'success') {

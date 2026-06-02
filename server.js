@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 const PORT = 3000;
 
@@ -61,6 +62,31 @@ const store = {
     saved: []        // array of college ids
   }
 };
+
+// ==========================================================
+// PERSISTENCE LAYER (To survive Nodemon / Laptop restarts)
+// ==========================================================
+const DB_PATH = path.join(__dirname, 'db.json');
+
+try {
+  if (fs.existsSync(DB_PATH)) {
+    const rawData = fs.readFileSync(DB_PATH, 'utf-8');
+    const savedData = JSON.parse(rawData);
+    if (savedData) {
+      store.planner.plans = savedData; // Restore the plans
+    }
+  }
+} catch (err) {
+  console.error("Failed to load db.json on startup", err);
+}
+
+function persistPlans() {
+  try {
+    fs.writeFileSync(DB_PATH, JSON.stringify(store.planner.plans, null, 2));
+  } catch (err) {
+    console.error("Failed to write to db.json", err);
+  }
+}
 
 // ==========================================================
 // SEEDS: 100 COLLEGES
@@ -1032,6 +1058,7 @@ app.post('/api/planner/create', (req, res) => {
   }
 
   store.planner.plans[planId] = plan;
+  persistPlans(); // Save to db.json immediately so it survives restarts
   res.json({ success: true, plan });
 });
 
@@ -1042,19 +1069,28 @@ app.get('/api/planner/agenda', (req, res) => {
   }
   const plan = store.planner.plans[activePlanId];
   
-  const pendingTasks = [];
-  plan.schedule.forEach(d => {
-    d.tasks.forEach(t => {
-      if (t.type !== 'rest') pendingTasks.push(t);
-    });
-  });
+  const todayStr = new Date().toISOString().split('T')[0];
+  let todaySchedule = plan.schedule.find(s => s.date === todayStr);
+  
+  if (!todaySchedule && plan.schedule.length > 0) {
+    todaySchedule = plan.schedule[0];
+  }
+  
+  if (!todaySchedule) {
+    return res.json({ tasks: [] });
+  }
 
-  const agendaTasks = pendingTasks.slice(0, 2).map(task => ({ // Show 2 tasks
+  const dayIndex = plan.schedule.indexOf(todaySchedule);
+
+  const agendaTasks = todaySchedule.tasks
+    .filter(t => t.type !== 'rest')
+    .map((task, taskIdx) => ({
+      taskId: `${activePlanId}_day${dayIndex}_task${taskIdx}`,
       topic: task.topic,
-      subject: task.section || task.subject,
+      subject: task.section || task.subject || 'Unknown',
       questions: task.questionCount || 20,
       time: task.estimatedMinutes || 30
-  }));
+    }));
 
   res.json({ tasks: agendaTasks });
 });

@@ -93,53 +93,52 @@
   <!-- ═══ VERTICAL SIDEBAR NAV (EXACT MOCKUP MATCH) ═══ -->
   <nav id="sidebar">
     <!-- Logo -->
-    <div class="logo" onclick="window.location.href='/'">
+    <div class="logo" onclick="window.location.href='/'" style="cursor:pointer">
       <span class="logo-icon">🤖</span>
-      <span class="logo-text">OnePrep</span>
+      <span class="logo-text">SAT Platform</span>
     </div>
-    
+
     <!-- Exam Selector -->
-    <select class="exam-selector" onchange="showToast('Selected ' + this.value.toUpperCase())">
+    <select class="exam-selector" onchange="if(typeof showToast === 'function') showToast('Selected ' + this.value.toUpperCase())">
       <option>SAT</option>
       <option>ACT</option>
     </select>
 
     <!-- Nav Links -->
     <ul class="nav-links">
-      <li><a href="/" data-page="home">🏠 Home</a></li>
-      <li><a href="/" onclick="window.location.href='/?chat=true'; return false;" data-page="ask-preppy">🤖 Ask Preppy AI</a></li>
+      <li class="section-label text-xs font-bold tracking-wider text-slate-400 uppercase pl-5" style="padding-left: 1.25rem;">DASHBOARD</li>
+      <li><a href="/" onclick="if(typeof show === 'function'){show('dashboard'); return false;}" data-page="home">🏠 Home</a></li>
       <li><a href="/study-planner" data-page="study-planner">📅 Study Planner</a></li>
       <li>
         <a href="/analytics" data-page="analytics">
           📊 Analytics <span class="badge-new">New</span>
         </a>
       </li>
-      
-      <li class="section-label">PRACTICE</li>
+      <li><a href="/" onclick="if(typeof show === 'function'){show('chat'); return false;}" data-page="ask-preppy">🤖 Ask Preppy AI</a></li>
+
+      <li class="section-label text-xs font-bold tracking-wider text-slate-400 uppercase pl-5" style="padding-left: 1.25rem;">PRACTICE</li>
       <li><a href="/question-bank" data-page="question-bank">🔲 Question Bank</a></li>
       <li><a href="/question-rush" data-page="question-rush">⚡ Question Rush</a></li>
-      <li><a href="/challenge" data-page="challenge">🎯 Challenge Questions</a></li>
       <li><a href="/predicted-tests" data-page="predicted-tests">📝 Predicted Tests</a></li>
-      <li><a href="/vocab" data-page="vocab">📚 Vocab</a></li>
-
-      <li class="section-label">PROGRESS</li>
-      <li><a href="/" data-page="saved">🔖 Saved</a></li>
-      <li><a href="/" data-page="mistakes">❌ Mistakes Log</a></li>
-      
-      <li class="section-label">COLLEGE</li>
-      <li><a href="/colleges" data-page="colleges" class="active">🎓 Browse Colleges</a></li>
+      <li><a href="/past-exams.html" data-page="past-exams">📝 Past Exams</a></li>
     </ul>
 
     <!-- Bottom items -->
     <div class="sidebar-bottom">
-      <a href="#" onclick="showToast('Join Us loaded!'); return false;">👥 Join Us</a>
-      <button onclick="toggleDark()">🌙 Switch To Dark</button>
-      <a href="#" onclick="showToast('Pro features unlocked!'); return false;">⬆️ Upgrade</a>
-      <a href="#" onclick="showToast('Other options'); return false;">⋯ Other</a>
-      <div class="user-profile" onclick="showToast('Settings')">
+      <button onclick="if(typeof toggleDark === 'function') toggleDark()">🌙 Switch To Dark</button>
+      <a href="#" onclick="if(typeof showToast === 'function') showToast('Pro features unlocked!'); return false;">⬆️ Upgrade</a>
+      
+      <!-- Profile with Dropdown -->
+      <div class="user-profile" style="position: relative; cursor: pointer;" onclick="const d = this.querySelector('.profile-dropdown'); if(d.style.display==='none'){d.style.display='block'}else{d.style.display='none'}">
         <span class="avatar">A</span>
         <span>Abdullah Abdus...</span>
         <span>⚙️</span>
+        <!-- Dropdown Menu -->
+        <div class="profile-dropdown" style="display: none; position: absolute; bottom: 100%; left: 0; width: 100%; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 50; margin-bottom: 0.5rem; overflow: hidden;">
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151; border-bottom: 1px solid #f3f4f6;" onclick="event.stopPropagation(); if(typeof showToast === 'function') showToast('Account Settings')">⚙️ Account Settings</a>
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151; border-bottom: 1px solid #f3f4f6;" onclick="event.stopPropagation(); if(typeof showToast === 'function') showToast('Join Us loaded!')">👥 Join Us</a>
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151;" onclick="event.stopPropagation(); if(typeof showToast === 'function') showToast('Other options')">⋯ Other</a>
+        </div>
       </div>
     </div>
   </nav>

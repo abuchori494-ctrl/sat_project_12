@@ -94,12 +94,12 @@
     }
     #sidebar .nav-links li { margin-bottom: 2px; }
     #sidebar .nav-links li.section-label {
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 800;
-      color: rgba(255,255,255,0.35);
+      color: rgba(255,255,255,0.45);
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 12px 10px 4px;
+      padding: 16px 12px 6px 14px; /* Fix 3: aligned padding */
     }
     #sidebar .nav-links a {
       display: flex;
@@ -204,11 +204,11 @@
       background: var(--lav-bg);
     }
 
-    /* Dashboard view: zero top padding so hero starts immediately — FIX 4 */
+    /* Dashboard view */
     #v-dashboard {
-      max-width: 1200px;
+      max-width: 1120px;
       margin: 0 auto;
-      padding: 0 28px 60px;
+      padding: 40px 48px 80px; /* Improved global container spacing */
     }
     .view { display: none; animation: viewFade 0.35s ease; }
     .view.active { display: block; }
@@ -287,10 +287,9 @@
 
     /* Headline */
     .hero-h1 {
-      font-family: 'Playfair Display', Georgia, serif;
+      font-family: var(--font-sans);
       font-size: clamp(2.2rem, 4vw, 3.4rem);
-      font-weight: 500;
-      font-style: italic;
+      font-weight: 800;
       line-height: 1.15;
       color: var(--lav-dark);
       letter-spacing: -0.02em;
@@ -331,9 +330,9 @@
       background: #6a5ed4;
     }
     .btn-hero-outline {
-      background: transparent;
+      background: var(--lav-light);
       color: var(--lav-accent);
-      border: 2px solid var(--lav-accent);
+      border: 2px solid transparent;
       padding: 12px 26px;
       border-radius: 10px;
       font-size: 0.95rem;
@@ -343,8 +342,8 @@
       transition: all 0.2s ease;
     }
     .btn-hero-outline:hover {
-      background: var(--lav-accent);
-      color: #fff;
+      background: rgba(124, 111, 224, 0.25);
+      border-color: var(--lav-accent);
     }
 
     /* Stats row */
@@ -390,9 +389,9 @@
       background: var(--lav-light);
       border: 1px solid var(--lav-border);
       border-radius: 99px;
-      padding: 8px 18px;
-      font-size: 0.82rem;
-      font-weight: 600;
+      padding: 10px 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
       color: var(--lav-dark);
     }
     .hero-countdown-pill .cp-icon { font-size: 14px; }
@@ -408,12 +407,12 @@
       border: none;
     }
     .founder-quote {
-      font-family: 'Playfair Display', Georgia, serif;
+      font-family: var(--font-sans);
       font-size: clamp(1.8rem, 4vw, 3.5rem);
-      font-weight: 500;
+      font-weight: 700;
       color: var(--lav-dark);
       line-height: 1.2;
-      font-style: italic;
+      letter-spacing: -0.02em;
     }
     .founder-author {
       margin-top: 16px;
@@ -449,6 +448,10 @@
       color: var(--lav-gray);
       text-transform: uppercase;
       margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
     }
     .ssc-score {
       font-size: 2.2rem;
@@ -620,6 +623,7 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 14px;
+      line-height: 1;
     }
     .ctc-header h3 {
       font-size: 0.95rem;
@@ -627,7 +631,7 @@
       color: var(--lav-dark);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
     #ctc-summary {
       font-size: 0.78rem;
@@ -688,21 +692,31 @@
     #daily-agenda-tasks .da-task-card {
       background: var(--lav-light);
       border: 1px solid var(--lav-border);
-      border-radius: 12px;
-      padding: 14px 16px;
+      border-radius: 12px; /* Inner card radius */
+      padding: 10px 16px; /* Drastically reduced vertical padding */
       margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    #daily-agenda-tasks .da-task-card:hover {
+      background: #E8E5FA;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(124, 111, 224, 0.1);
     }
     #daily-agenda-tasks .da-task-card:last-child { margin-bottom: 0; }
     #daily-agenda-tasks .da-task-card h4 {
-      font-size: 0.88rem;
-      font-weight: 700;
+      font-size: 0.85rem;
+      font-weight: 600;
       color: var(--lav-dark);
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
     .da-meta {
       display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
+      gap: 6px;
+      margin-bottom: 0;
     }
     .da-meta-pill {
       font-size: 11px;
@@ -996,18 +1010,18 @@
       pointer-events: auto;
     }
 
-    /* Preserve dark mode compatibility */
-    html.dark #v-dashboard,
-    html.dark .views-wrap { background: #1A1035; }
-    html.dark .lav-card,
-    html.dark .hero-score-card,
-    html.dark .das-card,
-    html.dark .dsps-empty-card,
-    html.dark .founder-quote-container {
-      background: #252144;
-      border-color: #3D3570;
+    /* Dark Mode Variable Overrides for Dashboard */
+    html.dark, body.dark {
+      --lav-bg: #1A1035;
+      --lav-sidebar: #130C27;
+      --lav-sidebar-active: #251B4D;
+      --lav-card: #252144;
+      --lav-border: #3D3570;
+      --lav-light: rgba(124, 111, 224, 0.15);
+      --lav-dark: #F4F3FF;
+      --lav-gray: #A78BFA;
     }
-    html.dark .founder-quote { color: #fff; }
+    html.dark .founder-quote, body.dark .founder-quote { color: #fff; }
   </style>
 </head>
 
@@ -1018,54 +1032,52 @@
   ═══════════════════════════════════════════════ -->
   <nav id="sidebar">
     <!-- Logo -->
-    <div class="logo" onclick="show('dashboard')">
+    <div class="logo" onclick="window.location.href='/'" style="cursor:pointer">
       <span class="logo-icon">🤖</span>
       <span class="logo-text">SAT Platform</span>
     </div>
 
     <!-- Exam Selector -->
-    <select class="exam-selector" onchange="showToast('Selected ' + this.value.toUpperCase())">
+    <select class="exam-selector" onchange="if(typeof showToast === 'function') showToast('Selected ' + this.value.toUpperCase())">
       <option>SAT</option>
       <option>ACT</option>
     </select>
 
     <!-- Nav Links -->
     <ul class="nav-links">
-      <li><a href="/" onclick="show('dashboard'); return false;" data-page="home" class="active">🏠 Home</a></li>
-      <li><a href="/" onclick="show('chat'); return false;" data-page="ask-preppy">🤖 Ask Preppy AI</a></li>
+      <li class="section-label text-xs font-bold tracking-wider text-slate-400 uppercase pl-5" style="padding-left: 1.25rem;">DASHBOARD</li>
+      <li><a href="/" onclick="if(typeof show === 'function'){show('dashboard'); return false;}" data-page="home" class="active">🏠 Home</a></li>
       <li><a href="/study-planner" data-page="study-planner">📅 Study Planner</a></li>
       <li>
         <a href="/analytics" data-page="analytics">
           📊 Analytics <span class="badge-new">New</span>
         </a>
       </li>
+      <li><a href="/" onclick="if(typeof show === 'function'){show('chat'); return false;}" data-page="ask-preppy">🤖 Ask Preppy AI</a></li>
 
-      <li class="section-label">PRACTICE</li>
+      <li class="section-label text-xs font-bold tracking-wider text-slate-400 uppercase pl-5" style="padding-left: 1.25rem;">PRACTICE</li>
       <li><a href="/question-bank" data-page="question-bank">🔲 Question Bank</a></li>
       <li><a href="/question-rush" data-page="question-rush">⚡ Question Rush</a></li>
-      <li><a href="/challenge" data-page="challenge">🎯 Challenge Questions</a></li>
       <li><a href="/predicted-tests" data-page="predicted-tests">📝 Predicted Tests</a></li>
       <li><a href="/past-exams.html" data-page="past-exams">📝 Past Exams</a></li>
-      <li><a href="/vocab" data-page="vocab">📚 Vocab</a></li>
-
-      <li class="section-label">PROGRESS</li>
-      <li><a href="/" onclick="show('dashboard'); return false;" data-page="saved">🔖 Saved</a></li>
-      <li><a href="/" onclick="show('review'); return false;" data-page="mistakes">❌ Mistakes Log</a></li>
-
-      <li class="section-label">COLLEGE</li>
-      <li><a href="/colleges" data-page="colleges">🎓 Browse Colleges</a></li>
     </ul>
 
     <!-- Bottom items -->
     <div class="sidebar-bottom">
-      <a href="#" onclick="showToast('Join Us loaded!'); return false;">👥 Join Us</a>
-      <button onclick="toggleDark()">🌙 Switch To Dark</button>
-      <a href="#" onclick="showToast('Pro features unlocked!'); return false;">⬆️ Upgrade</a>
-      <a href="#" onclick="showToast('Other options'); return false;">⋯ Other</a>
-      <div class="user-profile" onclick="showToast('Settings')">
+      <button onclick="if(typeof toggleDark === 'function') toggleDark()">🌙 Switch To Dark</button>
+      <a href="#" onclick="if(typeof showToast === 'function') showToast('Pro features unlocked!'); return false;">⬆️ Upgrade</a>
+      
+      <!-- Profile with Dropdown -->
+      <div class="user-profile" style="position: relative; cursor: pointer;" onclick="const d = this.querySelector('.profile-dropdown'); if(d.style.display==='none'){d.style.display='block'}else{d.style.display='none'}">
         <span class="avatar">A</span>
         <span>Abdullah Abdus...</span>
         <span>⚙️</span>
+        <!-- Dropdown Menu -->
+        <div class="profile-dropdown" style="display: none; position: absolute; bottom: 100%; left: 0; width: 100%; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 50; margin-bottom: 0.5rem; overflow: hidden;">
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151; border-bottom: 1px solid #f3f4f6;" onclick="event.stopPropagation(); if(typeof showToast === 'function') showToast('Account Settings')">⚙️ Account Settings</a>
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151; border-bottom: 1px solid #f3f4f6;" onclick="event.stopPropagation(); if(typeof showToast === 'function') showToast('Join Us loaded!')">👥 Join Us</a>
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151;" onclick="event.stopPropagation(); if(typeof showToast === 'function') showToast('Other options')">⋯ Other</a>
+        </div>
       </div>
     </div>
   </nav>
@@ -1198,24 +1210,10 @@
       </div><!-- /.dashboard-top-viewport -->
 
       <!-- ════════════════════════════════════════════
-           SECTION 2 — CONSISTENCY TRACKER + DAILY AGENDA
+           SECTION 2 — CONSOLIDATED MAIN DASHBOARD AGENDA
            ════════════════════════════════════════════ -->
-      <div class="db-mid">
-
-        <!-- Daily Agenda Card -->
-        <div class="lav-card daily-agenda-card">
-          <h3>Today's Agenda</h3>
-          <div id="daily-agenda-tasks" class="dac-tasks">
-            <!-- FIX 8: redesigned empty state; JS overwrites this when data loads -->
-            <div class="dac-empty" id="dac-empty-state">
-              <div class="dac-empty-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7C6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              </div>
-              <p>No study plan yet — create one to unlock your daily agenda</p>
-              <a href="/study-planner" class="dac-prompt-btn">Create Study Plan</a>
-            </div>
-          </div>
-        </div>
+      <div id="MainDashboardAgenda" class="db-mid" style="margin-bottom: 24px;">
+        <!-- Dynamically populated by app.js based on hasActivePlan -->
       </div>
 
       <!-- ════════════════════════════════════════════
@@ -1272,36 +1270,7 @@
         </div>
       </div>
 
-      <!-- ════════════════════════════════════════════
-           SECTION 4 — TODAY'S STUDY PLAN
-           ════════════════════════════════════════════ -->
-      <div class="db-study-plan dash-study-plan-section">
-        <h2>Today's Study Plan</h2>
-
-        <!-- Empty state — shown when no plan exists -->
-        <div id="dash-plan-empty" class="dsps-create-card dsps-empty-card">
-          <div class="dsps-empty-icon">📅</div>
-          <h3>Create a study plan</h3>
-          <p>Get a personalized study plan based on your test date and skill level. Practice smarter, not harder.</p>
-          <button class="btn-create-plan-solid" onclick="window.location.href='/study-planner'">Create my study plan</button>
-        </div>
-
-        <!-- Active state -->
-        <div id="dash-plan-active" class="hidden bg-white border border-gray-200 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-sm">
-          <div class="space-y-2">
-            <div class="flex items-center gap-2">
-              <span class="bg-green-100 text-green-700 text-[10px] font-bold uppercase px-2 py-0.5 rounded tracking-widest">Active</span>
-              <span class="text-xs text-gray-500 font-bold" id="dash-plan-status-id"></span>
-            </div>
-            <h3 class="text-xl font-extrabold text-black">Your Study Plan is Active</h3>
-            <p class="text-sm text-gray-500 font-medium">Head over to the planner to see your daily modules and track your progress.</p>
-          </div>
-          <button onclick="window.location.href='/study-planner'" class="bg-[#7C6FE0] hover:bg-[#6a5ed4] text-white text-sm font-bold px-6 py-3.5 rounded-xl transition-all shadow-sm">
-            View Today's Tasks →
-          </button>
-        </div>
-      </div>
-
+      <!-- Old Section 4 removed to consolidate into MainDashboardAgenda -->
     </section><!-- /#v-dashboard -->
 
 
@@ -1867,16 +1836,35 @@
           }
         }
 
-        // --- Active Study Plan status ---
-        if (data.studyPlan || localStorage.getItem('oneprep_offline_plans')) {
-          document.getElementById('dash-plan-empty').classList.add('hidden');
-          document.getElementById('dash-plan-active').classList.remove('hidden');
-          const idEl = document.getElementById('dash-plan-status-id');
-          if (idEl && data.studyPlan) idEl.textContent = `ID: ${data.studyPlan.planId}`;
-          else if (idEl) idEl.textContent = `ID: Active Plan`;
-        } else {
-          document.getElementById('dash-plan-empty').classList.remove('hidden');
-          document.getElementById('dash-plan-active').classList.add('hidden');
+        // --- MainDashboardAgenda Conditional Rendering ---
+        const mainAgendaContainer = document.getElementById('MainDashboardAgenda');
+        if (mainAgendaContainer) {
+          const hasActivePlan = data.studyPlan || localStorage.getItem('oneprep_offline_plans');
+          if (hasActivePlan) {
+            // STATE B: Active Plan -> Render Daily Agenda Card ONLY
+            mainAgendaContainer.innerHTML = `
+              <div class="lav-card daily-agenda-card">
+                <h3>Today's Agenda</h3>
+                <div id="daily-agenda-tasks" class="dac-tasks">
+                  <div style="padding: 24px; text-align: center; color: var(--lav-gray); font-size: 14px;">Loading tasks...</div>
+                </div>
+              </div>
+            `;
+            // Trigger fetch for daily agenda tasks since the container now exists
+            if (typeof renderDailyAgenda === 'function') {
+              renderDailyAgenda();
+            }
+          } else {
+            // STATE A: No Active Plan -> Render Clean Beautiful Empty State ONLY
+            mainAgendaContainer.innerHTML = `
+              <div class="dsps-create-card dsps-empty-card" style="margin-top: 0;">
+                <div class="dsps-empty-icon">📅</div>
+                <h3 style="margin-top: 16px; font-size: 1.1rem; font-weight: 800; color: var(--lav-dark);">Create a study plan</h3>
+                <p style="margin: 8px 0 20px; font-size: 0.9rem; color: var(--lav-gray); max-width: 400px;">Get a personalized study plan based on your test date and skill level. Practice smarter, not harder.</p>
+                <button class="btn-create-plan-solid" onclick="window.location.href='/study-planner'">Create my study plan</button>
+              </div>
+            `;
+          }
         }
 
       } catch (err) {

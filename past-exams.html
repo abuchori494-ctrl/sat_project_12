@@ -21,67 +21,54 @@
 <body class="light" id="app-body">
 
   <!-- SIDEBAR NAV -->
-  <nav class="sidebar-nav" id="sidebar">
-    <div class="sidebar-brand" onclick="window.location.href='/'">
-      <span class="brand-robot">🤖</span>
-      <span class="brand-text">SAT Platform</span>
+  <nav id="sidebar">
+    <!-- Logo -->
+    <div class="logo" onclick="window.location.href='/'" style="cursor:pointer">
+      <span class="logo-icon">🤖</span>
+      <span class="logo-text">SAT Platform</span>
     </div>
 
-    <div class="sidebar-dropdown-box">
-      <select class="sidebar-select">
-        <option>SAT</option>
-        <option>ACT</option>
-      </select>
-    </div>
+    <!-- Exam Selector -->
+    <select class="exam-selector" onchange="if(typeof showToast === 'function') showToast('Selected ' + this.value.toUpperCase())">
+      <option>SAT</option>
+      <option>ACT</option>
+    </select>
 
-    <div class="sidebar-menu">
-      <button class="nl" onclick="window.location.href='/'">
-        <span class="sbm-icon">🏠</span>
-        <span class="sbm-label">Home</span>
-      </button>
-      <button class="nl" onclick="window.location.href='/study-planner.html'">
-        <span class="sbm-icon">📅</span>
-        <span class="sbm-label">Study Planner</span>
-      </button>
-      <button class="nl" onclick="window.location.href='/analytics.html'">
-        <span class="sbm-icon">📊</span>
-        <span class="sbm-label">Analytics</span>
-        <span class="sbm-new-badge">NEW</span>
-      </button>
+    <!-- Nav Links -->
+    <ul class="nav-links">
+      <li class="section-label text-xs font-bold tracking-wider text-slate-400 uppercase pl-5" style="padding-left: 1.25rem;">DASHBOARD</li>
+      <li><a href="/" onclick="if(typeof show === 'function'){show('dashboard'); return false;}" data-page="home">🏠 Home</a></li>
+      <li><a href="/study-planner" data-page="study-planner">📅 Study Planner</a></li>
+      <li>
+        <a href="/analytics" data-page="analytics">
+          📊 Analytics <span class="badge-new">New</span>
+        </a>
+      </li>
+      <li><a href="/" onclick="if(typeof show === 'function'){show('chat'); return false;}" data-page="ask-preppy">🤖 Ask Preppy AI</a></li>
 
-      <div class="menu-section-header">PRACTICE</div>
-      <button class="nl" onclick="window.location.href='/question-bank.html'">
-        <span class="sbm-icon">🔲</span>
-        <span class="sbm-label">Question Bank</span>
-      </button>
-      <button class="nl active" onclick="window.location.href='/past-exams.html'">
-        <span class="sbm-icon">📝</span>
-        <span class="sbm-label">Past Exams</span>
-      </button>
-      <button class="nl" onclick="window.location.href='/vocab.html'">
-        <span class="sbm-icon">📚</span>
-        <span class="sbm-label">Vocab</span>
-      </button>
+      <li class="section-label text-xs font-bold tracking-wider text-slate-400 uppercase pl-5" style="padding-left: 1.25rem;">PRACTICE</li>
+      <li><a href="/question-bank" data-page="question-bank">🔲 Question Bank</a></li>
+      <li><a href="/question-rush" data-page="question-rush">⚡ Question Rush</a></li>
+      <li><a href="/predicted-tests" data-page="predicted-tests">📝 Predicted Tests</a></li>
+      <li><a href="/past-exams.html" data-page="past-exams" class="active">📝 Past Exams</a></li>
+    </ul>
 
-      <div class="menu-section-header">COLLEGE</div>
-      <button class="nl" onclick="window.location.href='/colleges.html'">
-        <span class="sbm-icon">🎓</span>
-        <span class="sbm-label">Browse Colleges</span>
-      </button>
-    </div>
-    
-    <!-- Sidebar Footer Profile -->
-    <div class="sidebar-footer">
-      <div class="sidebar-profile-box">
-        <div class="profile-avatar">
-          A
-          <div class="avatar-status-dot"></div>
+    <!-- Bottom items -->
+    <div class="sidebar-bottom">
+      <button onclick="if(typeof toggleDark === 'function') toggleDark()">🌙 Switch To Dark</button>
+      <a href="#" onclick="if(typeof showToast === 'function') showToast('Pro features unlocked!'); return false;">⬆️ Upgrade</a>
+      
+      <!-- Profile with Dropdown -->
+      <div class="user-profile" style="position: relative; cursor: pointer;" onclick="const d = this.querySelector('.profile-dropdown'); if(d.style.display==='none'){d.style.display='block'}else{d.style.display='none'}">
+        <span class="avatar">A</span>
+        <span>Abdullah Abdus...</span>
+        <span>⚙️</span>
+        <!-- Dropdown Menu -->
+        <div class="profile-dropdown" style="display: none; position: absolute; bottom: 100%; left: 0; width: 100%; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 50; margin-bottom: 0.5rem; overflow: hidden;">
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151; border-bottom: 1px solid #f3f4f6;" onclick="event.stopPropagation(); if(typeof showToast === 'function') showToast('Account Settings')">⚙️ Account Settings</a>
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151; border-bottom: 1px solid #f3f4f6;" onclick="event.stopPropagation(); if(typeof showToast === 'function') showToast('Join Us loaded!')">👥 Join Us</a>
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151;" onclick="event.stopPropagation(); if(typeof showToast === 'function') showToast('Other options')">⋯ Other</a>
         </div>
-        <div class="profile-meta">
-          <strong>Abdullah A.</strong>
-          <span style="font-size:10px; color:#A78BFA;">Pro Member</span>
-        </div>
-        <span class="profile-settings-gear">⚙️</span>
       </div>
     </div>
   </nav>

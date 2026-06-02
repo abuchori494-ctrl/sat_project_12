@@ -3,34 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Analytics Dashboard - OnePrep</title>
+  <title>Analytics Dashboard - SAT Platform</title>
   
-  <!-- DM Sans Font -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"DM Sans"', 'sans-serif'],
+            sans: ['"Inter"', 'system-ui', 'sans-serif'],
           },
           colors: {
-            appBg: '#f9fafb',
-            pinkAccent: '#ec4899',
-            blueAccent: '#3b82f6',
-            greenLight: '#22c55e',
-            greenDark: '#16a34a',
-            redLight: '#f87171',
-            redDark: '#ef4444',
-            orangeMedium: '#fb923c',
-            creamBg: '#faf8f4',
-            textPrimary: '#111827',
-            textSecondary: '#6b7280',
-            borderGray: '#e5e7eb',
+            app: {
+              bg: '#F9FAFB',
+              card: '#FFFFFF',
+              border: '#E5E7EB',
+              text: '#111827',
+              gray: '#6B7280',
+              lightGray: '#9CA3AF',
+              primary: '#5C4CE5',
+              primaryLight: '#DEDCFA',
+              primaryFaded: '#F0EFFE',
+              red: '#EF4444',
+              orange: '#F59E0B',
+              green: '#10B981',
+              yellowBg: '#FFF8F0',
+              yellowBorder: '#FDE6C6',
+              yellowText: '#92400E',
+              yellowDot: '#D97706'
+            }
           }
         }
       }
@@ -40,1143 +45,413 @@
 
   <style>
     body {
-      background-color: #f9fafb;
-      font-family: 'DM Sans', sans-serif;
+      background-color: var(--lav-bg, #F9FAFB);
       color: #111827;
       -webkit-font-smoothing: antialiased;
     }
-
-    /* Staggered entrance animations */
-    .fade-up-card {
-      animation: cardSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    
+    /* Sidebar overrides to match the rest of the app */
+    #sidebar {
+      position: sticky !important;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      transition: width 0.3s ease;
+      width: 240px;
+      z-index: 100;
+      background-color: #4A4580;
     }
-    @keyframes cardSlideUp {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    #sidebar.collapsed { width: 80px !important; }
+    #sidebar.collapsed .logo-text,
+    #sidebar.collapsed .exam-selector-container,
+    #sidebar.collapsed .section-label,
+    #sidebar.collapsed .nav-text,
+    #sidebar.collapsed .badge-new,
+    #sidebar.collapsed .user-profile span:not(.avatar) { display: none !important; }
+    #sidebar.collapsed .logo { justify-content: center; padding: 24px 0 20px 0; }
+    #sidebar.collapsed .nav-links a { justify-content: center; padding: 12px 0; font-size: 20px; }
+    #sidebar.collapsed .sidebar-bottom a, #sidebar.collapsed .sidebar-bottom button { justify-content: center; padding: 12px 0; font-size: 20px; }
+    #sidebar.collapsed .user-profile { justify-content: center; padding: 10px 0; background: transparent; }
+    
+    /* Custom Scrollbar for Dashboard */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+    
+    /* Animations */
+    .fade-up {
+      animation: fadeUp 0.5s ease-out forwards;
+      opacity: 0;
+      transform: translateY(10px);
     }
-
-    /* Donut chart spin animation */
-    @keyframes spinDonut {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* Skeleton loader pulse */
-    .skeleton {
-      background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
-      background-size: 200% 100%;
-      animation: loading-pulse 1.5s infinite;
-    }
-    @keyframes loading-pulse {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    /* Pro locked blurred states */
-    .pro-locked-row {
-      filter: blur(5px);
-      pointer-events: none;
-      user-select: none;
-      opacity: 0.6;
-    }
-
-    /* Target dot animations */
-    .accuracy-dot {
-      transition: left 1s cubic-bezier(0.16, 1, 0.3, 1);
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
-<body class="light">
-  <!-- ═══ VERTICAL SIDEBAR NAV (EXACT MOCKUP MATCH) ═══ -->
-  <nav id="sidebar">
-    <!-- Logo -->
-    <div class="logo" onclick="window.location.href='/'">
-      <span class="logo-icon">🤖</span>
-      <span class="logo-text">OnePrep</span>
+<body class="flex flex-row min-h-screen">
+  
+  <!-- ═══ VERTICAL SIDEBAR NAV ═══ -->
+  <nav id="sidebar" class="flex-shrink-0 relative group shadow-lg">
+    <button onclick="toggleSidebar()" class="absolute top-6 right-3 text-white/70 hover:text-white hover:bg-white/10 p-1.5 rounded-md z-50 transition-colors">
+      <svg id="collapse-icon" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+    </button>
+    <div class="logo flex items-center gap-2 px-5 pt-6 pb-5 cursor-pointer select-none" onclick="window.location.href='/'">
+      <span class="logo-icon text-2xl">🤖</span>
+      <span class="logo-text text-xl font-extrabold text-white tracking-tight">SAT Platform</span>
     </div>
-    
-    <!-- Exam Selector -->
-    <select class="exam-selector" onchange="showToast('Selected ' + this.value.toUpperCase())">
-      <option>SAT</option>
-      <option>ACT</option>
-    </select>
-
-    <!-- Nav Links -->
-    <ul class="nav-links">
-      <li><a href="/" data-page="home">🏠 Home</a></li>
-      <li><a href="/" onclick="window.location.href='/?chat=true'; return false;" data-page="ask-preppy">🤖 Ask Preppy AI</a></li>
-      <li><a href="/study-planner" data-page="study-planner">📅 Study Planner</a></li>
+    <div class="px-4 mb-5 exam-selector-container">
+      <select class="exam-selector w-full bg-white/10 text-white border border-white/20 rounded-lg py-2 px-3 text-sm font-semibold cursor-pointer outline-none transition-colors hover:bg-white/20" onchange="if(typeof showToast === 'function') showToast('Selected ' + this.value.toUpperCase())">
+        <option style="background: #4A4580">SAT</option>
+        <option style="background: #4A4580">ACT</option>
+      </select>
+    </div>
+    <ul class="nav-links flex-1 px-2 space-y-1">
+      <li class="section-label text-[10px] font-extrabold tracking-widest text-white/50 uppercase px-4 pt-4 pb-2">DASHBOARD</li>
+      <li><a href="/" onclick="if(typeof show === 'function'){show('dashboard'); return false;}" data-page="home" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm"><span>🏠</span> <span class="nav-text">Home</span></a></li>
+      <li><a href="/study-planner" data-page="study-planner" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm"><span>📅</span> <span class="nav-text">Study Planner</span></a></li>
       <li>
-        <a href="/analytics" data-page="analytics" class="active">
-          📊 Analytics <span class="badge-new">New</span>
+        <a href="/analytics" data-page="analytics" class="active flex items-center gap-3 px-3 py-2.5 rounded-lg text-white shadow-inner transition-all font-semibold text-sm relative" style="background: #5A5690; box-shadow: inset 3px 0 0 #B8B0F5;">
+          <span>📊</span> <span class="nav-text">Analytics</span>
         </a>
       </li>
-      
-      <li class="section-label">PRACTICE</li>
-      <li><a href="/question-bank" data-page="question-bank">🔲 Question Bank</a></li>
-      <li><a href="/question-rush" data-page="question-rush">⚡ Question Rush</a></li>
-      <li><a href="/challenge" data-page="challenge">🎯 Challenge Questions</a></li>
-      <li><a href="/predicted-tests" data-page="predicted-tests">📝 Predicted Tests</a></li>
-      <li><a href="/vocab" data-page="vocab">📚 Vocab</a></li>
-
-      <li class="section-label">PROGRESS</li>
-      <li><a href="/" data-page="saved">🔖 Saved</a></li>
-      <li><a href="/" data-page="mistakes">❌ Mistakes Log</a></li>
-      
-      <li class="section-label">COLLEGE</li>
-      <li><a href="/colleges" data-page="colleges">🎓 Browse Colleges</a></li>
+      <li><a href="/" onclick="if(typeof show === 'function'){show('chat'); return false;}" data-page="ask-preppy" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm"><span>🤖</span> <span class="nav-text">Ask Preppy AI</span></a></li>
+      <li class="section-label text-[10px] font-extrabold tracking-widest text-white/50 uppercase px-4 pt-6 pb-2">PRACTICE</li>
+      <li><a href="/question-bank" data-page="question-bank" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm"><span>🔲</span> <span class="nav-text">Question Bank</span></a></li>
+      <li><a href="/question-rush" data-page="question-rush" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm"><span>⚡</span> <span class="nav-text">Question Rush</span></a></li>
+      <li><a href="/predicted-tests" data-page="predicted-tests" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm"><span>📝</span> <span class="nav-text">Predicted Tests</span></a></li>
+      <li><a href="/past-exams.html" data-page="past-exams" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm"><span>📝</span> <span class="nav-text">Past Exams</span></a></li>
     </ul>
-
-    <!-- Bottom items -->
-    <div class="sidebar-bottom">
-      <a href="#" onclick="showToast('Join Us loaded!'); return false;">👥 Join Us</a>
-      <button onclick="toggleDark()">🌙 Switch To Dark</button>
-      <a href="#" onclick="showToast('Pro features unlocked!'); return false;">⬆️ Upgrade</a>
-      <a href="#" onclick="showToast('Other options'); return false;">⋯ Other</a>
-      <div class="user-profile" onclick="showToast('Settings')">
-        <span class="avatar">A</span>
-        <span>Abdullah Abdus...</span>
-        <span>⚙️</span>
+    <div class="sidebar-bottom mt-auto border-t border-white/10 p-3 flex flex-col gap-1">
+      <button onclick="if(typeof toggleDark === 'function') toggleDark()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm w-full text-left"><span>🌙</span> <span class="nav-text">Switch To Dark</span></button>
+      <div class="user-profile flex items-center gap-3 px-3 py-2.5 mt-2 rounded-lg bg-black/20 hover:bg-black/30 transition-all cursor-pointer relative" onclick="const d = this.querySelector('.profile-dropdown'); if(d.style.display==='none'){d.style.display='block'}else{d.style.display='none'}">
+        <span class="avatar flex-shrink-0 w-8 h-8 rounded-full text-white flex items-center justify-center font-bold text-sm" style="background: #7C6FE0">A</span>
+        <span class="nav-text flex-1 truncate text-xs font-semibold text-white">Abdullah Abdus...</span>
+        <span class="nav-text text-white/70">⚙️</span>
+        <div class="profile-dropdown" style="display: none; position: absolute; bottom: 100%; left: 0; width: 100%; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 50; margin-bottom: 0.5rem; overflow: hidden;">
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151; border-bottom: 1px solid #f3f4f6;" onclick="event.stopPropagation();">⚙️ Account Settings</a>
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151; border-bottom: 1px solid #f3f4f6;" onclick="event.stopPropagation();">👥 Join Us</a>
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151;" onclick="event.stopPropagation();">⋯ Other</a>
+        </div>
       </div>
     </div>
   </nav>
 
-  <div class="main-content space-y-6">
-       SKELETON LOADER SCREEN
-       ========================================== -->
-  <div id="skeleton-loader" class="space-y-6">
-    <div class="flex justify-between items-center">
-      <div class="h-10 w-44 skeleton rounded-lg"></div>
-      <div class="h-10 w-28 skeleton rounded-full"></div>
-    </div>
-    <div class="h-28 w-full skeleton rounded-2xl"></div>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div class="h-24 skeleton rounded-2xl"></div>
-      <div class="h-24 skeleton rounded-2xl"></div>
-      <div class="h-24 skeleton rounded-2xl"></div>
-      <div class="h-24 skeleton rounded-2xl"></div>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="col-span-2 h-96 skeleton rounded-2xl"></div>
-      <div class="h-96 skeleton rounded-2xl"></div>
-    </div>
-  </div>
-
-  <!-- ==========================================
-       MAIN CONTENT WRAPPER
-       ========================================== -->
-  <div id="main-content" class="hidden space-y-6">
-
-    <!-- Title Header -->
-    <header class="flex justify-between items-center fade-up-card" style="animation-delay: 0.05s">
-      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight flex items-center gap-2">
-        <span>📊</span> Analytics
-      </h1>
-      <button onclick="alert('Simulated Pro Upgraded Successfully! 🎉')" class="bg-black hover:bg-gray-800 text-white text-xs font-bold px-5 py-3 rounded-full shadow transition-all active:scale-95">
-        Unlock Pro
+  <!-- ═══ MAIN DASHBOARD CONTENT ═══ -->
+  <div class="main-content flex-1 min-w-0 transition-all duration-300 px-8 py-8 max-w-[1200px] mx-auto bg-[#F9FAFB]">
+  
+    <!-- Header -->
+    <header class="flex justify-between items-end mb-8 fade-up" style="animation-delay: 0.05s">
+      <div>
+        <h1 class="text-[24px] font-bold text-app-text tracking-tight">Performance analytics</h1>
+        <p class="text-[13px] text-app-gray mt-1">Track your progress, master skills, and achieve your target score.</p>
+      </div>
+      <button class="border border-app-primaryLight text-app-primary font-semibold text-[13px] px-6 py-1.5 rounded-full hover:bg-app-primaryFaded transition-colors shadow-sm">
+        SAT
       </button>
     </header>
 
-    <!-- Pink Pro Upgrade banner -->
-    <div class="bg-[#fce7f3] rounded-3xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative overflow-hidden fade-up-card border border-pink-200" style="animation-delay: 0.1s">
-      <div class="space-y-1 z-10">
-        <h3 class="text-lg md:text-xl font-black text-[#ec4899] leading-snug">Unlock the full report with Pro.</h3>
-        <p class="text-sm font-extrabold text-[#ec4899]">Every number, topic, and chart.</p>
+    <!-- ROW 1: SCORE & METRICS (Grid: 1 large card, 3 small cards) -->
+    <div class="grid grid-cols-1 lg:grid-cols-10 gap-5 mb-5 fade-up" style="animation-delay: 0.1s">
+      
+      <!-- Score Progress (Col span 4) -->
+      <div class="col-span-1 lg:col-span-4 bg-[#FAFAFA] border border-app-border rounded-[12px] p-5 shadow-sm flex flex-col justify-between">
+        <div class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mb-4">Score Progress</div>
+        
+        <div class="flex items-baseline gap-3 mb-6">
+          <span class="text-[44px] font-bold text-app-text tracking-tight leading-none" id="score-latest">1220</span>
+          <span class="text-app-lightGray text-sm relative -top-1">→</span>
+          <div class="flex flex-col items-start leading-none relative -top-1">
+            <span class="text-[26px] font-bold text-app-primary" id="score-target">1560</span>
+            <span class="text-[10px] text-app-lightGray mt-0.5">target</span>
+          </div>
+        </div>
+        
+        <div class="mb-5">
+          <div class="w-full h-2 bg-[#E5E7EB] rounded-full overflow-hidden">
+            <div id="score-progress-bar" class="h-full bg-app-primary rounded-full transition-all duration-1000" style="width: 36%;"></div>
+          </div>
+          <div class="flex justify-between text-[10px] text-app-lightGray mt-2 font-medium">
+            <span>1000</span>
+            <span id="score-gap-label">340 pts to go</span>
+            <span>1600</span>
+          </div>
+        </div>
+        
+        <div class="bg-app-yellowBg border border-app-yellowBorder rounded-[6px] p-3 flex gap-3 items-start" id="ai-motivation-box">
+          <div class="w-1.5 h-1.5 rounded-full bg-app-yellowDot mt-1.5 shrink-0"></div>
+          <p class="text-[11px] text-app-yellowText leading-snug" id="ai-motivation-text">You're 340 points from your goal. Focus on targeted<br>drilling to close the gap faster.</p>
+        </div>
       </div>
-      <!-- SVG ghost mascot character -->
-      <svg class="absolute right-4 bottom-[-10px] w-24 h-24 text-[#ec4899] opacity-10 pointer-events-none" viewBox="0 0 100 100" fill="currentColor">
-        <path d="M30,12 C55,2 75,8 88,26 C100,44 96,72 82,86 C64,100 32,96 16,81 C0,62 8,24 30,12 Z" />
-      </svg>
-      <button onclick="alert('Redirecting to Checkout...')" class="bg-[#ec4899] hover:bg-[#db2777] text-white text-xs font-bold px-6 py-3.5 rounded-full z-10 transition-all active:scale-95 shadow-sm">
-        Upgrade to Pro
+
+      <!-- Small Metrics (Col span 2 each) -->
+      <!-- Questions Done -->
+      <div class="col-span-1 lg:col-span-2 bg-[#FAFAFA] border border-app-border rounded-[12px] p-5 shadow-sm flex flex-col">
+        <div class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mb-4">Questions Done</div>
+        <div class="text-[32px] font-bold text-app-text leading-none mb-1" id="stat-attempted-val">0</div>
+        <div class="text-[11px] text-app-gray">of 500 goal</div>
+        
+        <!-- Mini chart -->
+        <div class="flex items-end gap-1.5 h-6 mt-auto">
+          <div class="w-full bg-app-primaryFaded h-[20%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[30%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[40%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[25%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[15%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[10%] rounded-sm"></div>
+          <div class="w-full bg-app-primary h-[5%] rounded-sm" id="stat-attempted-bar"></div>
+        </div>
+      </div>
+
+      <!-- All-time Accuracy -->
+      <div class="col-span-1 lg:col-span-2 bg-[#FAFAFA] border border-app-border rounded-[12px] p-5 shadow-sm flex flex-col">
+        <div class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mb-4">All-Time Accuracy</div>
+        <div class="text-[32px] font-bold text-app-text leading-none mb-1" id="stat-accuracy-historical">—</div>
+        <div class="text-[11px] text-app-gray">No data yet</div>
+        
+        <!-- Mini chart -->
+        <div class="flex items-end gap-1.5 h-6 mt-auto">
+          <div class="w-full bg-app-primaryFaded h-[20%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[30%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[40%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[25%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[15%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[10%] rounded-sm"></div>
+          <div class="w-full bg-app-primary h-[5%] rounded-sm"></div>
+        </div>
+      </div>
+
+      <!-- Study Streak -->
+      <div class="col-span-1 lg:col-span-2 bg-[#FAFAFA] border border-app-border rounded-[12px] p-5 shadow-sm flex flex-col">
+        <div class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mb-4">Study Streak</div>
+        <div class="text-[32px] font-bold text-app-text leading-none mb-1" id="stat-streak">0</div>
+        <div class="text-[11px] text-app-gray">Active days</div>
+        
+        <!-- Mini chart -->
+        <div class="flex items-end gap-1.5 h-6 mt-auto">
+          <div class="w-full bg-app-primaryFaded h-[20%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[30%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[40%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[25%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[15%] rounded-sm"></div>
+          <div class="w-full bg-app-primaryFaded h-[10%] rounded-sm"></div>
+          <div class="w-full bg-app-primary h-[5%] rounded-sm"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ROW 2: SKILL MASTERY -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5 fade-up" style="animation-delay: 0.2s">
+      
+      <!-- Math Mastery -->
+      <div class="bg-app-card border border-app-border rounded-[12px] p-6 shadow-sm">
+        <div class="mb-5">
+          <h3 class="text-[15px] font-bold text-app-text">Math mastery</h3>
+          <p class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mt-0.5">Sorted by weakest topics first</p>
+        </div>
+        <div class="space-y-3.5" id="math-diagnostics-list">
+          <!-- Rendered via JS, fallback matching screenshot -->
+          <div class="flex items-center text-[12px]">
+            <div class="w-[120px] text-app-gray">Word problems</div>
+            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
+              <div class="h-full bg-app-red rounded-full" style="width: 22%"></div>
+            </div>
+            <div class="w-[40px] text-right text-app-lightGray font-semibold">22%</div>
+          </div>
+          <div class="flex items-center text-[12px]">
+            <div class="w-[120px] text-app-gray">Data analysis</div>
+            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
+              <div class="h-full bg-app-orange rounded-full" style="width: 34%"></div>
+            </div>
+            <div class="w-[40px] text-right text-app-lightGray font-semibold">34%</div>
+          </div>
+          <div class="flex items-center text-[12px]">
+            <div class="w-[120px] text-app-gray">Algebra</div>
+            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
+              <div class="h-full bg-app-orange rounded-full" style="width: 51%"></div>
+            </div>
+            <div class="w-[40px] text-right text-app-lightGray font-semibold">51%</div>
+          </div>
+          <div class="flex items-center text-[12px]">
+            <div class="w-[120px] text-app-gray">Geometry</div>
+            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
+              <div class="h-full bg-app-primary rounded-full" style="width: 67%"></div>
+            </div>
+            <div class="w-[40px] text-right text-app-lightGray font-semibold">67%</div>
+          </div>
+          <div class="flex items-center text-[12px]">
+            <div class="w-[120px] text-app-gray">Functions</div>
+            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
+              <div class="h-full bg-app-green rounded-full" style="width: 78%"></div>
+            </div>
+            <div class="w-[40px] text-right text-app-lightGray font-semibold">78%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reading & Writing Mastery -->
+      <div class="bg-app-card border border-app-border rounded-[12px] p-6 shadow-sm">
+        <div class="mb-5">
+          <h3 class="text-[15px] font-bold text-app-text">Reading & writing mastery</h3>
+          <p class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mt-0.5">Sorted by weakest topics first</p>
+        </div>
+        <div class="space-y-3.5" id="rw-diagnostics-list">
+          <!-- Rendered via JS, fallback matching screenshot -->
+          <div class="flex items-center text-[12px]">
+            <div class="w-[120px] text-app-gray">Inferences</div>
+            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
+              <div class="h-full bg-app-red rounded-full" style="width: 18%"></div>
+            </div>
+            <div class="w-[40px] text-right text-app-lightGray font-semibold">18%</div>
+          </div>
+          <div class="flex items-center text-[12px]">
+            <div class="w-[120px] text-app-gray">Main idea</div>
+            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
+              <div class="h-full bg-app-red rounded-full" style="width: 28%"></div>
+            </div>
+            <div class="w-[40px] text-right text-app-lightGray font-semibold">28%</div>
+          </div>
+          <div class="flex items-center text-[12px]">
+            <div class="w-[120px] text-app-gray">Vocab in context</div>
+            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
+              <div class="h-full bg-app-orange rounded-full" style="width: 44%"></div>
+            </div>
+            <div class="w-[40px] text-right text-app-lightGray font-semibold">44%</div>
+          </div>
+          <div class="flex items-center text-[12px]">
+            <div class="w-[120px] text-app-gray">Grammar</div>
+            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
+              <div class="h-full bg-app-primary rounded-full" style="width: 57%"></div>
+            </div>
+            <div class="w-[40px] text-right text-app-lightGray font-semibold">57%</div>
+          </div>
+          <div class="flex items-center text-[12px]">
+            <div class="w-[120px] text-app-gray">Evidence support</div>
+            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
+              <div class="h-full bg-app-green rounded-full" style="width: 71%"></div>
+            </div>
+            <div class="w-[40px] text-right text-app-lightGray font-semibold">71%</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ROW 3: VOCABULARY & PRACTICE CONSISTENCY -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5 fade-up" style="animation-delay: 0.3s">
+      
+      <!-- Vocabulary Bank -->
+      <div class="bg-app-card border border-app-border rounded-[12px] p-6 shadow-sm flex flex-col justify-between">
+        <div class="mb-4">
+          <h3 class="text-[15px] font-bold text-app-text">Vocabulary bank</h3>
+          <p class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mt-0.5">Words mastered vs remaining</p>
+        </div>
+        
+        <div>
+          <div class="flex flex-wrap gap-[3px] max-w-[300px]" id="vocab-grid">
+            <!-- Populated by JS -->
+          </div>
+          
+          <!-- Legend -->
+          <div class="flex items-center gap-6 text-[10px] text-app-gray mt-5">
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-app-primary rounded-[2px]"></div> Mastered (<span id="vocab-mastered-count">43</span>)</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-[#C7D2FE] rounded-[2px]"></div> Seen</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-[#EDEDED] rounded-[2px]"></div> Remaining</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Practice Consistency -->
+      <div class="bg-app-card border border-app-border rounded-[12px] p-6 shadow-sm flex flex-col justify-between">
+        <div class="mb-4">
+          <h3 class="text-[15px] font-bold text-app-text">Practice consistency</h3>
+          <p class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mt-0.5">Daily question volume</p>
+        </div>
+        
+        <div>
+          <!-- Grid of varying purples -->
+          <div class="flex gap-[3px]" id="heatmap-grid">
+            <!-- Populated by JS -->
+          </div>
+          
+          <!-- Legend -->
+          <div class="flex items-center justify-end gap-1.5 text-[9px] text-app-gray mt-5">
+            <span>Less</span>
+            <div class="w-3 h-3 bg-[#EDEDED] rounded-[2px]"></div>
+            <div class="w-3 h-3 bg-[#E0E7FF] rounded-[2px]"></div>
+            <div class="w-3 h-3 bg-[#C7D2FE] rounded-[2px]"></div>
+            <div class="w-3 h-3 bg-[#818CF8] rounded-[2px]"></div>
+            <div class="w-3 h-3 bg-[#5C4CE5] rounded-[2px]"></div>
+            <span>More</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ROW 4: DIAGNOSTIC BANNER -->
+    <div class="bg-white border border-app-primaryLight rounded-[12px] p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-sm fade-up" style="animation-delay: 0.4s">
+      <div>
+        <h3 class="text-[15px] font-bold text-app-primary">Need a fresh baseline?</h3>
+        <p class="text-[12px] text-app-primary mt-0.5 opacity-90">Take a 20-minute adaptive diagnostic. Your dashboard will instantly recalculate.</p>
+      </div>
+      <button class="bg-app-primary text-white font-semibold text-[13px] px-6 py-2.5 rounded-[6px] hover:bg-[#4a3bc2] transition-colors shrink-0">
+        Start diagnostic
       </button>
     </div>
 
-    <!-- 4 Stat cards in a row -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 fade-up-card" style="animation-delay: 0.15s">
-      <!-- Card 1 -->
-      <div class="bg-white border border-gray-200 rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[110px] shadow-sm">
-        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Questions Attempted</span>
-        <strong id="stat-attempted" class="text-3xl font-black text-black">6</strong>
-        <span class="absolute right-4 bottom-4 text-3xl opacity-10 select-none">✓</span>
-      </div>
-      <!-- Card 2 -->
-      <div class="bg-white border border-gray-200 rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[110px] shadow-sm">
-        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Current Accuracy</span>
-        <strong id="stat-accuracy" class="text-3xl font-black text-black">100%</strong>
-        <span class="absolute right-4 bottom-4 text-3xl opacity-10 select-none">📊</span>
-      </div>
-      <!-- Card 3 -->
-      <div class="bg-white border border-gray-200 rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[110px] shadow-sm">
-        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Saved Questions</span>
-        <div class="flex items-baseline justify-between w-full">
-          <strong id="stat-saved" class="text-3xl font-black text-black">0</strong>
-          <button onclick="alert('No questions saved yet.')" class="text-[10px] font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition-all">View Saved</button>
-        </div>
-        <span class="absolute right-4 bottom-4 text-3xl opacity-10 select-none">🔖</span>
-      </div>
-      <!-- Card 4 -->
-      <div class="bg-white border border-gray-200 rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[110px] shadow-sm">
-        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Study Streak</span>
-        <strong id="stat-streak" class="text-3xl font-black text-black">0</strong>
-        <span class="absolute right-4 bottom-4 text-3xl opacity-10 select-none">🔥</span>
-      </div>
-    </div>
-
-    <!-- Light blue diagnostic card -->
-    <div class="bg-[#e0f2fe] rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden border border-[#bae6fd] fade-up-card" style="animation-delay: 0.2s">
-      <div class="space-y-4 text-left z-10 flex-1">
-        <h3 class="text-xl md:text-2xl font-black text-black leading-snug">Take the diagnostic to see your predicted score.</h3>
-        <p class="text-xs text-gray-500 font-extrabold flex items-center gap-1.5">
-          <span>🎯</span> 20 questions · ~20 min
-        </p>
-        <button onclick="alert('Launching Diagnostic session... ⏱️')" class="bg-[#3b82f6] hover:bg-[#2563eb] text-white text-xs font-bold px-6 py-3.5 rounded-full shadow transition-all active:scale-95">
-          Start diagnostic
-        </button>
-      </div>
-
-      <!-- 3 Cute CSS blob mascots right side -->
-      <div class="relative w-48 h-32 flex-shrink-0 flex items-center justify-center">
-        <!-- Large Purple Blob (holds giant crystal ball) -->
-        <div class="absolute w-24 h-24 bg-purple-500 rounded-full flex items-center justify-center text-white top-2 left-6 drop-shadow" style="border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%">
-          <!-- Eyes -->
-          <span class="absolute top-8 left-6 w-2.5 h-2.5 bg-black rounded-full"></span>
-          <span class="absolute top-8 left-12 w-2.5 h-2.5 bg-black rounded-full"></span>
-          <!-- Blush -->
-          <span class="absolute top-10 left-4 w-3.5 h-1.5 bg-pink-400 rounded-full opacity-60"></span>
-          <span class="absolute top-10 left-14 w-3.5 h-1.5 bg-pink-400 rounded-full opacity-60"></span>
-          <!-- Crystal Ball -->
-          <div class="w-14 h-14 bg-indigo-900 border-2 border-purple-300 rounded-full z-10 translate-y-6 translate-x-2 flex items-center justify-center opacity-95">
-            <span class="text-[10px] font-bold text-cyan-200 animate-pulse">🔮</span>
-          </div>
-        </div>
-
-        <!-- Small Green Blob -->
-        <div class="absolute w-12 h-12 bg-green-400 rounded-full top-10 left-0" style="border-radius: 60% 40% 30% 70%">
-          <!-- Eyes -->
-          <span class="absolute top-4 left-3 w-1.5 h-1.5 bg-black rounded-full"></span>
-          <span class="absolute top-4 left-7 w-1.5 h-1.5 bg-black rounded-full"></span>
-        </div>
-
-        <!-- Small Pink Blob -->
-        <div class="absolute w-14 h-14 bg-pink-400 rounded-full top-8 right-2 flex items-center justify-center" style="border-radius: 50% 50% 30% 70%">
-          <!-- Eyes -->
-          <span class="absolute top-5 left-4 w-1.5 h-1.5 bg-black rounded-full"></span>
-          <span class="absolute top-5 left-8 w-1.5 h-1.5 bg-black rounded-full"></span>
-          <!-- "GO" Badge on cheek -->
-          <span class="absolute bg-white text-[7px] text-pink-600 px-1 py-0.5 rounded font-black border border-pink-100 top-8">GO</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==========================================
-         2-COLUMN ANALYTICS LAYOUT
-         ========================================== -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-      <!-- LEFT COLUMN (SPAN 2): PRIMARY CHARTS & TOPICS -->
-      <div class="lg:col-span-2 space-y-6">
-
-        <!-- SECTION 2: ACTIVITY TREND CARD -->
-        <div class="bg-white border border-gray-200 rounded-3xl p-6 space-y-6 shadow-sm fade-up-card" style="animation-delay: 0.25s">
-          <div class="space-y-1">
-            <h3 class="text-xl font-extrabold text-black">Activity trend</h3>
-            <p class="text-xs text-gray-500 leading-relaxed font-medium">Wrong in red, correct in green. Harder questions look darker and sit below easier ones in each color. Each bar is one week.</p>
-          </div>
-
-          <!-- Legend -->
-          <div class="flex items-center gap-4 text-xs font-bold text-gray-600">
-            <span class="flex items-center gap-1.5">
-              <span class="w-3 h-3 rounded-full bg-green-500"></span> 6 Correct
-            </span>
-            <span class="flex items-center gap-1.5">
-              <span class="w-3 h-3 rounded-full bg-red-500"></span> 0 Wrong
-            </span>
-          </div>
-
-          <!-- Canvas 2D Activity Trend Chart -->
-          <div class="relative w-full h-[220px] flex items-center justify-center">
-            <canvas id="trendCanvas" class="w-full h-full"></canvas>
-          </div>
-        </div>
-
-        <!-- SECTION 3: ENGLISH ACCURACY BY TOPIC -->
-        <div class="bg-white border border-gray-200 rounded-3xl p-6 space-y-6 shadow-sm fade-up-card" style="animation-delay: 0.3s">
-          <div class="flex justify-between items-start">
-            <div class="space-y-1">
-              <h3 class="text-xl font-extrabold text-black">English</h3>
-              <p class="text-xs text-gray-500 font-medium">Accuracy by topic</p>
-            </div>
-            <!-- Legend indicators -->
-            <div class="flex items-center gap-3 text-[10px] font-bold text-gray-500">
-              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span> ≥ 85%</span>
-              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-orange-400"></span> 60–84%</span>
-              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500"></span> &lt; 60%</span>
-            </div>
-          </div>
-
-          <!-- Rows -->
-          <div class="space-y-5" id="english-topics-list">
-            <!-- Dynamically populated rows (Row 1 Correct; Rows 2-4 blurred locked) -->
-          </div>
-        </div>
-
-        <!-- SECTION 4: MATH ACCURACY BY TOPIC -->
-        <div class="bg-white border border-gray-200 rounded-3xl p-6 space-y-6 shadow-sm relative overflow-hidden fade-up-card" style="animation-delay: 0.35s">
-          <div class="flex justify-between items-start">
-            <div class="space-y-1">
-              <h3 class="text-xl font-extrabold text-black">Math</h3>
-              <p class="text-xs text-gray-500 font-medium">Accuracy by topic</p>
-            </div>
-            <div class="flex items-center gap-3 text-[10px] font-bold text-gray-500">
-              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span> ≥ 85%</span>
-              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-orange-400"></span> 60–84%</span>
-              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500"></span> &lt; 60%</span>
-            </div>
-          </div>
-
-          <div class="space-y-5" id="math-topics-list">
-            <!-- Dynamically populated rows -->
-          </div>
-
-          <!-- SECTION 4 EMPTY STATE OVERLAY (Visible because questionsAttempted = 6 < 15) -->
-          <div id="math-empty-overlay" class="absolute inset-0 bg-white/95 z-20 flex flex-col items-center justify-center gap-2 p-6 text-center">
-            <div class="text-4xl text-gray-300">📊</div>
-            <strong class="text-base font-extrabold text-[#111827]">Not enough data yet</strong>
-            <p class="text-xs text-gray-500 font-medium">Answer ~15 questions to unlock.</p>
-          </div>
-        </div>
-
-        <!-- SECTION 5: KNOW YOUR WEAK SPOTS (CREAM WIDE CARD) -->
-        <div class="bg-creamBg border border-orange-100 rounded-3xl p-6 md:p-8 space-y-8 shadow-sm fade-up-card" style="animation-delay: 0.4s">
-          <div class="space-y-1">
-            <h3 class="text-2xl font-black text-black">Know your weak spots</h3>
-            <p class="text-xs text-gray-500 leading-relaxed font-medium">See weekly activity, accuracy by topic, and time share by difficulty so you know exactly what to practice.</p>
-          </div>
-
-          <!-- Stacked bubble/pill bar chart (SVG implementation) -->
-          <div class="space-y-2">
-            <div id="stacked-svg-chart" class="w-full h-[220px]">
-              <!-- Dynamic SVG stacked bubbles injected here -->
-            </div>
-          </div>
-
-          <!-- 2-Column Topic Accuracy Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 pt-4 border-t border-orange-100" id="weak-spots-grid">
-            <!-- Filled dynamically -->
-          </div>
-
-          <!-- 2 Time Analysis cards side-by-side -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-            
-            <!-- Left Card: English Donuts -->
-            <div class="bg-white border border-gray-150 rounded-2xl p-5 flex flex-col sm:flex-row gap-5 items-center">
-              <div class="relative w-28 h-28 flex-shrink-0 flex items-center justify-center">
-                <!-- CSS conic-gradient Donut Chart -->
-                <div class="w-full h-full rounded-full" style="background: conic-gradient(#22c55e 0% 65%, #fb923c 65% 85%, #f87171 85% 100%);"></div>
-                <!-- Inner circle block -->
-                <div class="absolute w-20 h-20 bg-white rounded-full flex flex-col justify-center items-center text-center">
-                  <strong class="text-xs font-black text-black leading-none">2m 12s</strong>
-                  <span class="text-[8px] font-bold text-gray-400">avg</span>
-                </div>
-              </div>
-              
-              <div class="flex-1 space-y-1 w-full">
-                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">English Pace</span>
-                <ul class="text-[11px] font-bold text-gray-600 space-y-1">
-                  <li class="flex justify-between">
-                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span> Easy:</span> 
-                    <span>46s <span class="text-gray-400 font-medium">/ avg 1m 11s</span></span>
-                  </li>
-                  <li class="flex justify-between">
-                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-orange-400"></span> Medium:</span> 
-                    <span>1m 14s <span class="text-gray-400 font-medium">/ avg 1m 23s</span></span>
-                  </li>
-                  <li class="flex justify-between">
-                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500"></span> Hard:</span> 
-                    <span>2m 52s <span class="text-gray-400 font-medium">/ avg 2m 23s</span></span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- Right Card: Math Donuts (Locked overlay state) -->
-            <div class="bg-white border border-gray-150 rounded-2xl p-5 relative overflow-hidden flex flex-col sm:flex-row gap-5 items-center">
-              
-              <div class="relative w-28 h-28 flex-shrink-0 flex items-center justify-center opacity-25">
-                <div class="w-full h-full rounded-full" style="background: conic-gradient(#e5e7eb 0% 100%);"></div>
-                <div class="absolute w-20 h-20 bg-white rounded-full flex flex-col justify-center items-center">
-                  <strong class="text-xs font-black text-gray-400">1m 58s</strong>
-                  <span class="text-[8px] font-bold text-gray-400">avg</span>
-                </div>
-              </div>
-              
-              <div class="flex-1 space-y-1 w-full opacity-25">
-                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Math Pace</span>
-                <ul class="text-[11px] font-bold text-gray-600 space-y-1">
-                  <li>● Easy: --</li>
-                  <li>● Medium: --</li>
-                  <li>● Hard: --</li>
-                </ul>
-              </div>
-
-              <!-- Locked data overlay -->
-              <div class="absolute inset-0 bg-white/95 flex flex-col items-center justify-center p-4 text-center gap-1">
-                <span class="text-xl">⏱️</span>
-                <strong class="text-xs font-extrabold text-black">Not enough data yet</strong>
-                <p class="text-[10px] text-gray-400 font-medium leading-relaxed">Shows after a few timed questions.</p>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-
-      <!-- RIGHT COLUMN (SPAN 1): SIDEBAR PANELS -->
-      <div class="space-y-6">
-
-        <!-- SECTION 6: SEE HOW YOU PACE Lollipop chart -->
-        <div class="bg-white border border-gray-200 rounded-3xl p-6 space-y-6 shadow-sm fade-up-card" style="animation-delay: 0.45s">
-          <div class="space-y-1">
-            <h3 class="text-xl font-extrabold text-black">See how you pace</h3>
-            <p class="text-xs text-gray-500 leading-relaxed font-medium font-medium">Compare your pacing to thousands of other students on the platform to see where you stand.</p>
-          </div>
-
-          <!-- SVG Lollipop Chart container -->
-          <div id="lollipop-svg-chart" class="w-full h-[180px]">
-            <!-- Lollipop SVG elements go here -->
-          </div>
-        </div>
-
-        <!-- SECTION 7: TRACK YOUR DAILY ACTIVITY Heatmap -->
-        <div class="bg-white border border-gray-200 rounded-3xl p-6 space-y-6 shadow-sm fade-up-card" style="animation-delay: 0.5s">
-          <div class="space-y-1">
-            <h3 class="text-xl font-extrabold text-black">Track your daily activity</h3>
-            <p class="text-xs text-gray-500 font-medium">See how daily practice adds up over time.</p>
-          </div>
-
-          <!-- Heatmap render grid -->
-          <div id="mini-heatmap-container" class="space-y-4">
-            <!-- Dynamic Apr / May 2026 calendars inside -->
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- SECTION 8: YOUR PRACTICE ACTIVITY HEATMAP GRID -->
-    <div class="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 space-y-6 shadow-sm fade-up-card" style="animation-delay: 0.55s">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div class="space-y-1">
-          <h3 class="text-2xl font-black text-black">Your practice activity</h3>
-          <p class="text-xs text-gray-500 font-medium">Most active: <strong class="text-blue-600 font-black">Saturday</strong>.</p>
-        </div>
-        <div class="text-xs text-gray-500 font-extrabold" id="foot-attempts-label">6 questions answered.</div>
-      </div>
-
-      <!-- 10-Month Heatmap grid layout -->
-      <div id="ten-month-heatmap" class="grid grid-cols-1 md:grid-cols-5 gap-6 pt-4 border-t border-gray-100">
-        <!-- Rendered dynamically (Aug 2025 -> May 2026) -->
-      </div>
-
-      <!-- Bottom Heatmap Legend -->
-      <div class="flex items-center gap-2 justify-end text-[10px] font-bold text-gray-400">
-        <span>Less</span>
-        <span class="w-3.5 h-3.5 bg-gray-200 rounded-sm"></span>
-        <span class="w-3.5 h-3.5 bg-blue-200 rounded-sm"></span>
-        <span class="w-3.5 h-3.5 bg-blue-300 rounded-sm"></span>
-        <span class="w-3.5 h-3.5 bg-blue-400 rounded-sm"></span>
-        <span class="w-3.5 h-3.5 bg-blue-700 rounded-sm"></span>
-        <span>More</span>
-      </div>
-    </div>
-
   </div>
 
-  <!-- STICKY PRO FOOTER UPGRADE BANNER -->
-  <div id="sticky-upgrade-banner" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-xl bg-pink-500 text-white rounded-full px-6 py-4 flex items-center justify-between shadow-2xl z-40 popover-enter">
-    <div class="text-xs font-bold leading-tight">
-      Unlock the full report with Pro.
-    </div>
-    <button onclick="alert('Checkout loaded!')" class="bg-white hover:bg-pink-50 text-pink-600 text-[10px] font-black px-4 py-2 rounded-full transition-all shadow active:scale-95">
-      Upgrade to Pro
-    </button>
-  </div>
-
-  <!-- ==========================================
-       JAVASCRIPT DYNAMICS MOTOR
-       ========================================== -->
   <script>
-    const API_BASE = '';
-
-    // State fallbacks for offline execution
-    let offlineFallback = false;
-
-    document.addEventListener('DOMContentLoaded', () => {
-      // Setup sticky upgrade banner triggers
-      window.addEventListener('scroll', () => {
-        const banner = document.getElementById('sticky-upgrade-banner');
-        if (window.scrollY > 250) {
-          banner.classList.remove('hidden');
-        } else {
-          banner.classList.add('hidden');
-        }
-      });
-
-      loadDashboardData();
-    });
-
-    async function fetchFromApi(endpoint) {
-      try {
-        const response = await fetch(`${API_BASE}${endpoint}`);
-        if (!response.ok) throw new Error("API server responded with error");
-        return await response.json();
-      } catch (err) {
-        console.warn(`[Connection Failure] falling back to client-side data calculations. Target: ${endpoint}`);
-        offlineFallback = true;
-        return handleOfflineFallback(endpoint);
-      }
-    }
-
-    async function loadDashboardData() {
-      try {
-        // Parallel requests
-        const [summary, trend, accuracy, timing, pacing, heatmap, weakSpots] = await Promise.all([
-          fetchFromApi('/api/analytics/summary'),
-          fetchFromApi('/api/analytics/activity-trend'),
-          fetchFromApi('/api/analytics/accuracy-by-topic'),
-          fetchFromApi('/api/analytics/time-by-difficulty'),
-          fetchFromApi('/api/analytics/pacing'),
-          fetchFromApi('/api/analytics/heatmap?months=10'),
-          fetchFromApi('/api/analytics/weak-spots')
-        ]);
-
-        // Hide loader & show dashboard
-        document.getElementById('skeleton-loader').classList.add('hidden');
-        document.getElementById('main-content').classList.remove('hidden');
-
-        // Render sections
-        renderSummary(summary);
-        renderActivityTrendChart(trend);
-        renderAccuracyByTopic(accuracy);
-        renderWeakSpotsChart(weakSpots);
-        renderLollipopPacingChart(pacing);
-        renderHeatmaps(heatmap);
-
-      } catch (err) {
-        console.error("Dashboard compilation failed", err);
-      }
-    }
-
-    // SECTION 1: Summary Stats
-    function renderSummary(summary) {
-      document.getElementById('stat-attempted').textContent = summary.questionsAttempted;
-      document.getElementById('stat-accuracy').textContent = `${summary.currentAccuracy}%`;
-      document.getElementById('stat-saved').textContent = summary.savedQuestions;
-      document.getElementById('stat-streak').textContent = summary.studyStreak;
-
-      document.getElementById('foot-attempts-label').textContent = `${summary.questionsAttempted} questions answered.`;
-      
-      // Control empty state overlays
-      const overlay = document.getElementById('math-empty-overlay');
-      if (summary.questionsAttempted >= 15) {
-        overlay.classList.add('hidden');
+    let isSidebarCollapsed = false;
+    function toggleSidebar() {
+      isSidebarCollapsed = !isSidebarCollapsed;
+      const sidebar = document.getElementById('sidebar');
+      const icon = document.getElementById('collapse-icon');
+      if (isSidebarCollapsed) {
+        sidebar.classList.add('collapsed');
+        icon.classList.add('rotate-180');
       } else {
-        overlay.classList.remove('hidden');
+        sidebar.classList.remove('collapsed');
+        icon.classList.remove('rotate-180');
       }
     }
 
-    // SECTION 2: Canvas Activity Trend Chart
-    function renderActivityTrendChart(trend) {
-      const canvas = document.getElementById('trendCanvas');
-      if (!canvas) return;
+    // Populate mock grid for Vocab
+    const vocabGrid = document.getElementById('vocab-grid');
+    if (vocabGrid) {
+      let html = '';
+      for(let i=0; i<90; i++) {
+        let colorClass = "bg-[#EDEDED]"; // Gray remaining
+        if (i < 37) colorClass = "bg-[#5C4CE5]"; // Dark purple
+        else if (i < 48) colorClass = "bg-[#C7D2FE]"; // Light purple (seen)
+        html += `<div class="w-[14px] h-[14px] rounded-[2px] ${colorClass}"></div>`;
+      }
+      vocabGrid.innerHTML = html;
+    }
 
-      // Make responsive high DPI
-      const rect = canvas.parentNode.getBoundingClientRect();
-      canvas.width = rect.width * 2;
-      canvas.height = 220 * 2;
-      canvas.style.width = `${rect.width}px`;
-      canvas.style.height = `220px`;
-
-      const ctx = canvas.getContext('2d');
-      ctx.scale(2, 2);
-
-      // Clean canvas
-      ctx.clearRect(0, 0, rect.width, 220);
-
-      const chartHeight = 160;
-      const startX = 40;
-      const startY = 180;
-      const barWidth = 40;
-      const gap = (rect.width - 80 - (6 * barWidth)) / 5;
-
-      // Draw Grid Y lines
-      ctx.strokeStyle = '#f3f4f6';
-      ctx.lineWidth = 1;
-      ctx.fillStyle = '#9ca3af';
-      ctx.font = '10px DM Sans, sans-serif';
-      ctx.textAlign = 'right';
-
-      const yTicks = [0, 2, 4, 6, 8];
-      yTicks.forEach(tick => {
-        const yVal = startY - (tick / 8 * chartHeight);
-        ctx.beginPath();
-        ctx.moveTo(startX, yVal);
-        ctx.lineTo(rect.width - 20, yVal);
-        ctx.stroke();
-        ctx.fillText(tick, startX - 10, yVal + 3);
-      });
-
-      // Draw stacked bars
-      trend.forEach((item, index) => {
-        const xVal = startX + index * (barWidth + gap);
-        
-        // Sum total bar elements
-        const total = item.easyCorrect + item.hardCorrect + item.easyWrong + item.hardWrong;
-        if (total === 0) {
-          // Empty state placeholder dash line
-          ctx.strokeStyle = '#e5e7eb';
-          ctx.setLineDash([4, 4]);
-          ctx.beginPath();
-          ctx.moveTo(xVal + barWidth/2, startY);
-          ctx.lineTo(xVal + barWidth/2, startY - 10);
-          ctx.stroke();
-          ctx.setLineDash([]);
-        } else {
-          // Render stacks bottom-to-top: Hard wrong (dark red), Easy wrong (light red), Hard correct (dark green), Easy correct (light green)
-          const heights = {
-            hardWrong: (item.hardWrong / 8) * chartHeight,
-            easyWrong: (item.easyWrong / 8) * chartHeight,
-            hardCorrect: (item.hardCorrect / 8) * chartHeight,
-            easyCorrect: (item.easyCorrect / 8) * chartHeight
-          };
-
-          let currentY = startY;
-
-          // Render Hard wrong
-          if (heights.hardWrong > 0) {
-            ctx.fillStyle = '#ef4444'; // RedDark
-            ctx.fillRect(xVal, currentY - heights.hardWrong, barWidth, heights.hardWrong);
-            currentY -= heights.hardWrong;
-          }
-          // Easy wrong
-          if (heights.easyWrong > 0) {
-            ctx.fillStyle = '#f87171'; // RedLight
-            ctx.fillRect(xVal, currentY - heights.easyWrong, barWidth, heights.easyWrong);
-            currentY -= heights.easyWrong;
-          }
-          // Hard correct
-          if (heights.hardCorrect > 0) {
-            ctx.fillStyle = '#16a34a'; // GreenDark
-            ctx.fillRect(xVal, currentY - heights.hardCorrect, barWidth, heights.hardCorrect);
-            currentY -= heights.hardCorrect;
-          }
-          // Easy correct
-          if (heights.easyCorrect > 0) {
-            ctx.fillStyle = '#22c55e'; // GreenLight
-            // Rounded corners on top-most stack only
-            const topHeight = heights.easyCorrect;
-            ctx.fillStyle = '#22c55e';
-            ctx.beginPath();
-            ctx.roundRect(xVal, currentY - topHeight, barWidth, topHeight, [6, 6, 0, 0]);
-            ctx.fill();
-          }
+    // Populate mock grid for Heatmap
+    const heatmapGrid = document.getElementById('heatmap-grid');
+    if (heatmapGrid) {
+      let hHtml = '';
+      const shades = ['bg-[#EDEDED]', 'bg-[#E0E7FF]', 'bg-[#C7D2FE]', 'bg-[#818CF8]', 'bg-[#5C4CE5]', 'bg-[#4338CA]'];
+      for(let c=0; c<19; c++) {
+        hHtml += '<div class="flex flex-col gap-[3px]">';
+        for(let r=0; r<6; r++) {
+          let shade = shades[0];
+          let rand = Math.random();
+          if (rand > 0.85) shade = shades[5];
+          else if (rand > 0.7) shade = shades[4];
+          else if (rand > 0.5) shade = shades[3];
+          else if (rand > 0.3) shade = shades[2];
+          else if (rand > 0.15) shade = shades[1];
+          hHtml += `<div class="w-[14px] h-[14px] rounded-[2px] ${shade}"></div>`;
         }
-
-        // Draw X tick label
-        ctx.fillStyle = '#6b7280';
-        ctx.textAlign = 'center';
-        ctx.font = '10px DM Sans, sans-serif';
-        ctx.fillText(item.week, xVal + barWidth / 2, startY + 20);
-      });
-    }
-
-    // SECTION 3 & 4: Accuracy lists
-    function renderAccuracyByTopic(accuracy) {
-      // English topic render
-      const engList = document.getElementById('english-topics-list');
-      engList.innerHTML = accuracy.english.map(topic => {
-        if (topic.locked) {
-          return `
-            <div class="relative overflow-hidden">
-              <div class="flex justify-between items-center text-xs font-bold text-gray-400 pro-locked-row">
-                <span>${escapeHtml(topic.topic)}</span>
-                <span>0 attempts</span>
-              </div>
-              <div class="w-full bg-gray-150 h-3 rounded-full mt-2 overflow-hidden pro-locked-row">
-                <div class="h-full bg-gray-200" style="width: 100%"></div>
-              </div>
-              <!-- Lock overlay bubble -->
-              <div class="absolute inset-0 flex items-center justify-center bg-white/40 text-[10px] font-black text-pink-600 gap-1">
-                🔒 Unlock with Pro
-              </div>
-            </div>
-          `;
-        } else {
-          return `
-            <div class="space-y-1.5">
-              <div class="flex justify-between items-center text-xs font-bold text-black">
-                <span>${escapeHtml(topic.topic)}</span>
-                <span class="text-gray-400 font-medium">${topic.attempts} attempts</span>
-              </div>
-              
-              <!-- 3-Color zone bar -->
-              <div class="relative w-full h-3 rounded-full overflow-hidden flex">
-                <div class="bg-red-400/80 w-[60%] h-full"></div>
-                <div class="bg-orange-300 w-[25%] h-full"></div>
-                <div class="bg-green-400 w-[15%] h-full"></div>
-                
-                <!-- Dot indicator absolute positioned at 100% accuracy -->
-                <div class="absolute w-3.5 h-3.5 rounded-full border-2 border-white bg-green-500 shadow-sm top-1/2 -translate-y-1/2 accuracy-dot" style="left: calc(${topic.accuracy}% - 7px)"></div>
-              </div>
-              <div class="flex justify-end text-xs font-black text-green-600 mt-1">${topic.accuracy}%</div>
-            </div>
-          `;
-        }
-      }).join('');
-
-      // Math topic render
-      const mathList = document.getElementById('math-topics-list');
-      mathList.innerHTML = accuracy.math.map(topic => {
-        if (topic.locked) {
-          return `
-            <div class="relative overflow-hidden">
-              <div class="flex justify-between items-center text-xs font-bold text-gray-400 pro-locked-row">
-                <span>${escapeHtml(topic.topic)}</span>
-                <span>0 attempts</span>
-              </div>
-              <div class="w-full bg-gray-150 h-3 rounded-full mt-2 overflow-hidden pro-locked-row">
-                <div class="h-full bg-gray-200" style="width: 100%"></div>
-              </div>
-              <div class="absolute inset-0 flex items-center justify-center bg-white/40 text-[10px] font-black text-pink-600 gap-1">
-                🔒 Unlock with Pro
-              </div>
-            </div>
-          `;
-        } else {
-          let dotColor = "bg-red-500";
-          if (topic.accuracy >= 85) dotColor = "bg-green-500";
-          else if (topic.accuracy >= 60) dotColor = "bg-orange-400";
-
-          return `
-            <div class="space-y-1.5">
-              <div class="flex justify-between items-center text-xs font-bold text-black">
-                <span>${escapeHtml(topic.topic)}</span>
-                <span class="text-gray-400 font-medium">${topic.attempts} attempts</span>
-              </div>
-              
-              <!-- 3-Color zone bar -->
-              <div class="relative w-full h-3 rounded-full overflow-hidden flex">
-                <div class="bg-red-400/80 w-[60%] h-full"></div>
-                <div class="bg-orange-300 w-[25%] h-full"></div>
-                <div class="bg-green-400 w-[15%] h-full"></div>
-                
-                <!-- Dot indicator absolute positioned -->
-                <div class="absolute w-3.5 h-3.5 rounded-full border-2 border-white ${dotColor} shadow-sm top-1/2 -translate-y-1/2 accuracy-dot" style="left: calc(${topic.accuracy}% - 7px)"></div>
-              </div>
-              <div class="flex justify-end text-xs font-black text-gray-600 mt-1">${topic.accuracy}%</div>
-            </div>
-          `;
-        }
-      }).join('');
-    }
-
-    // SECTION 5: Cream Weak Spots card SVG
-    function renderWeakSpotsChart(weakSpots) {
-      const container = document.getElementById('stacked-svg-chart');
-      if (!container) return;
-
-      const rect = container.getBoundingClientRect();
-      const chartWidth = rect.width;
-      const chartHeight = 220;
-
-      const startX = 40;
-      const startY = 180;
-      const plotWidth = chartWidth - startX - 20;
-      const plotHeight = startY - 30;
-
-      const barWidth = 14;
-      const count = weakSpots.weeklyBars.length;
-      const gap = (plotWidth - (count * barWidth)) / (count - 1);
-
-      // Y line guides (0, 20, 40, 60, 80)
-      let svgLines = '';
-      const ticks = [0, 20, 40, 60, 80];
-      ticks.forEach(tick => {
-        const yVal = startY - (tick / 80 * plotHeight);
-        svgLines += `
-          <line x1="${startX}" y1="${yVal}" x2="${chartWidth - 20}" y2="${yVal}" stroke="#f3ece0" stroke-width="1.5" />
-          <text x="${startX - 10}" y="${yVal + 3}" fill="#a39683" font-size="9" font-weight="bold" text-anchor="end">${tick}</text>
-        `;
-      });
-
-      // Render Stacked bubble pills
-      let svgBars = '';
-      weakSpots.weeklyBars.forEach((bar, index) => {
-        const xVal = startX + index * (barWidth + gap);
-        
-        // Stack segments bottom-to-top: red, lightGreen, darkGreen
-        const redH = (bar.redHeight / 80) * plotHeight;
-        const lgH = (bar.lightGreenHeight / 80) * plotHeight;
-        const dgH = (bar.darkGreenHeight / 80) * plotHeight;
-        const totalHeight = redH + lgH + dgH;
-
-        const xCenter = xVal + barWidth/2;
-
-        // Render single continuous pill with layered segments
-        svgBars += `
-          <!-- Bottom segment: Coral Red -->
-          <rect x="${xVal}" y="${startY - redH}" width="${barWidth}" height="${redH}" rx="${barWidth/2}" fill="#f87171" />
-          
-          <!-- Middle segment: Light Green -->
-          <rect x="${xVal}" y="${startY - redH - lgH}" width="${barWidth}" height="${lgH + barWidth/2}" rx="${barWidth/2}" fill="#86efac" />
-          
-          <!-- Top segment: Dark Green -->
-          <rect x="${xVal}" y="${startY - totalHeight}" width="${barWidth}" height="${dgH + barWidth/2}" rx="${barWidth/2}" fill="#16a34a" />
-
-          <!-- X axis Label -->
-          <text x="${xCenter}" y="${startY + 20}" fill="#8c7d6b" font-size="9" font-weight="bold" text-anchor="middle">${bar.label}</text>
-        `;
-      });
-
-      container.innerHTML = `
-        <svg width="100%" height="100%" viewBox="0 0 ${chartWidth} ${chartHeight}">
-          ${svgLines}
-          ${svgBars}
-        </svg>
-      `;
-
-      // Fill 2-Column Topic Accuracy grid
-      const grid = document.getElementById('weak-spots-grid');
-      const leftCol = [];
-      const rightCol = [];
-
-      weakSpots.topicAccuracy.forEach(topic => {
-        const rowHtml = `
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center text-xs font-bold text-black">
-              <span class="truncate max-w-[200px]">${escapeHtml(topic.topic)}</span>
-              <span class="text-gray-400 font-medium">${topic.attempts} attempts</span>
-            </div>
-            
-            <div class="relative w-full h-2 rounded-full overflow-hidden flex bg-orange-100/50">
-              <div class="bg-red-400/80 w-[60%] h-full"></div>
-              <div class="bg-orange-300 w-[25%] h-full"></div>
-              <div class="bg-green-400 w-[15%] h-full"></div>
-              
-              <!-- Dot position pointer -->
-              <div class="absolute w-2.5 h-2.5 rounded-full border border-white bg-orange-400 shadow-sm top-1/2 -translate-y-1/2" style="left: calc(${topic.accuracy}% - 5px)"></div>
-            </div>
-            <div class="flex justify-end text-[11px] font-black text-black">${topic.accuracy}%</div>
-          </div>
-        `;
-        if (topic.subject === 'english') {
-          leftCol.push(rowHtml);
-        } else {
-          rightCol.push(rowHtml);
-        }
-      });
-
-      grid.innerHTML = `
-        <div class="space-y-5">${leftCol.join('')}</div>
-        <div class="space-y-5">${rightCol.join('')}</div>
-      `;
-    }
-
-    // SECTION 6: Lollipop range pacing chart SVG
-    function renderLollipopPacingChart(pacing) {
-      const container = document.getElementById('lollipop-svg-chart');
-      if (!container) return;
-
-      const rect = container.getBoundingClientRect();
-      const chartWidth = rect.width;
-      const chartHeight = 180;
-
-      const startX = 40;
-      const startY = 140;
-      const plotWidth = chartWidth - startX - 20;
-      const plotHeight = startY - 20;
-
-      const count = pacing.length;
-      const gap = plotWidth / (count - 1);
-
-      // Y Line guides (0s, 15s, 30s, 45s, 1m)
-      let svgLines = '';
-      const labels = [
-        { label: "0s", val: 0 },
-        { label: "15s", val: 15 },
-        { label: "30s", val: 30 },
-        { label: "45s", val: 45 },
-        { label: "1m", val: 60 }
-      ];
-
-      labels.forEach(tick => {
-        const yVal = startY - (tick.val / 60 * plotHeight);
-        svgLines += `
-          <line x1="${startX}" y1="${yVal}" x2="${chartWidth - 20}" y2="${yVal}" stroke="#f3f4f6" stroke-width="1.5" />
-          <text x="${startX - 10}" y="${yVal + 3}" fill="#9ca3af" font-size="9" font-weight="bold" text-anchor="end">${tick.label}</text>
-        `;
-      });
-
-      // Platform range vertical bars + blue circle dot
-      let svgData = '';
-      pacing.forEach((item, index) => {
-        const xVal = startX + index * gap;
-        
-        // Range bar
-        const yMax = startY - (item.platformMax / 60 * plotHeight);
-        const yMin = startY - (item.platformMin / 60 * plotHeight);
-        
-        // Your dot time
-        const yDot = startY - (item.yourTime / 60 * plotHeight);
-
-        svgData += `
-          <!-- Range bar -->
-          <line x1="${xVal}" y1="${yMin}" x2="${xVal}" y2="${yMax}" stroke="#bfdbfe" stroke-width="6" stroke-linecap="round" opacity="0.6" />
-          
-          <!-- Your time dot -->
-          <circle cx="${xVal}" cy="${yDot}" r="4.5" fill="#3b82f6" stroke="#ffffff" stroke-width="1.5" />
-
-          <!-- X axis Label -->
-          <text x="${xVal}" y="${startY + 20}" fill="#6b7280" font-size="9" font-weight="bold" text-anchor="middle">${item.week}</text>
-        `;
-      });
-
-      container.innerHTML = `
-        <svg width="100%" height="100%" viewBox="0 0 ${chartWidth} ${chartHeight}">
-          ${svgLines}
-          ${svgData}
-        </svg>
-        
-        <!-- Legend beneath -->
-        <div class="flex justify-center gap-4 text-[9px] font-bold text-gray-400 pt-2">
-          <span class="flex items-center gap-1"><span class="w-3.5 h-1.5 rounded-full bg-blue-100"></span> Platform range</span>
-          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Your time</span>
-        </div>
-      `;
-    }
-
-    // SECTION 7 & 8: heatmaps
-    function renderHeatmaps(heatmap) {
-      // 1. Mini 2-Month Heatmap Calendar (Apr & May 2026)
-      const miniContainer = document.getElementById('mini-heatmap-container');
-      
-      const weeksArr = ["M", "T", "W", "T", "F", "S", "S"];
-      
-      const aprGrid = generateMonthGrid(2026, 3, heatmap); // 0-indexed month
-      const mayGrid = generateMonthGrid(2026, 4, heatmap);
-
-      miniContainer.innerHTML = `
-        <div class="grid grid-cols-2 gap-4">
-          <!-- April -->
-          <div class="space-y-2 text-center">
-            <h4 class="text-xs font-bold text-black">Apr 2026</h4>
-            <div class="grid grid-cols-7 gap-1">
-              ${weeksArr.map(w => `<span class="text-[8px] font-bold ${w === 'S' && weeksArr.indexOf(w) === 5 ? 'text-blue-500' : 'text-gray-400'}">${w}</span>`).join('')}
-              ${aprGrid}
-            </div>
-          </div>
-          <!-- May -->
-          <div class="space-y-2 text-center">
-            <h4 class="text-xs font-bold text-black">May 2026</h4>
-            <div class="grid grid-cols-7 gap-1">
-              ${weeksArr.map(w => `<span class="text-[8px] font-bold ${w === 'S' && weeksArr.indexOf(w) === 5 ? 'text-blue-500' : 'text-gray-400'}">${w}</span>`).join('')}
-              ${mayGrid}
-            </div>
-          </div>
-        </div>
-        
-        <div class="flex items-center gap-1.5 justify-center text-[9px] font-bold text-gray-400 pt-2 border-t border-gray-100">
-          <span>Less</span>
-          <span class="w-2.5 h-2.5 bg-gray-200 rounded-sm"></span>
-          <span class="w-2.5 h-2.5 bg-blue-200 rounded-sm"></span>
-          <span class="w-2.5 h-2.5 bg-blue-300 rounded-sm"></span>
-          <span class="w-2.5 h-2.5 bg-blue-400 rounded-sm"></span>
-          <span class="w-2.5 h-2.5 bg-blue-700 rounded-sm"></span>
-          <span>More</span>
-        </div>
-      `;
-
-      // 2. 10-Month Heatmap grid layout (Aug 2025 -> May 2026)
-      const tenMonthGrid = document.getElementById('ten-month-heatmap');
-      
-      const monthsList = [
-        { year: 2025, month: 7, name: "August 2025" },
-        { year: 2025, month: 8, name: "September 2025" },
-        { year: 2025, month: 9, name: "October 2025" },
-        { year: 2025, month: 10, name: "November 2025" },
-        { year: 2025, month: 11, name: "December 2025" },
-        { year: 2026, month: 0, name: "January 2026" },
-        { year: 2026, month: 1, name: "February 2026" },
-        { year: 2026, month: 2, name: "March 2026" },
-        { year: 2026, month: 3, name: "April 2026" },
-        { year: 2026, month: 4, name: "May 2026" }
-      ];
-
-      tenMonthGrid.innerHTML = monthsList.map(m => {
-        const daysHeaders = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
-        const gridSquares = generateMonthGrid(m.year, m.month, heatmap);
-        
-        return `
-          <div class="space-y-2 text-center bg-gray-50/50 p-2.5 rounded-xl border border-gray-100">
-            <h4 class="text-[10px] font-extrabold text-black uppercase tracking-wider">${m.name}</h4>
-            <div class="grid grid-cols-7 gap-1">
-              ${daysHeaders.map(d => `<span class="text-[7px] font-bold ${d === 'Sa' ? 'text-blue-500' : 'text-gray-400'}">${d}</span>`).join('')}
-              ${gridSquares}
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // Helper month grid squares builder
-    function generateMonthGrid(year, monthIndex, heatmap) {
-      // Days count inside target month
-      const daysCount = new Date(year, monthIndex + 1, 0).getDate();
-      // First day of month (convert Sunday 0 to Saturday index alignment)
-      let firstDay = new Date(year, monthIndex, 1).getDay();
-      firstDay = firstDay === 0 ? 6 : firstDay - 1; // Align to Mon-Sun index
-
-      const squares = [];
-      
-      // Blank placeholders for pre-first day spacing
-      for (let i = 0; i < firstDay; i++) {
-        squares.push(`<div class="w-1.5 h-1.5 bg-transparent rounded-sm"></div>`);
+        hHtml += '</div>';
       }
-
-      // Populate squares
-      for (let d = 1; d <= daysCount; d++) {
-        const dateString = `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-        const count = heatmap[dateString] || 0;
-
-        let color = "bg-gray-200"; // 0
-        if (count >= 11) color = "bg-blue-700";
-        else if (count >= 7) color = "bg-blue-400";
-        else if (count >= 4) color = "bg-blue-300";
-        else if (count >= 1) color = "bg-blue-200";
-
-        squares.push(`
-          <div class="w-1.5 h-1.5 ${color} rounded-sm cursor-pointer hover:ring-1 hover:ring-black" title="${dateString}: ${count} questions"></div>
-        `);
-      }
-
-      return squares.join('');
-    }
-
-    // Graceful offline fallback loader mockups
-    function handleOfflineFallback(endpoint) {
-      if (endpoint.includes('summary')) {
-        return { questionsAttempted: 6, currentAccuracy: 100, savedQuestions: 0, studyStreak: 0, totalCorrect: 6, totalWrong: 0 };
-      }
-      if (endpoint.includes('activity-trend')) {
-        return [
-          { week: "Aug 11, '25", easyCorrect: 5, hardCorrect: 1, easyWrong: 0, hardWrong: 0 },
-          { week: "Sep 29, '25", easyCorrect: 0, hardCorrect: 0, easyWrong: 0, hardWrong: 0 },
-          { week: "Nov 17, '25", easyCorrect: 0, hardCorrect: 0, easyWrong: 0, hardWrong: 0 },
-          { week: "Jan 5, '26", easyCorrect: 0, hardCorrect: 0, easyWrong: 0, hardWrong: 0 },
-          { week: "Feb 23, '26", easyCorrect: 0, hardCorrect: 0, easyWrong: 0, hardWrong: 0 },
-          { week: "Apr 13, '26", easyCorrect: 0, hardCorrect: 0, easyWrong: 0, hardWrong: 0 }
-        ];
-      }
-      if (endpoint.includes('accuracy-by-topic')) {
-        return {
-          english: [
-            { topic: "Standard English Conventions", attempts: 6, accuracy: 100, locked: false },
-            { topic: "Information and Ideas", attempts: 0, accuracy: null, locked: true },
-            { topic: "Craft and Structure", attempts: 0, accuracy: null, locked: true },
-            { topic: "Expression of Ideas", attempts: 0, accuracy: null, locked: true }
-          ],
-          math: [
-            { topic: "Algebra", attempts: 31, accuracy: 58, locked: false },
-            { topic: "Advanced Math", attempts: 35, accuracy: 41, locked: false },
-            { topic: "Problem Solving and Data Analysis", attempts: 0, accuracy: null, locked: true },
-            { topic: "Geometry", attempts: 0, accuracy: null, locked: true }
-          ]
-        };
-      }
-      if (endpoint.includes('time-by-difficulty')) {
-        return {
-          english: { avgTotal: "2m 12s", easy: { yourTime: "46s", platformAvg: "1m 11s" }, medium: { yourTime: "1m 14s", platformAvg: "1m 23s" }, hard: { yourTime: "2m 52s", platformAvg: "2m 23s" } },
-          math: { avgTotal: "1m 58s", easy: { yourTime: "55s", platformAvg: "1m 8s" }, medium: { yourTime: "1m 35s", platformAvg: "1m 31s" }, hard: { yourTime: "3m 8s", platformAvg: "2m 23s" } }
-        };
-      }
-      if (endpoint.includes('pacing')) {
-        return [
-          { week: "Mar 24", yourTime: 32, platformMin: 20, platformMax: 50 },
-          { week: "Mar 31", yourTime: 28, platformMin: 18, platformMax: 48 },
-          { week: "Apr 7",  yourTime: 40, platformMin: 24, platformMax: 55 },
-          { week: "Apr 14", yourTime: 38, platformMin: 25, platformMax: 50 },
-          { week: "Apr 21", yourTime: 30, platformMin: 20, platformMax: 44 },
-          { week: "Apr 28", yourTime: 31, platformMin: 18, platformMax: 45 },
-          { week: "May 5",  yourTime: 52, platformMin: 28, platformMax: 58 }
-        ];
-      }
-      if (endpoint.includes('heatmap')) {
-        const heatmap = {};
-        const today = new Date();
-        for (let i = 0; i < 300; i++) {
-          const d = new Date();
-          d.setDate(today.getDate() - i);
-          heatmap[d.toISOString().split('T')[0]] = 0;
-        }
-        heatmap["2025-08-16"] = 6;
-        heatmap["2026-04-12"] = 2;
-        heatmap["2026-04-18"] = 5;
-        heatmap["2026-04-25"] = 9;
-        heatmap["2026-05-02"] = 12;
-        heatmap["2026-05-16"] = 7;
-        heatmap["2026-05-23"] = 4;
-        return heatmap;
-      }
-      if (endpoint.includes('weak-spots')) {
-        return {
-          weeklyBars: [
-            { label: "Mar 24", redHeight: 18, lightGreenHeight: 22, darkGreenHeight: 15 },
-            { label: "Mar 31", redHeight: 15, lightGreenHeight: 20, darkGreenHeight: 14 },
-            { label: "Apr 7",  redHeight: 22, lightGreenHeight: 28, darkGreenHeight: 18 },
-            { label: "Apr 14", redHeight: 20, lightGreenHeight: 26, darkGreenHeight: 13 },
-            { label: "Apr 21", redHeight: 28, lightGreenHeight: 30, darkGreenHeight: 16 },
-            { label: "Apr 28", redHeight: 15, lightGreenHeight: 22, darkGreenHeight: 30 },
-            { label: "May 5",  redHeight: 38, lightGreenHeight: 28, darkGreenHeight: 15 },
-            { label: "May 12", redHeight: 23, lightGreenHeight: 24, darkGreenHeight: 28 },
-            { label: "May 19", redHeight: 30, lightGreenHeight: 20, darkGreenHeight: 31 },
-            { label: "May 26", redHeight: 24, lightGreenHeight: 22, darkGreenHeight: 34 },
-            { label: "Jun 2",  redHeight: 22, lightGreenHeight: 25, darkGreenHeight: 34 }
-          ],
-          topicAccuracy: [
-            { topic: "Information and Ideas", attempts: 48, accuracy: 72, subject: "english" },
-            { topic: "Craft and Structure", attempts: 41, accuracy: 58, subject: "english" },
-            { topic: "Standard English Con...", attempts: 36, accuracy: 81, subject: "english" },
-            { topic: "Algebra", attempts: 52, accuracy: 64, subject: "math" },
-            { topic: "Advanced Math", attempts: 38, accuracy: 47, subject: "math" },
-            { topic: "Problem-Solving...", attempts: 28, accuracy: 76, subject: "math" }
-          ]
-        };
-      }
-      return {};
-    }
-
-    // Helper escape strings
-    function escapeHtml(str) {
-      if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+      heatmapGrid.innerHTML = hHtml;
     }
   </script>
-  </div>
-  <script src="app.js"></script>
 </body>
 </html>
