@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,446 +7,486 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
             sans: ['"Inter"', 'system-ui', 'sans-serif'],
+            outfit: ['"Outfit"', 'sans-serif'],
           },
           colors: {
-            app: {
-              bg: '#F9FAFB',
-              card: '#FFFFFF',
-              border: '#E5E7EB',
-              text: '#111827',
-              gray: '#6B7280',
-              lightGray: '#9CA3AF',
-              primary: '#5C4CE5',
-              primaryLight: '#DEDCFA',
-              primaryFaded: '#F0EFFE',
-              red: '#EF4444',
-              orange: '#F59E0B',
-              green: '#10B981',
-              yellowBg: '#FFF8F0',
-              yellowBorder: '#FDE6C6',
-              yellowText: '#92400E',
-              yellowDot: '#D97706'
-            }
+            bgDark: '#0B0914',
+            cardDark: '#13111C',
+            accentLight: '#8B5CF6',
+            accentHover: '#7C3AED',
+            textMuted: '#6A628B',
+            borderDark: 'rgba(255, 255, 255, 0.05)',
           }
         }
       }
     }
   </script>
-  <link rel="stylesheet" href="style.css" />
-
   <style>
     body {
-      background-color: var(--lav-bg, #F9FAFB);
-      color: #111827;
+      background-color: #0B0914;
       -webkit-font-smoothing: antialiased;
+      overflow: hidden; 
+      color: white;
     }
     
-    /* Sidebar overrides to match the rest of the app */
     #sidebar {
-      position: sticky !important;
-      top: 0;
       height: 100vh;
       overflow-y: auto;
-      transition: width 0.3s ease;
-      width: 240px;
+      width: 250px;
       z-index: 100;
-      background-color: #4A4580;
     }
-    #sidebar.collapsed { width: 80px !important; }
-    #sidebar.collapsed .logo-text,
-    #sidebar.collapsed .exam-selector-container,
-    #sidebar.collapsed .section-label,
-    #sidebar.collapsed .nav-text,
-    #sidebar.collapsed .badge-new,
-    #sidebar.collapsed .user-profile span:not(.avatar) { display: none !important; }
-    #sidebar.collapsed .logo { justify-content: center; padding: 24px 0 20px 0; }
-    #sidebar.collapsed .nav-links a { justify-content: center; padding: 12px 0; font-size: 20px; }
-    #sidebar.collapsed .sidebar-bottom a, #sidebar.collapsed .sidebar-bottom button { justify-content: center; padding: 12px 0; font-size: 20px; }
-    #sidebar.collapsed .user-profile { justify-content: center; padding: 10px 0; background: transparent; }
     
-    /* Custom Scrollbar for Dashboard */
-    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
     
-    /* Animations */
     .fade-up {
-      animation: fadeUp 0.5s ease-out forwards;
+      animation: fadeUp 0.4s ease-out forwards;
       opacity: 0;
       transform: translateY(10px);
     }
     @keyframes fadeUp {
       to { opacity: 1; transform: translateY(0); }
     }
+
+    .bg-image-layer {
+      background-image: url('assets/chaotic_bg_v2.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.25; 
+      mix-blend-mode: screen;
+    }
+
+    .mockup-card {
+      background-color: #13111C;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    
+    .progress-track {
+      background-color: #1F1B2E;
+    }
   </style>
 </head>
-<body class="flex flex-row min-h-screen">
+<body class="flex flex-row h-screen overflow-hidden text-white transition-colors duration-300">
   
+  <div class="fixed inset-0 z-0 pointer-events-none bg-image-layer"></div>
+
   <!-- ═══ VERTICAL SIDEBAR NAV ═══ -->
-  <nav id="sidebar" class="flex-shrink-0 relative group shadow-lg">
-    <button onclick="toggleSidebar()" class="absolute top-6 right-3 text-white/70 hover:text-white hover:bg-white/10 p-1.5 rounded-md z-50 transition-colors">
-      <svg id="collapse-icon" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
-    </button>
-    <div class="logo flex items-center gap-2 px-5 pt-6 pb-5 cursor-pointer select-none" onclick="window.location.href='/'">
-      <span class="logo-icon text-2xl">🤖</span>
-      <span class="logo-text text-xl font-extrabold text-white tracking-tight">SAT Platform</span>
+  <nav id="sidebar" class="flex-shrink-0 relative flex flex-col bg-[#0B0914] border-r border-white/5 z-20">
+    <div class="logo flex items-center gap-3 px-6 pt-8 pb-6 cursor-pointer select-none">
+      <div class="w-8 h-8 rounded-lg bg-[#8B5CF6] flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.4)]">
+         <span class="text-white text-sm">✦</span>
+      </div>
+      <span class="font-outfit text-xl font-bold text-white tracking-tight">SAT Platform</span>
     </div>
-    <div class="px-4 mb-5 exam-selector-container">
-      <select class="exam-selector w-full bg-white/10 text-white border border-white/20 rounded-lg py-2 px-3 text-sm font-semibold cursor-pointer outline-none transition-colors hover:bg-white/20" onchange="if(typeof showToast === 'function') showToast('Selected ' + this.value.toUpperCase())">
-        <option style="background: #4A4580">SAT</option>
-        <option style="background: #4A4580">ACT</option>
-      </select>
+    
+    <div class="px-5 mb-6">
+      <div class="relative">
+        <select class="w-full bg-[#13111C] text-white border border-white/5 rounded-lg py-2.5 px-4 text-sm font-medium cursor-pointer outline-none transition-all hover:bg-white/5 appearance-none">
+          <option class="bg-[#13111C]">SAT Dashboard</option>
+          <option class="bg-[#13111C]">ACT Dashboard</option>
+        </select>
+        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-xs text-white opacity-50">▼</div>
+      </div>
     </div>
-    <ul class="nav-links flex-1 px-2 space-y-1">
-      <li class="section-label text-[10px] font-extrabold tracking-widest text-white/50 uppercase px-4 pt-4 pb-2">DASHBOARD</li>
-      <li><a href="/" onclick="if(typeof show === 'function'){show('dashboard'); return false;}" data-page="home" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm"><span>🏠</span> <span class="nav-text">Home</span></a></li>
-      <li><a href="/study-planner" data-page="study-planner" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm"><span>📅</span> <span class="nav-text">Study Planner</span></a></li>
+
+    <ul class="nav-links flex-1 px-3 space-y-1">
+      <li class="text-[9px] font-bold tracking-widest text-[#6A628B] uppercase px-4 pt-4 pb-2">NAVIGATION</li>
+      <li><a href="index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-all font-medium text-sm"><span>🏠</span> <span>Home</span></a></li>
+      <li><a href="study-planner.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-all font-medium text-sm"><span>📅</span> <span>Study Planner</span></a></li>
       <li>
-        <a href="/analytics" data-page="analytics" class="active flex items-center gap-3 px-3 py-2.5 rounded-lg text-white shadow-inner transition-all font-semibold text-sm relative" style="background: #5A5690; box-shadow: inset 3px 0 0 #B8B0F5;">
-          <span>📊</span> <span class="nav-text">Analytics</span>
+        <a href="analytics.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-white transition-all font-semibold text-sm relative bg-[#1D1932]">
+          <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-3/4 bg-[#8B5CF6] rounded-r-full shadow-[0_0_10px_rgba(139,92,246,0.5)]"></div>
+          <span>📊</span> <span>Analytics</span>
         </a>
       </li>
-      <li><a href="/" onclick="if(typeof show === 'function'){show('chat'); return false;}" data-page="ask-preppy" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm"><span>🤖</span> <span class="nav-text">Ask Preppy AI</span></a></li>
-      <li class="section-label text-[10px] font-extrabold tracking-widest text-white/50 uppercase px-4 pt-6 pb-2">PRACTICE</li>
-      <li><a href="/question-bank" data-page="question-bank" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm"><span>🔲</span> <span class="nav-text">Question Bank</span></a></li>
-      <li><a href="/question-rush" data-page="question-rush" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm"><span>⚡</span> <span class="nav-text">Question Rush</span></a></li>
-      <li><a href="/predicted-tests" data-page="predicted-tests" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm"><span>📝</span> <span class="nav-text">Predicted Tests</span></a></li>
-      <li><a href="/past-exams.html" data-page="past-exams" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm"><span>📝</span> <span class="nav-text">Past Exams</span></a></li>
+      <li><a href="chat-support.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-all font-medium text-sm"><span>🤖</span> <span>Ask Preppy AI</span></a></li>
+      
+      <li class="text-[9px] font-bold tracking-widest text-[#6A628B] uppercase px-4 pt-6 pb-2">TRAINING</li>
+      <li><a href="question-bank.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-all font-medium text-sm"><span>🔲</span> <span>Question Bank</span></a></li>
+      <li><a href="vocab.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-all font-medium text-sm"><span>⚡</span> <span>Question Rush</span></a></li>
+      <li><a href="past-exams.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-all font-medium text-sm"><span>📝</span> <span>Predicted Tests</span></a></li>
     </ul>
-    <div class="sidebar-bottom mt-auto border-t border-white/10 p-3 flex flex-col gap-1">
-      <button onclick="if(typeof toggleDark === 'function') toggleDark()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all font-semibold text-sm w-full text-left"><span>🌙</span> <span class="nav-text">Switch To Dark</span></button>
-      <div class="user-profile flex items-center gap-3 px-3 py-2.5 mt-2 rounded-lg bg-black/20 hover:bg-black/30 transition-all cursor-pointer relative" onclick="const d = this.querySelector('.profile-dropdown'); if(d.style.display==='none'){d.style.display='block'}else{d.style.display='none'}">
-        <span class="avatar flex-shrink-0 w-8 h-8 rounded-full text-white flex items-center justify-center font-bold text-sm" style="background: #7C6FE0">A</span>
-        <span class="nav-text flex-1 truncate text-xs font-semibold text-white">Abdullah Abdus...</span>
-        <span class="nav-text text-white/70">⚙️</span>
-        <div class="profile-dropdown" style="display: none; position: absolute; bottom: 100%; left: 0; width: 100%; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 50; margin-bottom: 0.5rem; overflow: hidden;">
-          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151; border-bottom: 1px solid #f3f4f6;" onclick="event.stopPropagation();">⚙️ Account Settings</a>
-          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151; border-bottom: 1px solid #f3f4f6;" onclick="event.stopPropagation();">👥 Join Us</a>
-          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151;" onclick="event.stopPropagation();">⋯ Other</a>
-        </div>
+
+    <div class="mt-auto border-t border-white/5 p-4 flex flex-col gap-2">
+      <div class="user-profile flex items-center gap-3 px-4 py-3 rounded-lg bg-white/5 hover:bg-white/10 transition-all cursor-pointer">
+        <img src="assets/avatar.png" class="flex-shrink-0 w-8 h-8 rounded-full object-cover">
+        <span class="flex-1 truncate text-xs font-semibold text-white">@voriglalneine</span>
+        <span class="text-white/50 text-xs">⚙️</span>
       </div>
     </div>
   </nav>
 
   <!-- ═══ MAIN DASHBOARD CONTENT ═══ -->
-  <div class="main-content flex-1 min-w-0 transition-all duration-300 px-8 py-8 max-w-[1200px] mx-auto bg-[#F9FAFB]">
-  
-    <!-- Header -->
-    <header class="flex justify-between items-end mb-8 fade-up" style="animation-delay: 0.05s">
-      <div>
-        <h1 class="text-[24px] font-bold text-app-text tracking-tight">Performance analytics</h1>
-        <p class="text-[13px] text-app-gray mt-1">Track your progress, master skills, and achieve your target score.</p>
-      </div>
-      <button class="border border-app-primaryLight text-app-primary font-semibold text-[13px] px-6 py-1.5 rounded-full hover:bg-app-primaryFaded transition-colors shadow-sm">
-        SAT
-      </button>
-    </header>
+  <div class="main-content flex-1 min-w-0 transition-all duration-300 relative h-screen overflow-y-auto z-10">
 
-    <!-- ROW 1: SCORE & METRICS (Grid: 1 large card, 3 small cards) -->
-    <div class="grid grid-cols-1 lg:grid-cols-10 gap-5 mb-5 fade-up" style="animation-delay: 0.1s">
+    <div class="px-8 lg:px-10 py-10 max-w-[1200px] mx-auto relative z-10">
       
-      <!-- Score Progress (Col span 4) -->
-      <div class="col-span-1 lg:col-span-4 bg-[#FAFAFA] border border-app-border rounded-[12px] p-5 shadow-sm flex flex-col justify-between">
-        <div class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mb-4">Score Progress</div>
-        
-        <div class="flex items-baseline gap-3 mb-6">
-          <span class="text-[44px] font-bold text-app-text tracking-tight leading-none" id="score-latest">1220</span>
-          <span class="text-app-lightGray text-sm relative -top-1">→</span>
-          <div class="flex flex-col items-start leading-none relative -top-1">
-            <span class="text-[26px] font-bold text-app-primary" id="score-target">1560</span>
-            <span class="text-[10px] text-app-lightGray mt-0.5">target</span>
-          </div>
-        </div>
-        
-        <div class="mb-5">
-          <div class="w-full h-2 bg-[#E5E7EB] rounded-full overflow-hidden">
-            <div id="score-progress-bar" class="h-full bg-app-primary rounded-full transition-all duration-1000" style="width: 36%;"></div>
-          </div>
-          <div class="flex justify-between text-[10px] text-app-lightGray mt-2 font-medium">
-            <span>1000</span>
-            <span id="score-gap-label">340 pts to go</span>
-            <span>1600</span>
-          </div>
-        </div>
-        
-        <div class="bg-app-yellowBg border border-app-yellowBorder rounded-[6px] p-3 flex gap-3 items-start" id="ai-motivation-box">
-          <div class="w-1.5 h-1.5 rounded-full bg-app-yellowDot mt-1.5 shrink-0"></div>
-          <p class="text-[11px] text-app-yellowText leading-snug" id="ai-motivation-text">You're 340 points from your goal. Focus on targeted<br>drilling to close the gap faster.</p>
-        </div>
-      </div>
-
-      <!-- Small Metrics (Col span 2 each) -->
-      <!-- Questions Done -->
-      <div class="col-span-1 lg:col-span-2 bg-[#FAFAFA] border border-app-border rounded-[12px] p-5 shadow-sm flex flex-col">
-        <div class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mb-4">Questions Done</div>
-        <div class="text-[32px] font-bold text-app-text leading-none mb-1" id="stat-attempted-val">0</div>
-        <div class="text-[11px] text-app-gray">of 500 goal</div>
-        
-        <!-- Mini chart -->
-        <div class="flex items-end gap-1.5 h-6 mt-auto">
-          <div class="w-full bg-app-primaryFaded h-[20%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[30%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[40%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[25%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[15%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[10%] rounded-sm"></div>
-          <div class="w-full bg-app-primary h-[5%] rounded-sm" id="stat-attempted-bar"></div>
-        </div>
-      </div>
-
-      <!-- All-time Accuracy -->
-      <div class="col-span-1 lg:col-span-2 bg-[#FAFAFA] border border-app-border rounded-[12px] p-5 shadow-sm flex flex-col">
-        <div class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mb-4">All-Time Accuracy</div>
-        <div class="text-[32px] font-bold text-app-text leading-none mb-1" id="stat-accuracy-historical">—</div>
-        <div class="text-[11px] text-app-gray">No data yet</div>
-        
-        <!-- Mini chart -->
-        <div class="flex items-end gap-1.5 h-6 mt-auto">
-          <div class="w-full bg-app-primaryFaded h-[20%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[30%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[40%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[25%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[15%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[10%] rounded-sm"></div>
-          <div class="w-full bg-app-primary h-[5%] rounded-sm"></div>
-        </div>
-      </div>
-
-      <!-- Study Streak -->
-      <div class="col-span-1 lg:col-span-2 bg-[#FAFAFA] border border-app-border rounded-[12px] p-5 shadow-sm flex flex-col">
-        <div class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mb-4">Study Streak</div>
-        <div class="text-[32px] font-bold text-app-text leading-none mb-1" id="stat-streak">0</div>
-        <div class="text-[11px] text-app-gray">Active days</div>
-        
-        <!-- Mini chart -->
-        <div class="flex items-end gap-1.5 h-6 mt-auto">
-          <div class="w-full bg-app-primaryFaded h-[20%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[30%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[40%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[25%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[15%] rounded-sm"></div>
-          <div class="w-full bg-app-primaryFaded h-[10%] rounded-sm"></div>
-          <div class="w-full bg-app-primary h-[5%] rounded-sm"></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ROW 2: SKILL MASTERY -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5 fade-up" style="animation-delay: 0.2s">
-      
-      <!-- Math Mastery -->
-      <div class="bg-app-card border border-app-border rounded-[12px] p-6 shadow-sm">
-        <div class="mb-5">
-          <h3 class="text-[15px] font-bold text-app-text">Math mastery</h3>
-          <p class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mt-0.5">Sorted by weakest topics first</p>
-        </div>
-        <div class="space-y-3.5" id="math-diagnostics-list">
-          <!-- Rendered via JS, fallback matching screenshot -->
-          <div class="flex items-center text-[12px]">
-            <div class="w-[120px] text-app-gray">Word problems</div>
-            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
-              <div class="h-full bg-app-red rounded-full" style="width: 22%"></div>
-            </div>
-            <div class="w-[40px] text-right text-app-lightGray font-semibold">22%</div>
-          </div>
-          <div class="flex items-center text-[12px]">
-            <div class="w-[120px] text-app-gray">Data analysis</div>
-            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
-              <div class="h-full bg-app-orange rounded-full" style="width: 34%"></div>
-            </div>
-            <div class="w-[40px] text-right text-app-lightGray font-semibold">34%</div>
-          </div>
-          <div class="flex items-center text-[12px]">
-            <div class="w-[120px] text-app-gray">Algebra</div>
-            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
-              <div class="h-full bg-app-orange rounded-full" style="width: 51%"></div>
-            </div>
-            <div class="w-[40px] text-right text-app-lightGray font-semibold">51%</div>
-          </div>
-          <div class="flex items-center text-[12px]">
-            <div class="w-[120px] text-app-gray">Geometry</div>
-            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
-              <div class="h-full bg-app-primary rounded-full" style="width: 67%"></div>
-            </div>
-            <div class="w-[40px] text-right text-app-lightGray font-semibold">67%</div>
-          </div>
-          <div class="flex items-center text-[12px]">
-            <div class="w-[120px] text-app-gray">Functions</div>
-            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
-              <div class="h-full bg-app-green rounded-full" style="width: 78%"></div>
-            </div>
-            <div class="w-[40px] text-right text-app-lightGray font-semibold">78%</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Reading & Writing Mastery -->
-      <div class="bg-app-card border border-app-border rounded-[12px] p-6 shadow-sm">
-        <div class="mb-5">
-          <h3 class="text-[15px] font-bold text-app-text">Reading & writing mastery</h3>
-          <p class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mt-0.5">Sorted by weakest topics first</p>
-        </div>
-        <div class="space-y-3.5" id="rw-diagnostics-list">
-          <!-- Rendered via JS, fallback matching screenshot -->
-          <div class="flex items-center text-[12px]">
-            <div class="w-[120px] text-app-gray">Inferences</div>
-            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
-              <div class="h-full bg-app-red rounded-full" style="width: 18%"></div>
-            </div>
-            <div class="w-[40px] text-right text-app-lightGray font-semibold">18%</div>
-          </div>
-          <div class="flex items-center text-[12px]">
-            <div class="w-[120px] text-app-gray">Main idea</div>
-            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
-              <div class="h-full bg-app-red rounded-full" style="width: 28%"></div>
-            </div>
-            <div class="w-[40px] text-right text-app-lightGray font-semibold">28%</div>
-          </div>
-          <div class="flex items-center text-[12px]">
-            <div class="w-[120px] text-app-gray">Vocab in context</div>
-            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
-              <div class="h-full bg-app-orange rounded-full" style="width: 44%"></div>
-            </div>
-            <div class="w-[40px] text-right text-app-lightGray font-semibold">44%</div>
-          </div>
-          <div class="flex items-center text-[12px]">
-            <div class="w-[120px] text-app-gray">Grammar</div>
-            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
-              <div class="h-full bg-app-primary rounded-full" style="width: 57%"></div>
-            </div>
-            <div class="w-[40px] text-right text-app-lightGray font-semibold">57%</div>
-          </div>
-          <div class="flex items-center text-[12px]">
-            <div class="w-[120px] text-app-gray">Evidence support</div>
-            <div class="flex-1 h-[6px] bg-[#F3F4F6] rounded-full overflow-hidden">
-              <div class="h-full bg-app-green rounded-full" style="width: 71%"></div>
-            </div>
-            <div class="w-[40px] text-right text-app-lightGray font-semibold">71%</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ROW 3: VOCABULARY & PRACTICE CONSISTENCY -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5 fade-up" style="animation-delay: 0.3s">
-      
-      <!-- Vocabulary Bank -->
-      <div class="bg-app-card border border-app-border rounded-[12px] p-6 shadow-sm flex flex-col justify-between">
-        <div class="mb-4">
-          <h3 class="text-[15px] font-bold text-app-text">Vocabulary bank</h3>
-          <p class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mt-0.5">Words mastered vs remaining</p>
-        </div>
-        
+      <!-- Sleek Header -->
+      <header class="flex justify-between items-end mb-8 fade-up" style="animation-delay: 0.1s">
         <div>
-          <div class="flex flex-wrap gap-[3px] max-w-[300px]" id="vocab-grid">
-            <!-- Populated by JS -->
+          <h1 class="text-3xl font-outfit font-bold text-white tracking-tight drop-shadow-lg">Performance Analytics</h1>
+          <p class="text-[#6A628B] mt-1 text-sm font-medium">Track your progress and drill down into your weaknesses.</p>
+        </div>
+        <button class="bg-[#8B5CF6] text-white font-bold text-sm px-7 py-3 rounded-xl hover:bg-[#7C3AED] transition-all shadow-[0_4px_15px_rgba(139,92,246,0.3)] hover:shadow-[0_6px_20px_rgba(139,92,246,0.4)]">
+          Start Training
+        </button>
+      </header>
+
+      <!-- ROW 1: METRICS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-5 mb-5 fade-up" style="animation-delay: 0.2s">
+        
+        <!-- Score Progress (Col span 4) -->
+        <div class="col-span-1 xl:col-span-4 mockup-card rounded-[20px] p-6 flex flex-col relative overflow-hidden">
+          <div class="flex justify-between items-start mb-6">
+            <div class="text-[10px] font-bold text-[#6A628B] uppercase tracking-widest">Score Progress</div>
+            <div class="text-[10px] font-bold text-[#8B5CF6] uppercase tracking-widest">1560 Target</div>
           </div>
           
-          <!-- Legend -->
-          <div class="flex items-center gap-6 text-[10px] text-app-gray mt-5">
-            <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-app-primary rounded-[2px]"></div> Mastered (<span id="vocab-mastered-count">43</span>)</div>
-            <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-[#C7D2FE] rounded-[2px]"></div> Seen</div>
-            <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-[#EDEDED] rounded-[2px]"></div> Remaining</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Practice Consistency -->
-      <div class="bg-app-card border border-app-border rounded-[12px] p-6 shadow-sm flex flex-col justify-between">
-        <div class="mb-4">
-          <h3 class="text-[15px] font-bold text-app-text">Practice consistency</h3>
-          <p class="text-[9px] font-bold text-app-lightGray tracking-widest uppercase mt-0.5">Daily question volume</p>
-        </div>
-        
-        <div>
-          <!-- Grid of varying purples -->
-          <div class="flex gap-[3px]" id="heatmap-grid">
-            <!-- Populated by JS -->
+          <div class="flex items-baseline gap-3 mb-8">
+            <span class="text-[44px] font-outfit font-bold text-white tracking-tight leading-none drop-shadow-md">1220</span>
+            <span class="text-[#6A628B] text-xl font-light">→</span>
+            <span class="text-[38px] font-outfit font-bold text-[#8B5CF6] tracking-tight leading-none drop-shadow-[0_0_12px_rgba(139,92,246,0.4)] flex items-center gap-2">1560 <span class="text-xl drop-shadow-none">🚩</span></span>
           </div>
           
-          <!-- Legend -->
-          <div class="flex items-center justify-end gap-1.5 text-[9px] text-app-gray mt-5">
-            <span>Less</span>
-            <div class="w-3 h-3 bg-[#EDEDED] rounded-[2px]"></div>
-            <div class="w-3 h-3 bg-[#E0E7FF] rounded-[2px]"></div>
-            <div class="w-3 h-3 bg-[#C7D2FE] rounded-[2px]"></div>
-            <div class="w-3 h-3 bg-[#818CF8] rounded-[2px]"></div>
-            <div class="w-3 h-3 bg-[#5C4CE5] rounded-[2px]"></div>
-            <span>More</span>
+          <div class="mt-auto bg-[#1D1932] border border-[#2D264A] text-white rounded-xl p-4 shadow-inner">
+            <p class="text-xs font-medium leading-relaxed text-[#D1C8FA]">
+              <strong class="font-bold text-[#A594FD]">AI Goal Advisor</strong><br>
+              Target in sight! Drilling Function Word Problems (<span class="text-emerald-400">+80pts</span> prediction)
+            </p>
+          </div>
+        </div>
+
+        <!-- Questions Done (Col span 2) -->
+        <div class="col-span-1 xl:col-span-2 mockup-card rounded-[20px] p-6 flex flex-col items-center justify-between">
+          <div class="text-[10px] font-bold text-[#6A628B] uppercase tracking-widest w-full text-center">Questions Done</div>
+          
+          <div class="flex justify-center my-4 relative">
+            <svg class="w-[90px] h-[90px] transform -rotate-90">
+              <circle cx="45" cy="45" r="38" class="stroke-[#1F1B2E]" stroke-width="6" fill="none" />
+              <circle cx="45" cy="45" r="38" stroke="#8B5CF6" stroke-width="6" fill="none" stroke-dasharray="238" stroke-dashoffset="178" stroke-linecap="round" class="drop-shadow-[0_0_8px_rgba(139,92,246,0.6)]" />
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span class="text-2xl font-bold text-white leading-none">125</span>
+            </div>
+          </div>
+          
+          <div class="text-center text-[11px] text-[#6A628B] leading-tight">
+            of <span class="text-white">500 goal</span><br>
+            <span class="text-[#6A628B]">+30 XP daily</span>
+          </div>
+        </div>
+
+        <!-- All-Time Accuracy (Col span 2) -->
+        <div class="col-span-1 xl:col-span-2 mockup-card rounded-[20px] p-6 flex flex-col items-center justify-between">
+          <div class="text-[10px] font-bold text-[#6A628B] uppercase tracking-widest w-full text-center">Accuracy</div>
+          
+          <div class="flex justify-center my-4 relative">
+            <svg class="w-[90px] h-[90px] transform -rotate-90">
+              <circle cx="45" cy="45" r="38" class="stroke-[#1F1B2E]" stroke-width="6" fill="none" />
+              <circle cx="45" cy="45" r="38" stroke="#00E5FF" stroke-width="6" fill="none" stroke-dasharray="238" stroke-dashoffset="57" stroke-linecap="round" class="drop-shadow-[0_0_8px_rgba(0,229,255,0.6)]" />
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span class="text-2xl font-bold text-white leading-none">76%</span>
+            </div>
+          </div>
+          
+          <div class="text-center text-[11px] text-[#6A628B] leading-tight">
+            Idea Progression<br>
+            strongest at 95%
+          </div>
+        </div>
+
+        <!-- Study Streak (Col span 2) -->
+        <div class="col-span-1 xl:col-span-2 mockup-card rounded-[20px] p-6 flex flex-col justify-between items-center text-center">
+          <div class="text-[10px] font-bold text-[#6A628B] uppercase tracking-widest w-full">Study Streak</div>
+          
+          <div class="flex flex-col items-center justify-center flex-1 my-4">
+            <div class="text-[44px] font-outfit font-bold text-white leading-none flex items-center gap-1 drop-shadow-md">
+              15 <span class="text-3xl drop-shadow-none">🔥</span>
+            </div>
+            <div class="text-[11px] font-medium text-[#6A628B] mt-2">Active days</div>
+          </div>
+          
+          <div class="bg-[#2D1623] border border-[#4A2033] rounded-lg px-3 py-1.5 text-center">
+            <span class="text-[10px] text-[#FCA5A5]">Earn <strong>100 Coins</strong></span><br>
+            <span class="text-[9px] text-[#9CA3AF]">for a 7-day streak</span>
+          </div>
+        </div>
+
+        <!-- Leaderboard (Col span 2) -->
+        <div class="col-span-1 xl:col-span-2 mockup-card rounded-[20px] p-6 flex flex-col justify-between items-center text-center">
+          <div class="text-[10px] font-bold text-[#6A628B] uppercase tracking-widest w-full">Leaderboard</div>
+          
+          <div class="flex flex-col items-center justify-center flex-1 my-4">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-[#EC4899] to-[#8B5CF6] flex items-center justify-center mb-3 shadow-[0_0_15px_rgba(236,72,153,0.3)]">
+            </div>
+            <div class="text-xl font-bold text-white leading-none">4th place</div>
+          </div>
+          
+          <div class="text-[10px] text-[#6A628B]">
+            Master 20 Math words
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ROW 2: MASTERY -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-5 fade-up" style="animation-delay: 0.3s">
+        
+        <!-- Math Mastery -->
+        <div class="col-span-1 lg:col-span-6 mockup-card rounded-[20px] p-7">
+          <div class="mb-6 flex justify-between items-center border-b border-white/5 pb-4">
+            <h3 class="text-[15px] font-bold text-white">Math Mastery</h3>
+            <div class="bg-[#1D1932] text-[#8B8B99] text-[9px] font-bold px-3 py-1 rounded-md uppercase tracking-widest">Sorted by weakness</div>
+          </div>
+          <div class="space-y-5">
+            <div class="flex flex-col gap-2 text-sm">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-white font-medium">Word problems</span>
+                <span class="text-[#6A628B]">22%</span>
+              </div>
+              <div class="h-1 progress-track rounded-full overflow-hidden">
+                <div class="h-full bg-[#EC4899] shadow-[0_0_8px_#EC4899] rounded-full" style="width: 22%"></div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2 text-sm">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-white font-medium">Data analysis</span>
+                <span class="text-[#6A628B]">34%</span>
+              </div>
+              <div class="h-1 progress-track rounded-full overflow-hidden">
+                <div class="h-full bg-[#F97316] shadow-[0_0_8px_#F97316] rounded-full" style="width: 34%"></div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2 text-sm">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-white font-medium">Algebra</span>
+                <span class="text-[#6A628B]">51%</span>
+              </div>
+              <div class="h-1 progress-track rounded-full overflow-hidden">
+                <div class="h-full bg-[#FACC15] shadow-[0_0_8px_#FACC15] rounded-full" style="width: 51%"></div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2 text-sm">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-white font-medium">Geometry</span>
+                <span class="text-[#6A628B]">67%</span>
+              </div>
+              <div class="h-1 progress-track rounded-full overflow-hidden">
+                <div class="h-full bg-[#06B6D4] shadow-[0_0_8px_#06B6D4] rounded-full" style="width: 67%"></div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2 text-sm">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-white font-medium">Functions</span>
+                <span class="text-[#6A628B]">79%</span>
+              </div>
+              <div class="h-1 progress-track rounded-full overflow-hidden">
+                <div class="h-full bg-[#8B5CF6] shadow-[0_0_8px_#8B5CF6] rounded-full" style="width: 79%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reading Mastery -->
+        <div class="col-span-1 lg:col-span-6 mockup-card rounded-[20px] p-7">
+          <div class="mb-6 flex justify-between items-center border-b border-white/5 pb-4">
+            <h3 class="text-[15px] font-bold text-white">Reading & Writing</h3>
+            <div class="bg-[#1D1932] text-[#8B8B99] text-[9px] font-bold px-3 py-1 rounded-md uppercase tracking-widest">Tested by weakness</div>
+          </div>
+          <div class="space-y-5">
+            <div class="flex flex-col gap-2 text-sm">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-white font-medium">Main idea</span>
+                <span class="text-[#6A628B]">18%</span>
+              </div>
+              <div class="h-1 progress-track rounded-full overflow-hidden">
+                <div class="h-full bg-[#EC4899] shadow-[0_0_8px_#EC4899] rounded-full" style="width: 18%"></div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2 text-sm">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-white font-medium">Inferences</span>
+                <span class="text-[#6A628B]">28%</span>
+              </div>
+              <div class="h-1 progress-track rounded-full overflow-hidden">
+                <div class="h-full bg-[#F97316] shadow-[0_0_8px_#F97316] rounded-full" style="width: 28%"></div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2 text-sm">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-white font-medium">Vocab in context</span>
+                <span class="text-[#6A628B]">44%</span>
+              </div>
+              <div class="h-1 progress-track rounded-full overflow-hidden">
+                <div class="h-full bg-[#FACC15] shadow-[0_0_8px_#FACC15] rounded-full" style="width: 44%"></div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2 text-sm">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-white font-medium">Grammar</span>
+                <span class="text-[#6A628B]">57%</span>
+              </div>
+              <div class="h-1 progress-track rounded-full overflow-hidden">
+                <div class="h-full bg-[#06B6D4] shadow-[0_0_8px_#06B6D4] rounded-full" style="width: 57%"></div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2 text-sm">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-white font-medium">Idea Progression</span>
+                <span class="text-[#6A628B]">95%</span>
+              </div>
+              <div class="h-1 progress-track rounded-full overflow-hidden">
+                <div class="h-full bg-[#8B5CF6] shadow-[0_0_8px_#8B5CF6] rounded-full" style="width: 95%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 3: DRILL-DOWN & EXTRA -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-10 fade-up" style="animation-delay: 0.4s">
+        
+        <!-- AI Weak Spot Drill-Down -->
+        <div class="col-span-1 lg:col-span-6 mockup-card rounded-[20px] p-7 flex flex-col">
+          <h3 class="text-[15px] font-bold text-white mb-5">AI Weak Spot Drill-Down & Plan</h3>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 h-full">
+            <div class="bg-[#1D1932]/50 border border-white/5 rounded-xl p-5 flex flex-col shadow-inner">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="bg-[#2A162B] text-[#EC4899] p-2 rounded-lg text-sm shadow-[0_0_10px_rgba(236,72,153,0.15)]">🧮</div>
+                <div class="text-[10px] font-bold text-[#EC4899] uppercase tracking-wider">Math</div>
+              </div>
+              <h4 class="text-sm font-bold text-white mb-2">Function Word Problems</h4>
+              <p class="text-xs text-[#6A628B] leading-relaxed mb-4 flex-1">
+                You often misinterpret function notation when inputs represent time or cost.
+              </p>
+              <div class="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
+                <span class="text-xs font-semibold text-[#6A628B]">Predict: <span class="text-[#00E5FF] drop-shadow-[0_0_5px_rgba(0,229,255,0.4)]">+80pts</span></span>
+                <button class="bg-[#8B5CF6] text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-[#7C3AED] transition-colors shadow-[0_2px_8px_rgba(139,92,246,0.3)]">Practice</button>
+              </div>
+            </div>
+            
+            <div class="bg-[#1D1932]/50 border border-white/5 rounded-xl p-5 flex flex-col shadow-inner">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="bg-[#2D211A] text-[#F97316] p-2 rounded-lg text-sm shadow-[0_0_10px_rgba(249,115,22,0.15)]">🕵️</div>
+                <div class="text-[10px] font-bold text-[#F97316] uppercase tracking-wider">Reading</div>
+              </div>
+              <h4 class="text-sm font-bold text-white mb-2">Analyzing Tone</h4>
+              <p class="text-xs text-[#6A628B] leading-relaxed mb-4 flex-1">
+                Difficulty distinguishing between objective and subjective tone in historical analysis.
+              </p>
+              <div class="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
+                <span class="text-xs font-semibold text-[#6A628B]">Predict: <span class="text-[#00E5FF] drop-shadow-[0_0_5px_rgba(0,229,255,0.4)]">+40pts</span></span>
+                <button class="bg-[#8B5CF6] text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-[#7C3AED] transition-colors shadow-[0_2px_8px_rgba(139,92,246,0.3)]">Practice</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Game Plan -->
+        <div class="col-span-1 lg:col-span-3 mockup-card rounded-[20px] p-7 flex flex-col">
+          <h3 class="text-[15px] font-bold text-white mb-5">Execution Plan</h3>
+          <ul class="space-y-4 text-sm font-medium text-white/90 flex-1 mt-1">
+            <li class="flex items-start gap-3">
+              <input type="checkbox" class="mt-1 w-4 h-4 rounded bg-[#1D1932] border-white/10 text-[#8B5CF6] focus:ring-[#8B5CF6] focus:ring-offset-[#13111C]">
+              <span>AI Practice Questions</span>
+            </li>
+            <li class="flex items-start gap-3 opacity-50">
+              <input type="checkbox" class="mt-1 w-4 h-4 rounded bg-[#1D1932] border-white/10 text-[#8B5CF6] focus:ring-[#8B5CF6] focus:ring-offset-[#13111C]" checked>
+              <span class="line-through text-[#6A628B]">4x Practice Functions</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <input type="checkbox" class="mt-1 w-4 h-4 rounded bg-[#1D1932] border-white/10 text-[#8B5CF6] focus:ring-[#8B5CF6] focus:ring-offset-[#13111C]">
+              <span>Analyzing Tone</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <input type="checkbox" class="mt-1 w-4 h-4 rounded bg-[#1D1932] border-white/10 text-[#8B5CF6] focus:ring-[#8B5CF6] focus:ring-offset-[#13111C]">
+              <span>Unfamiliar Topics</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-span-1 lg:col-span-3 flex flex-col gap-5">
+          <!-- Vocab -->
+          <div class="mockup-card rounded-[20px] p-6 h-[180px] flex flex-col">
+            <div class="mb-4 flex justify-between items-end">
+              <h3 class="text-[13px] font-bold text-white">Vocabulary Bank</h3>
+            </div>
+            <div class="flex flex-wrap gap-[3px] mb-4 w-full" id="vocab-grid"></div>
+            <div class="flex items-center justify-between text-[8px] font-bold text-[#6A628B] uppercase tracking-widest mt-auto">
+              <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 bg-[#10B981] rounded-[2px] shadow-[0_0_5px_rgba(16,185,129,0.5)]"></div> Mastered</div>
+              <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 bg-[#FACC15] rounded-[2px] shadow-[0_0_5px_rgba(250,204,21,0.5)]"></div> Seen</div>
+              <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 bg-[#1F1B2E] rounded-[2px]"></div></div>
+            </div>
+          </div>
+          
+          <!-- Heatmap -->
+          <div class="mockup-card rounded-[20px] p-6 flex-1 flex flex-col justify-between">
+            <div class="mb-4 flex justify-between items-end">
+              <h3 class="text-[13px] font-bold text-white">Consistency</h3>
+            </div>
+            <div class="flex gap-[3px] mb-4 w-full" id="heatmap-grid"></div>
+            <div class="flex items-center justify-end gap-1.5 text-[8px] font-bold text-[#6A628B] uppercase tracking-widest">
+              <span>Less</span>
+              <div class="w-2.5 h-2.5 bg-[#1F1B2E] rounded-[2px]"></div>
+              <div class="w-2.5 h-2.5 bg-[#8B5CF6] opacity-30 rounded-[2px]"></div>
+              <div class="w-2.5 h-2.5 bg-[#8B5CF6] opacity-60 rounded-[2px]"></div>
+              <div class="w-2.5 h-2.5 bg-[#8B5CF6] shadow-[0_0_6px_rgba(139,92,246,0.5)] rounded-[2px]"></div>
+              <span>More</span>
+            </div>
           </div>
         </div>
       </div>
 
     </div>
-
-    <!-- ROW 4: DIAGNOSTIC BANNER -->
-    <div class="bg-white border border-app-primaryLight rounded-[12px] p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-sm fade-up" style="animation-delay: 0.4s">
-      <div>
-        <h3 class="text-[15px] font-bold text-app-primary">Need a fresh baseline?</h3>
-        <p class="text-[12px] text-app-primary mt-0.5 opacity-90">Take a 20-minute adaptive diagnostic. Your dashboard will instantly recalculate.</p>
-      </div>
-      <button class="bg-app-primary text-white font-semibold text-[13px] px-6 py-2.5 rounded-[6px] hover:bg-[#4a3bc2] transition-colors shrink-0">
-        Start diagnostic
-      </button>
-    </div>
-
   </div>
 
   <script>
-    let isSidebarCollapsed = false;
-    function toggleSidebar() {
-      isSidebarCollapsed = !isSidebarCollapsed;
-      const sidebar = document.getElementById('sidebar');
-      const icon = document.getElementById('collapse-icon');
-      if (isSidebarCollapsed) {
-        sidebar.classList.add('collapsed');
-        icon.classList.add('rotate-180');
-      } else {
-        sidebar.classList.remove('collapsed');
-        icon.classList.remove('rotate-180');
-      }
-    }
-
-    // Populate mock grid for Vocab
     const vocabGrid = document.getElementById('vocab-grid');
     if (vocabGrid) {
-      let html = '';
-      for(let i=0; i<90; i++) {
-        let colorClass = "bg-[#EDEDED]"; // Gray remaining
-        if (i < 37) colorClass = "bg-[#5C4CE5]"; // Dark purple
-        else if (i < 48) colorClass = "bg-[#C7D2FE]"; // Light purple (seen)
-        html += `<div class="w-[14px] h-[14px] rounded-[2px] ${colorClass}"></div>`;
+      let h = '';
+      for(let i=0; i<88; i++) {
+        let colorClass = "bg-[#1F1B2E]"; 
+        if (i < 43) { colorClass = "bg-[#10B981] shadow-[0_0_4px_rgba(16,185,129,0.4)]"; }
+        else if (i < 65) { colorClass = "bg-[#FACC15] shadow-[0_0_4px_rgba(250,204,21,0.4)]"; }
+        h += `<div class="w-[calc(8.33%_-_3px)] aspect-square rounded-[2px] ${colorClass}"></div>`;
       }
-      vocabGrid.innerHTML = html;
+      vocabGrid.innerHTML = h;
     }
 
-    // Populate mock grid for Heatmap
     const heatmapGrid = document.getElementById('heatmap-grid');
     if (heatmapGrid) {
       let hHtml = '';
-      const shades = ['bg-[#EDEDED]', 'bg-[#E0E7FF]', 'bg-[#C7D2FE]', 'bg-[#818CF8]', 'bg-[#5C4CE5]', 'bg-[#4338CA]'];
-      for(let c=0; c<19; c++) {
-        hHtml += '<div class="flex flex-col gap-[3px]">';
-        for(let r=0; r<6; r++) {
+      const shades = [
+        'bg-[#1F1B2E]', 
+        'bg-[#8B5CF6] opacity-30', 
+        'bg-[#8B5CF6] opacity-60', 
+        'bg-[#8B5CF6] opacity-80 shadow-[0_0_4px_rgba(139,92,246,0.3)]', 
+        'bg-[#8B5CF6] shadow-[0_0_6px_rgba(139,92,246,0.6)]'
+      ];
+      for(let c=0; c<24; c++) {
+        hHtml += '<div class="flex flex-col gap-[3px] flex-1">';
+        for(let r=0; r<5; r++) {
           let shade = shades[0];
           let rand = Math.random();
-          if (rand > 0.85) shade = shades[5];
-          else if (rand > 0.7) shade = shades[4];
-          else if (rand > 0.5) shade = shades[3];
-          else if (rand > 0.3) shade = shades[2];
-          else if (rand > 0.15) shade = shades[1];
-          hHtml += `<div class="w-[14px] h-[14px] rounded-[2px] ${shade}"></div>`;
+          if (rand > 0.9) shade = shades[4];
+          else if (rand > 0.75) shade = shades[3];
+          else if (rand > 0.5) shade = shades[2];
+          else if (rand > 0.3) shade = shades[1];
+          hHtml += `<div class="w-full aspect-square rounded-[2px] ${shade}"></div>`;
         }
         hHtml += '</div>';
       }
