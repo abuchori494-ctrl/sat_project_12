@@ -134,13 +134,21 @@ function show(viewId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// --- THEME SWITCHER ---
+// --- THEME SWITCHER (UNIFIED) ---
 function toggleTheme() {
   const isDark = document.body.classList.contains('dark');
   const newTheme = isDark ? 'light' : 'dark';
   document.body.className = newTheme;
   localStorage.setItem('oneprep_theme', newTheme);
-  showToast(`Switched to ${newTheme} mode!`);
+  const msg = `Switched to ${newTheme} mode!`;
+  showToast(msg);
+  // Close menu if open
+  const menu = document.getElementById('sh-menu');
+  if (menu) menu.style.display = 'none';
+}
+
+function toggleDark() {
+  toggleTheme();
 }
 
 // --- COUNTDOWN TIMER ---
@@ -799,7 +807,7 @@ function loadQuestion(idx) {
   const q = currentSimQuestions[idx];
   
   // Badge
-  document.getElementById('sp-badge').textContent = `Question ${idx + 1} of ${currentSimQuestions.length}`;
+  document.getElementById('sp-badge').textContent = `${idx + 1} of ${currentSimQuestions.length}`;
   
   // Passage / prompt content
   document.getElementById('sp-content').innerHTML = q.passage || `<div style="padding: 40px 0; text-align: center; color: var(--text-sub);">Mathematics Problem. Refer to equation details on the right pane.</div>`;
@@ -810,14 +818,16 @@ function loadQuestion(idx) {
   // Explanation hidden
   document.getElementById('expl-box').style.display = 'none';
   
-  // Flag button state
-  const flagBtn = document.getElementById('sh-flag');
-  if (flaggedSimQuestions[idx]) {
-    flagBtn.textContent = '🚩 Flagged';
-    flagBtn.style.color = 'var(--orange)';
-  } else {
-    flagBtn.textContent = '🚩 Flag';
-    flagBtn.style.color = 'inherit';
+  // Mark for Review button state
+  const markBtn = document.getElementById('mark-review-btn');
+  if (markBtn) {
+    if (flaggedSimQuestions[idx]) {
+      markBtn.classList.add('flagged');
+      markBtn.textContent = '✓ Marked for Review';
+    } else {
+      markBtn.classList.remove('flagged');
+      markBtn.textContent = 'Mark for Review';
+    }
   }
   
   const optsContainer = document.getElementById('sim-opts');
@@ -935,7 +945,42 @@ function showExplanation(isCorrect, answer, explanation) {
 
 function toggleFlag() {
   flaggedSimQuestions[currentSimIdx] = !flaggedSimQuestions[currentSimIdx];
-  loadQuestion(currentSimIdx);
+  const btn = document.getElementById('mark-review-btn');
+  if (btn) {
+    if (flaggedSimQuestions[currentSimIdx]) {
+      btn.classList.add('flagged');
+      btn.textContent = '✓ Marked for Review';
+    } else {
+      btn.classList.remove('flagged');
+      btn.textContent = 'Mark for Review';
+    }
+  }
+  renderNavigatorNodes();
+}
+
+function toggleDirections() {
+  showToast('Directions: Review the problem passage and select the best answer.');
+}
+
+function toggleHighlight() {
+  showToast('Highlight mode toggled for the current passage.');
+}
+
+function toggleSimMenu() {
+  const menu = document.getElementById('sh-menu');
+  if (menu) {
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+  }
+}
+
+function saveAndExit() {
+  if (confirm('Save your progress and exit this module?')) {
+    if (simTimerInterval) clearInterval(simTimerInterval);
+    document.getElementById('sim-active').style.display = 'none';
+    document.getElementById('sim-welcome').style.display = 'block';
+    show('simulator');
+    showToast('Progress saved! Return anytime to resume.');
+  }
 }
 
 function goQuestion(dir) {

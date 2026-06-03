@@ -246,10 +246,20 @@
       localStorage.setItem('oneprep_theme', newTheme);
     }
 
+    let userAttempts = {};
+
     // Sync theme on load
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       const savedTheme = localStorage.getItem('oneprep_theme') || 'light';
       document.body.className = savedTheme;
+      try {
+        const response = await fetch('/api/exams/attempts');
+        if (response.ok) {
+          userAttempts = await response.json();
+        }
+      } catch (err) {
+        console.error("Failed to fetch exam attempts", err);
+      }
       renderExams();
     });
 
@@ -282,32 +292,91 @@
             const cardName = `${exam.month} ${exam.year} ${region.name}-${v.name} ebrw english reading writing math`.toLowerCase();
             if (searchQuery && !cardName.includes(searchQuery)) return;
 
-            stats.exams = pastExamsData.length; // Count total exams in array (or could be unique months)
-            stats.versions += 1;
-            stats.sections += 2; // Math + EBRW
-
-            // Generate deterministic progress based on ID so status filters work logically
-            const progress1 = (v.id.charCodeAt(0) + v.id.charCodeAt(1)) % 100; // Fake deterministic score 0-100
-            const progress2 = (progress1 * 2) % 100;
+             stats.exams = pastExamsData.length; // Count total exams in array (or could be unique months)
+             stats.versions += 1;
+             stats.sections += 2; // Math
+             
+             const examId = `${exam.month.toLowerCase()}-${exam.year}-${v.id}`;
+             
+             // Generate deterministic progress or load real attempts
+            let p_ebrw1 = 0, p_ebrw2 = 0, p_math1 = 0, p_math2 = 0;
+            let score_ebrw1 = "0/27 Correct", score_ebrw2 = "0/27 Correct", score_math1 = "0/22 Correct", score_math2 = "0/22 Correct";
             
-            const isCompleted = progress1 > 70;
+            if (examId === 'march-2026-int-a') {
+              if (userAttempts && userAttempts['march-2026-int-a-ebrw1']) {
+                p_ebrw1 = userAttempts['march-2026-int-a-ebrw1'].percentage;
+                score_ebrw1 = `${userAttempts['march-2026-int-a-ebrw1'].score}/${userAttempts['march-2026-int-a-ebrw1'].total} Correct`;
+              }
+              if (userAttempts && userAttempts['march-2026-int-a-ebrw2']) {
+                p_ebrw2 = userAttempts['march-2026-int-a-ebrw2'].percentage;
+                score_ebrw2 = `${userAttempts['march-2026-int-a-ebrw2'].score}/${userAttempts['march-2026-int-a-ebrw2'].total} Correct`;
+              }
+              if (userAttempts && userAttempts['march-2026-int-a-math1']) {
+                p_math1 = userAttempts['march-2026-int-a-math1'].percentage;
+                score_math1 = `${userAttempts['march-2026-int-a-math1'].score}/${userAttempts['march-2026-int-a-math1'].total} Correct`;
+              }
+              if (userAttempts && userAttempts['march-2026-int-a-math2']) {
+                p_math2 = userAttempts['march-2026-int-a-math2'].percentage;
+                score_math2 = `${userAttempts['march-2026-int-a-math2'].score}/${userAttempts['march-2026-int-a-math2'].total} Correct`;
+              }
+            } else {
+              // Fake progress for other list items so they look populated
+              let progress1 = (v.id.charCodeAt(0) + v.id.charCodeAt(1)) % 100;
+              let progress2 = (progress1 * 2) % 100;
+              p_ebrw1 = progress1;
+              p_ebrw2 = progress2;
+              p_math1 = progress1;
+              p_math2 = progress2;
+              score_ebrw1 = `${Math.floor((p_ebrw1/100)*27)}/27 Correct`;
+              score_ebrw2 = `${Math.floor((p_ebrw2/100)*27)}/27 Correct`;
+              score_math1 = `${Math.floor((p_math1/100)*22)}/22 Correct`;
+              score_math2 = `${Math.floor((p_math2/100)*22)}/22 Correct`;
+            }
+            
+            const isCompleted = p_ebrw1 > 70;
             if (currentFilters.status === 'completed' && !isCompleted) return;
             if (currentFilters.status === 'not_started' && isCompleted) return;
 
             const badgeClass = region.name === 'US' ? 'style="background: var(--blue-glow); color: var(--blue);"' : '';
             
-            // Score calculations
-            const m1Score = Math.floor((progress1 / 100) * 22);
-            const m2Score = Math.floor((progress2 / 100) * 22);
-            
             // Module 2 locked logic
-            const isM2Locked = progress1 < 40;
+            let isM2Locked = false;
+            if (examId === 'march-2026-int-a') {
+              isM2Locked = !(userAttempts && userAttempts['march-2026-int-a-math1']);
+            } else {
+              isM2Locked = p_math1 < 40;
+            }
+            
             const m2Class = isM2Locked ? 'card-disabled' : '';
             const m2BtnText = isM2Locked ? '🔒 LOCKED' : '▶ TRY NOW';
-            const m2BtnClick = isM2Locked ? '' : `onclick="window.location.href='/past-exams/${exam.year}/${exam.month.toLowerCase()}/${v.id}/math'"`;
+            
+            // Practice links
+            const link_ebrw1 = `/past-exams/${exam.year}/${exam.month.toLowerCase()}/${v.id}/ebrw1`;
+            const link_ebrw2 = `/past-exams/${exam.year}/${exam.month.toLowerCase()}/${v.id}/ebrw2`;
+            const link_math1 = `/past-exams/${exam.year}/${exam.month.toLowerCase()}/${v.id}/math1`;
+            const link_math2 = `/past-exams/${exam.year}/${exam.month.toLowerCase()}/${v.id}/math2`;
+            
+            const m2BtnClick = isM2Locked ? '' : `onclick="window.location.href='${link_math2}'"`;
+
+            // Review button configurations
+            let showReviewEbrw1 = "";
+            let showReviewEbrw2 = "";
+            let showReviewMath1 = "";
+            let showReviewMath2 = "";
+            
+            if (examId === 'march-2026-int-a') {
+              showReviewEbrw1 = userAttempts && userAttempts['march-2026-int-a-ebrw1'] ? `onclick="window.location.href='${link_ebrw1}'"` : `disabled style="opacity: 0.5; cursor: not-allowed;"`;
+              showReviewEbrw2 = userAttempts && userAttempts['march-2026-int-a-ebrw2'] ? `onclick="window.location.href='${link_ebrw2}'"` : `disabled style="opacity: 0.5; cursor: not-allowed;"`;
+              showReviewMath1 = userAttempts && userAttempts['march-2026-int-a-math1'] ? `onclick="window.location.href='${link_math1}'"` : `disabled style="opacity: 0.5; cursor: not-allowed;"`;
+              showReviewMath2 = userAttempts && userAttempts['march-2026-int-a-math2'] ? `onclick="window.location.href='${link_math2}'"` : `disabled style="opacity: 0.5; cursor: not-allowed;"`;
+            } else {
+              showReviewEbrw1 = `onclick="window.location.href='${link_ebrw1}'"`;
+              showReviewEbrw2 = `onclick="window.location.href='${link_ebrw2}'"`;
+              showReviewMath1 = `onclick="window.location.href='${link_math1}'"`;
+              showReviewMath2 = isM2Locked ? `disabled style="opacity: 0.5; cursor: not-allowed;"` : `onclick="window.location.href='${link_math2}'"`;
+            }
 
             // EBRW CARD
-            const ebrwLink = `/past-exams/${exam.year}/${exam.month.toLowerCase()}/${v.id}/ebrw`;
             const englishHtml = `
               <article class="ecl-card ecl-card-english">
                 <div class="ecl-card-header">
@@ -323,19 +392,19 @@
                   <div class="ecl-row">
                     <div class="ecl-row-info">
                       <strong>📖 Reading Comprehension</strong>
-                      <small>52 min • 52 questions</small>
-                      <div class="score-badge">${Math.floor((progress1 / 100) * 52)}/52 Correct</div>
+                      <small>32 min • 27 questions</small>
+                      <div class="score-badge">${score_ebrw1}</div>
                       <div class="ecl-row-btns" style="margin-top: 12px;">
-                        <button class="btn-practice-pill" onclick="window.location.href='${ebrwLink}'">▶ PRACTICE</button>
-                        <button class="btn-review-pill">REVIEW</button>
+                        <button class="btn-practice-pill" onclick="window.location.href='${link_ebrw1}'">▶ PRACTICE</button>
+                        <button class="btn-review-pill" ${showReviewEbrw1}>REVIEW</button>
                       </div>
                     </div>
-                    <div class="progress-ring-box" style="--p:${progress1}">
+                    <div class="progress-ring-box" style="--p:${p_ebrw1}">
                       <svg viewBox="0 0 36 36" class="pr-svg">
                         <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="pr-fill" stroke-dasharray="${progress1}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="pr-fill" stroke-dasharray="${p_ebrw1}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                       </svg>
-                      <span>${progress1}%</span>
+                      <span>${p_ebrw1}%</span>
                     </div>
                   </div>
                   
@@ -344,19 +413,19 @@
                   <div class="ecl-row">
                     <div class="ecl-row-info">
                       <strong>📖 Writing & Language</strong>
-                      <small>35 min • 44 questions</small>
-                      <div class="score-badge">${Math.floor((progress2 / 100) * 44)}/44 Correct</div>
+                      <small>32 min • 27 questions</small>
+                      <div class="score-badge">${score_ebrw2}</div>
                       <div class="ecl-row-btns" style="margin-top: 12px;">
-                        <button class="btn-practice-pill" onclick="window.location.href='${ebrwLink}'">▶ PRACTICE</button>
-                        <button class="btn-review-pill">REVIEW</button>
+                        <button class="btn-practice-pill" onclick="window.location.href='${link_ebrw2}'">▶ PRACTICE</button>
+                        <button class="btn-review-pill" ${showReviewEbrw2}>REVIEW</button>
                       </div>
                     </div>
-                    <div class="progress-ring-box" style="--p:${progress2}">
+                    <div class="progress-ring-box" style="--p:${p_ebrw2}">
                       <svg viewBox="0 0 36 36" class="pr-svg">
                         <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="pr-fill" stroke-dasharray="${progress2}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="pr-fill" stroke-dasharray="${p_ebrw2}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                       </svg>
-                      <span>${progress2}%</span>
+                      <span>${p_ebrw2}%</span>
                     </div>
                   </div>
                 </div>
@@ -379,19 +448,19 @@
                   <div class="ecl-row">
                     <div class="ecl-row-info">
                       <strong>🧩 Module 1</strong>
-                      <small>Q1-22 · Algebra & Functions</small>
-                      <div class="score-badge">${m1Score}/22 Correct</div>
+                      <small>35 min • 22 questions</small>
+                      <div class="score-badge">${score_math1}</div>
                       <div class="ecl-row-btns" style="margin-top: 12px;">
-                        <button class="btn-practice-pill btn-math" onclick="window.location.href='/past-exams/${exam.year}/${exam.month.toLowerCase()}/${v.id}/math'">▶ TRY NOW</button>
-                        <button class="btn-review-pill">REVIEW</button>
+                        <button class="btn-practice-pill btn-math" onclick="window.location.href='${link_math1}'">▶ TRY NOW</button>
+                        <button class="btn-review-pill" ${showReviewMath1}>REVIEW</button>
                       </div>
                     </div>
-                    <div class="progress-ring-box math-ring" style="--p:${progress1}">
+                    <div class="progress-ring-box math-ring" style="--p:${p_math1}">
                       <svg viewBox="0 0 36 36" class="pr-svg">
                         <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="pr-fill" stroke-dasharray="${progress1}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="pr-fill" stroke-dasharray="${p_math1}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                       </svg>
-                      <span>${progress1}%</span>
+                      <span>${p_math1}%</span>
                     </div>
                   </div>
                   
@@ -400,19 +469,19 @@
                   <div class="ecl-row ${m2Class}">
                     <div class="ecl-row-info">
                       <strong>🧩 Module 2</strong>
-                      <small>Q23-38 · Geometry & Trigonometry</small>
-                      <div class="score-badge">${m2Score}/22 Correct</div>
+                      <small>35 min • 22 questions</small>
+                      <div class="score-badge">${score_math2}</div>
                       <div class="ecl-row-btns" style="margin-top: 12px;">
                         <button class="btn-practice-pill btn-math" ${m2BtnClick}>${m2BtnText}</button>
-                        <button class="btn-review-pill">REVIEW</button>
+                        <button class="btn-review-pill" ${showReviewMath2}>REVIEW</button>
                       </div>
                     </div>
-                    <div class="progress-ring-box math-ring" style="--p:${progress2}">
+                    <div class="progress-ring-box math-ring" style="--p:${p_math2}">
                       <svg viewBox="0 0 36 36" class="pr-svg">
                         <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="pr-fill" stroke-dasharray="${progress2}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="pr-fill" stroke-dasharray="${p_math2}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                       </svg>
-                      <span>${progress2}%</span>
+                      <span>${p_math2}%</span>
                     </div>
                   </div>
 
