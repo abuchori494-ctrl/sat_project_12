@@ -94,8 +94,9 @@ let similarQuizIdx = 0;
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
   // Sync Theme
-  const savedTheme = localStorage.getItem('oneprep_theme') || 'light';
-  document.body.className = savedTheme;
+  const savedTheme = localStorage.getItem('oneprep_theme') || 'dark';
+  document.body.classList.remove('light', 'dark');
+  document.body.classList.add(savedTheme);
   
   // Render views
   renderVocab();
@@ -138,7 +139,8 @@ function show(viewId) {
 function toggleTheme() {
   const isDark = document.body.classList.contains('dark');
   const newTheme = isDark ? 'light' : 'dark';
-  document.body.className = newTheme;
+  document.body.classList.remove('light', 'dark');
+  document.body.classList.add(newTheme);
   localStorage.setItem('oneprep_theme', newTheme);
   const msg = `Switched to ${newTheme} mode!`;
   showToast(msg);

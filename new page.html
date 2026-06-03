@@ -7,6 +7,15 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('oneprep_theme') || 'dark';
+      document.body.classList.remove('light', 'dark');
+      document.body.classList.add(savedTheme);
+    })();
+  </script>
+
   <header>
     <h1>New Page</h1>
   </header>
