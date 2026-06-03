@@ -69,9 +69,11 @@ const store = {
 const DB_PATH = path.join(__dirname, 'db.json');
 const EXAM_QUESTIONS_PATH = path.join(__dirname, 'examQuestions.json');
 const ATTEMPTS_PATH = path.join(__dirname, 'examAttempts.json');
+const REAL_EXAM_ATTEMPTS_PATH = path.join(__dirname, 'realExamAttempts.json');
 
 let examQuestionsDb = {};
 let examAttempts = {};
+let realExamAttempts = {};
 
 try {
   if (fs.existsSync(DB_PATH)) {
@@ -103,6 +105,15 @@ try {
   console.error("Failed to load examAttempts.json on startup", err);
 }
 
+try {
+  if (fs.existsSync(REAL_EXAM_ATTEMPTS_PATH)) {
+    const rData = fs.readFileSync(REAL_EXAM_ATTEMPTS_PATH, 'utf-8');
+    realExamAttempts = JSON.parse(rData);
+  }
+} catch (err) {
+  console.error("Failed to load realExamAttempts.json on startup", err);
+}
+
 function persistPlans() {
   try {
     fs.writeFileSync(DB_PATH, JSON.stringify(store.planner.plans, null, 2));
@@ -119,6 +130,13 @@ function persistAttempts() {
   }
 }
 
+function persistRealExamAttempts() {
+  try {
+    fs.writeFileSync(REAL_EXAM_ATTEMPTS_PATH, JSON.stringify(realExamAttempts, null, 2));
+  } catch (err) {
+    console.error("Failed to write to realExamAttempts.json", err);
+  }
+}
 
 // ==========================================================
 // SEEDS: 100 COLLEGES
@@ -721,9 +739,7 @@ app.get('/past-exams/:year/:month/:version/:subject', (req, res) => {
 });
 
 // Fallback handles routing data views nicely
-app.get('/question-rush', (req, res) => res.sendFile(path.join(__dirname, 'question-bank.html')));
 app.get('/challenge', (req, res) => res.sendFile(path.join(__dirname, 'question-bank.html')));
-app.get('/predicted-tests', (req, res) => res.sendFile(path.join(__dirname, 'question-bank.html')));
 app.get('/saved', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/mistakes', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
@@ -1424,6 +1440,1027 @@ app.get('/api/colleges/stats', (req, res) => {
     avgAcceptanceRate: Math.round(sumRate / total),
     avgMedianSAT: Math.round(sumSAT / total)
   });
+});
+
+// ==========================================================
+// REAL EXAM MODE API
+// ==========================================================
+
+// Helper: build module list for an exam
+function buildRealExamModules(examId) {
+  const modules = [
+    { id: 'ebrw1', name: 'Reading & Writing — Module 1', subject: 'reading', timeSeconds: 32 * 60, questionCount: 27, status: 'active', answers: {}, score: null, flagged: [] },
+    { id: 'ebrw2', name: 'Reading & Writing — Module 2', subject: 'reading', timeSeconds: 32 * 60, questionCount: 27, status: 'locked', answers: {}, score: null, flagged: [] },
+    { id: 'break', name: '10-Minute Break', subject: 'break', timeSeconds: 10 * 60, questionCount: 0, status: 'locked', answers: {}, score: null, flagged: [] },
+    { id: 'math1', name: 'Math — Module 1', subject: 'math', timeSeconds: 35 * 60, questionCount: 22, status: 'locked', answers: {}, score: null, flagged: [] },
+    { id: 'math2', name: 'Math — Module 2', subject: 'math', timeSeconds: 35 * 60, questionCount: 22, status: 'locked', answers: {}, score: null, flagged: [] }
+  ];
+  return modules;
+}
+
+// Helper: get questions for a module (from real exam or cycle from seed)
+function getRealExamQuestions(examId, moduleId) {
+  if (examId === 'march-2026-int-a' && examQuestionsDb && examQuestionsDb.modules && examQuestionsDb.modules[moduleId]) {
+    return examQuestionsDb.modules[moduleId].questions;
+  }
+  // AI-generated: cycle questionsDb
+  const allQ = questionsDb;
+  const counts = { ebrw1: 27, ebrw2: 27, math1: 22, math2: 22 };
+  const count = counts[moduleId] || 22;
+  const result = [];
+  for (let i = 0; i < count; i++) {
+    result.push({ ...allQ[i % allQ.length], questionNumber: i + 1 });
+  }
+  return result;
+}
+
+// Helper: compute SAT scale score from raw
+function computeScaledScore(rawCorrect, rawTotal, sectionMin = 200, sectionMax = 800) {
+  if (rawTotal === 0) return sectionMin;
+  const pct = rawCorrect / rawTotal;
+  return Math.round(sectionMin + pct * (sectionMax - sectionMin));
+}
+
+// Route: serve real-exam page
+app.get('/real-exam', (req, res) => res.sendFile(path.join(__dirname, 'real-exam.html')));
+
+// GET /api/real-exam/list — available exams + in-progress status
+app.get('/api/real-exam/list', (req, res) => {
+  const userId = 'user_001';
+
+  // Find any in-progress attempt for this user
+  const inProgress = Object.values(realExamAttempts).find(a => a.userId === userId && a.status === 'in_progress');
+
+  const exams = [
+  {
+    "id": "march-2026-int-a",
+    "type": "official",
+    "name": "March 2026 SAT (Int A)",
+    "date": "March 2026",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2026-int-b",
+    "type": "official",
+    "name": "March 2026 SAT (Int B)",
+    "date": "March 2026",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2026-int-c",
+    "type": "official",
+    "name": "March 2026 SAT (Int C)",
+    "date": "March 2026",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2026-us-a",
+    "type": "official",
+    "name": "March 2026 SAT (US A)",
+    "date": "March 2026",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2026-us-b",
+    "type": "official",
+    "name": "March 2026 SAT (US B)",
+    "date": "March 2026",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "december-2025-int-a",
+    "type": "official",
+    "name": "December 2025 SAT (Int A)",
+    "date": "December 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "december-2025-int-b",
+    "type": "official",
+    "name": "December 2025 SAT (Int B)",
+    "date": "December 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "december-2025-int-c",
+    "type": "official",
+    "name": "December 2025 SAT (Int C)",
+    "date": "December 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "december-2025-int-d",
+    "type": "official",
+    "name": "December 2025 SAT (Int D)",
+    "date": "December 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "december-2025-us-a",
+    "type": "official",
+    "name": "December 2025 SAT (US A)",
+    "date": "December 2025",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "december-2025-us-b",
+    "type": "official",
+    "name": "December 2025 SAT (US B)",
+    "date": "December 2025",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "december-2025-us-c",
+    "type": "official",
+    "name": "December 2025 SAT (US C)",
+    "date": "December 2025",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "november-2025-int-a",
+    "type": "official",
+    "name": "November 2025 SAT (Int A)",
+    "date": "November 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "november-2025-int-b",
+    "type": "official",
+    "name": "November 2025 SAT (Int B)",
+    "date": "November 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "november-2025-int-c",
+    "type": "official",
+    "name": "November 2025 SAT (Int C)",
+    "date": "November 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "november-2025-us-a",
+    "type": "official",
+    "name": "November 2025 SAT (US A)",
+    "date": "November 2025",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "october-2025-int-a",
+    "type": "official",
+    "name": "October 2025 SAT (Int A)",
+    "date": "October 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "october-2025-int-b",
+    "type": "official",
+    "name": "October 2025 SAT (Int B)",
+    "date": "October 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "october-2025-us-a",
+    "type": "official",
+    "name": "October 2025 SAT (US A)",
+    "date": "October 2025",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "october-2025-us-b",
+    "type": "official",
+    "name": "October 2025 SAT (US B)",
+    "date": "October 2025",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "august-2025-form-a",
+    "type": "official",
+    "name": "August 2025 SAT (Form A)",
+    "date": "August 2025",
+    "region": "Global",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "august-2025-form-b",
+    "type": "official",
+    "name": "August 2025 SAT (Form B)",
+    "date": "August 2025",
+    "region": "Global",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "august-2025-form-c",
+    "type": "official",
+    "name": "August 2025 SAT (Form C)",
+    "date": "August 2025",
+    "region": "Global",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "august-2025-form-d",
+    "type": "official",
+    "name": "August 2025 SAT (Form D)",
+    "date": "August 2025",
+    "region": "Global",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "august-2025-form-e",
+    "type": "official",
+    "name": "August 2025 SAT (Form E)",
+    "date": "August 2025",
+    "region": "Global",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "june-2025-int-a",
+    "type": "official",
+    "name": "June 2025 SAT (Int A)",
+    "date": "June 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "june-2025-int-b",
+    "type": "official",
+    "name": "June 2025 SAT (Int B)",
+    "date": "June 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "june-2025-us-a",
+    "type": "official",
+    "name": "June 2025 SAT (US A)",
+    "date": "June 2025",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "june-2025-us-b",
+    "type": "official",
+    "name": "June 2025 SAT (US B)",
+    "date": "June 2025",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "june-2025-us-c",
+    "type": "official",
+    "name": "June 2025 SAT (US C)",
+    "date": "June 2025",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "may-2025-int-a",
+    "type": "official",
+    "name": "May 2025 SAT (Int A)",
+    "date": "May 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "may-2025-int-b",
+    "type": "official",
+    "name": "May 2025 SAT (Int B)",
+    "date": "May 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "may-2025-int-c",
+    "type": "official",
+    "name": "May 2025 SAT (Int C)",
+    "date": "May 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "may-2025-us-a",
+    "type": "official",
+    "name": "May 2025 SAT (US A)",
+    "date": "May 2025",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2025-int-a",
+    "type": "official",
+    "name": "March 2025 SAT (Int A)",
+    "date": "March 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2025-int-b",
+    "type": "official",
+    "name": "March 2025 SAT (Int B)",
+    "date": "March 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2025-int-c",
+    "type": "official",
+    "name": "March 2025 SAT (Int C)",
+    "date": "March 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2025-int-d",
+    "type": "official",
+    "name": "March 2025 SAT (Int D)",
+    "date": "March 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2025-int-e",
+    "type": "official",
+    "name": "March 2025 SAT (Int E)",
+    "date": "March 2025",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2025-us-a",
+    "type": "official",
+    "name": "March 2025 SAT (US A)",
+    "date": "March 2025",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2025-us-b",
+    "type": "official",
+    "name": "March 2025 SAT (US B)",
+    "date": "March 2025",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2025-us-c",
+    "type": "official",
+    "name": "March 2025 SAT (US C)",
+    "date": "March 2025",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "december-2024-int-a",
+    "type": "official",
+    "name": "December 2024 SAT (Int A)",
+    "date": "December 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "december-2024-int-b",
+    "type": "official",
+    "name": "December 2024 SAT (Int B)",
+    "date": "December 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "december-2024-int-c",
+    "type": "official",
+    "name": "December 2024 SAT (Int C)",
+    "date": "December 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "december-2024-int-d",
+    "type": "official",
+    "name": "December 2024 SAT (Int D)",
+    "date": "December 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "december-2024-us-a",
+    "type": "official",
+    "name": "December 2024 SAT (US A)",
+    "date": "December 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "december-2024-us-b",
+    "type": "official",
+    "name": "December 2024 SAT (US B)",
+    "date": "December 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "december-2024-us-c",
+    "type": "official",
+    "name": "December 2024 SAT (US C)",
+    "date": "December 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "november-2024-int-a",
+    "type": "official",
+    "name": "November 2024 SAT (Int A)",
+    "date": "November 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "november-2024-int-b",
+    "type": "official",
+    "name": "November 2024 SAT (Int B)",
+    "date": "November 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "november-2024-int-c",
+    "type": "official",
+    "name": "November 2024 SAT (Int C)",
+    "date": "November 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "november-2024-int-d",
+    "type": "official",
+    "name": "November 2024 SAT (Int D)",
+    "date": "November 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "november-2024-us-a",
+    "type": "official",
+    "name": "November 2024 SAT (US A)",
+    "date": "November 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "november-2024-us-b",
+    "type": "official",
+    "name": "November 2024 SAT (US B)",
+    "date": "November 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "october-2024-int-a",
+    "type": "official",
+    "name": "October 2024 SAT (Int A)",
+    "date": "October 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "october-2024-int-b",
+    "type": "official",
+    "name": "October 2024 SAT (Int B)",
+    "date": "October 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "october-2024-int-c",
+    "type": "official",
+    "name": "October 2024 SAT (Int C)",
+    "date": "October 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "october-2024-us-a",
+    "type": "official",
+    "name": "October 2024 SAT (US A)",
+    "date": "October 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "october-2024-us-b",
+    "type": "official",
+    "name": "October 2024 SAT (US B)",
+    "date": "October 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "october-2024-us-c",
+    "type": "official",
+    "name": "October 2024 SAT (US C)",
+    "date": "October 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "august-2024-int-a",
+    "type": "official",
+    "name": "August 2024 SAT (Int A)",
+    "date": "August 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "august-2024-int-b",
+    "type": "official",
+    "name": "August 2024 SAT (Int B)",
+    "date": "August 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "august-2024-us-a",
+    "type": "official",
+    "name": "August 2024 SAT (US A)",
+    "date": "August 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "august-2024-us-b",
+    "type": "official",
+    "name": "August 2024 SAT (US B)",
+    "date": "August 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "august-2024-us-c",
+    "type": "official",
+    "name": "August 2024 SAT (US C)",
+    "date": "August 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "august-2024-us-d",
+    "type": "official",
+    "name": "August 2024 SAT (US D)",
+    "date": "August 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "august-2024-us-e",
+    "type": "official",
+    "name": "August 2024 SAT (US E)",
+    "date": "August 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "june-2024-form-a",
+    "type": "official",
+    "name": "June 2024 SAT (Form A)",
+    "date": "June 2024",
+    "region": "Global",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "june-2024-form-b",
+    "type": "official",
+    "name": "June 2024 SAT (Form B)",
+    "date": "June 2024",
+    "region": "Global",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "june-2024-form-c",
+    "type": "official",
+    "name": "June 2024 SAT (Form C)",
+    "date": "June 2024",
+    "region": "Global",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "june-2024-form-d",
+    "type": "official",
+    "name": "June 2024 SAT (Form D)",
+    "date": "June 2024",
+    "region": "Global",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "june-2024-form-e",
+    "type": "official",
+    "name": "June 2024 SAT (Form E)",
+    "date": "June 2024",
+    "region": "Global",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "may-2024-int-a",
+    "type": "official",
+    "name": "May 2024 SAT (Int A)",
+    "date": "May 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "may-2024-int-b",
+    "type": "official",
+    "name": "May 2024 SAT (Int B)",
+    "date": "May 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "may-2024-us-a",
+    "type": "official",
+    "name": "May 2024 SAT (US A)",
+    "date": "May 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "may-2024-us-b",
+    "type": "official",
+    "name": "May 2024 SAT (US B)",
+    "date": "May 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2024-int-a",
+    "type": "official",
+    "name": "March 2024 SAT (Int A)",
+    "date": "March 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2024-int-b",
+    "type": "official",
+    "name": "March 2024 SAT (Int B)",
+    "date": "March 2024",
+    "region": "International",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2024-us-a",
+    "type": "official",
+    "name": "March 2024 SAT (US A)",
+    "date": "March 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "march-2024-us-b",
+    "type": "official",
+    "name": "March 2024 SAT (US B)",
+    "date": "March 2024",
+    "region": "US",
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "OFFICIAL"
+  },
+  {
+    "id": "ai-practice-1",
+    "type": "ai",
+    "name": "AI Practice Exam #1",
+    "date": "Generated for you",
+    "region": null,
+    "estimatedTime": "~3h 15min",
+    "modules": 4,
+    "badge": "AI GENERATED"
+  }
+];
+
+  res.json({ exams, inProgress: inProgress || null });
+});
+
+// POST /api/real-exam/start — create new attempt
+app.post('/api/real-exam/start', (req, res) => {
+  const { examId } = req.body;
+  if (!examId) return res.status(400).json({ error: 'examId required' });
+
+  const userId = 'user_001';
+  // Abandon any existing in-progress attempt
+  Object.values(realExamAttempts).forEach(a => {
+    if (a.userId === userId && a.status === 'in_progress') {
+      a.status = 'abandoned';
+    }
+  });
+
+  const attemptId = `re_${Date.now()}`;
+  const modules = buildRealExamModules(examId);
+  const attempt = {
+    attemptId,
+    userId,
+    examId,
+    examType: examId.startsWith('ai') ? 'ai' : 'official',
+    status: 'in_progress',
+    currentModuleIndex: 0,
+    currentQuestionIndex: 0,
+    timeLeftSeconds: modules[0].timeSeconds,
+    modules,
+    results: null,
+    startedAt: new Date().toISOString(),
+    completedAt: null
+  };
+
+  realExamAttempts[attemptId] = attempt;
+  persistRealExamAttempts();
+  res.json({ attemptId, attempt });
+});
+
+// GET /api/real-exam/attempt/:id — get full attempt state
+app.get('/api/real-exam/attempt/:id', (req, res) => {
+  const attempt = realExamAttempts[req.params.id];
+  if (!attempt) return res.status(404).json({ error: 'Attempt not found' });
+  res.json(attempt);
+});
+
+// PUT /api/real-exam/attempt/:id/save — autosave progress
+app.put('/api/real-exam/attempt/:id/save', (req, res) => {
+  const attempt = realExamAttempts[req.params.id];
+  if (!attempt) return res.status(404).json({ error: 'Attempt not found' });
+  if (attempt.status !== 'in_progress') return res.status(400).json({ error: 'Attempt not in progress' });
+
+  const { currentModuleIndex, currentQuestionIndex, timeLeftSeconds, answers, flagged } = req.body;
+  if (currentModuleIndex !== undefined) attempt.currentModuleIndex = currentModuleIndex;
+  if (currentQuestionIndex !== undefined) attempt.currentQuestionIndex = currentQuestionIndex;
+  if (timeLeftSeconds !== undefined) attempt.timeLeftSeconds = timeLeftSeconds;
+  if (answers !== undefined && attempt.modules[attempt.currentModuleIndex]) {
+    attempt.modules[attempt.currentModuleIndex].answers = answers;
+  }
+  if (flagged !== undefined && attempt.modules[attempt.currentModuleIndex]) {
+    attempt.modules[attempt.currentModuleIndex].flagged = flagged;
+  }
+
+  persistRealExamAttempts();
+  res.json({ success: true });
+});
+
+// POST /api/real-exam/attempt/:id/submit-module — submit current module, unlock next
+app.post('/api/real-exam/attempt/:id/submit-module', (req, res) => {
+  const attempt = realExamAttempts[req.params.id];
+  if (!attempt) return res.status(404).json({ error: 'Attempt not found' });
+  if (attempt.status !== 'in_progress') return res.status(400).json({ error: 'Attempt not in progress' });
+
+  const { answers, flagged } = req.body;
+  const modIdx = attempt.currentModuleIndex;
+  const mod = attempt.modules[modIdx];
+  if (!mod) return res.status(400).json({ error: 'Invalid module index' });
+
+  // Save answers & flagged
+  if (answers) mod.answers = answers;
+  if (flagged) mod.flagged = flagged;
+  mod.status = 'completed';
+
+  // Score it (unless it's the break)
+  if (mod.subject !== 'break') {
+    const questions = getRealExamQuestions(attempt.examId, mod.id);
+    let correct = 0;
+    questions.forEach((q, i) => {
+      const qNum = q.questionNumber || (i + 1);
+      const userAns = (answers || {})[qNum];
+      if (userAns !== undefined && String(userAns).trim().toLowerCase() === String(q.correctAnswer).trim().toLowerCase()) {
+        correct++;
+      }
+    });
+    mod.score = { correct, total: questions.length, percentage: Math.round((correct / questions.length) * 100) };
+  }
+
+  // Unlock next module
+  const nextIdx = modIdx + 1;
+  if (nextIdx < attempt.modules.length) {
+    attempt.modules[nextIdx].status = 'active';
+    attempt.currentModuleIndex = nextIdx;
+    attempt.currentQuestionIndex = 0;
+    attempt.timeLeftSeconds = attempt.modules[nextIdx].timeSeconds;
+  }
+
+  persistRealExamAttempts();
+  res.json({ success: true, nextModuleIndex: nextIdx, attempt });
+});
+
+// POST /api/real-exam/attempt/:id/complete — final scoring
+app.post('/api/real-exam/attempt/:id/complete', (req, res) => {
+  const attempt = realExamAttempts[req.params.id];
+  if (!attempt) return res.status(404).json({ error: 'Attempt not found' });
+
+  attempt.status = 'completed';
+  attempt.completedAt = new Date().toISOString();
+
+  // Aggregate scores
+  const rwMods = attempt.modules.filter(m => m.subject === 'reading' && m.score);
+  const mathMods = attempt.modules.filter(m => m.subject === 'math' && m.score);
+
+  const rwCorrect = rwMods.reduce((s, m) => s + m.score.correct, 0);
+  const rwTotal = rwMods.reduce((s, m) => s + m.score.total, 0);
+  const mathCorrect = mathMods.reduce((s, m) => s + m.score.correct, 0);
+  const mathTotal = mathMods.reduce((s, m) => s + m.score.total, 0);
+
+  const rwScaled = computeScaledScore(rwCorrect, rwTotal || 54);
+  const mathScaled = computeScaledScore(mathCorrect, mathTotal || 44);
+  const totalScaled = rwScaled + mathScaled;
+
+  attempt.results = {
+    total: totalScaled,
+    reading: rwScaled,
+    math: mathScaled,
+    rwCorrect, rwTotal,
+    mathCorrect, mathTotal,
+    moduleBreakdown: attempt.modules.filter(m => m.score).map(m => ({
+      name: m.name,
+      correct: m.score.correct,
+      total: m.score.total,
+      percentage: m.score.percentage
+    }))
+  };
+
+  persistRealExamAttempts();
+  updateStreak();
+  res.json({ success: true, results: attempt.results });
 });
 
 // ==========================================================

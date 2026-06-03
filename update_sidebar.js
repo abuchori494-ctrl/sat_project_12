@@ -207,8 +207,6 @@ const baseSidebar = `<nav id="sidebar">
 
       <li class="section-label">PRACTICE</li>
       <li><a href="/question-bank" data-page="question-bank">🔲 Question Bank</a></li>
-      <li><a href="/question-rush" data-page="question-rush">⚡ Question Rush</a></li>
-      <li><a href="/predicted-tests" data-page="predicted-tests">📝 Predicted Tests</a></li>
       <li><a href="/past-exams.html" data-page="past-exams">📝 Past Exams</a></li>
     </ul>
 
@@ -252,8 +250,6 @@ files.forEach(file => {
     else if (file === 'study-planner.html') activePage = 'study-planner';
     else if (file === 'analytics.html') activePage = 'analytics';
     else if (file === 'question-bank.html') activePage = 'question-bank';
-    else if (file === 'question-rush.html') activePage = 'question-rush';
-    else if (file === 'predicted-tests.html') activePage = 'predicted-tests';
     else if (file === 'past-exams.html') activePage = 'past-exams';
     else if (file === 'vocab.html') activePage = 'vocab';
     
