@@ -1306,14 +1306,14 @@ async function renderDailyAgenda() {
     const checkedTasks = JSON.parse(localStorage.getItem('oneprep_plan_checks')) || {};
 
     container.innerHTML = tasks.map(task => {
-      let badgeStyle = 'background: #DBEAFE; color: #1D4ED8;'; // Blue (Math default)
+      let badgeBg = '#DBEAFE'; // Blue (Math default)
       let subjectText = (task.subject || 'Math').toUpperCase();
       
       if (subjectText.includes('ENGLISH') || subjectText.includes('READING')) {
-        badgeStyle = 'background: #FAE8FF; color: #A21CAF;'; // Fuchsia
+        badgeBg = '#FAE8FF'; // Fuchsia
         subjectText = 'ENGLISH';
       } else if (subjectText.includes('VOCAB')) {
-        badgeStyle = 'background: #FEF3C7; color: #B45309;'; // Amber
+        badgeBg = '#FEF3C7'; // Amber
         subjectText = 'VOCAB';
       } else {
         subjectText = 'MATH';
@@ -1329,7 +1329,7 @@ async function renderDailyAgenda() {
         <div class="da-task-card ${isChecked ? 'completed' : ''}" onclick="startPracticeTopic('${task.topic}')" style="margin-bottom: 10px;">
           <div class="da-task-info">
             <div style="margin-bottom: 4px;">
-              <span style="${badgeStyle} font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.05em;">${subjectText}</span>
+              <span style="background: ${badgeBg}; color: #1E293B; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.05em;">${subjectText}</span>
             </div>
             <h4 style="${titleStyle}">${task.topic}</h4>
             <div class="da-meta">

@@ -839,7 +839,7 @@
     /* FIX 6: today highlighted with purple border */
     .ctc-day.today {
       border: 2px solid var(--lav-accent);
-      background: var(--lav-light);
+      background: rgba(124, 111, 224, 0.15);
     }
 
     .ctc-day.complete {
@@ -859,7 +859,7 @@
       border: 1px solid var(--lav-border);
       border-radius: 12px;
       /* Inner card radius */
-      padding: 10px 16px;
+      padding: 6px 16px;
       /* Drastically reduced vertical padding */
       margin-bottom: 10px;
       display: flex;
@@ -1017,10 +1017,10 @@
       border: 1px solid var(--lav-border);
       border-radius: var(--lav-radius);
       box-shadow: var(--lav-shadow);
-      padding: 20px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
       position: relative;
       overflow: hidden;
       transition: transform 0.2s, box-shadow 0.2s;
@@ -1040,7 +1040,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
       flex-shrink: 0;
     }
 
@@ -1062,6 +1062,7 @@
       font-weight: 800;
       color: var(--lav-dark);
       line-height: 1;
+      margin-top: auto;
     }
 
     .das-card-val.accent {
