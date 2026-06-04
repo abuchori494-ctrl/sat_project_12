@@ -37,6 +37,27 @@
       --lav-grad: linear-gradient(135deg, #7C6FE0, #B8B0F5);
     }
 
+    /* ── Dark Mode Variables ── */
+    body.dark {
+      --lav-bg: #000000;
+      --bg-app: #000000 !important;
+      background-color: #000000 !important;
+      --lav-sidebar: #000000;
+      --lav-card: #0A0A0A;
+      --bg-card: #0A0A0A !important;
+      --lav-border: #1A1A1A;
+      --lav-dark: #8B5CF6;
+      --lav-gray: #A78BFA;
+      --lav-accent: #8B5CF6;
+      --lav-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
+      --lav-card-shadow-strong: 0 8px 30px rgba(139, 92, 246, 0.3);
+    }
+
+    /* Transitions for Dark Mode */
+    body, #sidebar, .lav-card, .btn-hero-outline, .hero-announce-pill, .stat-item, .hero-countdown-pill, .ctc-day {
+      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
     /* ── Layout shell ── */
     #app-body {
       background: var(--lav-bg);
@@ -157,12 +178,12 @@
     }
 
     .badge-new {
-      font-size: 8px;
-      font-weight: 800;
-      background: var(--lav-accent);
-      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      background: #EDE9FE;
+      color: #7C6FE0;
       padding: 2px 6px;
-      border-radius: 99px;
+      border-radius: 6px;
       text-transform: uppercase;
       position: absolute;
       right: 10px;
@@ -753,8 +774,8 @@
        ================================================================ */
     .db-mid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
+      grid-template-columns: 60fr 40fr;
+      gap: 48px;
       margin-bottom: 24px;
     }
 
@@ -1362,7 +1383,7 @@
     #sidebar .nav-links a { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; color: rgba(255, 255, 255, 0.82); font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s ease; position: relative; }
     #sidebar .nav-links a:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
     #sidebar .nav-links a.active { background: var(--lav-sidebar-active); color: #fff; box-shadow: inset 3px 0 0 var(--lav-accent2); }
-    #sidebar .badge-new { font-size: 8px; font-weight: 800; background: var(--lav-accent); color: #fff; padding: 2px 6px; border-radius: 99px; text-transform: uppercase; position: absolute; right: 10px; }
+    #sidebar .badge-new { font-size: 10px; font-weight: 600; background: #EDE9FE; color: #7C6FE0; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; position: absolute; right: 10px; }
     #sidebar .sidebar-bottom { padding: 16px 10px; border-top: 1px solid rgba(255, 255, 255, 0.07); display: flex; flex-direction: column; gap: 2px; }
     #sidebar .sidebar-bottom a, #sidebar .sidebar-bottom button { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; color: rgba(255, 255, 255, 0.7); font-size: 13px; font-weight: 600; text-decoration: none; background: transparent; border: none; font-family: inherit; cursor: pointer; width: 100%; text-align: left; transition: all 0.2s ease; }
     #sidebar .sidebar-bottom a:hover, #sidebar .sidebar-bottom button:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
@@ -1486,6 +1507,110 @@
     }
     #toggle-sidebar-btn:hover {
       color: white;
+    }
+
+    /* ── Component CSS Classes & Dark Mode Overrides ── */
+    .ctc-day-rest { background-color: rgba(156, 163, 175, 0.15); border-color: #D1D5DB; }
+    .ctc-day-incomplete { background-color: #FEE2E2; border-color: #FEE2E2; color: #FCA5A5; }
+    .ctc-day-incomplete-today { color: #ef4444; }
+    .ctc-day-future { border-style: dashed; border-color: #DDD6FE; }
+
+    body.dark #sidebar {
+      background-color: #000000 !important;
+    }
+    
+    body.dark .lav-card {
+      background-color: #0A0A0A !important;
+      border-color: #1A1A1A !important;
+    }
+
+    body.dark .lav-card:hover {
+      background: #111111;
+    }
+    body.dark #sidebar .sidebar-bottom {
+      border-top-color: #1A1A1A;
+    }
+    body.dark .btn-hero-outline {
+      border-color: #8B5CF6;
+      color: #8B5CF6;
+      background: transparent;
+    }
+    body.dark .hero-announce-pill {
+      background: #0A0A0A;
+      color: #A78BFA;
+      border: 1px solid #1A1A1A;
+    }
+    body.dark .hero-stats {
+      display: flex;
+    }
+    body.dark .stat-item span, body.dark .si-icon {
+      color: #C4BFEF;
+    }
+    body.dark .hero-countdown-pill {
+      background: #0A0A0A;
+      border: 1px solid #1A1A1A;
+      color: #A78BFA;
+    }
+    body.dark .ctc-day {
+      background-color: transparent;
+      border-color: #1A1A1A;
+      border-radius: 6px;
+    }
+    body.dark .ctc-day-future {
+      background-color: transparent;
+      border-color: #1A1A1A;
+      border-radius: 6px;
+    }
+    body.dark .ctc-day.today {
+      border-color: #8B5CF6;
+      border-width: 2px;
+      background-color: transparent;
+    }
+    body.dark .ctc-day-incomplete {
+      background-color: rgba(239, 68, 68, 0.1);
+      border-color: #EF4444;
+      color: #EF4444;
+      border-radius: 6px;
+    }
+    body.dark .ctc-day-incomplete-today {
+      color: #EF4444;
+    }
+    body.dark #ctc-summary {
+      color: #A78BFA;
+    }
+    body.dark .ssc-title, body.dark .ssc-sub, body.dark .cp-icon + span {
+      color: #A78BFA;
+    }
+    body.dark .review-stack-card {
+      background: #0A0A0A !important;
+      border-color: #1A1A1A !important;
+      border-style: solid !important;
+    }
+    body.dark .review-stack-card h3 {
+      color: #8B5CF6 !important;
+    }
+    body.dark .review-stack-card p {
+      color: #A78BFA !important;
+    }
+    body.dark a[href="#MainDashboardAgenda"], body.dark a[onclick*="openGoalModal"] {
+      color: #8B5CF6 !important;
+    }
+    body.dark .da-task-card, body.dark .da-task-card.completed {
+      background: #000000 !important;
+      border-top-color: #1A1A1A !important;
+      border-right-color: #1A1A1A !important;
+      border-bottom-color: #1A1A1A !important;
+    }
+    body.dark .founder-quote {
+      font-style: italic;
+      color: #C4BFEF;
+    }
+    body.dark #latest-score-val, body.dark #target-score-val span {
+      color: #8B5CF6 !important;
+      font-size: 1.1rem;
+    }
+    body.dark .ssc-score {
+      color: #8B5CF6;
     }
   </style>
 
@@ -1614,7 +1739,7 @@
             <!-- CTA Buttons -->
             <div class="hero-btns">
               <button class="btn-hero-filled" onclick="window.location.href='/question-bank'">Practice Questions</button>
-              <button class="btn-hero-outline" onclick="window.location.href='/real-exam'">Take a Full Exam</button>
+              <button class="btn-hero-outline" onclick="window.location.href='/real-exam'">Full Exam</button>
             </div>
 
             <!-- Stats Row -->
@@ -1664,26 +1789,31 @@
                 <% if (typeof consistencyWeek !== 'undefined' && consistencyWeek) { %>
                   <% consistencyWeek.forEach(day => { %>
                     <%
-                      let inlineStyle = '';
+                      let extraClass = '';
                       if (day.status === 'rest') {
-                        inlineStyle = 'background-color: rgba(156, 163, 175, 0.15); border-color: #D1D5DB;';
+                        extraClass = 'ctc-day-rest';
                       } else if (day.status === 'incomplete' && !day.isToday) {
-                        inlineStyle = 'background-color: rgba(220, 80, 80, 0.1); border-color: #ef4444; color: #ef4444;';
+                        extraClass = 'ctc-day-incomplete';
                       } else if (day.status === 'incomplete' && day.isToday) {
-                        inlineStyle = 'color: #ef4444;';
+                        extraClass = 'ctc-day-incomplete-today';
+                      } else if (day.status !== 'complete' && !day.isToday) {
+                        extraClass = 'ctc-day-future';
                       }
                     %>
-                    <div class="ctc-day <%= day.isToday ? 'today' : '' %> <%= day.status === 'complete' ? 'complete' : '' %>" style="<%= inlineStyle %>">
+                    <div class="ctc-day <%= day.isToday ? 'today' : '' %> <%= day.status === 'complete' ? 'complete' : '' %> <%= extraClass %>">
                       <% if (day.status === 'complete') { %>
                         ✓
                       <% } else if (day.status === 'incomplete') { %>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-top: 2px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-top: 2px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                       <% } else if (day.status === 'rest') { %>
                         😴
                       <% } %>
                     </div>
                   <% }); %>
                 <% } %>
+              </div>
+              <div style="text-align: center; font-size: 11px; margin-top: 12px;">
+                <a href="#MainDashboardAgenda" style="color: #7C6FE0; text-decoration: none;">Study today to build your streak →</a>
               </div>
               <!-- JS: renderConsistencyTracker() is now disabled in app.js as backend renders this via EJS -->
             </div>
@@ -1756,12 +1886,13 @@
 
         <!-- FIX 7: clean SVG icons, title case labels, no watermarks -->
         <div class="analytics-strip" style="background: #fff; border: 1px solid #EDE9FE; border-radius: 12px; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--text-sub, #64748b);">
-          <div class="strip-stats" style="display: flex; gap: 8px; align-items: center;">
-            <span>📝 <strong style="font-weight: 700;" id="stat-attempted"><%= analyticsData.questionsDone %></strong> <span style="font-weight: 400;">Questions Done</span></span>
+          <div class="strip-stats" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <span>🎯 <strong style="font-weight: 700;" id="stat-attempted"><%= analyticsData.questionsDone %></strong> <span style="font-weight: 400;">Questions This Week</span></span>
             <span style="font-weight: 400;">&middot;</span>
-            <span>✅ <strong style="font-weight: 700;" id="stat-accuracy"><%= analyticsData.accuracy %>%</strong> <span style="font-weight: 400;">Accuracy</span></span>
-            <span style="font-weight: 400;">&middot;</span>
-            <span>⚠️ Weakest: <strong style="font-weight: 700;" id="stat-weakest"><%= analyticsData.weakestTopic %></strong></span>
+            <span>📈 <strong style="font-weight: 700;" id="stat-accuracy"><%= analyticsData.accuracy %>%</strong> <span style="font-weight: 400;">Recent Accuracy</span></span>
+            <span style="font-weight: 400;" id="weakest-divider">&middot;</span>
+            <span id="stat-weakest-container" style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            </span>
           </div>
           <a href="/analytics" style="color: #7C6FE0; font-weight: 500; text-decoration: none;">View all analytics &rarr;</a>
         </div>
@@ -2113,7 +2244,7 @@
     // ─── Load dashboard data from /api/dashboard ───────────────────────
     async function loadDashboardData() {
       try {
-        const res = await fetch('/api/dashboard');
+        const res = await fetch('/api/dashboard', { cache: 'no-store' });
         if (!res.ok) throw new Error('Dashboard fetch failed');
         const data = await res.json();
 
@@ -2159,7 +2290,7 @@
             }
           } else {
             // No completed exam — show empty state
-            latestEl.innerHTML = '<span style="font-size:1.1rem;font-weight:700;color:var(--lav-gray);">No exams yet</span>';
+            latestEl.innerHTML = '<span style="font-size:1.1rem;font-weight:500;color:#6B7280;">One exam away from knowing your baseline.</span>';
             if (rwPill)   rwPill.style.display   = 'none';
             if (mathPill) mathPill.style.display = 'none';
             if (latestSubEl) {
@@ -2210,10 +2341,26 @@
         const analytics = data.analytics || {};
         const attemptedEl = document.getElementById('stat-attempted');
         const accuracyEl = document.getElementById('stat-accuracy');
-        const weakestEl = document.getElementById('stat-weakest');
+        const weakestContainer = document.getElementById('stat-weakest-container');
+        const divider = document.getElementById('weakest-divider');
         if (attemptedEl) attemptedEl.textContent = analytics.questionsAttempted ?? 0;
         if (accuracyEl) accuracyEl.textContent = (analytics.currentAccuracy ?? 100) + '%';
-        if (weakestEl) weakestEl.textContent = analytics.weakestTopic ?? 'None';
+        if (weakestContainer && analytics) {
+          if (analytics.questionsAttempted === 0) {
+            weakestContainer.innerHTML = `<span>🌱 You haven't taken any practice yet! Start studying to see insights.</span>`;
+            if (divider) divider.style.display = 'inline-block';
+          } else if (analytics.isPerfect || !analytics.weakestTopics || analytics.weakestTopics.length === 0) {
+            weakestContainer.innerHTML = `<span>🌟 Flawless! You're dominating every topic so far. Keep it up!</span>`;
+            if (divider) divider.style.display = 'inline-block';
+          } else {
+            let html = `<span>🚨 Priority Review:</span>`;
+            analytics.weakestTopics.forEach(topic => {
+              html += `<button onclick="window.location.href='/question-bank?topic=${encodeURIComponent(topic)}'" style="background: #FEE2E2; color: #B91C1C; border: 1px solid #FECACA; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#FECACA'" onmouseout="this.style.background='#FEE2E2'">${topic}</button>`;
+            });
+            weakestContainer.innerHTML = html;
+            if (divider) divider.style.display = 'inline-block';
+          }
+        }
 
         // FIX 1: countdown with expired-date handling
         const rawDate = user.examDate || '2026-12-05';
@@ -2242,20 +2389,50 @@
         if (mainAgendaContainer) {
           const hasActivePlan = data.studyPlan || localStorage.getItem('oneprep_offline_plans');
           if (hasActivePlan) {
-            // STATE B: Active Plan -> Render Daily Agenda Card ONLY
+            // STATE B: Active Plan -> Render Daily Agenda Card AND Review Stack
+            const mistakes = data.analytics.mistakesToReview || {math:0, english:0, vocab:0};
+            const totalMistakes = mistakes.math + mistakes.english + mistakes.vocab;
+            
+            let reviewCardHTML = '';
+            if (totalMistakes > 0) {
+              reviewCardHTML = `
+                <div class="lav-card review-stack-card" style="display: flex; flex-direction: column;">
+                  <h3 style="margin: 0 0 16px; padding: 0; font-size: 1.1rem; color: var(--lav-dark);">Before you move on...</h3>
+                  <p style="font-size: 0.85rem; color: var(--lav-gray); margin-top: 0; margin-bottom: 16px;">
+                    You have <strong>${totalMistakes}</strong> unreviewed mistakes from previous sessions. Let's patch those gaps.
+                  </p>
+                  <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    ${mistakes.math > 0 ? `<div style="display: flex; justify-content: space-between; font-size: 0.95rem;"><span>📐 Math</span><strong style="color: #ef4444;">${mistakes.math}</strong></div>` : ''}
+                    ${mistakes.english > 0 ? `<div style="display: flex; justify-content: space-between; font-size: 0.95rem;"><span>📚 English</span><strong style="color: #ef4444;">${mistakes.english}</strong></div>` : ''}
+                    ${mistakes.vocab > 0 ? `<div style="display: flex; justify-content: space-between; font-size: 0.95rem;"><span>🔤 Vocab</span><strong style="color: #ef4444;">${mistakes.vocab}</strong></div>` : ''}
+                  </div>
+                  <button class="btn-hero-filled" style="width: 100%; margin-top: auto;" onclick="window.location.href='/question-bank'">Review Mistakes Now</button>
+                </div>
+              `;
+            } else {
+              reviewCardHTML = `
+                <div class="lav-card review-stack-card" style="display: flex; flex-direction: column; justify-content: center; align-items: flex-start; text-align: left; background: #f8fafc; border: 1px dashed #cbd5e1; min-height: 140px;">
+                  <div style="font-size: 2rem; margin-bottom: 12px;">🎉</div>
+                  <h3 style="margin: 0 0 8px; padding: 0; font-size: 1.1rem; color: var(--lav-dark);">All caught up!</h3>
+                  <p style="font-size: 0.85rem; color: var(--lav-gray); margin: 0;">You have zero unreviewed mistakes. You're ready to tackle today's agenda.</p>
+                </div>
+              `;
+            }
+
             mainAgendaContainer.innerHTML = `
               <div class="lav-card daily-agenda-card">
                 <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px;">
                   <h3 style="margin: 0; padding: 0;">Today's Agenda</h3>
                   <span id="agenda-progress-text" style="font-size: 11px; font-weight: 600; color: var(--lav-gray); display: none;"></span>
                 </div>
-                <div id="agenda-progress-track" style="width: 100%; height: 1px; background: rgba(124, 111, 224, 0.2); border-radius: 0px; margin-bottom: 20px; position: relative; display: none;">
+                <div id="agenda-progress-track" style="width: 100%; height: 4px; background: #EDE9FE; border-radius: 999px; margin-bottom: 20px; position: relative; display: none;">
                   <div id="agenda-progress-fill" style="width: 0%; height: 100%; background: var(--lav-accent); border-radius: 0px; transition: width 0.3s ease;"></div>
                 </div>
                 <div id="daily-agenda-tasks" class="dac-tasks">
                   <div style="padding: 24px; text-align: center; color: var(--lav-gray); font-size: 14px;">Loading tasks...</div>
                 </div>
               </div>
+              ${reviewCardHTML}
             `;
             // Trigger fetch for daily agenda tasks since the container now exists
             if (typeof renderDailyAgenda === 'function') {
@@ -2264,7 +2441,7 @@
           } else {
             // STATE A: No Active Plan -> Render Clean Beautiful Empty State ONLY
             mainAgendaContainer.innerHTML = `
-              <div class="dsps-create-card dsps-empty-card" style="margin-top: 0;">
+              <div class="dsps-create-card dsps-empty-card" style="margin-top: 0; grid-column: 1 / -1;">
                 <div class="dsps-empty-icon">📅</div>
                 <h3 style="margin-top: 16px; font-size: 1.1rem; font-weight: 800; color: var(--lav-dark);">Create a study plan</h3>
                 <p style="margin: 8px 0 20px; font-size: 0.9rem; color: var(--lav-gray); max-width: 400px;">Get a personalized study plan based on your test date and skill level. Practice smarter, not harder.</p>
@@ -2284,8 +2461,14 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      loadDashboardData();
+    // Execute on load
+    document.addEventListener('DOMContentLoaded', loadDashboardData);
+    
+    // Execute when returning via the browser's "Back" button (BFCache)
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) {
+        loadDashboardData();
+      }
     });
   </script>
 </body>

@@ -817,7 +817,8 @@ function getAnalyticsSummary() {
   const answered = store.questions?.answered || [];
   const questionsDone = answered.length;
   let accuracy = 0;
-  let weakestTopic = "N/A";
+  let weakestTopics = [];
+  let isPerfect = false;
 
   if (questionsDone > 0) {
     const correctCount = answered.filter(q => q.correct).length;
@@ -836,14 +837,14 @@ function getAnalyticsSummary() {
     
     if (sortedTopics.length > 0) {
       if (sortedTopics[0].acc === 100) {
-        weakestTopic = "None yet!";
+        isPerfect = true;
       } else {
-        weakestTopic = sortedTopics[0].topic;
+        weakestTopics = sortedTopics.filter(t => t.acc < 100).slice(0, 3).map(t => t.topic);
       }
     }
   }
 
-  return { questionsDone, accuracy, weakestTopic };
+  return { questionsDone, accuracy, weakestTopics, isPerfect };
 }
 
 function updateStreak() {
@@ -1070,6 +1071,7 @@ app.get('/api/dashboard', (req, res) => {
   completedAttempts.sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt));
   const latestAttempt = completedAttempts[0] || null;
 
+  const analyticsSummary = getAnalyticsSummary();
   // Return formatted payload
   res.json({
     user: store.user,
@@ -1081,10 +1083,11 @@ app.get('/api/dashboard', (req, res) => {
     latestExamDate: latestAttempt ? latestAttempt.completedAt : null,
     analytics: {
       questionsAttempted: store.questions.answered.length,
-      currentAccuracy: getAnalyticsSummary().accuracy,
+      currentAccuracy: analyticsSummary.accuracy,
       savedQuestions: store.questions.saved.length,
       recentErrors: store.questions.answered.filter(q => !q.correct).length,
-      weakestTopic: getAnalyticsSummary().weakestTopic
+      weakestTopics: analyticsSummary.weakestTopics,
+      isPerfect: analyticsSummary.isPerfect
     }
   });
 });

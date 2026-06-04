@@ -1307,8 +1307,8 @@ async function renderDailyAgenda() {
             <h4 style="margin: 0; font-size: 14px; font-weight: 600; flex: 1; ${titleStyle}">${task.topic}</h4>
             <span style="font-size: 11px; background: #F3F2FF; color: #7C6FE0; padding: 2px 8px; border-radius: 20px;">${task.questions} Questions</span>
             <span style="font-size: 11px; background: #F3F2FF; color: #7C6FE0; padding: 2px 8px; border-radius: 20px;">~${task.time} min</span>
-            <div class="da-task-checkbox" onclick="toggleAgendaTask(this, event, '${task.taskId}')" style="width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid ${cbBorder}; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; background: ${cbBg}; flex-shrink: 0;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="check-icon" style="opacity: ${checkOp}; transition: opacity 0.2s;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <div class="da-task-checkbox" onclick="toggleAgendaTask(this, event, '${task.taskId}')" style="width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid ${cbBorder}; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; background: ${cbBg}; flex-shrink: 0;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="check-icon" style="opacity: ${checkOp}; transition: opacity 0.2s;"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </div>
         </div>
       `;
