@@ -1577,9 +1577,13 @@
           <div class="hero-left">
             <!-- FIX 2: badges stacked vertically -->
             <div class="hero-badges-stack">
-              <div class="hero-announce-pill">
-                ✨ May 2026 Real Past Exam Available Now
-              </div>
+              <% if (typeof latestExamName !== 'undefined' && latestExamName) { %>
+              <a href="/exams/<%= latestExamId %>" style="text-decoration: none;">
+                <div class="hero-announce-pill">
+                  ✨ <%= latestExamName %>
+                </div>
+              </a>
+              <% } %>
             </div>
 
             <!-- Headline -->

@@ -7,6 +7,31 @@ const PORT = 3000;
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.set('views', __dirname);
+
+app.get('/', (req, res) => {
+  let latestExamName = "March 2026 Real Past Exam Available Now";
+  let latestExamId = "march-2026-int-a";
+  
+  try {
+    const raw = fs.readFileSync(path.join(__dirname, 'exams_array.json'), 'utf-8');
+    const examsData = JSON.parse(raw);
+    
+    const examsWithDate = examsData.filter(e => e.createdAt);
+    if (examsWithDate.length > 0) {
+      examsWithDate.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      latestExamName = examsWithDate[0].name + " Available Now";
+      latestExamId = examsWithDate[0].id;
+    }
+  } catch (err) {
+    console.error("Error reading exams database:", err);
+  }
+
+  res.render('index.html', { latestExamName, latestExamId });
+});
+
 app.use(express.static(path.join(__dirname))); // Serve all HTML, CSS, JS static files
 
 // ==========================================================
