@@ -1754,63 +1754,17 @@
         </div>
 
         <!-- FIX 7: clean SVG icons, title case labels, no watermarks -->
-        <div class="das-grid">
-          <!-- Card 1: Questions Attempted -->
-          <div class="das-card">
-            <div class="das-card-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C6FE0" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-                <polyline points="10 9 9 9 8 9" />
-              </svg>
-            </div>
-            <span class="das-card-label">Questions Attempted</span>
-            <strong class="das-card-val" id="stat-attempted">6</strong>
+        <div class="analytics-strip" style="background: #fff; border: 1px solid #EDE9FE; border-radius: 12px; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--text-sub, #64748b);">
+          <div class="strip-stats" style="display: flex; gap: 8px; align-items: center;">
+            <span>📝 <strong style="font-weight: 700;" id="stat-attempted">0</strong> <span style="font-weight: 400;">Questions Attempted</span></span>
+            <span style="font-weight: 400;">&middot;</span>
+            <span>✅ <strong style="font-weight: 700;" id="stat-accuracy">0%</strong> <span style="font-weight: 400;">Accuracy</span></span>
+            <span style="font-weight: 400;">&middot;</span>
+            <span>🔖 <strong style="font-weight: 700;" id="stat-saved">0</strong> <span style="font-weight: 400;">Saved</span></span>
+            <span style="font-weight: 400;">&middot;</span>
+            <span>❌ <strong style="font-weight: 700;" id="stat-errors">0</strong> <span style="font-weight: 400;">Errors</span></span>
           </div>
-
-          <!-- Card 2: Current Accuracy -->
-          <div class="das-card">
-            <div class="das-card-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C6FE0" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="9 11 12 14 22 4" />
-              </svg>
-            </div>
-            <span class="das-card-label">Current Accuracy</span>
-            <strong class="das-card-val green" id="stat-accuracy">100%</strong>
-          </div>
-
-          <!-- Card 3: Saved Questions -->
-          <div class="das-card">
-            <div class="das-card-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C6FE0" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-              </svg>
-            </div>
-            <span class="das-card-label">Saved Questions</span>
-            <strong class="das-card-val" id="stat-saved">0</strong>
-            <button class="das-card-btn" onclick="show('exams')">View Saved</button>
-          </div>
-
-          <!-- Card 4: Recent Errors -->
-          <div class="das-card">
-            <div class="das-card-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C6FE0" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="15" y1="9" x2="9" y2="15" />
-                <line x1="9" y1="9" x2="15" y2="15" />
-              </svg>
-            </div>
-            <span class="das-card-label">Recent Errors</span>
-            <strong class="das-card-val" id="stat-errors">0</strong>
-            <button class="das-card-btn" onclick="show('review')">View Errors</button>
-          </div>
+          <a href="#" onclick="show('analytics'); return false;" style="color: #7C6FE0; font-weight: 500; text-decoration: none;">View all analytics &rarr;</a>
         </div>
       </div>
 
