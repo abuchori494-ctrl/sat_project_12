@@ -1367,7 +1367,7 @@ window.toggleAgendaTask = function(el, e, taskId) {
   localStorage.setItem('oneprep_plan_checks', JSON.stringify(checkedTasks));
 
   const card = el.closest('.da-task-card');
-  const isCompleted = el.classList.toggle('completed');
+  card.classList.toggle('completed', willBeChecked);
   
   const checkIcon = el.querySelector('.check-icon');
   const title = card.querySelector('h4');
