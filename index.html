@@ -831,8 +831,8 @@
 
     /* FIX 6: today highlighted with purple border */
     .ctc-day.today {
-      background-color: rgba(124, 111, 224, 0.15);
-      border-color: #7C6FE0;
+      background-color: rgba(124, 111, 224, 0.15) !important;
+      border-color: #7C6FE0 !important;
     }
 
     .ctc-day.complete {
@@ -850,11 +850,11 @@
     #daily-agenda-tasks .da-task-card {
       background: var(--lav-light);
       border: 1px solid var(--lav-border);
-      border-radius: 12px;
+      border-radius: 0 10px 10px 0;
       /* Inner card radius */
       padding: 10px 16px;
       /* Drastically reduced vertical padding */
-      margin-bottom: 10px;
+      margin-bottom: 6px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -1524,6 +1524,24 @@
 
     <!-- Bottom items -->
     <div class="sidebar-bottom">
+      <style>
+        body:not(.dark) .dm-icon::before { content: '🌙'; }
+        body.dark .dm-icon::before { content: '☀️'; }
+        body:not(.dark) .dm-text::before { content: 'Dark Mode'; }
+        body.dark .dm-text::before { content: 'Light Mode'; }
+        body.dark .dm-switch { background: var(--lav-accent) !important; }
+        body.dark .dm-knob { transform: translateX(12px); }
+      </style>
+      <button onclick="toggleTheme()" style="justify-content: space-between;">
+        <span style="display: flex; align-items: center; gap: 10px;">
+          <span class="dm-icon"></span>
+          <span class="dm-text"></span>
+        </span>
+        <span class="dm-switch" style="width: 28px; height: 16px; background: rgba(255,255,255,0.2); border-radius: 8px; position: relative; transition: background 0.2s; flex-shrink: 0; display: inline-block;">
+          <span class="dm-knob" style="width: 12px; height: 12px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: transform 0.2s; display: inline-block;"></span>
+        </span>
+      </button>
+
       <a href="#" onclick="if(typeof showToast === 'function') showToast('Pro features unlocked!'); return false;">⬆️ Upgrade</a>
       
       <!-- Profile with Dropdown -->
@@ -1542,11 +1560,7 @@
   </div>
   <button id="uncollapse-btn" onclick="document.body.classList.toggle('sidebar-collapsed')" title="Expand Menu">▶</button>
   
-  <!-- Floating Theme Toggle Pill -->
-  <div id="theme-pill-toggle">
-    <div class="theme-pill-icon sun-icon" onclick="if(typeof toggleTheme==='function'){if(document.body.classList.contains('dark')) toggleTheme();}">☀️</div>
-    <div class="theme-pill-icon moon-icon" onclick="if(typeof toggleTheme==='function'){if(!document.body.classList.contains('dark')) toggleTheme();}">🌙</div>
-  </div>
+
   
   </nav>
 
@@ -1588,10 +1602,8 @@
               <% } %>
             </div>
 
-            <!-- Headline -->
             <h1 class="hero-h1">
-              The #1 Digital SAT<br>
-              Prep Platform
+              Your Personal Digital SAT Coach.
             </h1>
 
             <!-- Sub headline -->
@@ -1608,41 +1620,18 @@
             <!-- Stats Row -->
             <div class="hero-stats">
               <div class="stat-item">
-                <div class="si-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                  </svg>
-                </div>
-                <strong>4</strong>
-                <span>Modules</span>
+                <div class="si-icon">🎯</div>
+                <span>Real Past Exams</span>
               </div>
               <div class="stat-div"></div>
               <div class="stat-item">
-                <div class="si-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                    <line x1="12" y1="17" x2="12.01" y2="17" />
-                  </svg>
-                </div>
-                <strong>5000+</strong>
-                <span>Questions</span>
+                <div class="si-icon">⏱️</div>
+                <span>Timed Practice</span>
               </div>
               <div class="stat-div"></div>
-              <!-- FIX 3: tag/price-tag SVG icon replacing plain checkmark -->
               <div class="stat-item">
-                <div class="si-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-                    <line x1="7" y1="7" x2="7.01" y2="7" />
-                  </svg>
-                </div>
-                <strong>100%</strong>
-                <span>Free</span>
+                <div class="si-icon">💡</div>
+                <span>Instant Explanations</span>
               </div>
             </div>
 
@@ -1676,7 +1665,9 @@
                   <% consistencyWeek.forEach(day => { %>
                     <%
                       let inlineStyle = '';
-                      if (day.status === 'incomplete' && !day.isToday) {
+                      if (day.status === 'rest') {
+                        inlineStyle = 'background-color: rgba(156, 163, 175, 0.15); border-color: #D1D5DB;';
+                      } else if (day.status === 'incomplete' && !day.isToday) {
                         inlineStyle = 'background-color: rgba(220, 80, 80, 0.1); border-color: #ef4444; color: #ef4444;';
                       } else if (day.status === 'incomplete' && day.isToday) {
                         inlineStyle = 'color: #ef4444;';
@@ -1687,6 +1678,8 @@
                         ✓
                       <% } else if (day.status === 'incomplete') { %>
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-top: 2px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                      <% } else if (day.status === 'rest') { %>
+                        😴
                       <% } %>
                     </div>
                   <% }); %>
@@ -1700,8 +1693,23 @@
               <!-- Target Score (Left) -->
               <div class="split-side target-side">
                 <div class="ssc-title">🎯 Target</div>
-                <div class="ssc-score" id="target-score-val">--</div>
-                <div class="ssc-sub" id="target-score-sub">Your goal</div>
+                <div class="ssc-score" id="target-score-val">
+                  <% if (typeof user !== 'undefined' && user.goalScore) { %>
+                    <%= user.goalScore %>
+                  <% } else { %>
+                    <span style="font-size:1.1rem;font-weight:700;color:var(--lav-gray);">Not set</span>
+                  <% } %>
+                </div>
+                <div class="ssc-sub" id="target-score-sub">
+                  <% if (typeof user !== 'undefined' && user.goalScore) { %>
+                    <% if (user.goalMath && user.goalEnglish) { %>
+                      Math: <%= user.goalMath %> | R&W: <%= user.goalEnglish %><br>
+                    <% } else { %>
+                      Your goal<br>
+                    <% } %>
+                  <% } %>
+                  <a href="javascript:void(0)" onclick="openGoalModal()" style="font-size:11px;font-weight:700;color:var(--lav-accent);text-decoration:none;display:inline-block;margin-top:4px;">Set goal →</a>
+                </div>
               </div>
 
               <!-- Divider -->
@@ -1715,7 +1723,7 @@
                   <span class="ssc-pill" id="latest-rw-pill">R&amp;W: --</span>
                   <span class="ssc-pill" id="latest-math-pill">Math: --</span>
                 </div>
-                <div class="ssc-sub">Last practice <span id="latest-score-date" style="font-weight:400"></span></div>
+                <div class="ssc-sub" id="latest-score-sub">Last practice <span id="latest-score-date" style="font-weight:400"></span></div>
               </div>
             </div>
           </div>
@@ -1732,6 +1740,7 @@
       <!-- ════════════════════════════════════════════
            SECTION 3 — ANALYTICS STRIP
            ════════════════════════════════════════════ -->
+      <% if (typeof analyticsData !== 'undefined' && analyticsData.questionsDone > 0) { %>
       <div class="db-analytics">
         <div class="db-analytics-header">
           <h2>
@@ -1748,15 +1757,16 @@
         <!-- FIX 7: clean SVG icons, title case labels, no watermarks -->
         <div class="analytics-strip" style="background: #fff; border: 1px solid #EDE9FE; border-radius: 12px; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--text-sub, #64748b);">
           <div class="strip-stats" style="display: flex; gap: 8px; align-items: center;">
-            <span>📝 <strong style="font-weight: 700;" id="stat-attempted">0</strong> <span style="font-weight: 400;">Questions Done</span></span>
+            <span>📝 <strong style="font-weight: 700;" id="stat-attempted"><%= analyticsData.questionsDone %></strong> <span style="font-weight: 400;">Questions Done</span></span>
             <span style="font-weight: 400;">&middot;</span>
-            <span>✅ <strong style="font-weight: 700;" id="stat-accuracy">0%</strong> <span style="font-weight: 400;">Accuracy</span></span>
+            <span>✅ <strong style="font-weight: 700;" id="stat-accuracy"><%= analyticsData.accuracy %>%</strong> <span style="font-weight: 400;">Accuracy</span></span>
             <span style="font-weight: 400;">&middot;</span>
-            <span>⚠️ Weakest: <strong style="font-weight: 700;" id="stat-weakest">Loading...</strong></span>
+            <span>⚠️ Weakest: <strong style="font-weight: 700;" id="stat-weakest"><%= analyticsData.weakestTopic %></strong></span>
           </div>
           <a href="/analytics" style="color: #7C6FE0; font-weight: 500; text-decoration: none;">View all analytics &rarr;</a>
         </div>
       </div>
+      <% } %>
 
       <!-- Old Section 4 removed to consolidate into MainDashboardAgenda -->
     </section><!-- /#v-dashboard -->
@@ -2046,6 +2056,55 @@
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
+  <!-- Set Goal Modal -->
+  <div class="modal-overlay" id="set-goal-modal" style="display:none" onclick="closeGoalModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeGoalModal()">✕</button>
+      <h2 style="margin-bottom:16px;">Set Your Target Score</h2>
+      <div style="margin-bottom:12px;">
+        <label style="display:block;margin-bottom:4px;font-size:14px;">Math Target (200-800)</label>
+        <input type="number" id="goal-math-input" min="200" max="800" step="10" placeholder="e.g. 800" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;margin-bottom:4px;font-size:14px;">English Target (200-800)</label>
+        <input type="number" id="goal-english-input" min="200" max="800" step="10" placeholder="e.g. 750" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;">
+      </div>
+      <button class="btn-primary" onclick="saveGoal()" style="width:100%">Save Goal</button>
+    </div>
+  </div>
+
+  <script>
+    function openGoalModal() {
+      document.getElementById('set-goal-modal').style.display = 'flex';
+    }
+    function closeGoalModal() {
+      document.getElementById('set-goal-modal').style.display = 'none';
+    }
+    async function saveGoal() {
+      const m = parseInt(document.getElementById('goal-math-input').value);
+      const e = parseInt(document.getElementById('goal-english-input').value);
+      if(isNaN(m) || m < 200 || m > 800 || isNaN(e) || e < 200 || e > 800) {
+        if(typeof showToast === 'function') showToast('Please enter valid scores between 200 and 800.');
+        return;
+      }
+      const total = m + e;
+      try {
+        const res = await fetch('/api/user', {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ goalScore: total, goalMath: m, goalEnglish: e })
+        });
+        if(res.ok) {
+          closeGoalModal();
+          loadDashboardData();
+          if(typeof showToast === 'function') showToast('Goal updated!');
+        }
+      } catch(err) {
+        console.error(err);
+      }
+    }
+  </script>
+
   <script src="june2024Data.js"></script>
   <script src="app.js"></script>
 
@@ -2061,41 +2120,89 @@
         // --- Score cards ---
         const user = data.user;
 
-        // Target Score Card
-        const targetEl = document.getElementById('target-score-val');
+        // ── Target Score ──────────────────────────────────────────────
+        const targetEl  = document.getElementById('target-score-val');
         const targetSub = document.getElementById('target-score-sub');
+        const setGoalLink = '<a href="javascript:void(0)" onclick="openGoalModal()" style="font-size:11px;font-weight:700;color:var(--lav-accent);text-decoration:none;display:inline-block;margin-top:4px;">Set goal →</a>';
         if (targetEl) {
           if (user.goalScore) {
             targetEl.textContent = user.goalScore;
-            if (targetSub) targetSub.textContent = "Your goal";
+            let subText = 'Your goal';
+            if (user.goalMath && user.goalEnglish) {
+              subText = `Math: ${user.goalMath} | R&W: ${user.goalEnglish}`;
+            }
+            if (targetSub) targetSub.innerHTML = subText + '<br>' + setGoalLink;
           } else {
-            targetEl.innerHTML = `<a href="/study-planner" style="color:var(--lav-accent);font-size:16px;text-decoration:none;">Set your target →</a>`;
-            if (targetSub) targetSub.textContent = "";
+            targetEl.innerHTML = '<span style="font-size:1.1rem;font-weight:700;color:var(--lav-gray);">Not set</span>';
+            if (targetSub) targetSub.innerHTML = setGoalLink;
           }
         }
 
-        // Latest Practice Score Card
-        const latestEl = document.getElementById('latest-score-val');
-        const rwPill = document.getElementById('latest-rw-pill');
-        const mathPill = document.getElementById('latest-math-pill');
-        const dateSpan = document.getElementById('latest-score-date');
+        // ── Latest Exam Score ─────────────────────────────────────────
+        const latestEl      = document.getElementById('latest-score-val');
+        const rwPill        = document.getElementById('latest-rw-pill');
+        const mathPill      = document.getElementById('latest-math-pill');
+        const latestSubEl   = document.getElementById('latest-score-sub');
+        const latestExamScore = data.latestExamScore; // null when no completed exam exists
+
         if (latestEl) {
-          if (user.currentScore) {
-            const currentScore = user.currentScore;
-            const rwScore = Math.round(currentScore * 0.508);
-            const mathScore = currentScore - rwScore;
-
-            latestEl.textContent = currentScore;
-            if (rwPill) { rwPill.textContent = `R&W: ${rwScore}`; rwPill.style.display = 'inline-block'; }
-            if (mathPill) { mathPill.textContent = `Math: ${mathScore}`; mathPill.style.display = 'inline-block'; }
-
-            const practiceDate = user.lastActiveDate || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            if (dateSpan) dateSpan.textContent = `· ${practiceDate}`;
+          if (latestExamScore) {
+            // Real exam data available — show genuine scores
+            latestEl.textContent = latestExamScore.total;
+            if (rwPill)   { rwPill.textContent   = 'R&W: '  + latestExamScore.reading; rwPill.style.display   = 'inline-block'; }
+            if (mathPill) { mathPill.textContent = 'Math: ' + latestExamScore.math;    mathPill.style.display = 'inline-block'; }
+            if (latestSubEl) {
+              const examDateStr = data.latestExamDate
+                ? new Date(data.latestExamDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                : null;
+              latestSubEl.textContent = examDateStr ? ('Last exam \u00b7 ' + examDateStr) : 'Last exam';
+            }
           } else {
-            latestEl.innerHTML = `<span style="font-size:16px;color:var(--lav-gray);font-weight:600;">Start practicing to see your score</span>`;
-            if (rwPill) rwPill.style.display = 'none';
+            // No completed exam — show empty state
+            latestEl.innerHTML = '<span style="font-size:1.1rem;font-weight:700;color:var(--lav-gray);">No exams yet</span>';
+            if (rwPill)   rwPill.style.display   = 'none';
             if (mathPill) mathPill.style.display = 'none';
-            if (dateSpan) dateSpan.textContent = '';
+            if (latestSubEl) {
+              const lastActive = user.lastActiveDate
+                ? new Date(user.lastActiveDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                : null;
+              latestSubEl.textContent = lastActive ? ('Last practice \u00b7 ' + lastActive) : 'No practice yet';
+            }
+          }
+        }
+
+        // Add Points Left block below split card if both target and latest exist
+        const splitCard = document.querySelector('.scores-split-card');
+        const existingGap = document.getElementById('score-gap-card');
+        if(existingGap) existingGap.remove();
+        if (user.goalScore && latestExamScore && splitCard) {
+          const gap = user.goalScore - latestExamScore.total;
+          if (gap > 0) {
+            const gapDiv = document.createElement('div');
+            gapDiv.id = 'score-gap-card';
+            gapDiv.style.marginTop = '12px';
+            gapDiv.style.padding = '12px';
+            gapDiv.style.borderRadius = '12px';
+            gapDiv.style.background = 'rgba(124,111,224,0.1)';
+            gapDiv.style.color = 'var(--lav-dark)';
+            gapDiv.style.fontWeight = '700';
+            gapDiv.style.fontSize = '14px';
+            gapDiv.style.textAlign = 'center';
+            gapDiv.innerHTML = `🚀 ${gap} points left to reach your target score!`;
+            splitCard.parentNode.insertBefore(gapDiv, splitCard.nextSibling);
+          } else {
+            const gapDiv = document.createElement('div');
+            gapDiv.id = 'score-gap-card';
+            gapDiv.style.marginTop = '12px';
+            gapDiv.style.padding = '12px';
+            gapDiv.style.borderRadius = '12px';
+            gapDiv.style.background = 'rgba(34,197,94,0.1)';
+            gapDiv.style.color = '#15803d';
+            gapDiv.style.fontWeight = '700';
+            gapDiv.style.fontSize = '14px';
+            gapDiv.style.textAlign = 'center';
+            gapDiv.innerHTML = `🎉 You have reached your target score!`;
+            splitCard.parentNode.insertBefore(gapDiv, splitCard.nextSibling);
           }
         }
 
@@ -2138,12 +2245,12 @@
             // STATE B: Active Plan -> Render Daily Agenda Card ONLY
             mainAgendaContainer.innerHTML = `
               <div class="lav-card daily-agenda-card">
-                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px;">
                   <h3 style="margin: 0; padding: 0;">Today's Agenda</h3>
                   <span id="agenda-progress-text" style="font-size: 11px; font-weight: 600; color: var(--lav-gray); display: none;"></span>
                 </div>
-                <div id="agenda-progress-track" style="width: 100%; height: 2px; background: rgba(124, 111, 224, 0.2); border-radius: 2px; margin-bottom: 24px; position: relative; display: none;">
-                  <div id="agenda-progress-fill" style="width: 0%; height: 100%; background: var(--lav-accent); border-radius: 2px; transition: width 0.3s ease;"></div>
+                <div id="agenda-progress-track" style="width: 100%; height: 1px; background: rgba(124, 111, 224, 0.2); border-radius: 0px; margin-bottom: 20px; position: relative; display: none;">
+                  <div id="agenda-progress-fill" style="width: 0%; height: 100%; background: var(--lav-accent); border-radius: 0px; transition: width 0.3s ease;"></div>
                 </div>
                 <div id="daily-agenda-tasks" class="dac-tasks">
                   <div style="padding: 24px; text-align: center; color: var(--lav-gray); font-size: 14px;">Loading tasks...</div>

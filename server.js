@@ -12,6 +12,7 @@ app.set('view engine', 'html');
 app.set('views', __dirname);
 
 app.get('/', (req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
   let latestExamName = "March 2026 Real Past Exam Available Now";
   let latestExamId = "march-2026-int-a";
   
@@ -51,10 +52,13 @@ app.get('/', (req, res) => {
       if (activePlan) {
         const scheduleDay = activePlan.schedule.find(s => s.date === dateStr);
         if (scheduleDay) {
+          const hasRestTask = scheduleDay.tasks.some(t => t.type === 'rest');
           const tasks = scheduleDay.tasks.filter(t => t.type !== 'rest');
           const scheduledCount = tasks.length;
           
-          if (scheduledCount > 0) {
+          if (hasRestTask && scheduledCount === 0) {
+            status = "rest";
+          } else if (scheduledCount > 0) {
             const dayIndex = activePlan.schedule.indexOf(scheduleDay);
             let completedCount = 0;
             
@@ -65,9 +69,9 @@ app.get('/', (req, res) => {
               }
             });
             
-            if (completedCount === scheduledCount) {
+            if (completedCount === scheduledCount && scheduledCount > 0) {
               status = "complete";
-            } else {
+            } else if (scheduledCount > 0 && day < new Date(new Date().setHours(0, 0, 0, 0))) {
               status = "incomplete";
             }
           }
@@ -84,7 +88,8 @@ app.get('/', (req, res) => {
     console.error("Error computing consistencyWeek:", err);
   }
 
-  res.render('index.html', { latestExamName, latestExamId, consistencyWeek });
+  const analyticsData = getAnalyticsSummary();
+  res.render('index.html', { latestExamName, latestExamId, consistencyWeek, user: store.user, analyticsData });
 });
 
 app.use(express.static(path.join(__dirname))); // Serve all HTML, CSS, JS static files
@@ -96,8 +101,10 @@ const store = {
   user: {
     id: 'user_001',
     name: 'Abdullah',
-    currentScore: 1220,
-    goalScore: 1560,
+    currentScore: null,
+    goalScore: null,
+    goalMath: null,
+    goalEnglish: null,
     examDate: '2026-12-05', // FIX 1: updated to a future date
     streak: 3,
     consistency: {
@@ -151,10 +158,23 @@ const DB_PATH = path.join(__dirname, 'db.json');
 const EXAM_QUESTIONS_PATH = path.join(__dirname, 'examQuestions.json');
 const ATTEMPTS_PATH = path.join(__dirname, 'examAttempts.json');
 const REAL_EXAM_ATTEMPTS_PATH = path.join(__dirname, 'realExamAttempts.json');
+const USER_DB_PATH = path.join(__dirname, 'userDb.json');
 
 let examQuestionsDb = {};
 let examAttempts = {};
 let realExamAttempts = {};
+
+try {
+  if (fs.existsSync(USER_DB_PATH)) {
+    const raw = fs.readFileSync(USER_DB_PATH, 'utf-8');
+    const savedUser = JSON.parse(raw);
+    if (savedUser) {
+      store.user = { ...store.user, ...savedUser };
+    }
+  }
+} catch (err) {
+  console.error("Failed to load userDb.json on startup", err);
+}
 
 try {
   if (fs.existsSync(DB_PATH)) {
@@ -216,6 +236,14 @@ function persistRealExamAttempts() {
     fs.writeFileSync(REAL_EXAM_ATTEMPTS_PATH, JSON.stringify(realExamAttempts, null, 2));
   } catch (err) {
     console.error("Failed to write to realExamAttempts.json", err);
+  }
+}
+
+function persistUser() {
+  try {
+    fs.writeFileSync(USER_DB_PATH, JSON.stringify(store.user, null, 2));
+  } catch (err) {
+    console.error("Failed to write to userDb.json", err);
   }
 }
 
@@ -785,11 +813,37 @@ const remixDb = {
 // ==========================================================
 // SHARED HELPERS
 // ==========================================================
-function calcAccuracy() {
-  const answered = store.questions.answered;
-  if (!answered.length) return 100;
-  const correct = answered.filter(q => q.correct).length;
-  return Math.round((correct / answered.length) * 100);
+function getAnalyticsSummary() {
+  const answered = store.questions?.answered || [];
+  const questionsDone = answered.length;
+  let accuracy = 0;
+  let weakestTopic = "N/A";
+
+  if (questionsDone > 0) {
+    const correctCount = answered.filter(q => q.correct).length;
+    accuracy = Math.round((correctCount / questionsDone) * 100);
+
+    const topicStats = {};
+    answered.forEach(q => {
+      if (!topicStats[q.topic]) topicStats[q.topic] = { attempted: 0, correct: 0 };
+      topicStats[q.topic].attempted++;
+      if (q.correct) topicStats[q.topic].correct++;
+    });
+
+    const sortedTopics = Object.entries(topicStats).map(([topic, stats]) => {
+      return { topic, acc: (stats.correct / stats.attempted) * 100 };
+    }).sort((a, b) => a.acc - b.acc);
+    
+    if (sortedTopics.length > 0) {
+      if (sortedTopics[0].acc === 100) {
+        weakestTopic = "None yet!";
+      } else {
+        weakestTopic = sortedTopics[0].topic;
+      }
+    }
+  }
+
+  return { questionsDone, accuracy, weakestTopic };
 }
 
 function updateStreak() {
@@ -802,6 +856,10 @@ function updateStreak() {
 
   const key = new Date().toISOString().split('T')[0];
   store.analytics.heatmap[key] = (store.analytics.heatmap[key] || 0) + 1;
+}
+
+function persistData() {
+  // Logic to save store to db.json
 }
 
 // ==========================================================
@@ -939,11 +997,14 @@ app.get('/api/user', (req, res) => {
 });
 
 app.put('/api/user', (req, res) => {
-  const { name, currentScore, goalScore, examDate } = req.body;
+  const { name, currentScore, goalScore, goalMath, goalEnglish, examDate } = req.body;
   if (name !== undefined) store.user.name = name;
   if (currentScore !== undefined) store.user.currentScore = parseInt(currentScore);
   if (goalScore !== undefined) store.user.goalScore = parseInt(goalScore);
+  if (goalMath !== undefined) store.user.goalMath = parseInt(goalMath);
+  if (goalEnglish !== undefined) store.user.goalEnglish = parseInt(goalEnglish);
   if (examDate !== undefined) store.user.examDate = examDate;
+  persistUser(); // Save user to database
   res.json(store.user);
 });
 
@@ -1003,19 +1064,27 @@ app.get('/api/dashboard', (req, res) => {
   // Extract last 3 unique topics
   const topics = Array.from(new Set(store.questions.answered.map(q => q.topic))).slice(-3);
 
+  // Find the most recently completed real exam attempt (genuine data only)
+  const completedAttempts = Object.values(realExamAttempts)
+    .filter(a => a.status === 'completed' && a.results && a.completedAt);
+  completedAttempts.sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt));
+  const latestAttempt = completedAttempts[0] || null;
+
   // Return formatted payload
   res.json({
     user: store.user,
     todayQuestions: todayQs,
     weekStreak: store.user.streak,
-    recentTopics: topics.length > 0 ? topics : ["Algebra", "Standard English Conventions"],
+    recentTopics: topics.length > 0 ? topics : ['Algebra', 'Standard English Conventions'],
     studyPlan: store.planner.plans[Object.keys(store.planner.plans)[0]] || null,
+    latestExamScore: latestAttempt ? latestAttempt.results : null,
+    latestExamDate: latestAttempt ? latestAttempt.completedAt : null,
     analytics: {
       questionsAttempted: store.questions.answered.length,
-      currentAccuracy: calcAccuracy(),
+      currentAccuracy: getAnalyticsSummary().accuracy,
       savedQuestions: store.questions.saved.length,
       recentErrors: store.questions.answered.filter(q => !q.correct).length,
-      weakestTopic: "Expression of Ideas"
+      weakestTopic: getAnalyticsSummary().weakestTopic
     }
   });
 });
@@ -1026,7 +1095,7 @@ app.get('/api/dashboard', (req, res) => {
 app.get('/api/analytics/summary', (req, res) => {
   res.json({
     totalAttempted: store.questions.answered.length,
-    accuracy: calcAccuracy(),
+    accuracy: getAnalyticsSummary().accuracy,
     streak: store.user.streak,
     savedQuestionsCount: store.questions.saved.length
   });

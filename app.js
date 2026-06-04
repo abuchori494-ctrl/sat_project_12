@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateTasksProgress();
   renderDashboardWidgets();
   renderPastExams();
+  renderScoreSummary();
 });
 
 // --- SPA VIEW ROUTING ---
@@ -1301,7 +1302,7 @@ async function renderDailyAgenda() {
       const cardBg = isChecked ? '#F8F7FF' : '#ffffff';
 
       return `
-        <div class="da-task-card ${isChecked ? 'completed' : ''}" onclick="startPracticeTopic('${task.topic}')" style="padding: 10px 16px; background: ${cardBg}; border: 1px solid #EDE9FE; border-radius: 12px; border-left: 4px solid ${borderLeftColor}; display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+        <div class="da-task-card ${isChecked ? 'completed' : ''}" onclick="startPracticeTopic('${task.topic}')" style="padding: 10px 16px; background: ${cardBg}; border: 1px solid #EDE9FE; border-radius: 0 20px 20px 0; border-left: 4px solid ${borderLeftColor}; display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
             <span style="background: ${badgeBg}; color: ${badgeColor}; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px;">${subjectText}</span>
             <h4 style="margin: 0; font-size: 14px; font-weight: 600; flex: 1; ${titleStyle}">${task.topic}</h4>
             <span style="font-size: 11px; background: #F3F2FF; color: #7C6FE0; padding: 2px 8px; border-radius: 20px;">${task.questions} Questions</span>
@@ -1426,22 +1427,100 @@ function showToast(msg) {
 // INTERACTIVE DASHBOARD ACTION FLOWS (EXACT MOCKUP MATCH)
 // ==========================================================================
 function createStudyPlan() {
-  const current = prompt("Enter your current SAT score (e.g., 1220):", "1220");
-  if (!current) return;
-  const goal = prompt("Enter your target goal SAT score (e.g., 1560):", "1560");
-  if (!goal) return;
+  const currentMathStr = prompt("Enter your latest Math score (e.g., 600):", "600");
+  if (!currentMathStr) return;
+  const currentEbrwStr = prompt("Enter your latest English/EBRW score (e.g., 620):", "620");
+  if (!currentEbrwStr) return;
+  
+  const targetMathStr = prompt("Enter your target goal Math score (e.g., 800):", "800");
+  if (!targetMathStr) return;
+  const targetEbrwStr = prompt("Enter your target goal English/EBRW score (e.g., 760):", "760");
+  if (!targetEbrwStr) return;
+  
+  const scores = {
+    currentMath: parseInt(currentMathStr, 10) || 0,
+    currentEbrw: parseInt(currentEbrwStr, 10) || 0,
+    targetMath: parseInt(targetMathStr, 10) || 0,
+    targetEbrw: parseInt(targetEbrwStr, 10) || 0,
+  };
+  localStorage.setItem('oneprep_scores', JSON.stringify(scores));
+  
+  renderScoreSummary();
+
+  const currentTotal = scores.currentMath + scores.currentEbrw;
+  const targetTotal = scores.targetMath + scores.targetEbrw;
   
   // Update UI values dynamically
   const scoreCardVal = document.querySelector('.dsps-score-info strong');
   const goalCardVal = document.querySelector('.dsps-small-card.purple-bg strong');
   
-  if (scoreCardVal) scoreCardVal.textContent = current;
-  if (goalCardVal) goalCardVal.textContent = goal;
+  if (scoreCardVal) scoreCardVal.textContent = currentTotal;
+  if (goalCardVal) goalCardVal.textContent = targetTotal;
   
-  showToast("🎯 Study plan created! Goal score set to " + goal + ".");
+  showToast("🎯 Study plan created! Goal score set to " + targetTotal + ".");
   
   // Increment coins as reward!
   updateCoins(20);
+}
+
+function renderScoreSummary() {
+  const scoresStr = localStorage.getItem('oneprep_scores');
+  if (!scoresStr) return;
+  const scores = JSON.parse(scoresStr);
+  
+  const currentTotal = scores.currentMath + scores.currentEbrw;
+  const targetTotal = scores.targetMath + scores.targetEbrw;
+  const leftTotal = targetTotal - currentTotal;
+  const leftMath = scores.targetMath - scores.currentMath;
+  const leftEbrw = scores.targetEbrw - scores.currentEbrw;
+
+  let summaryContainer = document.getElementById('custom-score-summary');
+  if (!summaryContainer) {
+    summaryContainer = document.createElement('div');
+    summaryContainer.id = 'custom-score-summary';
+    summaryContainer.className = 'custom-score-summary';
+    
+    const welcomeContainer = document.querySelector('.welcome-container');
+    if (welcomeContainer) {
+      welcomeContainer.parentNode.insertBefore(summaryContainer, welcomeContainer.nextSibling);
+    } else {
+      const dashGrid = document.querySelector('.dash-grid');
+      if (dashGrid) {
+        dashGrid.parentNode.insertBefore(summaryContainer, dashGrid);
+      }
+    }
+  }
+
+  summaryContainer.innerHTML = `
+    <div class="score-summary-grid">
+      <div class="ss-card current-score">
+        <div class="ss-label">Latest Overall Score</div>
+        <div class="ss-total">${currentTotal}</div>
+        <div class="ss-breakdown">
+          <span>Math: <strong>${scores.currentMath}</strong></span>
+          <span>English: <strong>${scores.currentEbrw}</strong></span>
+        </div>
+      </div>
+      
+      <div class="ss-card target-score">
+        <div class="ss-label">Target Goal Score</div>
+        <div class="ss-total">${targetTotal}</div>
+        <div class="ss-breakdown">
+          <span>Math: <strong>${scores.targetMath}</strong></span>
+          <span>English: <strong>${scores.targetEbrw}</strong></span>
+        </div>
+      </div>
+      
+      <div class="ss-card score-left">
+        <div class="ss-label">Points Left to Goal</div>
+        <div class="ss-total">${leftTotal > 0 ? '+' + leftTotal : leftTotal}</div>
+        <div class="ss-breakdown">
+          <span>Math: <strong>${leftMath > 0 ? '+' + leftMath : leftMath}</strong></span>
+          <span>English: <strong>${leftEbrw > 0 ? '+' + leftEbrw : leftEbrw}</strong></span>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function switchTestDate() {

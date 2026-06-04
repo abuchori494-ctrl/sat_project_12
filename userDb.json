@@ -1,0 +1,28 @@
+{
+  "id": "user_001",
+  "name": "Abdullah",
+  "currentScore": null,
+  "goalScore": 1600,
+  "goalMath": 800,
+  "goalEnglish": 800,
+  "examDate": "2026-12-05",
+  "streak": 3,
+  "consistency": {
+    "2026-05-25": true,
+    "2026-05-26": true,
+    "2026-05-27": false,
+    "2026-05-28": true,
+    "2026-05-29": true,
+    "2026-05-30": false,
+    "2026-05-31": true
+  },
+  "coins": 80,
+  "flames": 1,
+  "savedColleges": [],
+  "savedQuestions": [],
+  "settings": {
+    "dailyGoal": 10,
+    "notifications": true,
+    "difficulty": "all"
+  }
+}
