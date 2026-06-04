@@ -1276,42 +1276,39 @@ async function renderDailyAgenda() {
 
     container.innerHTML = tasks.map(task => {
       let badgeBg = '#DBEAFE'; // Blue (Math default)
+      let badgeColor = '#1E293B';
+      let borderLeftColor = '#3B82F6';
       let subjectText = (task.subject || 'Math').toUpperCase();
       
       if (subjectText.includes('ENGLISH') || subjectText.includes('READING')) {
         badgeBg = '#FAE8FF'; // Fuchsia
+        borderLeftColor = '#7C6FE0'; // purple
         subjectText = 'ENGLISH';
       } else if (subjectText.includes('VOCAB')) {
         badgeBg = '#FEF3C7'; // Amber
+        borderLeftColor = '#10B981'; // green
         subjectText = 'VOCAB';
       } else {
         subjectText = 'MATH';
+        borderLeftColor = '#3B82F6'; // blue
       }
 
       const isChecked = !!checkedTasks[task.taskId];
       const cbBg = isChecked ? '#7C6FE0' : '#fff';
-      const cbBorder = isChecked ? '#7C6FE0' : '#cbd5e1';
+      const cbBorder = isChecked ? '#7C6FE0' : '#D0CBF5';
       const checkOp = isChecked ? '1' : '0';
-      const titleStyle = isChecked ? 'text-decoration: line-through; color: #94a3b8;' : '';
+      const titleStyle = isChecked ? 'text-decoration: line-through; color: var(--text-sub);' : 'text-decoration: none; color: inherit;';
+      const cardBg = isChecked ? '#F8F7FF' : '#ffffff';
 
       return `
-        <div class="da-task-card ${isChecked ? 'completed' : ''}" onclick="startPracticeTopic('${task.topic}')" style="margin-bottom: 10px;">
-          <div class="da-task-info">
-            <div style="margin-bottom: 4px;">
-              <span style="background: ${badgeBg}; color: #1E293B; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.05em;">${subjectText}</span>
-            </div>
-            <h4 style="${titleStyle}">${task.topic}</h4>
-            <div class="da-meta">
-              <span class="da-meta-pill">${task.questions} Questions</span>
-              <span class="da-meta-pill">~${task.time} min</span>
-            </div>
-          </div>
-          <div class="da-task-action" style="display: flex; align-items: center; gap: 12px;">
-            <div class="da-task-checkbox" onclick="toggleAgendaTask(this, event, '${task.taskId}')" style="width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid ${cbBorder}; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; background: ${cbBg};">
+        <div class="da-task-card ${isChecked ? 'completed' : ''}" onclick="startPracticeTopic('${task.topic}')" style="padding: 10px 16px; background: ${cardBg}; border: 1px solid #EDE9FE; border-radius: 12px; border-left: 4px solid ${borderLeftColor}; display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+            <span style="background: ${badgeBg}; color: ${badgeColor}; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px;">${subjectText}</span>
+            <h4 style="margin: 0; font-size: 14px; font-weight: 600; flex: 1; ${titleStyle}">${task.topic}</h4>
+            <span style="font-size: 11px; background: #F3F2FF; color: #7C6FE0; padding: 2px 8px; border-radius: 20px;">${task.questions} Questions</span>
+            <span style="font-size: 11px; background: #F3F2FF; color: #7C6FE0; padding: 2px 8px; border-radius: 20px;">~${task.time} min</span>
+            <div class="da-task-checkbox" onclick="toggleAgendaTask(this, event, '${task.taskId}')" style="width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid ${cbBorder}; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; background: ${cbBg}; flex-shrink: 0;">
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="check-icon" style="opacity: ${checkOp}; transition: opacity 0.2s;"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </div>
         </div>
       `;
     }).join('');
@@ -1354,14 +1351,16 @@ window.toggleAgendaTask = function(el, e, taskId) {
     checkIcon.style.opacity = '1';
     
     title.style.textDecoration = 'line-through';
-    title.style.color = '#94a3b8'; // slate-400
+    title.style.color = 'var(--text-sub)'; // slate-400 equivalent
+    card.style.background = '#F8F7FF';
   } else {
     el.style.background = '#fff';
-    el.style.borderColor = '#cbd5e1';
+    el.style.borderColor = '#D0CBF5';
     checkIcon.style.opacity = '0';
     
     title.style.textDecoration = 'none';
-    title.style.color = ''; // Revert to default
+    title.style.color = 'inherit'; // Revert to default
+    card.style.background = '#ffffff';
   }
   
   if (typeof window.updateAgendaProgress === 'function') window.updateAgendaProgress();
