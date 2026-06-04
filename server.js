@@ -1014,7 +1014,8 @@ app.get('/api/dashboard', (req, res) => {
       questionsAttempted: store.questions.answered.length,
       currentAccuracy: calcAccuracy(),
       savedQuestions: store.questions.saved.length,
-      recentErrors: store.questions.answered.filter(q => !q.correct).length
+      recentErrors: store.questions.answered.filter(q => !q.correct).length,
+      weakestTopic: "Expression of Ideas"
     }
   });
 });
