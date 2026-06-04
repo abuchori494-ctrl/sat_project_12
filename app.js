@@ -1347,6 +1347,8 @@ async function renderDailyAgenda() {
       `;
     }).join('');
 
+    if (typeof window.updateAgendaProgress === 'function') window.updateAgendaProgress();
+
   } catch (error) {
     console.error("Error rendering daily agenda:", error);
     const container = document.getElementById('daily-agenda-tasks');
@@ -1385,6 +1387,33 @@ window.toggleAgendaTask = function(el, e, taskId) {
     title.style.textDecoration = 'none';
     title.style.color = ''; // Revert to default
   }
+  
+  if (typeof window.updateAgendaProgress === 'function') window.updateAgendaProgress();
+};
+
+window.updateAgendaProgress = function() {
+  const container = document.getElementById('daily-agenda-tasks');
+  const textEl = document.getElementById('agenda-progress-text');
+  const trackEl = document.getElementById('agenda-progress-track');
+  const fillEl = document.getElementById('agenda-progress-fill');
+  
+  if (!container || !textEl || !trackEl || !fillEl) return;
+  
+  const tasks = container.querySelectorAll('.da-task-card');
+  if (tasks.length === 0) {
+    textEl.style.display = 'none';
+    trackEl.style.display = 'none';
+    return;
+  }
+  
+  textEl.style.display = 'block';
+  trackEl.style.display = 'block';
+  
+  const completed = container.querySelectorAll('.da-task-card.completed').length;
+  const total = tasks.length;
+  
+  textEl.textContent = `${completed} of ${total} completed`;
+  fillEl.style.width = `${(completed / total) * 100}%`;
 };
 
 function startPracticeTopic(topic) {
