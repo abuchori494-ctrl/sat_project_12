@@ -1231,39 +1231,8 @@ async function renderDashboardWidgets() {
 }
 
 async function renderConsistencyTracker() {
-  try {
-    const res = await fetch(API_BASE + '/api/user/consistency');
-    if (!res.ok) throw new Error('Failed to fetch consistency data');
-    const data = await res.json();
-
-    const container = document.getElementById('consistency-tracker-boxes');
-    const summaryEl = document.getElementById('ctc-summary');
-
-    if (!container || !summaryEl) return;
-
-    container.innerHTML = '';
-    // FIX 6: use todayIndex from API to mark today's box
-    const todayIdx = (data.todayIndex !== undefined) ? data.todayIndex : ((new Date().getDay() + 6) % 7);
-    data.week.forEach((isComplete, i) => {
-      const dayBox = document.createElement('div');
-      dayBox.className = 'ctc-day';
-      if (i === todayIdx) {
-        dayBox.classList.add('today');
-      }
-      if (isComplete) {
-        dayBox.classList.add('complete');
-        dayBox.innerHTML = '✓';
-      }
-      container.appendChild(dayBox);
-    });
-
-    summaryEl.textContent = `${data.activeCount} of 7 days active this week`;
-
-  } catch (error) {
-    console.error("Error rendering consistency tracker:", error);
-    const container = document.getElementById('consistency-tracker-boxes');
-    if(container) container.innerHTML = `<p class="dac-prompt" style="grid-column: span 7;">Could not load tracker.</p>`;
-  }
+  // Disabled: The consistency tracker is now rendered via EJS on the backend (server.js & index.html).
+  return;
 }
 
 async function renderDailyAgenda() {
@@ -1365,6 +1334,13 @@ window.toggleAgendaTask = function(el, e, taskId) {
   
   checkedTasks[taskId] = willBeChecked;
   localStorage.setItem('oneprep_plan_checks', JSON.stringify(checkedTasks));
+
+  // Sync with backend
+  fetch(API_BASE + '/api/planner/agenda/check', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ taskId, completed: willBeChecked })
+  }).catch(err => console.error("Failed to sync task completion", err));
 
   const card = el.closest('.da-task-card');
   card.classList.toggle('completed', willBeChecked);

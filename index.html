@@ -1658,13 +1658,39 @@
             <div class="lav-card consistency-tracker-card" style="margin-bottom: 24px;">
               <div class="ctc-header">
                 <h3>🔥 This Week</h3>
-                <span id="ctc-summary">0 of 7 days</span>
+                <% 
+                  let activeDays = 0;
+                  if (typeof consistencyWeek !== 'undefined' && consistencyWeek) {
+                    activeDays = consistencyWeek.filter(d => d.status === 'complete').length;
+                  }
+                %>
+                <span id="ctc-summary"><%= activeDays %> of 7 days</span>
               </div>
               <div class="ctc-week-labels">
                 <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
               </div>
-              <div id="consistency-tracker-boxes" class="ctc-day-boxes"></div>
-              <!-- JS: renderConsistencyTracker() targets #consistency-tracker-boxes and #ctc-summary -->
+              <div id="consistency-tracker-boxes" class="ctc-day-boxes">
+                <% if (typeof consistencyWeek !== 'undefined' && consistencyWeek) { %>
+                  <% consistencyWeek.forEach(day => { %>
+                    <%
+                      let inlineStyle = '';
+                      if (day.status === 'incomplete' && !day.isToday) {
+                        inlineStyle = 'background-color: rgba(220, 80, 80, 0.1); border-color: #ef4444; color: #ef4444;';
+                      } else if (day.status === 'incomplete' && day.isToday) {
+                        inlineStyle = 'color: #ef4444;';
+                      }
+                    %>
+                    <div class="ctc-day <%= day.isToday ? 'today' : '' %> <%= day.status === 'complete' ? 'complete' : '' %>" style="<%= inlineStyle %>">
+                      <% if (day.status === 'complete') { %>
+                        ✓
+                      <% } else if (day.status === 'incomplete') { %>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-top: 2px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                      <% } %>
+                    </div>
+                  <% }); %>
+                <% } %>
+              </div>
+              <!-- JS: renderConsistencyTracker() is now disabled in app.js as backend renders this via EJS -->
             </div>
 
             <!-- Split Score Card -->

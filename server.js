@@ -29,7 +29,62 @@ app.get('/', (req, res) => {
     console.error("Error reading exams database:", err);
   }
 
-  res.render('index.html', { latestExamName, latestExamId });
+  const consistencyWeek = [];
+  try {
+    const now = new Date();
+    const dayOfWeekISO = (now.getDay() + 6) % 7; // 0=Mon, 6=Sun
+    
+    let activePlan = null;
+    const planKeys = Object.keys(store.planner.plans);
+    if (planKeys.length > 0) {
+      activePlan = store.planner.plans[planKeys[0]];
+    }
+
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(now);
+      day.setHours(0, 0, 0, 0);
+      day.setDate(now.getDate() - (dayOfWeekISO - i));
+      const dateStr = day.toISOString().split('T')[0];
+      
+      let status = "empty";
+      
+      if (activePlan) {
+        const scheduleDay = activePlan.schedule.find(s => s.date === dateStr);
+        if (scheduleDay) {
+          const tasks = scheduleDay.tasks.filter(t => t.type !== 'rest');
+          const scheduledCount = tasks.length;
+          
+          if (scheduledCount > 0) {
+            const dayIndex = activePlan.schedule.indexOf(scheduleDay);
+            let completedCount = 0;
+            
+            tasks.forEach((t, idx) => {
+              const taskId = `${activePlan.planId}_day${dayIndex}_task${idx}`;
+              if (store.planner.taskCompletions[taskId]) {
+                completedCount++;
+              }
+            });
+            
+            if (completedCount === scheduledCount) {
+              status = "complete";
+            } else {
+              status = "incomplete";
+            }
+          }
+        }
+      }
+      
+      consistencyWeek.push({
+        date: dateStr,
+        status: status,
+        isToday: i === dayOfWeekISO
+      });
+    }
+  } catch (err) {
+    console.error("Error computing consistencyWeek:", err);
+  }
+
+  res.render('index.html', { latestExamName, latestExamId, consistencyWeek });
 });
 
 app.use(express.static(path.join(__dirname))); // Serve all HTML, CSS, JS static files
@@ -73,6 +128,7 @@ const store = {
   },
   planner: {
     plans: {},       // planId → plan object
+    taskCompletions: {}, // taskId -> boolean
     uploads: []
   },
   vocab: {
@@ -1245,6 +1301,13 @@ app.post('/api/planner/create', (req, res) => {
   store.planner.plans[planId] = plan;
   persistPlans(); // Save to db.json immediately so it survives restarts
   res.json({ success: true, plan });
+});
+
+app.post('/api/planner/agenda/check', (req, res) => {
+  const { taskId, completed } = req.body;
+  if (!taskId) return res.status(400).json({ error: "taskId is required" });
+  store.planner.taskCompletions[taskId] = !!completed;
+  res.json({ success: true, taskId, completed: !!completed });
 });
 
 app.get('/api/planner/agenda', (req, res) => {
