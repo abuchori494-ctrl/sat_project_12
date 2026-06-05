@@ -3,7 +3,7 @@
    ========================================================================== */
 
 :root {
-  --bg-app: #F3F4F6;
+  --bg-app: #F8F7FF;
   --bg-card: #ffffff;
   --border: #EDE9FE;
   --text-main: #1A1035;
@@ -1053,12 +1053,16 @@ body.dark .theme-toggle-switch::after {
 }
 
 .ecl-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #F8F7FF;
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 24px;
-  border-bottom: 1.5px solid var(--border);
-  padding-bottom: 12px;
+  border-bottom: 2px solid #EDE9FE;
+  padding: 12px 0;
 }
 .ecl-icon {
   font-size: 24px;
@@ -1077,7 +1081,7 @@ body.dark .theme-toggle-switch::after {
 .ecl-cards-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 /* ecl-card glass card styling */
@@ -1087,7 +1091,7 @@ body.dark .theme-toggle-switch::after {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 12px rgba(124, 111, 224, 0.08);
   transition: var(--transition);
 }
 .ecl-card:hover {
@@ -1129,15 +1133,23 @@ body.dark .ecl-card.ecl-card-math {
 .ecl-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  gap: 8px;
   padding: 20px 24px 14px;
   border-bottom: 1px solid var(--border);
   background: rgba(0, 0, 0, 0.01);
+}
+.ecl-card-header > div {
+  flex: 1;
+  min-width: 0;
 }
 .ecl-card-header h4 {
   font-size: 14.5px;
   font-weight: 800;
   color: var(--text-main);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .ecl-card-sub {
   font-size: 10.5px;
@@ -1151,6 +1163,7 @@ body.dark .ecl-card.ecl-card-math {
   padding: 2.5px 8px;
   border-radius: 4px;
   letter-spacing: 0.02em;
+  flex-shrink: 0;
 }
 .ecl-badge.official {
   background: #c4b5fd;
@@ -1221,33 +1234,6 @@ body.dark .ecl-card.ecl-card-math {
   border: 1px solid #bae6fd;
   background: #f0f9ff;
   color: #0369a1;
-  transition: var(--transition);
-  letter-spacing: 0.02em;
-}
-.btn-practice-pill:hover {
-  background: #e0f2fe;
-  transform: translateY(-1px);
-}
-.btn-practice-pill.btn-math {
-  background: #1e1b4b;
-  color: white;
-  border: none;
-}
-.btn-practice-pill.btn-math:hover {
-  background: #312e81;
-}
-
-.btn-review-pill {
-  font-family: inherit;
-  font-size: 10px;
-  font-weight: 750;
-  padding: 6px 14px;
-  border-radius: 50px;
-  cursor: pointer;
-  border: 1px solid var(--border);
-  background: #ddd6fe;
-  color: #5b21b6;
-  border-color: transparent;
   transition: var(--transition);
 }
 .btn-review-pill:hover {
@@ -3646,26 +3632,26 @@ body.dark .main-content {
   gap: 16px;
 }
 .stat-box {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: #F8F7FF;
+  border: none;
+  border-left: 4px solid #7C6FE0;
   border-radius: var(--radius-md);
-  padding: 8px 16px;
+  padding: 12px 16px;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 12px rgba(124, 111, 224, 0.08);
 }
 .sb-label {
-  font-size: 11px;
-  color: var(--text-sub);
-  font-weight: 600;
+  font-size: 0.7rem;
+  color: #6B7280;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
   margin-bottom: 4px;
 }
 .sb-val {
-  font-size: 18px;
-  color: var(--text-main);
-  font-weight: 800;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1E1B4B;
 }
 
 /* Inline Select Filters */
@@ -3684,16 +3670,25 @@ body.dark .main-content {
   font-family: inherit;
   font-size: 12px;
   font-weight: 600;
-  color: var(--text-main);
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  color: #7C6FE0;
+  background: white;
+  border: 1px solid #7C6FE0;
   border-radius: 6px;
   padding: 4px 8px;
   outline: none;
   cursor: pointer;
 }
 body.dark .filter-group-inline select {
-  background: var(--bg-app);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: #7C6FE0;
+  background: white;
+  border: 1px solid #7C6FE0;
+  border-radius: 6px;
+  padding: 4px 8px;
+  outline: none;
+  cursor: pointer;
 }
 
 /* Dashboard Controls Main (Highlight + Filters) */
@@ -3716,16 +3711,20 @@ body.dark .filter-group-inline select {
 
 /* Latest Highlight */
 .latest-admin-highlight {
-  background: linear-gradient(135deg, #fff1f2, #ffe4e6);
-  border: 1px solid #fecdd3;
+  background: #EDE9FE;
+  border: 1px solid #C4B5FD;
   border-radius: var(--radius-lg);
   padding: 20px 24px;
-  box-shadow: 0 4px 15px rgba(225, 29, 72, 0.05);
+  box-shadow: 0 4px 15px rgba(124, 111, 224, 0.05);
 }
 body.dark .latest-admin-highlight {
-  background: linear-gradient(135deg, #4c0519, #280b15);
-  border-color: rgba(225, 29, 72, 0.2);
+  background: #EDE9FE;
+  border: 1px solid #C4B5FD;
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  box-shadow: 0 4px 15px rgba(124, 111, 224, 0.05);
 }
+
 .lah-header {
   display: flex;
   justify-content: space-between;
@@ -3735,58 +3734,12 @@ body.dark .latest-admin-highlight {
 .lah-header h2 {
   font-size: 18px;
   font-weight: 800;
-  color: #e11d48;
+  color: #4C1D95;
 }
 body.dark .lah-header h2 {
-  color: #fb7185;
-}
-.lah-versions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.version-pill {
-  background: white;
-  color: #e11d48;
-  border: 1px solid #fecdd3;
-  padding: 4px 10px;
-  border-radius: 50px;
-  font-size: 11px;
-  font-weight: 700;
-}
-body.dark .version-pill {
-  background: #881337;
-  color: white;
-  border-color: #9f1239;
-}
-
-/* Filters Container */
-.exam-filters-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 20px 24px;
-}
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.filter-group label {
-  font-size: 10.5px;
-  font-weight: 700;
-  color: var(--text-sub);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.filter-pills {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
+  font-size: 18px;
+  font-weight: 800;
+  color: #4C1D95;
 .filter-pill {
   background: transparent;
   border: 1px solid var(--border);
@@ -3903,3 +3856,5 @@ body.dark .ss-card {
   font-weight: 750;
   margin-left: 4px;
 }
+
+

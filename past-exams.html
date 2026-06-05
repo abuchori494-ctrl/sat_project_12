@@ -240,6 +240,24 @@
 
     <!-- Bottom items -->
     <div class="sidebar-bottom">
+      <style>
+        body:not(.dark) .dm-icon::before { content: '☀️'; }
+        body.dark .dm-icon::before { content: '🌙'; }
+        body:not(.dark) .dm-text::before { content: 'Dark Mode'; }
+        body.dark .dm-text::before { content: 'Light Mode'; }
+        body.dark .dm-switch { background: var(--lav-accent) !important; }
+        body.dark .dm-knob { transform: translateX(12px); }
+      </style>
+      <button onclick="toggleTheme()" style="justify-content: space-between;">
+        <span style="display: flex; align-items: center; gap: 10px;">
+          <span class="dm-icon"></span>
+          <span class="dm-text"></span>
+        </span>
+        <span class="dm-switch" style="width: 28px; height: 16px; background: rgba(255,255,255,0.2); border-radius: 8px; position: relative; transition: background 0.2s; flex-shrink: 0; display: inline-block;">
+          <span class="dm-knob" style="width: 12px; height: 12px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: transform 0.2s; display: inline-block;"></span>
+        </span>
+      </button>
+
       <a href="#" onclick="if(typeof showToast === 'function') showToast('Pro features unlocked!'); return false;">⬆️ Upgrade</a>
       
       <!-- Profile with Dropdown -->
@@ -258,14 +276,10 @@
   </div>
   <button id="uncollapse-btn" onclick="document.body.classList.toggle('sidebar-collapsed')" title="Expand Menu">▶</button>
   
-  <!-- Floating Theme Toggle Pill -->
-  <div id="theme-pill-toggle">
-    <div class="theme-pill-icon sun-icon" onclick="if(typeof toggleTheme==='function'){if(document.body.classList.contains('dark')) toggleTheme();}">☀️</div>
-    <div class="theme-pill-icon moon-icon" onclick="if(typeof toggleTheme==='function'){if(!document.body.classList.contains('dark')) toggleTheme();}">🌙</div>
+<div class="theme-pill-icon moon-icon" onclick="if(typeof toggleTheme==='function'){if(!document.body.classList.contains('dark')) toggleTheme();}">🌙</div>
   </div>
   
   </nav>
-  
 
   <!-- VIEWS WRAPPER -->
   <div class="views-wrap">
@@ -274,27 +288,15 @@
       <div class="main-content-layout">
         
         <!-- Top header layout -->
-        <div class="exams-header-bar">
-          <div class="ehb-left">
-            <div class="ehb-title-row">
-              <span class="ehb-logo-cap">🎓</span>
-              <div>
-                <h1 class="ehb-title">SAT Mastery Platform</h1>
-                <p class="ehb-subtitle">Dashboard - Past Exams</p>
-              </div>
-            </div>
-            <p class="ehb-quote">"Pick your subject. Master one module a time. Save words. Get better."</p>
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Past Exams</h1>
+            <p class="page-sub">Pick your subject. Master one module at a time.</p>
           </div>
 
           <!-- Theme Switcher and Search -->
           <div class="ehb-right">
-            <div class="theme-toggle-row">
-              <button class="theme-toggle-switch" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
-                <span class="tts-icon sun">☀️</span>
-                <span class="tts-icon moon">🌙</span>
-              </button>
-            </div>
-            <div class="search-pill-box">
+<div class="search-pill-box">
               <span class="spb-icon-left">🔍</span>
               <input type="text" id="exam-search" placeholder="Search exams, e.g., June 2024, Module 1" oninput="renderExams()" />
               <span class="spb-icon-right">🎯</span>
@@ -348,13 +350,13 @@
                     </div>
                   </div>
                </div>
-               <div class="lah-versions" id="latest-versions"></div>
             </div>
           </div>
 
         </div>
 
-      <div class="exams-columns-layout">
+      
+        <div class="exams-columns-layout">
 
         <!-- COLUMN 1: English & Reading -->
         <div class="ecl-column">
@@ -381,25 +383,21 @@
         </div>
 
         <!-- COLUMN 3: Vocabulary Bank -->
-        <div class="ecl-column">
+        <div class="ecl-column" style="position: sticky; top: 24px; align-self: flex-start; max-height: calc(100vh - 48px); overflow-y: auto; padding-right: 4px; padding-bottom: 24px;">
           <div class="ecl-header">
             <span class="ecl-icon">🌿</span>
             <div>
               <h3>Vocabulary Bank</h3>
-              <p id="vocab-count">5 words mastered • 15 to go</p>
+              <p id="vocab-count">5 words mastered  15 to go</p>
             </div>
           </div>
 
           <div class="ecl-cards-list">
             <p style="font-size: 11.5px; color: var(--text-sub); margin-bottom: 8px;">Start saving words from practice tests to build your bank.</p>
-            <!-- Daily Challenge Card -->
-            <div class="ecl-card ecl-card-english daily-challenge-card" style="padding: 16px; border-radius: var(--radius-md);">
-              <div class="dcc-info">
-                <strong style="color: var(--text-main); font-size: 13.5px;">📖 Daily Challenge</strong>
-                <p style="color: var(--text-sub); font-size: 11px; margin: 4px 0 12px;">Learn 3 new words today</p>
-                <button class="btn-practice-pill" onclick="alert('Launch Quiz!')">▶ ACCEPT</button>
-              </div>
-              <div class="dcc-bulb" style="position: absolute; right: 16px; top: 16px; font-size: 32px;">💡</div>
+            
+            <div style="border: 2px dashed #C4B5FD; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 16px;">
+              <div style="font-size: 2rem; margin-bottom: 8px;">📚</div>
+              <div style="color: #9CA3AF; font-size: 0.82rem;">No words saved yet</div>
             </div>
 
             <!-- Vocabulary Quiz Card -->
@@ -409,14 +407,13 @@
                 <strong style="color: var(--text-main); font-size: 13.5px;">Vocabulary Quiz</strong>
                 <p style="color: var(--text-sub); font-size: 10px; line-height: 1.3; margin-top: 2px;">Challenge yourself with flashcards &amp; learn faster</p>
               </div>
-              <div class="qbc-arrow" style="color: var(--primary); font-weight: bold;">➔</div>
+              <div class="qbc-arrow" style="color: var(--primary); font-weight: bold; font-size: 18px;">💡</div>
             </div>
           </div>
         </div>
 
       </div>
       <!-- END .main-content-layout -->
-
     </section>
   </div>
 
@@ -541,8 +538,8 @@
               isM2Locked = p_math1 < 40;
             }
             
-            const m2Class = isM2Locked ? 'card-disabled' : '';
-            const m2BtnText = isM2Locked ? '🔒 LOCKED' : '▶ TRY NOW';
+            const m2Class = '';
+            const m2BtnText = '▶ TRY NOW';
             
             // Practice links
             const link_ebrw1 = `/past-exams/${exam.year}/${exam.month.toLowerCase()}/${v.id}/ebrw1`;
@@ -550,7 +547,7 @@
             const link_math1 = `/past-exams/${exam.year}/${exam.month.toLowerCase()}/${v.id}/math1`;
             const link_math2 = `/past-exams/${exam.year}/${exam.month.toLowerCase()}/${v.id}/math2`;
             
-            const m2BtnClick = isM2Locked ? '' : `onclick="window.location.href='${link_math2}'"`;
+            const m2BtnClick = isM2Locked ? `onclick="const msg = this.parentElement.nextElementSibling; if(msg) msg.style.display='block';"` : `onclick="window.location.href='${link_math2}'"`;
 
             // Review button configurations
             let showReviewEbrw1 = "";
@@ -575,7 +572,7 @@
               <article class="ecl-card ecl-card-english">
                 <div class="ecl-card-header">
                   <div>
-                    <h4>📄 ${exam.month} ${exam.year} (${v.name})</h4>
+                    <h4>🗓️ ${exam.month} ${exam.year} (${v.name})</h4>
                   </div>
                   <span class="ecl-badge official" ${badgeClass}>OFFICIAL</span>
                 </div>
@@ -596,7 +593,7 @@
                     <div class="progress-ring-box" style="--p:${p_ebrw1}">
                       <svg viewBox="0 0 36 36" class="pr-svg">
                         <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="pr-fill" stroke-dasharray="${p_ebrw1}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="pr-fill" stroke-dasharray="${p_ebrw1}, 100" ${p_ebrw1 <= 0 ? 'style="display:none;"' : ''} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                       </svg>
                       <span>${p_ebrw1}%</span>
                     </div>
@@ -606,7 +603,7 @@
                   
                   <div class="ecl-row">
                     <div class="ecl-row-info">
-                      <strong>📖 Writing & Language</strong>
+                      <strong>✍️ Writing & Language</strong>
                       <small>32 min • 27 questions</small>
                       <div class="score-badge">${score_ebrw2}</div>
                       <div class="ecl-row-btns" style="margin-top: 12px;">
@@ -617,7 +614,7 @@
                     <div class="progress-ring-box" style="--p:${p_ebrw2}">
                       <svg viewBox="0 0 36 36" class="pr-svg">
                         <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="pr-fill" stroke-dasharray="${p_ebrw2}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="pr-fill" stroke-dasharray="${p_ebrw2}, 100" ${p_ebrw2 <= 0 ? 'style="display:none;"' : ''} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                       </svg>
                       <span>${p_ebrw2}%</span>
                     </div>
@@ -632,7 +629,7 @@
               <article class="ecl-card ecl-card-english">
                 <div class="ecl-card-header">
                   <div>
-                    <h4>🧮 ${exam.month} ${exam.year}</h4>
+                    <h4>🗓️ ${exam.month} ${exam.year} (${v.name})</h4>
                   </div>
                   <span class="ecl-badge official btn-math" ${badgeClass}>OFFICIAL</span>
                 </div>
@@ -652,7 +649,7 @@
                     <div class="progress-ring-box math-ring" style="--p:${p_math1}">
                       <svg viewBox="0 0 36 36" class="pr-svg">
                         <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="pr-fill" stroke-dasharray="${p_math1}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="pr-fill" stroke-dasharray="${p_math1}, 100" ${p_math1 <= 0 ? 'style="display:none;"' : ''} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                       </svg>
                       <span>${p_math1}%</span>
                     </div>
@@ -666,14 +663,15 @@
                       <small>35 min • 22 questions</small>
                       <div class="score-badge">${score_math2}</div>
                       <div class="ecl-row-btns" style="margin-top: 12px;">
-                        <button class="btn-practice-pill btn-math" ${m2BtnClick}>${m2BtnText}</button>
+                        <button class="btn-practice-pill btn-math" ${m2BtnClick}>▶ TRY NOW</button>
                         <button class="btn-review-pill" ${showReviewMath2}>REVIEW</button>
                       </div>
+                      ${isM2Locked ? `<div style="display: none; color: #9CA3AF; font-size: 0.78rem; margin-top: 8px;">ℹ️ Complete Module 1 first to unlock adaptive scoring.</div>` : ''}
                     </div>
                     <div class="progress-ring-box math-ring" style="--p:${p_math2}">
                       <svg viewBox="0 0 36 36" class="pr-svg">
                         <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="pr-fill" stroke-dasharray="${p_math2}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="pr-fill" stroke-dasharray="${p_math2}, 100" ${p_math2 <= 0 ? 'style="display:none;"' : ''} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                       </svg>
                       <span>${p_math2}%</span>
                     </div>
@@ -695,13 +693,6 @@
       // Update Latest Highlight
       if (latestExam) {
         document.getElementById('latest-title').innerText = `🔥 Latest Administration: ${latestExam.month} ${latestExam.year}`;
-        let pillsHtml = '';
-        latestExam.regions.forEach(r => {
-          r.versions.forEach(v => {
-            pillsHtml += `<span class="version-pill">${r.name}-${v.name}</span>`;
-          });
-        });
-        document.getElementById('latest-versions').innerHTML = pillsHtml;
       }
     }
   </script>
