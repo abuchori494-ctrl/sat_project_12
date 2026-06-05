@@ -516,12 +516,6 @@
   </div>
   <button id="uncollapse-btn" onclick="document.body.classList.toggle('sidebar-collapsed')" title="Expand Menu">▶</button>
   
-  <!-- Floating Theme Toggle Pill -->
-  <div id="theme-pill-toggle">
-    <div class="theme-pill-icon sun-icon" onclick="if(typeof toggleTheme==='function'){if(document.body.classList.contains('dark')) toggleTheme();}">☀️</div>
-    <div class="theme-pill-icon moon-icon" onclick="if(typeof toggleTheme==='function'){if(!document.body.classList.contains('dark')) toggleTheme();}">🌙</div>
-  </div>
-  
   </nav>
   
 
@@ -534,7 +528,7 @@
     <!-- ==========================================
          SCREEN 1: LANDING PAGE VIEW
          ========================================== -->
-    <section id="view-landing" class="space-y-5 max-w-4xl mx-auto stagger-in">
+    <section id="view-landing" class="hidden space-y-5 max-w-4xl mx-auto stagger-in">
       
       <!-- Back to home -->
       <a href="/" class="text-lavAccent font-bold text-sm flex items-center gap-2 hover:underline w-fit">
@@ -582,20 +576,7 @@
           </button>
         </div>
 
-        <!-- Option 2: Upload score report -->
-        <div class="flex-1 bg-lavCard rounded-[16px] p-6 flex flex-col items-start relative overflow-hidden lift-hover shadow-lav border border-lavBorder border-l-4 !border-l-[#B8B0F5] stagger-in" style="border-left:4px solid #B8B0F5; gap: 1rem; animation-delay: 0.2s;">
-          <div class="w-11 h-11 rounded-full bg-lavLight flex items-center justify-center flex-shrink-0" style="color: #7C6FE0; opacity: 0.85;">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-          </div>
-          <div class="space-y-1.5 z-10">
-            <h3 class="text-lg font-bold text-lavDark">Upload Your Score Report</h3>
-            <p class="text-sm text-lavGray leading-relaxed font-medium">Have an official College Board or real exam score report? Upload it and we'll tailor your plan to your actual strengths and gaps.</p>
-            <p class="text-xs text-lavGray italic mt-1">Supports College Board PDF score reports</p>
-          </div>
-          <button onclick="navigate('upload')" class="mt-auto border-2 border-lavAccent text-lavAccent text-sm font-bold px-7 py-3 rounded-[10px] w-fit hover:bg-lavAccent hover:text-white transition-all z-10 shadow-sm active:scale-95">
-            Upload Report →
-          </button>
-        </div>
+
 
       </div>
 
@@ -729,20 +710,7 @@
             </div>
           </div>
 
-          <!-- Absolute Floating Dropdown Popover -->
-          <div id="day-dropdown" class="hidden absolute bg-lavCard border border-lavBorder shadow-lav rounded-[16px] p-4 w-[240px] z-50 space-y-2 popover-enter">
-            <!-- Header/Title -->
-            <div class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest" id="dropdown-day-title">Schedule Mon</div>
-            <!-- Options -->
-            <button onclick="selectSessionType('standard')" class="w-full text-left p-3.5 hover:bg-gray-50 border border-transparent hover:border-lavAccent rounded-[10px] transition-all flex flex-col">
-              <strong class="text-xs text-lavDark">Standard practice day</strong>
-              <span class="text-[10px] text-lavGray">Standard session length</span>
-            </button>
-            <button onclick="selectSessionType('extended')" class="w-full text-left p-3.5 hover:bg-gray-50 border border-transparent hover:border-lavAccent2 rounded-[10px] transition-all flex flex-col">
-              <strong class="text-xs text-lavDark">Extended practice day</strong>
-              <span class="text-[10px] text-lavGray">More content scheduled</span>
-            </button>
-          </div>
+
 
           <!-- Bottom controls -->
           <div class="flex items-center justify-between pt-8 border-t border-lavBorder" id="step1-controls">
@@ -949,8 +917,14 @@
       <!-- Header Card -->
       <div class="bg-white rounded-2xl p-8 md:p-10 flex flex-col md:flex-row justify-between items-start gap-6 border border-gray-100 border-l-4 border-l-[#7C6FE0]" style="box-shadow: 0 4px 24px -4px rgba(108, 71, 255, 0.06), 0 12px 48px -12px rgba(0, 0, 0, 0.04);">
         <div class="space-y-4 flex-1 w-full">
-          <div>
-            <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Your Personalized SAT Prep Plan</h2>
+          <div class="relative w-full">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-0">
+              <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Your Personalized SAT Prep Plan</h2>
+              <button onclick="startOverPlan()" class="text-sm font-bold text-[#7C6FE0] hover:text-[#5A4FBA] flex items-center gap-1.5 transition-colors mt-1 sm:mt-0 bg-[#F0EFFE] px-3 py-1.5 rounded-lg border border-[#EDE9FE] shadow-sm hover:shadow">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Create New Plan
+              </button>
+            </div>
             <div class="flex flex-wrap items-center justify-start gap-x-4 gap-y-2 text-sm text-gray-500 font-medium mt-2 leading-none">
               <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Goal: <strong class="text-gray-900" id="dash-goal-score">1520</strong></span>
               <span class="text-gray-300 hidden md:inline self-center -translate-y-[1px]">|</span>
@@ -1120,9 +1094,7 @@
     }
 
     function startOverPlan() {
-      localStorage.removeItem('oneprep_offline_plans');
-      localStorage.removeItem('oneprep_plan_checks');
-      offlinePlans = {};
+      navigate('landing');
       showSetupOptions();
     }
 
@@ -1142,7 +1114,6 @@
           if (dot) dot.classList.add('hidden');
         }
       });
-      document.getElementById('day-dropdown').classList.add('hidden');
       updateCreateButtonState();
 
       // Reset Step 2
@@ -1196,51 +1167,22 @@
     // SCREEN 2: STUDY DAYS POPUP HANDLERS
     // ==========================================
     function toggleStudyDay(dayName, btnEl) {
-      const dropdown = document.getElementById('day-dropdown');
-      
-      // If already active in dropdown, close it
-      if (activeDropdownDay === dayName) {
-        dropdown.classList.add('hidden');
-        activeDropdownDay = null;
-        return;
+      const dot = document.getElementById(`dot-${dayName}`);
+
+      if (studyDaysState[dayName]) {
+        // Deselect
+        delete studyDaysState[dayName];
+        btnEl.className = "w-10 h-14 md:w-12 md:h-16 border border-gray-200 text-xs md:text-sm font-bold rounded-xl hover:border-black flex flex-col items-center justify-center gap-1.5 transition-all";
+        dot.classList.add('hidden');
+      } else {
+        // Select
+        studyDaysState[dayName] = 'standard';
+        btnEl.className = "w-10 h-14 md:w-12 md:h-16 border-2 border-black text-xs md:text-sm font-extrabold rounded-xl bg-gray-50 flex flex-col items-center justify-center gap-1.5 transition-all scale-102";
+        dot.className = "w-1.5 h-1.5 rounded-full dot-standard";
+        dot.classList.remove('hidden');
       }
 
-      activeDropdownDay = dayName;
-      
-      // Position dropdown below button
-      const rect = btnEl.getBoundingClientRect();
-      const modalRect = document.getElementById('modal-days-card').getBoundingClientRect();
-      
-      const relativeTop = rect.bottom - modalRect.top + 8;
-      const relativeLeft = rect.left - modalRect.left - 80; // offset centering
-      
-      document.getElementById('dropdown-day-title').textContent = `Schedule ${dayName}`;
-      dropdown.style.top = `${relativeTop}px`;
-      dropdown.style.left = `${relativeLeft}px`;
-      dropdown.classList.remove('hidden');
-    }
-
-    function selectSessionType(type) {
-      if (!activeDropdownDay) return;
-      
-      const day = activeDropdownDay;
-      studyDaysState[day] = type; // "standard" or "extended"
-      
-      // Update UI button and indicator dot
-      const btn = document.getElementById(`day-${day}`);
-      const dot = document.getElementById(`dot-${day}`);
-
-      btn.className = "w-10 h-14 md:w-12 md:h-16 border-2 border-black text-xs md:text-sm font-extrabold rounded-xl bg-gray-50 flex flex-col items-center justify-center gap-1.5 transition-all scale-102";
-      
-      dot.className = `w-1.5 h-1.5 rounded-full ${type === 'extended' ? 'dot-extended' : 'dot-standard'}`;
-      dot.classList.remove('hidden');
-
-      // Close dropdown
-      document.getElementById('day-dropdown').classList.add('hidden');
-      activeDropdownDay = null;
-
       updateCreateButtonState();
-      showToast(`${day} configured as ${type} practice day.`);
     }
 
     function updateCreateButtonState() {
@@ -1757,8 +1699,8 @@
           const weekDateRange = `${monthNames[weekStart.getMonth()]} ${weekStart.getDate()} – ${monthNames[weekEnd.getMonth()]} ${weekEnd.getDate()}, ${weekEnd.getFullYear()}`;
           
           weekHeader.innerHTML = `
-            <h1 class="text-[1.6rem] font-[800] text-[#1A1035] tracking-tight">WEEK ${currentWeek}</h1>
-            <p class="text-sm font-semibold text-[#6B7280] mt-1">${weekDateRange}</p>
+            <h1 class="text-[18px] font-[600] text-[#7C6FE0] tracking-[0.08em] uppercase">WEEK ${currentWeek}</h1>
+            <p class="text-[13px] text-[#9CA3AF] mt-1">${weekDateRange}</p>
           `;
           calendar.appendChild(weekHeader);
       }
@@ -1769,8 +1711,12 @@
         const dayHeader = document.createElement('div');
         dayHeader.className = "mt-8 mb-4 flex items-center justify-start gap-3 leading-none";
         dayHeader.innerHTML = `
-            <h3 class="text-[0.95rem] font-[600] text-slate-500 uppercase tracking-widest flex items-center gap-2">DAY ${trueDayIndex + 1} <span class="text-slate-300">|</span> <span class="text-slate-600 capitalize font-medium tracking-normal">${dayObj.fullDateStr}</span></h3>
-            ${dayObj.isToday ? '<span class="bg-[#7C6FE0] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider self-center">Today</span>' : ''}
+            <div style="background: #F5F3FF; border-radius: 8px; padding: 5px 14px; display: inline-flex; align-items: center; gap: 8px;">
+                <span style="font-size: 13px; font-weight: 700; color: #7C6FE0; letter-spacing: 0.05em;">DAY ${trueDayIndex + 1}</span>
+                <span style="color: #D1D5DB;">|</span>
+                <span style="font-size: 13px; font-weight: 500; color: #6B7280;">${dayObj.fullDateStr}</span>
+            </div>
+            ${dayObj.isToday ? '<span class="bg-[#7C6FE0] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider self-center ml-2">Today</span>' : ''}
         `;
         calendar.appendChild(dayHeader);
 
@@ -1796,20 +1742,24 @@
                 actionHtml = `<button onclick="window.location.href='/mock-exam'" class="bg-[#F59E0B] text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-opacity-90 transition-all">Start Exam →</button>`;
             } else {
                 actionHtml = `
-                    <div class="relative flex items-center justify-center w-6 h-6 cursor-pointer" onclick="togglePlanCheck(this, '${currentPlanId}', ${trueDayIndex}, ${taskIdx}, '${style.border}')">
-                      <div class="checkbox-box w-6 h-6 rounded border-[3px] transition-all group-hover:border-[#7C6FE0] hover:bg-[#F0EFFE] flex items-center justify-center" style="border-color: ${isChecked ? style.border : '#A78BFA'}; background-color: ${isChecked ? style.border : 'transparent'};">
-                        <svg class="checkmark w-4 h-4 text-white transition-all ${isChecked ? 'opacity-100' : 'opacity-0'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    <div class="relative flex items-center justify-center w-[24px] h-[24px] cursor-pointer" onclick="togglePlanCheck(this, '${currentPlanId}', ${trueDayIndex}, ${taskIdx}, '${style.border}')">
+                      <div class="checkbox-box w-[24px] h-[24px] rounded-[6px] border-[2px] transition-all flex items-center justify-center" style="border-color: ${isChecked ? '#22C55E' : '#7C6FE0'}; background-color: ${isChecked ? '#22C55E' : 'white'};">
+                        <svg class="checkmark w-3.5 h-3.5 text-white transition-all ${isChecked ? 'opacity-100' : 'opacity-0'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                       </div>
                     </div>
                 `;
             }
+
+            let displayType = task.type.toUpperCase();
+            if (displayType === 'ENGLISH') displayType = 'READING/WRITING';
+            if (displayType === 'MOCK EXAM') displayType = 'MOCK_EXAM';
 
             card.innerHTML = `
               <div class="flex justify-between items-center gap-4">
                 <div class="space-y-1.5 flex-1">
                   <div class="flex items-center gap-2">
                     <span class="text-[10px] font-bold uppercase px-3 py-1 rounded-md tracking-widest" style="background-color: ${style.badgeBg}; color: ${style.badgeText};">
-                      ${style.icon} ${task.type}
+                      ${style.icon} ${displayType}
                     </span>
                     <h4 class="task-title text-sm font-bold text-[#1A1035] truncate max-w-[280px] ${isChecked && !isRest ? 'line-through text-gray-500' : ''}">${escapeHtml(task.topic)}</h4>
                   </div>
@@ -2009,15 +1959,15 @@
 
       if (willBeChecked) {
         showToast("Task completed! Keep crushing your plan! 🔥");
-        box.style.backgroundColor = borderColor;
-        box.style.borderColor = borderColor;
+        box.style.backgroundColor = '#22C55E';
+        box.style.borderColor = '#22C55E';
         checkmark.classList.remove('opacity-0');
         checkmark.classList.add('opacity-100');
         card.classList.add('opacity-60');
         if(title) title.classList.add('line-through', 'text-gray-500');
       } else {
-        box.style.backgroundColor = 'transparent';
-        box.style.borderColor = '#D1D5DB';
+        box.style.backgroundColor = 'white';
+        box.style.borderColor = '#7C6FE0';
         checkmark.classList.remove('opacity-100');
         checkmark.classList.add('opacity-0');
         card.classList.remove('opacity-60');
