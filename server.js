@@ -1371,9 +1371,17 @@ app.post('/api/planner/create', (req, res) => {
     if (isStudyDay) globalStudyDayIndex++;
   }
 
+  store.planner.plans = {}; // Enforce a single active plan per user
   store.planner.plans[planId] = plan;
   persistPlans(); // Save to db.json immediately so it survives restarts
   res.json({ success: true, plan });
+});
+
+app.post('/api/planner/clear', (req, res) => {
+  store.planner.plans = {};
+  store.planner.taskCompletions = {};
+  persistPlans();
+  res.json({ success: true, message: "Plans cleared" });
 });
 
 app.post('/api/planner/agenda/check', (req, res) => {

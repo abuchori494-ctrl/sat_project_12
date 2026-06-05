@@ -1054,9 +1054,6 @@
       });
 
       checkExistingPlan();
-
-      // Navigate to landing by default
-      navigate('landing');
     });
     
     async function checkExistingPlan() {
@@ -1064,14 +1061,16 @@
         const res = await fetch(`${API_BASE}/api/dashboard`);
         const data = await res.json();
         if (data.studyPlan || Object.keys(offlinePlans).length > 0) {
-          showExistingPlan();
+          viewActivePlan();
         } else {
+          navigate('landing');
           showSetupOptions();
         }
       } catch (err) {
         if (Object.keys(offlinePlans).length > 0) {
-          showExistingPlan();
+          viewActivePlan();
         } else {
+          navigate('landing');
           showSetupOptions();
         }
       }

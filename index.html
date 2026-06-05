@@ -1515,102 +1515,236 @@
     .ctc-day-incomplete-today { color: #ef4444; }
     .ctc-day-future { border-style: dashed; border-color: #DDD6FE; }
 
-    body.dark #sidebar {
-      background-color: #000000 !important;
+    /* ── Component CSS Classes & Dark Mode Overrides (Deep Space Theme) ── */
+    /* ── Component CSS Classes & Dark Mode Overrides (Refined Deep Space Theme) ── */
+    body.dark {
+      background-color: #0F0E1A !important;
+      --lav-bg: #0F0E1A !important;
     }
-    
-    body.dark .lav-card {
-      background-color: #0A0A0A !important;
-      border-color: #1A1A1A !important;
+    body.dark #sidebar {
+      background: #14131F !important;
+      border-right: 1px solid #2B2645 !important;
+    }
+    body.dark #sidebar .nav-links a {
+      color: #B8B4DC !important;
+    }
+    body.dark #sidebar .nav-links a.active {
+      background: #1E1B38 !important;
+      color: #EAE7FF !important;
+    }
+    body.dark #sidebar .section-label,
+    body.dark #sidebar .nav-links li.section-label {
+      color: #4A4670 !important;
+    }
+    body.dark #sidebar .badge-new {
+      background: #242040 !important;
+      color: #B8B4DC !important;
+    }
+    body.dark #sidebar .exam-selector {
+      background: #1C1A30 !important;
+      border: 1px solid #2B2645 !important;
+      color: #C8C4E8 !important;
+    }
+    body.dark #sidebar .sidebar-bottom a,
+    body.dark #sidebar .sidebar-bottom button,
+    body.dark .dm-text {
+      color: #B8B4DC !important;
+    }
+    body.dark #sidebar .nav-icon {
+      background: #3A3660 !important;
     }
 
-    body.dark .lav-card:hover {
-      background: #111111;
+    body.dark .founder-quote {
+      color: #9B97C0 !important;
     }
-    body.dark #sidebar .sidebar-bottom {
-      border-top-color: #1A1A1A;
+    body.dark .founder-author {
+      color: #5A5680 !important;
+    }
+
+    body.dark .hero-announce-pill {
+      background: #1C1A30 !important;
+      border: 1px solid #2B2645 !important;
+      color: #A8A4D8 !important;
+    }
+    body.dark .hero-announce-pill span[style*="#E8874A"], body.dark .hero-announce-pill span:first-child {
+      color: #E8874A !important;
+    }
+
+    body.dark .hero-h1 {
+      color: #F0EEFF !important;
+    }
+    body.dark .hero-sub {
+      color: #7C78A8 !important;
     }
     body.dark .btn-hero-outline {
-      border-color: #8B5CF6;
-      color: #8B5CF6;
-      background: transparent;
+      border: 1.5px solid #2B2645 !important;
+      color: #A8A4D8 !important;
+      background: transparent !important;
     }
-    body.dark .hero-announce-pill {
-      background: #0A0A0A;
-      color: #A78BFA;
-      border: 1px solid #1A1A1A;
+    body.dark .stat-item strong,
+    body.dark .stat-item span {
+      color: #6B6890 !important;
     }
-    body.dark .hero-stats {
-      display: flex;
-    }
-    body.dark .stat-item span, body.dark .si-icon {
-      color: #C4BFEF;
+    body.dark .stat-div {
+      background: #1C1A30 !important;
     }
     body.dark .hero-countdown-pill {
-      background: #0A0A0A;
-      border: 1px solid #1A1A1A;
-      color: #A78BFA;
+      background: #1C1A30 !important;
+      border: 1px solid #2B2645 !important;
+      color: #7C78A8 !important;
     }
-    body.dark .ctc-day {
-      background-color: transparent;
-      border-color: #1A1A1A;
-      border-radius: 6px;
+    body.dark .hero-countdown-pill strong {
+      color: #E8874A !important;
     }
-    body.dark .ctc-day-future {
-      background-color: transparent;
-      border-color: #1A1A1A;
-      border-radius: 6px;
+
+    body.dark .consistency-tracker-card {
+      background: #14131F !important;
+      border: 1px solid #2B2645 !important;
     }
-    body.dark .ctc-day.today {
-      border-color: #8B5CF6;
-      border-width: 2px;
-      background-color: transparent;
-    }
-    body.dark .ctc-day-incomplete {
-      background-color: rgba(239, 68, 68, 0.1);
-      border-color: #EF4444;
-      color: #EF4444;
-      border-radius: 6px;
-    }
-    body.dark .ctc-day-incomplete-today {
-      color: #EF4444;
+    body.dark .ctc-header h3 {
+      color: #EAE7FF !important;
     }
     body.dark #ctc-summary {
-      color: #A78BFA;
+      color: #4A4670 !important;
+      background: transparent !important;
     }
-    body.dark .ssc-title, body.dark .ssc-sub, body.dark .cp-icon + span {
-      color: #A78BFA;
+    body.dark .ctc-week-labels span {
+      color: #4A4670 !important;
     }
-    body.dark .review-stack-card {
-      background: #0A0A0A !important;
-      border-color: #1A1A1A !important;
-      border-style: solid !important;
+    body.dark .ctc-day {
+      background: #1C1A30 !important;
+      border: 1px solid transparent !important;
+      color: #4A4670 !important;
     }
-    body.dark .review-stack-card h3 {
-      color: #8B5CF6 !important;
+    body.dark .ctc-day.missed,
+    body.dark .ctc-day-incomplete,
+    body.dark .ctc-day-incomplete-today {
+      background: #2E1A1A !important;
+      border: 1px solid transparent !important;
+      color: #F87171 !important;
     }
-    body.dark .review-stack-card p {
-      color: #A78BFA !important;
+    body.dark .ctc-day.today {
+      background: #1E1B38 !important;
+      border: 1.5px dashed #5B54A8 !important;
+      color: #A8A4D8 !important;
     }
-    body.dark a[href="#MainDashboardAgenda"], body.dark a[onclick*="openGoalModal"] {
-      color: #8B5CF6 !important;
+    body.dark .ctc-day-future {
+      background: #1C1A30 !important;
+      border: 1px dashed #2B2645 !important;
+      color: #383560 !important;
     }
-    body.dark .da-task-card, body.dark .da-task-card.completed {
-      background: #000000 !important;
-      border-top-color: #1A1A1A !important;
-      border-right-color: #1A1A1A !important;
-      border-bottom-color: #1A1A1A !important;
+    body.dark a[href="#MainDashboardAgenda"] {
+      color: #7C6FE0 !important;
     }
-    body.dark .founder-quote {
-      font-style: italic;
-      color: #C4BFEF;
+
+    body.dark .scores-split-card,
+    body.dark .lav-card {
+      background: #14131F !important;
+      border: 1px solid #2B2645 !important;
     }
-    body.dark #latest-score-val, body.dark #target-score-val span {
-      color: #8B5CF6 !important;
-      font-size: 1.1rem;
+    body.dark .ssc-title,
+    body.dark .ssc-title + div {
+      color: #6B68A0 !important;
     }
-    body.dark .ssc-score {
-      color: #8B5CF6;
+    body.dark .ssc-score,
+    body.dark #latest-score-val,
+    body.dark #target-score-val {
+      color: #F0EEFF !important;
+    }
+    body.dark .ssc-sub {
+      color: #4A4670 !important;
+    }
+    body.dark .ssc-sub a,
+    body.dark a[onclick*="openGoalModal"] {
+      color: #7C6FE0 !important;
+    }
+    body.dark #latest-score-val span {
+      color: #8884B0 !important;
+    }
+    body.dark #latest-score-sub {
+      color: #4A4670 !important;
+    }
+
+    body.dark .daily-agenda-card {
+      background: #14131F !important;
+      border: 1px solid #2B2645 !important;
+    }
+    body.dark .daily-agenda-card h3 {
+      color: #EAE7FF !important;
+    }
+    body.dark .da-progress-text,
+    body.dark #agenda-progress-text {
+      color: #4A4670 !important;
+    }
+    body.dark .da-progress-track,
+    body.dark #agenda-progress-track {
+      background: #242040 !important;
+    }
+    body.dark .da-task-card,
+    body.dark .agenda-item {
+      background: transparent !important;
+      border-color: #2B2645 !important;
+    }
+    body.dark .da-task-card:hover,
+    body.dark .agenda-item:hover {
+      background: #1C1A30 !important;
+    }
+    body.dark .badge-math, body.dark .da-meta-pill[style*="math"], body.dark .da-meta-pill.math, body.dark .math-badge {
+      background: #1A2A4A !important; color: #7EB3F7 !important; border:none!important;
+    }
+    body.dark .badge-english, body.dark .da-meta-pill[style*="english"], body.dark .da-meta-pill.english, body.dark .english-badge {
+      background: #2A1A4A !important; color: #B39DFF !important; border:none!important;
+    }
+    body.dark .badge-vocab, body.dark .da-meta-pill[style*="vocab"], body.dark .da-meta-pill.vocab, body.dark .vocab-badge {
+      background: #1A3A2A !important; color: #6FCF97 !important; border:none!important;
+    }
+    body.dark .da-task-card h4, body.dark .agenda-item h4 {
+      color: #EAE7FF !important;
+    }
+    body.dark .da-task-card.completed h4, body.dark .agenda-item.completed h4 {
+      color: #5A5680 !important;
+      text-decoration: line-through !important;
+    }
+    body.dark .da-task-card .da-meta span, body.dark .agenda-item .da-meta span {
+      color: #7C78A8 !important;
+    }
+    body.dark .task-check.completed, body.dark .da-check.completed, body.dark .da-check-icon.completed, body.dark .da-circle-check.completed {
+      background: #7C6FE0 !important;
+      color: #FFFFFF !important;
+      border: none !important;
+    }
+    body.dark .task-check:not(.completed), body.dark .da-check:not(.completed), body.dark .da-check-icon:not(.completed), body.dark .da-circle-check:not(.completed) {
+      background: transparent !important;
+      border: 1px solid #3A3660 !important;
+    }
+
+    body.dark .dsps-empty-card, body.dark .all-caught-up-card, body.dark .review-stack-card {
+      background: #14131F !important;
+      border: 1px solid #2B2645 !important;
+    }
+    body.dark .dsps-empty-card h3, body.dark .all-caught-up-card h3, body.dark .review-stack-card h3 {
+      color: #EAE7FF !important;
+    }
+    body.dark .dsps-empty-card p, body.dark .all-caught-up-card p, body.dark .review-stack-card p {
+      color: #7C78A8 !important;
+    }
+
+    body.dark .db-analytics-header h2 {
+      color: #EAE7FF !important;
+    }
+    body.dark .analytics-strip {
+      background: #14131F !important;
+      border: 1px solid #2B2645 !important;
+      color: #7C78A8 !important;
+    }
+    body.dark .analytics-strip strong {
+      color: #EAE7FF !important;
+    }
+    body.dark .analytics-strip a {
+      color: #7C6FE0 !important;
+    }
+    body.dark .analytics-strip span[id*="divider"] {
+      color: #383560 !important;
     }
   </style>
 
@@ -2290,7 +2424,7 @@
             }
           } else {
             // No completed exam — show empty state
-            latestEl.innerHTML = '<span style="font-size:1.1rem;font-weight:500;color:#6B7280;">One exam away from knowing your baseline.</span>';
+            latestEl.innerHTML = '<span style="font-size:13px;line-height:1.4;font-weight:500;color:#6B7280;">One exam away from knowing your baseline.</span>';
             if (rwPill)   rwPill.style.display   = 'none';
             if (mathPill) mathPill.style.display = 'none';
             if (latestSubEl) {
