@@ -1390,11 +1390,25 @@
     // Load initial data
     document.addEventListener('DOMContentLoaded', async () => {
       initURLParams();
+      
+      // Ensure we have a JWT token for backend requests
+      let token = localStorage.getItem('jwt_token');
+      if (!token) {
+        try {
+          const authRes = await fetch('/api/auth/mock-login', { method: 'POST' });
+          const authData = await authRes.json();
+          token = authData.token;
+          localStorage.setItem('jwt_token', token);
+        } catch(e) { console.error('Failed to get mock token', e); }
+      }
+
       await fetchUserData();
       
       // Fetch and restore attempt if exists
       try {
-        const attemptsResponse = await fetch('/api/exams/attempts');
+        const attemptsResponse = await fetch('/api/exams/attempts', {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('jwt_token')}` }
+        });
         if (attemptsResponse.ok) {
           const allAttempts = await attemptsResponse.json();
           const attemptKey = `${examId}-${currentModule}`;
@@ -1927,7 +1941,10 @@
       try {
         const response = await fetch(`/api/exams/${examId}/submit`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`
+          },
           body: JSON.stringify(payload)
         });
         

@@ -3,50 +3,119 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const app = express();
+const rateLimit = require('express-rate-limit');
+const globalLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
+app.use('/api/', globalLimiter);
+const submitLimiter = rateLimit({ windowMs: 60 * 1000, max: 30 });
+
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'SAT Platform API',
+      version: '1.0.0',
+      description: 'API documentation for the SAT Prep Platform'
+    },
+    servers: [
+      { url: 'http://localhost:3000' }
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
+    }
+  },
+  apis: ['./server.js']
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+// Global Async Handler
+const asyncHandler = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
+
 const PORT = 3000;
 
-app.use(cors());
-app.use(express.json({ limit: '10mb' }));
+
+const jwt = require('jsonwebtoken');
+const { z } = require('zod');
+const JWT_SECRET = process.env.JWT_SECRET || 'super-secure-jwt-secret-key-123';
+
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Missing or invalid Authorization header' });
+  }
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.userId = decoded.userId;
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+};
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://127.0.0.1:27017/sat_prep', {})
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
+const attemptSchema = new mongoose.Schema({
+  userId: { type: String, required: true },
+  examId: { type: String, required: true },
+  moduleId: { type: String, required: true },
+  correct: { type: Number, required: true },
+  total: { type: Number, required: true },
+  percentage: { type: Number, required: true },
+  answers: { type: Object },
+  completedAt: { type: Date, default: Date.now }
+});
+
+const Attempt = mongoose.model('Attempt', attemptSchema);
+
+
+app.use(cors({ origin: ['http://localhost:3000', 'https://yourdomain.com'], credentials: true }));
+app.use(express.json({ limit: '50kb' }));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.set('views', __dirname);
 
-app.get('/', (req, res) => {
-  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-  let latestExamName = "March 2026 Real Past Exam Available Now";
-  let latestExamId = "march-2026-int-a";
-  
-  try {
-    const raw = fs.readFileSync(path.join(__dirname, 'exams_array.json'), 'utf-8');
-    const examsData = JSON.parse(raw);
-    
-    const examsWithDate = examsData.filter(e => e.createdAt);
-    if (examsWithDate.length > 0) {
-      examsWithDate.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      latestExamName = examsWithDate[0].name + " Available Now";
-      latestExamId = examsWithDate[0].id;
-    }
-  } catch (err) {
-    console.error("Error reading exams database:", err);
-  }
 
-  const consistencyWeek = [];
+app.post('/api/auth/mock-login', (req, res) => {
+  const token = jwt.sign({ userId: 'user_001' }, JWT_SECRET, { expiresIn: '24h' });
+  res.json({ token });
+});
+
+
+let cachedAnalytics = { questionsDone: 0, accuracy: 0, weakestTopics: [], isPerfect: false };
+let cachedConsistencyWeek = [];
+
+async function updateAnalyticsCache() {
+  cachedAnalytics = getAnalyticsSummary();
+  
+  // Compute consistencyWeek
+  const newConsistencyWeek = [];
   try {
     const now = new Date();
-    const dayOfWeekISO = (now.getDay() + 6) % 7; // 0=Mon, 6=Sun
-    
+    const dayOfWeekISO = (now.getDay() + 6) % 7; 
     let activePlan = null;
     const planKeys = Object.keys(store.planner.plans);
-    if (planKeys.length > 0) {
-      activePlan = store.planner.plans[planKeys[0]];
-    }
+    if (planKeys.length > 0) activePlan = store.planner.plans[planKeys[0]];
 
     for (let i = 0; i < 7; i++) {
       const day = new Date(now);
       day.setHours(0, 0, 0, 0);
       day.setDate(now.getDate() - (dayOfWeekISO - i));
       const dateStr = day.toISOString().split('T')[0];
-      
       let status = "empty";
       
       if (activePlan) {
@@ -55,41 +124,48 @@ app.get('/', (req, res) => {
           const hasRestTask = scheduleDay.tasks.some(t => t.type === 'rest');
           const tasks = scheduleDay.tasks.filter(t => t.type !== 'rest');
           const scheduledCount = tasks.length;
-          
-          if (hasRestTask && scheduledCount === 0) {
-            status = "rest";
-          } else if (scheduledCount > 0) {
+          if (hasRestTask && scheduledCount === 0) status = "rest";
+          else if (scheduledCount > 0) {
             const dayIndex = activePlan.schedule.indexOf(scheduleDay);
             let completedCount = 0;
-            
             tasks.forEach((t, idx) => {
-              const taskId = `${activePlan.planId}_day${dayIndex}_task${idx}`;
-              if (store.planner.taskCompletions[taskId]) {
-                completedCount++;
-              }
+              if (store.planner.taskCompletions[`${activePlan.planId}_day${dayIndex}_task${idx}`]) completedCount++;
             });
-            
-            if (completedCount === scheduledCount && scheduledCount > 0) {
-              status = "complete";
-            } else if (scheduledCount > 0 && day < new Date(new Date().setHours(0, 0, 0, 0))) {
-              status = "incomplete";
-            }
+            if (completedCount === scheduledCount && scheduledCount > 0) status = "complete";
+            else if (scheduledCount > 0 && day < new Date(new Date().setHours(0, 0, 0, 0))) status = "incomplete";
           }
         }
       }
-      
-      consistencyWeek.push({
-        date: dateStr,
-        status: status,
-        isToday: i === dayOfWeekISO
-      });
+      newConsistencyWeek.push({ date: dateStr, status: status, isToday: i === dayOfWeekISO });
     }
-  } catch (err) {
-    console.error("Error computing consistencyWeek:", err);
-  }
+  } catch (e) { console.error("Error computing consistencyWeek cache", e); }
+  
+  cachedConsistencyWeek = newConsistencyWeek;
+}
+setInterval(updateAnalyticsCache, 5 * 60 * 1000);
+setTimeout(updateAnalyticsCache, 1000); // Initial run
 
-  const analyticsData = getAnalyticsSummary();
-  res.render('index.html', { latestExamName, latestExamId, consistencyWeek, user: store.user, analyticsData });
+
+app.get('/', async (req, res) => {
+  let latestExamName = "No active exam";
+  let latestExamId = "none";
+  try {
+    const raw = await fs.promises.readFile(path.join(__dirname, 'exams_array.json'), 'utf-8');
+    const examsData = JSON.parse(raw);
+    const activeExams = examsData.filter(e => !e.id.endsWith('-b'));
+    if (activeExams.length > 0) {
+      latestExamName = activeExams[0].name;
+      latestExamId = activeExams[0].id;
+    }
+  } catch (err) { console.error("Error reading exams database:", err); }
+
+  res.render('index.html', { 
+    latestExamName, 
+    latestExamId, 
+    consistencyWeek: cachedConsistencyWeek, 
+    user: store.user, 
+    analyticsData: cachedAnalytics 
+  });
 });
 
 app.use(express.static(path.join(__dirname))); // Serve all HTML, CSS, JS static files
@@ -886,6 +962,95 @@ app.get('/mistakes', (req, res) => res.sendFile(path.join(__dirname, 'index.html
 // ==========================================================
 // EXAM SIMULATOR API
 // ==========================================================
+
+
+/**
+ * @swagger
+ * /api/exams:
+ *   get:
+ *     summary: Retrieve a paginated and filtered list of exams
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema: { type: integer }
+ *       - in: query
+ *         name: limit
+ *         schema: { type: integer }
+ *       - in: query
+ *         name: year
+ *         schema: { type: string }
+ *       - in: query
+ *         name: region
+ *         schema: { type: string }
+ *       - in: query
+ *         name: status
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Paginated exams array
+ */
+app.get('/api/exams', asyncHandler(async (req, res) => {
+  res.set('Cache-Control', 'public, max-age=3600');
+
+  const raw = await fs.promises.readFile(path.join(__dirname, 'exams_array.json'), 'utf-8');
+  let examsData = JSON.parse(raw);
+  
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const yearFilter = req.query.year;
+  const regionFilter = req.query.region;
+  const statusFilter = req.query.status;
+
+  if (yearFilter && yearFilter !== 'all') {
+    examsData = examsData.filter(e => e.date.includes(yearFilter));
+  }
+  if (regionFilter && regionFilter !== 'all') {
+    examsData = examsData.filter(e => e.region.toLowerCase() === regionFilter.toLowerCase());
+  }
+
+  if (statusFilter && statusFilter !== 'all') {
+    const authHeader = req.headers.authorization;
+    let userAttemptsList = [];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+        userAttemptsList = await Attempt.find({ userId: decoded.userId }).lean();
+      } catch(e) {}
+    }
+    
+    examsData = examsData.filter(e => {
+      const hasAttempt = userAttemptsList.some(a => a.examId === e.id);
+      if (statusFilter === 'completed') return hasAttempt;
+      if (statusFilter === 'incomplete') return !hasAttempt;
+      return true;
+    });
+  }
+
+  const grouped = {};
+  examsData.forEach(exam => {
+    if (exam.id.endsWith('-b')) return;
+    const year = parseInt(exam.date.split(' ')[1]);
+    const month = exam.date.split(' ')[0];
+    const examKey = month + '-' + year;
+    
+    if (!grouped[examKey]) grouped[examKey] = { id: month.toLowerCase() + '-' + year, month, year, regions: [] };
+    let regionEntry = grouped[examKey].regions.find(r => r.name === exam.region);
+    if (!regionEntry) { regionEntry = { name: exam.region, versions: [] }; grouped[examKey].regions.push(regionEntry); }
+    
+    const versionId = exam.id.split('-').slice(2).join('-');
+    const versionMatch = exam.name.match(/\(([^)]+)\)/);
+    const versionName = versionMatch ? versionMatch[1] : versionId;
+    regionEntry.versions.push({ name: versionName, id: versionId });
+  });
+  
+  const fullArray = Object.values(grouped);
+  const total = fullArray.length;
+  const totalPages = Math.ceil(total / limit);
+  const paginatedData = fullArray.slice((page - 1) * limit, page * limit);
+  
+  res.json({ data: paginatedData, total, page, limit, totalPages });
+}));
+
 app.get('/api/exams/:examId/questions', (req, res) => {
   const { examId } = req.params;
   const targetModule = req.query.module || 'ebrw1';
@@ -910,10 +1075,56 @@ app.get('/api/exams/:examId/questions', (req, res) => {
   res.status(404).json({ error: `Questions for exam ${examId} not found.` });
 });
 
-app.post('/api/exams/:examId/submit', (req, res) => {
+
+const submitAttemptSchema = z.object({
+  body: z.object({
+    answers: z.record(z.any()).optional(),
+    timeSpent: z.number().optional(),
+    module: z.string().optional()
+  }),
+  params: z.object({
+    examId: z.string().min(1, 'examId is required')
+  })
+});
+
+
+/**
+ * @swagger
+ * /api/exams/{examId}/submit:
+ *   post:
+ *     summary: Submit an exam attempt
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: examId
+ *         required: true
+ *         schema: { type: string }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               answers:
+ *                 type: object
+ *               timeSpent:
+ *                 type: integer
+ *               module:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: The graded attempt result
+ */
+app.post('/api/exams/:examId/submit', verifyToken, submitLimiter, asyncHandler(async (req, res) => {
+  res.set('Cache-Control', 'private, no-store');
+  submitAttemptSchema.parse({ body: req.body, params: req.params });
+
   const { examId } = req.params;
   const { answers, timeSpent, module: bodyModule } = req.body;
   const targetModule = bodyModule || req.query.module || 'ebrw1';
+  const userId = req.userId;
 
   if (examQuestionsDb && examQuestionsDb.examId === examId) {
     let questions = [];
@@ -947,11 +1158,26 @@ app.post('/api/exams/:examId/submit', (req, res) => {
         isCorrect,
         explanation: q.explanation
       });
+    });
 
-      // Log answer in global history
+    const total = questions.length;
+    const percentage = Math.round((correctCount / total) * 100);
+
+    const attempt = new Attempt({
+      userId,
+      examId,
+      moduleId: targetModule,
+      correct: correctCount,
+      total,
+      percentage,
+      answers
+    });
+    await attempt.save();
+
+    questions.forEach((q, idx) => {
       store.questions.answered.push({
         questionId: q.id,
-        correct: isCorrect,
+        correct: results[idx].isCorrect,
         timeSpent: Math.round(timeSpent / questions.length) || 15,
         topic: q.module || targetModule,
         subject: targetModule.includes('math') ? 'math' : 'reading',
@@ -959,19 +1185,8 @@ app.post('/api/exams/:examId/submit', (req, res) => {
       });
     });
 
-    const total = questions.length;
-    const percentage = Math.round((correctCount / total) * 100);
-
-    const attemptKey = `${examId}-${targetModule}`;
-    examAttempts[attemptKey] = {
-      score: correctCount,
-      total,
-      percentage,
-      answers,
-      timestamp: new Date().toISOString()
-    };
-    persistAttempts();
     updateStreak();
+    updateAnalyticsCache();
 
     return res.json({
       success: true,
@@ -983,11 +1198,36 @@ app.post('/api/exams/:examId/submit', (req, res) => {
   }
 
   res.status(404).json({ error: `Exam ${examId} not found.` });
-});
+}));
 
-app.get('/api/exams/attempts', (req, res) => {
-  res.json(examAttempts);
-});
+
+/**
+ * @swagger
+ * /api/exams/attempts:
+ *   get:
+ *     summary: Retrieve a user's exam attempts
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of simplified attempt records
+ */
+app.get('/api/exams/attempts', verifyToken, asyncHandler(async (req, res) => {
+  res.set('Cache-Control', 'private, no-store');
+  const userId = req.userId;
+  
+  const attempts = await Attempt.find({ userId });
+  
+  const safeAttempts = attempts.map(a => ({
+    examId: a.examId,
+    moduleId: a.moduleId,
+    correct: a.correct,
+    total: a.total,
+    percentage: a.percentage
+  }));
+  
+  res.json(safeAttempts);
+}));
 
 
 // ==========================================================
@@ -1170,6 +1410,7 @@ app.post('/api/analytics/log-answer', (req, res) => {
   });
 
   updateStreak();
+      updateAnalyticsCache();
   res.json({ success: true, user: store.user });
 });
 
@@ -1214,6 +1455,7 @@ app.post('/api/questions/answer', (req, res) => {
   });
 
   updateStreak();
+      updateAnalyticsCache();
 
   res.json({
     correct,
@@ -1655,48 +1897,18 @@ app.get('/real-exam', (req, res) => res.sendFile(path.join(__dirname, 'real-exam
 
 // GET /api/real-exam/list — available exams + in-progress status
 app.get('/api/real-exam/list', (req, res) => {
-  const userId = 'user_001';
+  const userId = req.userId;
 
   // Find any in-progress attempt for this user
   const inProgress = Object.values(realExamAttempts).find(a => a.userId === userId && a.status === 'in_progress');
 
   const exams = [
   {
-    "id": "march-2026-int-a",
-    "type": "official",
-    "name": "March 2026 SAT (Int A)",
-    "date": "March 2026",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
     "id": "march-2026-int-b",
     "type": "official",
     "name": "March 2026 SAT (Int B)",
     "date": "March 2026",
     "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "march-2026-int-c",
-    "type": "official",
-    "name": "March 2026 SAT (Int C)",
-    "date": "March 2026",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "march-2026-us-a",
-    "type": "official",
-    "name": "March 2026 SAT (US A)",
-    "date": "March 2026",
-    "region": "US",
     "estimatedTime": "~3h 15min",
     "modules": 4,
     "badge": "OFFICIAL"
@@ -1712,51 +1924,11 @@ app.get('/api/real-exam/list', (req, res) => {
     "badge": "OFFICIAL"
   },
   {
-    "id": "december-2025-int-a",
-    "type": "official",
-    "name": "December 2025 SAT (Int A)",
-    "date": "December 2025",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
     "id": "december-2025-int-b",
     "type": "official",
     "name": "December 2025 SAT (Int B)",
     "date": "December 2025",
     "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "december-2025-int-c",
-    "type": "official",
-    "name": "December 2025 SAT (Int C)",
-    "date": "December 2025",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "december-2025-int-d",
-    "type": "official",
-    "name": "December 2025 SAT (Int D)",
-    "date": "December 2025",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "december-2025-us-a",
-    "type": "official",
-    "name": "December 2025 SAT (US A)",
-    "date": "December 2025",
-    "region": "US",
     "estimatedTime": "~3h 15min",
     "modules": 4,
     "badge": "OFFICIAL"
@@ -1772,60 +1944,10 @@ app.get('/api/real-exam/list', (req, res) => {
     "badge": "OFFICIAL"
   },
   {
-    "id": "december-2025-us-c",
-    "type": "official",
-    "name": "December 2025 SAT (US C)",
-    "date": "December 2025",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "november-2025-int-a",
-    "type": "official",
-    "name": "November 2025 SAT (Int A)",
-    "date": "November 2025",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
     "id": "november-2025-int-b",
     "type": "official",
     "name": "November 2025 SAT (Int B)",
     "date": "November 2025",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "november-2025-int-c",
-    "type": "official",
-    "name": "November 2025 SAT (Int C)",
-    "date": "November 2025",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "november-2025-us-a",
-    "type": "official",
-    "name": "November 2025 SAT (US A)",
-    "date": "November 2025",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "october-2025-int-a",
-    "type": "official",
-    "name": "October 2025 SAT (Int A)",
-    "date": "October 2025",
     "region": "International",
     "estimatedTime": "~3h 15min",
     "modules": 4,
@@ -1842,31 +1964,11 @@ app.get('/api/real-exam/list', (req, res) => {
     "badge": "OFFICIAL"
   },
   {
-    "id": "october-2025-us-a",
-    "type": "official",
-    "name": "October 2025 SAT (US A)",
-    "date": "October 2025",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
     "id": "october-2025-us-b",
     "type": "official",
     "name": "October 2025 SAT (US B)",
     "date": "October 2025",
     "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "august-2025-form-a",
-    "type": "official",
-    "name": "August 2025 SAT (Form A)",
-    "date": "August 2025",
-    "region": "Global",
     "estimatedTime": "~3h 15min",
     "modules": 4,
     "badge": "OFFICIAL"
@@ -1882,61 +1984,11 @@ app.get('/api/real-exam/list', (req, res) => {
     "badge": "OFFICIAL"
   },
   {
-    "id": "august-2025-form-c",
-    "type": "official",
-    "name": "August 2025 SAT (Form C)",
-    "date": "August 2025",
-    "region": "Global",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "august-2025-form-d",
-    "type": "official",
-    "name": "August 2025 SAT (Form D)",
-    "date": "August 2025",
-    "region": "Global",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "august-2025-form-e",
-    "type": "official",
-    "name": "August 2025 SAT (Form E)",
-    "date": "August 2025",
-    "region": "Global",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "june-2025-int-a",
-    "type": "official",
-    "name": "June 2025 SAT (Int A)",
-    "date": "June 2025",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
     "id": "june-2025-int-b",
     "type": "official",
     "name": "June 2025 SAT (Int B)",
     "date": "June 2025",
     "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "june-2025-us-a",
-    "type": "official",
-    "name": "June 2025 SAT (US A)",
-    "date": "June 2025",
-    "region": "US",
     "estimatedTime": "~3h 15min",
     "modules": 4,
     "badge": "OFFICIAL"
@@ -1952,60 +2004,10 @@ app.get('/api/real-exam/list', (req, res) => {
     "badge": "OFFICIAL"
   },
   {
-    "id": "june-2025-us-c",
-    "type": "official",
-    "name": "June 2025 SAT (US C)",
-    "date": "June 2025",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "may-2025-int-a",
-    "type": "official",
-    "name": "May 2025 SAT (Int A)",
-    "date": "May 2025",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
     "id": "may-2025-int-b",
     "type": "official",
     "name": "May 2025 SAT (Int B)",
     "date": "May 2025",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "may-2025-int-c",
-    "type": "official",
-    "name": "May 2025 SAT (Int C)",
-    "date": "May 2025",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "may-2025-us-a",
-    "type": "official",
-    "name": "May 2025 SAT (US A)",
-    "date": "May 2025",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "march-2025-int-a",
-    "type": "official",
-    "name": "March 2025 SAT (Int A)",
-    "date": "March 2025",
     "region": "International",
     "estimatedTime": "~3h 15min",
     "modules": 4,
@@ -2022,71 +2024,11 @@ app.get('/api/real-exam/list', (req, res) => {
     "badge": "OFFICIAL"
   },
   {
-    "id": "march-2025-int-c",
-    "type": "official",
-    "name": "March 2025 SAT (Int C)",
-    "date": "March 2025",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "march-2025-int-d",
-    "type": "official",
-    "name": "March 2025 SAT (Int D)",
-    "date": "March 2025",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "march-2025-int-e",
-    "type": "official",
-    "name": "March 2025 SAT (Int E)",
-    "date": "March 2025",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "march-2025-us-a",
-    "type": "official",
-    "name": "March 2025 SAT (US A)",
-    "date": "March 2025",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
     "id": "march-2025-us-b",
     "type": "official",
     "name": "March 2025 SAT (US B)",
     "date": "March 2025",
     "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "march-2025-us-c",
-    "type": "official",
-    "name": "March 2025 SAT (US C)",
-    "date": "March 2025",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "december-2024-int-a",
-    "type": "official",
-    "name": "December 2024 SAT (Int A)",
-    "date": "December 2024",
-    "region": "International",
     "estimatedTime": "~3h 15min",
     "modules": 4,
     "badge": "OFFICIAL"
@@ -2102,61 +2044,11 @@ app.get('/api/real-exam/list', (req, res) => {
     "badge": "OFFICIAL"
   },
   {
-    "id": "december-2024-int-c",
-    "type": "official",
-    "name": "December 2024 SAT (Int C)",
-    "date": "December 2024",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "december-2024-int-d",
-    "type": "official",
-    "name": "December 2024 SAT (Int D)",
-    "date": "December 2024",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "december-2024-us-a",
-    "type": "official",
-    "name": "December 2024 SAT (US A)",
-    "date": "December 2024",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
     "id": "december-2024-us-b",
     "type": "official",
     "name": "December 2024 SAT (US B)",
     "date": "December 2024",
     "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "december-2024-us-c",
-    "type": "official",
-    "name": "December 2024 SAT (US C)",
-    "date": "December 2024",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "november-2024-int-a",
-    "type": "official",
-    "name": "November 2024 SAT (Int A)",
-    "date": "November 2024",
-    "region": "International",
     "estimatedTime": "~3h 15min",
     "modules": 4,
     "badge": "OFFICIAL"
@@ -2172,51 +2064,11 @@ app.get('/api/real-exam/list', (req, res) => {
     "badge": "OFFICIAL"
   },
   {
-    "id": "november-2024-int-c",
-    "type": "official",
-    "name": "November 2024 SAT (Int C)",
-    "date": "November 2024",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "november-2024-int-d",
-    "type": "official",
-    "name": "November 2024 SAT (Int D)",
-    "date": "November 2024",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "november-2024-us-a",
-    "type": "official",
-    "name": "November 2024 SAT (US A)",
-    "date": "November 2024",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
     "id": "november-2024-us-b",
     "type": "official",
     "name": "November 2024 SAT (US B)",
     "date": "November 2024",
     "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "october-2024-int-a",
-    "type": "official",
-    "name": "October 2024 SAT (Int A)",
-    "date": "October 2024",
-    "region": "International",
     "estimatedTime": "~3h 15min",
     "modules": 4,
     "badge": "OFFICIAL"
@@ -2232,51 +2084,11 @@ app.get('/api/real-exam/list', (req, res) => {
     "badge": "OFFICIAL"
   },
   {
-    "id": "october-2024-int-c",
-    "type": "official",
-    "name": "October 2024 SAT (Int C)",
-    "date": "October 2024",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "october-2024-us-a",
-    "type": "official",
-    "name": "October 2024 SAT (US A)",
-    "date": "October 2024",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
     "id": "october-2024-us-b",
     "type": "official",
     "name": "October 2024 SAT (US B)",
     "date": "October 2024",
     "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "october-2024-us-c",
-    "type": "official",
-    "name": "October 2024 SAT (US C)",
-    "date": "October 2024",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "august-2024-int-a",
-    "type": "official",
-    "name": "August 2024 SAT (Int A)",
-    "date": "August 2024",
-    "region": "International",
     "estimatedTime": "~3h 15min",
     "modules": 4,
     "badge": "OFFICIAL"
@@ -2292,61 +2104,11 @@ app.get('/api/real-exam/list', (req, res) => {
     "badge": "OFFICIAL"
   },
   {
-    "id": "august-2024-us-a",
-    "type": "official",
-    "name": "August 2024 SAT (US A)",
-    "date": "August 2024",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
     "id": "august-2024-us-b",
     "type": "official",
     "name": "August 2024 SAT (US B)",
     "date": "August 2024",
     "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "august-2024-us-c",
-    "type": "official",
-    "name": "August 2024 SAT (US C)",
-    "date": "August 2024",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "august-2024-us-d",
-    "type": "official",
-    "name": "August 2024 SAT (US D)",
-    "date": "August 2024",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "august-2024-us-e",
-    "type": "official",
-    "name": "August 2024 SAT (US E)",
-    "date": "August 2024",
-    "region": "US",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "june-2024-form-a",
-    "type": "official",
-    "name": "June 2024 SAT (Form A)",
-    "date": "June 2024",
-    "region": "Global",
     "estimatedTime": "~3h 15min",
     "modules": 4,
     "badge": "OFFICIAL"
@@ -2362,61 +2124,11 @@ app.get('/api/real-exam/list', (req, res) => {
     "badge": "OFFICIAL"
   },
   {
-    "id": "june-2024-form-c",
-    "type": "official",
-    "name": "June 2024 SAT (Form C)",
-    "date": "June 2024",
-    "region": "Global",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "june-2024-form-d",
-    "type": "official",
-    "name": "June 2024 SAT (Form D)",
-    "date": "June 2024",
-    "region": "Global",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "june-2024-form-e",
-    "type": "official",
-    "name": "June 2024 SAT (Form E)",
-    "date": "June 2024",
-    "region": "Global",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "may-2024-int-a",
-    "type": "official",
-    "name": "May 2024 SAT (Int A)",
-    "date": "May 2024",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
     "id": "may-2024-int-b",
     "type": "official",
     "name": "May 2024 SAT (Int B)",
     "date": "May 2024",
     "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "may-2024-us-a",
-    "type": "official",
-    "name": "May 2024 SAT (US A)",
-    "date": "May 2024",
-    "region": "US",
     "estimatedTime": "~3h 15min",
     "modules": 4,
     "badge": "OFFICIAL"
@@ -2432,31 +2144,11 @@ app.get('/api/real-exam/list', (req, res) => {
     "badge": "OFFICIAL"
   },
   {
-    "id": "march-2024-int-a",
-    "type": "official",
-    "name": "March 2024 SAT (Int A)",
-    "date": "March 2024",
-    "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
     "id": "march-2024-int-b",
     "type": "official",
     "name": "March 2024 SAT (Int B)",
     "date": "March 2024",
     "region": "International",
-    "estimatedTime": "~3h 15min",
-    "modules": 4,
-    "badge": "OFFICIAL"
-  },
-  {
-    "id": "march-2024-us-a",
-    "type": "official",
-    "name": "March 2024 SAT (US A)",
-    "date": "March 2024",
-    "region": "US",
     "estimatedTime": "~3h 15min",
     "modules": 4,
     "badge": "OFFICIAL"
@@ -2491,7 +2183,7 @@ app.post('/api/real-exam/start', (req, res) => {
   const { examId } = req.body;
   if (!examId) return res.status(400).json({ error: 'examId required' });
 
-  const userId = 'user_001';
+  const userId = req.userId;
   // Abandon any existing in-progress attempt
   Object.values(realExamAttempts).forEach(a => {
     if (a.userId === userId && a.status === 'in_progress') {
@@ -2629,12 +2321,22 @@ app.post('/api/real-exam/attempt/:id/complete', (req, res) => {
 
   persistRealExamAttempts();
   updateStreak();
+      updateAnalyticsCache();
   res.json({ success: true, results: attempt.results });
 });
 
 // ==========================================================
 // INIT APP LISTEN
 // ==========================================================
+
+// ==========================================================
+// GLOBAL ERROR BOUNDARY
+// ==========================================================
+app.use((err, req, res, next) => {
+  console.error('Unhandled Error:', err.stack);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
 app.listen(PORT, () => {
   console.log(`==========================================================`);
   console.log(`✅ SAT Platform Unified full-stack server running on http://localhost:${PORT}`);

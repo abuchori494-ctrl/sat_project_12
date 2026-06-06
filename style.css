@@ -1085,25 +1085,28 @@ body.dark .theme-toggle-switch::after {
 }
 
 /* ecl-card glass card styling */
+}
+
+/* ecl-card glass card styling */
 .ecl-card {
   position: relative;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: #ffffff;
+  border: 1px solid #E2E4F3;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(124, 111, 224, 0.08);
+  box-shadow: 0 2px 8px rgba(100, 95, 180, 0.08);
   transition: var(--transition);
 }
 .ecl-card:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 12px rgba(100, 95, 180, 0.12);
 }
 
 /* Column Specific Mockup Colors & Ambient Gradients */
 .ecl-card.ecl-card-english {
-  background: linear-gradient(135deg, #eef2ff, #e0e7ff);
-  border: 1.5px solid #c7d2fe;
-  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.04);
+  background: #ffffff;
+  border: 1px solid #E2E4F3;
+  box-shadow: 0 2px 8px rgba(100, 95, 180, 0.08);
 }
 body.dark .ecl-card.ecl-card-english {
   background: linear-gradient(135deg, #181628, #131120);
@@ -1111,14 +1114,14 @@ body.dark .ecl-card.ecl-card-english {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 .ecl-card.ecl-card-english .ecl-card-header {
-  border-bottom-color: rgba(168, 85, 247, 0.1);
-  background: rgba(168, 85, 247, 0.02);
+  border-bottom-color: #F0F0F8;
+  background: transparent;
 }
 
 .ecl-card.ecl-card-math {
-  background: linear-gradient(135deg, #ecfdf5, #d1fae5); /* Gorgeous light mint gradient */
-  border: 1.5px solid #a7f3d0;
-  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.04);
+  background: #ffffff;
+  border: 1px solid #E2E4F3;
+  box-shadow: 0 2px 8px rgba(100, 95, 180, 0.08);
 }
 body.dark .ecl-card.ecl-card-math {
   background: linear-gradient(135deg, #0b1d16, #07130e);
@@ -1126,8 +1129,8 @@ body.dark .ecl-card.ecl-card-math {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 .ecl-card.ecl-card-math .ecl-card-header {
-  border-bottom-color: rgba(16, 185, 129, 0.1);
-  background: rgba(16, 185, 129, 0.02);
+  border-bottom-color: #F0F0F8;
+  background: transparent;
 }
 
 .ecl-card-header {
@@ -1135,39 +1138,45 @@ body.dark .ecl-card.ecl-card-math {
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  padding: 20px 24px 14px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.01);
+  padding: 20px 24px 12px;
+  border-bottom: 1px solid #F0F0F8;
+  background: transparent;
 }
 .ecl-card-header > div {
   flex: 1;
   min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 .ecl-card-header h4 {
-  font-size: 14.5px;
-  font-weight: 800;
-  color: var(--text-main);
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d2d4e;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
+.ecl-card-header-icon {
+  color: #9998B8;
+  font-size: 14px;
+}
 .ecl-card-sub {
-  font-size: 10.5px;
-  color: var(--text-sub);
-  font-weight: 600;
-  margin-top: 1px;
+  display: none;
 }
 .ecl-badge {
-  font-size: 9.5px;
-  font-weight: 850;
-  padding: 2.5px 8px;
-  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
   letter-spacing: 0.02em;
   flex-shrink: 0;
+  background: #EEEDFE;
+  color: #6C63D4;
 }
 .ecl-badge.official {
-  background: #c4b5fd;
-  color: #4c1d95;
+  background: #EEEDFE;
+  color: #6C63D4;
 }
 
 .ecl-card-body {
@@ -1200,6 +1209,8 @@ body.dark .ecl-card.ecl-card-math {
   align-items: center;
   position: relative;
   z-index: 2;
+  padding: 14px 0;
+  border-top: 1px solid #F0F0F8;
 }
 
 .ecl-row-info {
@@ -1207,15 +1218,21 @@ body.dark .ecl-card.ecl-card-math {
 }
 .ecl-row-info strong {
   display: block;
-  font-size: 13.5px;
-  font-weight: 750;
-  color: var(--text-main);
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d2d4e;
   margin-bottom: 2px;
 }
 .ecl-row-info small {
   display: block;
-  font-size: 11px;
-  color: var(--text-sub);
+  font-size: 12px;
+  color: #9998B8;
+  margin-bottom: 8px;
+}
+.score-badge {
+  font-size: 22px;
+  font-weight: 700;
+  color: #2d2d4e;
   margin-bottom: 12px;
 }
 .ecl-row-btns {
@@ -1236,22 +1253,31 @@ body.dark .ecl-card.ecl-card-math {
   color: #0369a1;
   transition: var(--transition);
 }
+.btn-review-pill {
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 850;
+  padding: 6px 14px;
+  border-radius: 50px;
+  cursor: pointer;
+  border: 1.5px solid #C5C3E8;
+  background: white;
+  color: #6C63D4;
+  transition: var(--transition);
+}
 .btn-review-pill:hover {
-  background: var(--secondary);
-  color: white;
+  color: var(--text-main);
 }
 
 .ecl-divider {
-  height: 1px;
-  background: var(--border);
-  margin: 16px 0;
+  display: none;
 }
 
 /* Beautiful Circular SVG Progress Ring */
 .progress-ring-box {
   position: relative;
-  width: 48px;
-  height: 48px;
+  width: 54px;
+  height: 54px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1264,7 +1290,7 @@ body.dark .ecl-card.ecl-card-math {
 }
 .pr-bg {
   fill: none;
-  stroke: var(--border);
+  stroke: #EEEDFE;
   stroke-width: 3.5;
 }
 .pr-fill {
@@ -1274,6 +1300,9 @@ body.dark .ecl-card.ecl-card-math {
   stroke-linecap: round;
   transition: stroke-dasharray 0.8s ease;
 }
+.math-ring .pr-bg {
+  stroke: #EBF1FE;
+}
 .math-ring .pr-fill {
   stroke: var(--primary);
 }
@@ -1281,7 +1310,7 @@ body.dark .ecl-card.ecl-card-math {
   position: absolute;
   font-size: 11px;
   font-weight: 850;
-  color: var(--text-main);
+  color: #2d2d4e;
 }
 
 /* Horizontal progress bars under Math ECL card */

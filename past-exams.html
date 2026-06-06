@@ -379,8 +379,17 @@
               <p>Master modules 1 &amp; 2</p>
             </div>
           </div>
+          
           <div class="ecl-cards-list" id="math-list"></div>
         </div>
+
+        <!-- Pagination Controls -->
+        <div id="pagination-controls" style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 24px; grid-column: span 2; width: 100%;">
+          <button id="prev-page-btn" class="btn-practice-pill" onclick="changePage(-1)" disabled style="padding: 8px 16px;">Previous</button>
+          <span id="page-indicator" style="font-size: 14px; font-weight: 500;">Page 1</span>
+          <button id="next-page-btn" class="btn-practice-pill" onclick="changePage(1)" style="padding: 8px 16px;">Next</button>
+        </div>
+
 
         <!-- COLUMN 3: Vocabulary Bank -->
         <div class="ecl-column" style="position: sticky; top: 24px; align-self: flex-start; max-height: calc(100vh - 48px); overflow-y: auto; padding-right: 4px; padding-bottom: 24px;">
@@ -417,17 +426,59 @@
     </section>
   </div>
 
-  <script src="pastExamsData.js"></script>
   <script>
     let currentFilters = {
       year: 'all',
       region: 'all',
       status: 'all'
     };
+    
+    let currentPage = 1;
+    let totalPages = 1;
+
+    async function fetchExams() {
+      try {
+        const token = localStorage.getItem('jwt_token') || '';
+        const params = new URLSearchParams({
+          page: currentPage,
+          limit: 10,
+          year: currentFilters.year,
+          region: currentFilters.region,
+          status: currentFilters.status
+        });
+        
+        const examsRes = await fetch('/api/exams?' + params.toString(), {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (examsRes.ok) {
+          const resJson = await examsRes.json();
+          pastExamsData = resJson.data;
+          totalPages = resJson.totalPages || 1;
+          
+          document.getElementById('page-indicator').textContent = `Page ${currentPage} of ${totalPages}`;
+          document.getElementById('prev-page-btn').disabled = currentPage <= 1;
+          document.getElementById('next-page-btn').disabled = currentPage >= totalPages;
+          
+          renderExams();
+        }
+      } catch (err) {
+        console.error("Failed to fetch exams", err);
+      }
+    }
 
     function setFilter(type, val) {
       currentFilters[type] = val;
-      renderExams();
+      currentPage = 1; // reset to first page on filter change
+      fetchExams();
+    }
+    
+    function changePage(delta) {
+      const newPage = currentPage + delta;
+      if (newPage >= 1 && newPage <= totalPages) {
+        currentPage = newPage;
+        fetchExams();
+      }
     }
 
     function toggleTheme() {
@@ -438,20 +489,38 @@
     }
 
     let userAttempts = {};
+    let pastExamsData = [];
 
     // Sync theme on load
     document.addEventListener('DOMContentLoaded', async () => {
       const savedTheme = localStorage.getItem('oneprep_theme') || 'light';
       document.body.className = savedTheme;
       try {
-        const response = await fetch('/api/exams/attempts');
-        if (response.ok) {
-          userAttempts = await response.json();
+        const authRes = await fetch('/api/auth/mock-login', { method: 'POST' });
+        const authData = await authRes.json();
+        const token = authData.token;
+        localStorage.setItem('jwt_token', token);
+
+        const attemptsRes = await fetch('/api/exams/attempts', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (attemptsRes.ok) {
+          const attemptsArray = await attemptsRes.json();
+          attemptsArray.forEach(a => {
+            userAttempts[`${a.examId}-${a.moduleId}`] = {
+              score: a.correct,
+              total: a.total,
+              percentage: a.percentage
+            };
+          });
         }
       } catch (err) {
-        console.error("Failed to fetch exam attempts", err);
+        console.error("Failed to fetch data", err);
       }
-      renderExams();
+      
+      // Fetch initial paginated data
+      await fetchExams();
     });
 
     function renderExams() {
@@ -471,12 +540,12 @@
         if (!latestExam) latestExam = exam; 
 
         // Filter Logic
-        if (currentFilters.year !== 'all' && exam.year.toString() !== currentFilters.year) return;
+        
 
         let hasMatchingRegion = false;
 
         exam.regions.forEach(region => {
-          if (currentFilters.region !== 'all' && region.name !== currentFilters.region) return;
+          
           hasMatchingRegion = true;
           
           region.versions.forEach(v => {
@@ -525,8 +594,8 @@
             }
             
             const isCompleted = p_ebrw1 > 70;
-            if (currentFilters.status === 'completed' && !isCompleted) return;
-            if (currentFilters.status === 'not_started' && isCompleted) return;
+            
+            
 
             const badgeClass = region.name === 'US' ? 'style="background: var(--blue-glow); color: var(--blue);"' : '';
             
@@ -570,9 +639,9 @@
             // EBRW CARD
             const englishHtml = `
               <article class="ecl-card ecl-card-english">
-                <div class="ecl-card-header">
+                <div class="ecl-card-header" style="border-bottom: 1px solid #F0F0F8; padding-bottom: 12px;">
                   <div>
-                    <h4>🗓️ ${exam.month} ${exam.year} (${v.name})</h4>
+                    <h4><span class="ecl-card-header-icon">🗓️</span> ${exam.month} ${exam.year} (${v.name})</h4>
                   </div>
                   <span class="ecl-badge official" ${badgeClass}>OFFICIAL</span>
                 </div>
@@ -582,42 +651,40 @@
                   
                   <div class="ecl-row">
                     <div class="ecl-row-info">
-                      <strong>📖 Reading Comprehension</strong>
+                      <strong>📖 Module 1</strong>
                       <small>32 min • 27 questions</small>
                       <div class="score-badge">${score_ebrw1}</div>
-                      <div class="ecl-row-btns" style="margin-top: 12px;">
+                      <div class="ecl-row-btns">
                         <button class="btn-practice-pill" onclick="window.location.href='${link_ebrw1}'">▶ PRACTICE</button>
-                        <button class="btn-review-pill" ${showReviewEbrw1}>REVIEW</button>
+                        <button class="btn-review-pill" ${showReviewEbrw1} style="${score_ebrw1.startsWith('0/') ? 'opacity: 0.4; pointer-events: none;' : ''}">REVIEW</button>
                       </div>
                     </div>
-                    <div class="progress-ring-box" style="--p:${p_ebrw1}">
-                      <svg viewBox="0 0 36 36" class="pr-svg">
-                        <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="pr-fill" stroke-dasharray="${p_ebrw1}, 100" ${p_ebrw1 <= 0 ? 'style="display:none;"' : ''} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                      </svg>
-                      <span>${p_ebrw1}%</span>
-                    </div>
+                    <div class="progress-ring-box">
+  <svg width="54" height="54" style="transform: rotate(-90deg);">
+    <circle fill="none" stroke="#EEEDFE" stroke-width="5" r="22" cx="27" cy="27"></circle>
+    <circle fill="none" stroke="#6C63D4" stroke-width="5" r="22" cx="27" cy="27" stroke-dasharray="138.2" stroke-dashoffset="${138.2 * (1 - p_ebrw1/100)}" stroke-linecap="round"></circle>
+  </svg>
+  <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6C63D4;">${p_ebrw1}%</span>
+</div>
                   </div>
-                  
-                  <div class="ecl-divider"></div>
                   
                   <div class="ecl-row">
                     <div class="ecl-row-info">
-                      <strong>✍️ Writing & Language</strong>
+                      <strong>✍️ Module 2</strong>
                       <small>32 min • 27 questions</small>
                       <div class="score-badge">${score_ebrw2}</div>
-                      <div class="ecl-row-btns" style="margin-top: 12px;">
+                      <div class="ecl-row-btns">
                         <button class="btn-practice-pill" onclick="window.location.href='${link_ebrw2}'">▶ PRACTICE</button>
-                        <button class="btn-review-pill" ${showReviewEbrw2}>REVIEW</button>
+                        <button class="btn-review-pill" ${showReviewEbrw2} style="${score_ebrw2.startsWith('0/') ? 'opacity: 0.4; pointer-events: none;' : ''}">REVIEW</button>
                       </div>
                     </div>
-                    <div class="progress-ring-box" style="--p:${p_ebrw2}">
-                      <svg viewBox="0 0 36 36" class="pr-svg">
-                        <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="pr-fill" stroke-dasharray="${p_ebrw2}, 100" ${p_ebrw2 <= 0 ? 'style="display:none;"' : ''} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                      </svg>
-                      <span>${p_ebrw2}%</span>
-                    </div>
+                    <div class="progress-ring-box">
+  <svg width="54" height="54" style="transform: rotate(-90deg);">
+    <circle fill="none" stroke="#EEEDFE" stroke-width="5" r="22" cx="27" cy="27"></circle>
+    <circle fill="none" stroke="#6C63D4" stroke-width="5" r="22" cx="27" cy="27" stroke-dasharray="138.2" stroke-dashoffset="${138.2 * (1 - p_ebrw2/100)}" stroke-linecap="round"></circle>
+  </svg>
+  <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6C63D4;">${p_ebrw2}%</span>
+</div>
                   </div>
                 </div>
               </article>
@@ -626,57 +693,55 @@
 
             // MATH CARD
             const mathHtml = `
-              <article class="ecl-card ecl-card-english">
-                <div class="ecl-card-header">
+              <article class="ecl-card ecl-card-math">
+                <div class="ecl-card-header" style="border-bottom: 1px solid #F0F0F8; padding-bottom: 12px;">
                   <div>
-                    <h4>🗓️ ${exam.month} ${exam.year} (${v.name})</h4>
+                    <h4><span class="ecl-card-header-icon">🗓️</span> ${exam.month} ${exam.year} (${v.name})</h4>
                   </div>
                   <span class="ecl-badge official btn-math" ${badgeClass}>OFFICIAL</span>
                 </div>
                 
                 <div class="ecl-card-body">
+                  <div class="ecl-bg-illustration math-bg">＋１<br>✕＝</div>
                   
                   <div class="ecl-row">
                     <div class="ecl-row-info">
                       <strong>🧩 Module 1</strong>
                       <small>35 min • 22 questions</small>
                       <div class="score-badge">${score_math1}</div>
-                      <div class="ecl-row-btns" style="margin-top: 12px;">
+                      <div class="ecl-row-btns">
                         <button class="btn-practice-pill btn-math" onclick="window.location.href='${link_math1}'">▶ TRY NOW</button>
-                        <button class="btn-review-pill" ${showReviewMath1}>REVIEW</button>
+                        <button class="btn-review-pill" ${showReviewMath1} style="${score_math1.startsWith('0/') ? 'opacity: 0.4; pointer-events: none;' : ''}">REVIEW</button>
                       </div>
                     </div>
-                    <div class="progress-ring-box math-ring" style="--p:${p_math1}">
-                      <svg viewBox="0 0 36 36" class="pr-svg">
-                        <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="pr-fill" stroke-dasharray="${p_math1}, 100" ${p_math1 <= 0 ? 'style="display:none;"' : ''} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                      </svg>
-                      <span>${p_math1}%</span>
-                    </div>
+                    <div class="progress-ring-box math-ring">
+  <svg width="54" height="54" style="transform: rotate(-90deg);">
+    <circle fill="none" stroke="#EBF1FE" stroke-width="5" r="22" cx="27" cy="27"></circle>
+    <circle fill="none" stroke="#5B8DEF" stroke-width="5" r="22" cx="27" cy="27" stroke-dasharray="138.2" stroke-dashoffset="${138.2 * (1 - p_math1/100)}" stroke-linecap="round"></circle>
+  </svg>
+  <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #5B8DEF;">${p_math1}%</span>
+</div>
                   </div>
-                  
-                  <div class="ecl-divider"></div>
                   
                   <div class="ecl-row ${m2Class}">
                     <div class="ecl-row-info">
                       <strong>🧩 Module 2</strong>
                       <small>35 min • 22 questions</small>
                       <div class="score-badge">${score_math2}</div>
-                      <div class="ecl-row-btns" style="margin-top: 12px;">
+                      <div class="ecl-row-btns">
                         <button class="btn-practice-pill btn-math" ${m2BtnClick}>▶ TRY NOW</button>
-                        <button class="btn-review-pill" ${showReviewMath2}>REVIEW</button>
+                        <button class="btn-review-pill" ${showReviewMath2} style="${score_math2.startsWith('0/') ? 'opacity: 0.4; pointer-events: none;' : ''}">REVIEW</button>
                       </div>
                       ${isM2Locked ? `<div style="display: none; color: #9CA3AF; font-size: 0.78rem; margin-top: 8px;">ℹ️ Complete Module 1 first to unlock adaptive scoring.</div>` : ''}
                     </div>
-                    <div class="progress-ring-box math-ring" style="--p:${p_math2}">
-                      <svg viewBox="0 0 36 36" class="pr-svg">
-                        <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="pr-fill" stroke-dasharray="${p_math2}, 100" ${p_math2 <= 0 ? 'style="display:none;"' : ''} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                      </svg>
-                      <span>${p_math2}%</span>
-                    </div>
+                    <div class="progress-ring-box math-ring">
+  <svg width="54" height="54" style="transform: rotate(-90deg);">
+    <circle fill="none" stroke="#EBF1FE" stroke-width="5" r="22" cx="27" cy="27"></circle>
+    <circle fill="none" stroke="#5B8DEF" stroke-width="5" r="22" cx="27" cy="27" stroke-dasharray="138.2" stroke-dashoffset="${138.2 * (1 - p_math2/100)}" stroke-linecap="round"></circle>
+  </svg>
+  <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #5B8DEF;">${p_math2}%</span>
+</div>
                   </div>
-
                 </div>
               </article>
             `;
