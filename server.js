@@ -4,9 +4,9 @@ const path = require('path');
 const fs = require('fs');
 const app = express();
 const rateLimit = require('express-rate-limit');
-const globalLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
+const globalLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100000 });
 app.use('/api/', globalLimiter);
-const submitLimiter = rateLimit({ windowMs: 60 * 1000, max: 30 });
+const submitLimiter = rateLimit({ windowMs: 60 * 1000, max: 30000 });
 
 
 const swaggerUi = require('swagger-ui-express');
