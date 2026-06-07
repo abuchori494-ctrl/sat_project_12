@@ -1,6 +1,7 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SAT Digital Simulator - March 2026 (Int-A)</title>
@@ -177,21 +178,7 @@
       color: var(--text-main);
     }
 
-    .pause-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-      color: var(--text-sub);
-      padding: 4px;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .pause-btn:hover {
-      background: var(--border);
-    }
+
 
     .hide-btn {
       background: none;
@@ -360,7 +347,7 @@
     }
 
     /* Text styling */
-    .passage-title {
+    .passage-title { display: none; 
       font-size: 14px;
       font-weight: 700;
       color: var(--text-muted);
@@ -371,10 +358,11 @@
     }
 
     .passage-content {
-      font-family: var(--font-passage);
-      font-size: 17px;
-      line-height: 1.85;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-size: 18px;
+      line-height: 1.8;
       color: var(--text-main);
+      padding: 0 16px;
     }
     .passage-content p {
       margin-bottom: 16px;
@@ -469,8 +457,8 @@
       align-items: center;
       justify-content: space-between;
       padding: 16px 20px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-md);
+      border: 1px solid #94a3b8;
+      border-radius: 6px; /* Rectangular rounded corners */
       background: var(--bg-app);
       cursor: pointer;
       width: 100%;
@@ -492,14 +480,13 @@
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      border: 1.5px solid var(--border);
+      border: 1px solid #64748b;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 600;
-      font-size: 13.5px;
-      color: var(--text-sub);
-      transition: all 0.15s;
+      font-size: 14px;
+      color: #475569;
       flex-shrink: 0;
     }
 
@@ -862,47 +849,43 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    .popover-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      max-height: 240px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
+    
     .popover-node {
-      height: 40px;
-      border-radius: var(--radius-sm);
-      border: 1.5px solid var(--border);
-      background: var(--bg-app);
-      color: var(--text-main);
+      height: 32px;
+      width: 32px;
+      border: 1px dashed #2563eb;
+      background: transparent;
+      color: #2563eb;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
-      font-size: 13.5px;
+      font-weight: 600;
+      font-size: 15px;
       cursor: pointer;
       position: relative;
-      transition: all 0.15s;
+      transition: all 0.1s;
     }
     .popover-node:hover {
-      border-color: var(--primary);
+      background: #eff6ff;
     }
     .popover-node.active {
-      background: var(--text-main);
-      color: var(--bg-app);
-      border-color: var(--text-main);
+      background: transparent;
+      color: #2563eb;
+      border-color: #2563eb;
+    }
+    .popover-node.active::before {
+      content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>');
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
     }
     .popover-node.answered {
-      border-color: var(--primary);
-      box-shadow: inset 0 -3px 0 var(--primary);
+      border: 1px solid #2563eb;
+      box-shadow: none;
     }
     .popover-node.flagged::after {
-      content: 'рџ”–';
-      position: absolute;
-      top: -3px;
-      right: -3px;
-      font-size: 10px;
+      
     }
 
     /* в”Ђв”Ђ ASK PREPPY AI DRAWER в”Ђв”Ђ */
@@ -1100,11 +1083,223 @@
       font-weight: 800;
       color: var(--text-main);
     }
+    /* в”Ђв”Ђ ASK PREPPY AI DRAWER в”Ђв”Ђ */
+    .ai-drawer {
+      position: fixed;
+      top: 60px;
+      right: -380px;
+      width: 380px;
+      height: calc(100vh - 124px);
+      background: var(--bg-panel);
+      border-left: 1px solid var(--border);
+      box-shadow: -10px 0 30px rgba(0,0,0,0.05);
+      z-index: 150;
+      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .ai-drawer.open {
+      right: 0;
+    }
+    .ai-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--purple-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ai-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ai-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--purple);
+    }
+    .ai-close {
+      font-size: 18px;
+      color: var(--text-sub);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .ai-chat-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .chat-bubble {
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      line-height: 1.5;
+      max-width: 85%;
+    }
+    .chat-bubble.assistant {
+      background: var(--bg-accent);
+      color: var(--text-main);
+      align-self: flex-start;
+      border-top-left-radius: 2px;
+    }
+    .chat-bubble.user {
+      background: var(--purple);
+      color: #ffffff;
+      align-self: flex-end;
+      border-top-right-radius: 2px;
+    }
+    .ai-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-app);
+      display: flex;
+      gap: 8px;
+    }
+    .ai-input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      font-family: var(--font-ui);
+      font-size: 13.5px;
+      background: var(--bg-accent);
+      color: var(--text-main);
+    }
+    .ai-send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--purple);
+      color: #ffffff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* в”Ђв”Ђ MODALS & OVERLAYS в”Ђв”Ђ */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.4);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    .overlay.open {
+      display: flex;
+    }
+    .modal {
+      background: var(--bg-app);
+      border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border);
+      width: 90%;
+      max-width: 480px;
+      padding: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    .modal-title {
+      font-size: 20px;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+    .modal-body {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    /* Keyframes */
+    @keyframes slideUp {
+      from { transform: translateY(12px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes slideDown {
+      from { transform: translateY(-12px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Test Results Layout */
+    .results-score-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin: 20px 0;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      background: var(--bg-accent);
+    }
+    .results-ring-box {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+    }
+    .results-ring-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+    .results-ring-bg {
+      fill: none;
+      stroke: var(--border);
+      stroke-width: 3.5;
+    }
+    .results-ring-fill {
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      transition: stroke-dasharray 0.3s;
+    }
+    .results-ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+  
+    .bookmark-btn.flagged .bm-icon { fill: #ef4444; stroke: #ef4444; }
+    .popover-node.flagged::after {
+      content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="%23ef4444" stroke="%23ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>');
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 14px;
+      height: 14px;
+    }
+  
+    .hover-bg:hover { background: #f1f5f9 !important; }
+    #more-dropdown.open { display: block !important; }
   </style>
 </head>
 <body>
 
   <script>
+    // Globally disable right click to match Bluebook
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+
     (function() {
       const savedTheme = localStorage.getItem('oneprep_theme') || 'dark';
       document.body.classList.remove('light', 'dark');
@@ -1112,49 +1307,55 @@
     })();
   </script>
 
-
   <!-- TOP BAR -->
   <header class="topbar">
-    <div class="topbar-left">
-      <button class="go-back-btn" onclick="confirmExit()">
-        &lt; Go back
-      </button>
-      <button class="directions-btn" onclick="toggleDirections(true)">
-        Directions в€Ё
+    <div class="topbar-left" style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px;">
+      <div class="section-title" id="sh-title" style="font-weight: 700; font-size: 16px; color: #0f172a;">Section 1, Module 1: Reading and Writing</div>
+      <button class="directions-btn" onclick="toggleDirections(true)" style="background: transparent; border: none; color: #334155; font-size: 13px; font-weight: 600; cursor: pointer; padding: 0;">
+        Directions <span id="directions-arrow">▾</span>
       </button>
     </div>
 
     <div class="topbar-center">
       <div class="timer-row">
-        <button class="pause-btn" id="pause-timer-btn" onclick="toggleTimerPause()">||</button>
-        <span class="timer-display" id="timer-text">32:00</span>
+        <span class="timer-display" id="timer-text" style="font-weight: 600; font-family: 'Outfit', sans-serif;">32:00</span>
+        <button class="tool-btn" id="pause-timer-btn" onclick="toggleTimerPause()" style="background: none; border: none; cursor: pointer; color: var(--text-main); font-weight: bold; font-size: 16px; padding: 0 4px; display: flex; align-items: center; justify-content: center;">||</button>
       </div>
       <button class="hide-btn" id="hide-timer-btn" onclick="toggleTimerVisibility()">Hide</button>
     </div>
 
-    <div class="topbar-right">
-      <button class="tool-btn" id="highlighter-tool" onclick="toggleHighlightMode()">
-        вњЏпёЏ Highlight
+    <div class="topbar-right" style="display: flex; gap: 24px; align-items: center;">
+      <button class="tool-btn" id="highlighter-tool" onclick="toggleHighlightMode()" style="display:flex; align-items:center; gap:6px; font-weight:600; font-size:13px; color:#1e293b; border: none; background: transparent; padding: 0; cursor: pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+        <span style="text-decoration: underline;">Highlights & Notes</span>
       </button>
-      <div class="more-dropdown-container">
-        <button class="tool-btn" id="more-menu-btn" onclick="toggleMoreMenu()">
-          More в‹®
+      <div class="more-dropdown-container" style="position: relative;">
+      <button class="tool-btn" id="more-menu-btn" onclick="toggleMoreMenu()" style="display:flex; align-items:center; gap:4px; font-weight:600; font-size:13px; color:#1e293b; border: none; background: transparent; padding: 0; cursor: pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+        <span>More</span>
+      </button>
+      <div class="dropdown-menu" id="more-dropdown" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #cbd5e1; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 220px; z-index: 1000; padding: 8px 0; margin-top: 8px;">
+        <button class="dropdown-item hover-bg" onclick="toggleLineReader(); toggleMoreMenu();" style="display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 10px 16px; background: none; border: none; font-size: 14px; cursor: pointer; color: #1e293b; transition: background 0.2s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Line Reader
         </button>
-        <div class="dropdown-menu" id="more-dropdown">
-          <button class="dropdown-item" onclick="confirmExit()">в†© Save and Exit</button>
-          <div class="dropdown-divider"></div>
-          <button class="dropdown-item" onclick="toggleFullscreen()">в›¶ Fullscreen</button>
-          <button class="dropdown-item" onclick="toggleDarkMode()">рџЊ™ Switch to dark mode</button>
-          <div class="dropdown-divider"></div>
-          <button class="dropdown-item" onclick="triggerReport()">в„№пёЏ Bug Report</button>
-        </div>
+        <button class="dropdown-item hover-bg" onclick="zoom('in'); toggleMoreMenu();" style="display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 10px 16px; background: none; border: none; font-size: 14px; cursor: pointer; color: #1e293b; transition: background 0.2s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg> Zoom In
+        </button>
+        <button class="dropdown-item hover-bg" onclick="zoom('out'); toggleMoreMenu();" style="display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 10px 16px; background: none; border: none; font-size: 14px; cursor: pointer; color: #1e293b; transition: background 0.2s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg> Zoom Out
+        </button>
+        <button class="dropdown-item hover-bg" onclick="zoom('reset'); toggleMoreMenu();" style="display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 10px 16px; background: none; border: none; font-size: 14px; cursor: pointer; color: #1e293b; transition: background 0.2s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg> Reset Zoom
+        </button>
+        <div class="dropdown-divider" style="height: 1px; background: #cbd5e1; margin: 4px 0;"></div>
+        <button class="dropdown-item hover-bg" onclick="toggleShortcutsModal(true); toggleMoreMenu();" style="display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 10px 16px; background: none; border: none; font-size: 14px; cursor: pointer; color: #1e293b; transition: background 0.2s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"></path></svg> Keyboard Shortcuts
+        </button>
+        <button class="dropdown-item hover-bg" onclick="toggleFullscreen(); toggleMoreMenu();" style="display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 10px 16px; background: none; border: none; font-size: 14px; cursor: pointer; color: #1e293b; transition: background 0.2s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg> <span id="fullscreen-btn-text">Fullscreen</span>
+        </button>
       </div>
-      <div class="badge-capsule streak">
-        рџ”Ґ <span id="streak-val">1</span>
-      </div>
-      <div class="badge-capsule score">
-        рџ’§ <span id="score-val">80</span>
-      </div>
+    </div>
     </div>
   </header>
 
@@ -1176,15 +1377,17 @@
     <section class="question-panel" id="right-pane">
       
       <!-- HEADER ROW -->
-      <div class="q-header-row">
-        <div class="q-badge-and-bookmark">
-          <div class="q-badge" id="question-badge-num">1</div>
-          <button class="bookmark-btn" id="bookmark-btn" onclick="toggleQuestionBookmark()">
-            рџ”– Mark for Review
+      <!-- HEADER ROW -->
+      <div class="q-header-row" style="border-bottom: 2px dashed #cbd5e1; padding-bottom: 12px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
+        <div class="q-badge-and-bookmark" style="display: flex; align-items: center; gap: 16px;">
+          <div class="q-badge" id="question-badge-num" style="background: #0f172a; color: #fff; width: 32px; height: 32px; font-size: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</div>
+          <button class="bookmark-btn" id="bookmark-btn" onclick="toggleQuestionBookmark()" style="display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; text-decoration: underline; background: transparent; color: #0f172a; border: none; cursor: pointer; padding: 0;">
+            <svg class="bm-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+            <span id="bm-text">Mark for Review</span>
           </button>
         </div>
-        <button class="report-btn" onclick="triggerReport()">
-          рџљ© Report
+        <button class="eliminate-mode-btn"  style="background: #2563eb; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;" >
+          <span style="text-decoration: line-through; font-weight: 700; font-size: 14px; color: white;">ABC</span>
         </button>
       </div>
 
@@ -1209,37 +1412,52 @@
   </main>
 
   <!-- BOTTOM BAR -->
-  <footer class="bottombar">
-    <div class="bottombar-left">
-      <button class="info-circle-btn" onclick="toggleDirections(true)">i</button>
-      <button class="navigator-dropdown-btn" id="navigator-btn" onclick="toggleNavigatorPopover()">
-        <span id="nav-badge-text">1 of 27</span> в€Ё
+  <footer class="bottombar" style="justify-content: space-between; align-items: center; position: relative;">
+    <div class="bottombar-left" id="student-name-display" style="font-weight: 700; font-size: 15px; color: #0f172a;">
+      Student Name
+    </div>
+
+    <div class="bottombar-center" style="position: absolute; left: 50%; transform: translateX(-50%);">
+      <button class="navigator-dropdown-btn" id="navigator-btn" onclick="toggleNavigatorPopover()" style="background: #1e293b; color: white; border-radius: 24px; padding: 6px 20px; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 14px;">
+        Question <span id="nav-badge-text">1 of 27</span>
+        ▲
       </button>
     </div>
 
-    <div class="bottombar-right">
-      <button class="purple-btn" onclick="togglePreppyAI()">
-        рџ¤– Ask Preppy
-      </button>
-      <button class="pink-btn" id="remix-btn" onclick="triggerRemix()">
-        рџЊЂ Remix
-      </button>
-      <button class="purple-outline-btn" id="explain-btn" onclick="toggleExplanation()">
-        рџ”Ќ Explanation
-      </button>
-      
-      <div style="width: 12px;"></div> <!-- Spacer -->
-      
-      <button class="nav-nav-btn" id="prev-btn" onclick="goToPrevQuestion()" disabled>Previous</button>
-      <button class="nav-nav-btn primary" id="next-btn" onclick="goToNextQuestion()">Next</button>
+    <div class="bottombar-right" style="gap: 12px; display: flex;">
+      <button class="nav-nav-btn" id="prev-btn" onclick="goToPrevQuestion()" disabled style="background: transparent; border: none; color: #64748b; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 15px;">Back</button>
+      <button class="nav-nav-btn primary" id="next-btn" onclick="goToNextQuestion()" style="background: #2563eb; color: white; border-radius: 24px; padding: 8px 24px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 15px;">Next</button>
     </div>
 
     <!-- NAVIGATOR GRID POPOVER -->
-    <div class="navigator-popover" id="navigator-popover">
-      <div class="popover-header">Question Navigator</div>
-      <div class="popover-grid" id="navigator-grid">
+    <div class="navigator-popover" id="navigator-popover" style="background: white; border: 1px solid #cbd5e1; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 480px; padding: 24px; color: black; bottom: 60px; left: 50%; transform: translateX(-50%); text-align: center;">
+      <div class="popover-header" style="font-size: 17px; font-weight: 700; color: #000; margin-bottom: 20px; text-transform: none; display: flex; justify-content: space-between; align-items: flex-start; letter-spacing: 0;">
+        <span style="flex: 1; text-align: center; line-height: 1.4;">Section 1, Module 1: Reading and Writing<br>Questions</span>
+        <button onclick="toggleNavigatorPopover()" style="background: none; border: none; font-size: 16px; cursor: pointer; color: #64748b;">✕</button>
+      </div>
+      
+      <div class="popover-legend" style="display: flex; justify-content: center; gap: 16px; font-size: 13px; margin-bottom: 24px; color: #334155;">
+        <span style="display: flex; align-items: center; gap: 4px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          Current
+        </span>
+        <span style="display: flex; align-items: center; gap: 4px;">
+          <div style="width: 12px; height: 12px; border: 1px dashed #64748b;"></div>
+          Unanswered
+        </span>
+        <span style="display: flex; align-items: center; gap: 4px;">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+          For Review
+        </span>
+      </div>
+
+      <div class="popover-grid" id="navigator-grid" style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 12px; margin-bottom: 24px; max-height: none; overflow: visible;">
         <!-- Nodes injected dynamically -->
       </div>
+      
+      <button class="nav-review-btn" onclick="toggleNavigatorPopover()" style="background: white; border: 1px solid #2563eb; color: #2563eb; border-radius: 20px; padding: 6px 16px; font-size: 12px; font-weight: 600; cursor: pointer;">
+        Go to Review Page
+      </button>
     </div>
   </footer>
 
@@ -1247,7 +1465,7 @@
   <aside class="ai-drawer" id="ai-drawer">
     <div class="ai-header">
       <div class="ai-header-left">
-        <span style="font-size:18px;">рџ¤–</span>
+        <span style="font-size:18px;">🤖</span>
         <span class="ai-title">Preppy AI Tutor</span>
       </div>
       <button class="ai-close" onclick="togglePreppyAI(false)">Г—</button>
@@ -1265,31 +1483,105 @@
 
   <!-- DIRECTIONS MODAL -->
   <div class="overlay" id="directions-modal-overlay">
-    <div class="modal">
-      <h3 class="modal-title">Reading and Writing Directions</h3>
-      <div class="modal-body">
-        <p>The questions in this section address a number of important reading and writing skills. Each question includes one or more passages, which may include a table or graph. Read each passage and question carefully, and then choose the best answer to the question based on the passage(s).</p>
-        <br />
+    <div class="modal" style="width: 800px; max-width: 90%; padding: 48px; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); background: white;">
+      <div class="modal-body" style="font-family: Georgia, 'Times New Roman', Times, serif; font-size: 16px; line-height: 1.6; color: #1e293b; margin: 0;">
+        <p style="margin-bottom: 16px;">The questions in this section address a number of important reading and writing skills. Each question includes one or more passages, which may include a table or graph. Read each passage and question carefully, and then choose the best answer to the question based on the passage(s).</p>
         <p>All questions in this section are multiple-choice with four answer choices. Each question has a single best answer.</p>
       </div>
-      <div class="modal-actions">
-        <button class="nav-nav-btn primary" onclick="toggleDirections(false)">Close Directions</button>
+      <div class="modal-actions" style="margin-top: 32px; display: flex; justify-content: flex-end;">
+        <button onclick="toggleDirections(false)" style="background: #facc15; color: #000; border-radius: 20px; padding: 6px 24px; border: none; font-weight: 600; cursor: pointer; font-size: 14px;">Close</button>
+      </div>
+    </div>
+
+  <!-- SHORTCUTS MODAL -->
+  
+  <!-- HIGHLIGHT TOOLBAR -->
+  <div id="highlight-toolbar" style="display: none; position: absolute; z-index: 9999; background: white; border: 1px solid #cbd5e1; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 6px 12px; align-items: center; gap: 12px; font-family: var(--font-ui); transform: translate(-50%, -120%); margin-top: -10px;">
+    <!-- Color circles -->
+    <div style="display: flex; gap: 8px; align-items: center; padding-right: 12px; border-right: 1px solid #e2e8f0;">
+      <button onclick="applyHighlight('#fef08a')" style="width: 24px; height: 24px; border-radius: 50%; background: #fef08a; border: 1px solid #eab308; cursor: pointer; padding: 0;"></button>
+      <button onclick="applyHighlight('#bfdbfe')" style="width: 24px; height: 24px; border-radius: 50%; background: #bfdbfe; border: 1px solid #60a5fa; cursor: pointer; padding: 0;"></button>
+      <button onclick="applyHighlight('#fbcfe8')" style="width: 24px; height: 24px; border-radius: 50%; background: #fbcfe8; border: 1px solid #f472b6; cursor: pointer; padding: 0;"></button>
+    </div>
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <button onclick="applyHighlight('underline')" style="background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; color: #1e293b; font-family: serif; text-decoration: underline;">U</button>
+      <button onclick="addNote()" style="background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; color: #1e293b;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+      </button>
+      <button id="highlight-remove-btn" onclick="removeHighlight()" style="display: none; background: none; border: none; cursor: pointer; padding: 4px; align-items: center; justify-content: center; color: #ef4444;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <!-- Note input popover (hidden by default) -->
+    <div id="highlight-note-input-container" style="display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 12px; background: white; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 250px;">
+      <textarea id="highlight-note-textarea" rows="3" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; resize: none; font-family: var(--font-ui); font-size: 13px;" placeholder="Add a note..."></textarea>
+      <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+        <button onclick="saveNote()" style="background: #2563eb; color: white; border: none; border-radius: 4px; padding: 4px 12px; font-weight: 600; cursor: pointer; font-size: 12px;">Save Note</button>
       </div>
     </div>
   </div>
 
-  <!-- PAUSE MODAL -->
-  <div class="overlay" id="pause-modal-overlay">
-    <div class="modal" style="text-align: center;">
-      <h3 class="modal-title" style="font-size:24px;">Test Paused</h3>
-      <div class="modal-body">
-        <p>Your simulator timer is currently paused. Take a quick breath, review your posture, and click resume when you are ready to continue.</p>
-      </div>
-      <div class="modal-actions" style="justify-content: center;">
-        <button class="nav-nav-btn primary" style="padding: 10px 24px;" onclick="toggleTimerPause()">Resume Test</button>
+
+  <!-- HIGHLIGHT TOOLBAR -->
+  <div id="highlight-toolbar" style="display: none; position: absolute; z-index: 9999; background: white; border: 1px solid #cbd5e1; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 6px 12px; align-items: center; gap: 12px; font-family: var(--font-ui); transform: translate(-50%, -120%); margin-top: -10px;">
+    <!-- Color circles -->
+    <div style="display: flex; gap: 8px; align-items: center; padding-right: 12px; border-right: 1px solid #e2e8f0;">
+      <button onclick="applyHighlight('#fef08a')" style="width: 24px; height: 24px; border-radius: 50%; background: #fef08a; border: 1px solid #eab308; cursor: pointer; padding: 0;"></button>
+      <button onclick="applyHighlight('#bfdbfe')" style="width: 24px; height: 24px; border-radius: 50%; background: #bfdbfe; border: 1px solid #60a5fa; cursor: pointer; padding: 0;"></button>
+      <button onclick="applyHighlight('#fbcfe8')" style="width: 24px; height: 24px; border-radius: 50%; background: #fbcfe8; border: 1px solid #f472b6; cursor: pointer; padding: 0;"></button>
+    </div>
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <button onclick="applyHighlight('underline')" style="background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; color: #1e293b; font-family: serif; text-decoration: underline;">U</button>
+      <button onclick="addNote()" style="background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; color: #1e293b;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+      </button>
+      <button id="highlight-remove-btn" onclick="removeHighlight()" style="display: none; background: none; border: none; cursor: pointer; padding: 4px; align-items: center; justify-content: center; color: #ef4444;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <!-- Note input popover (hidden by default) -->
+    <div id="highlight-note-input-container" style="display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 12px; background: white; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 250px;">
+      <textarea id="highlight-note-textarea" rows="3" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; resize: none; font-family: var(--font-ui); font-size: 13px;" placeholder="Add a note..."></textarea>
+      <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+        <button onclick="saveNote()" style="background: #2563eb; color: white; border: none; border-radius: 4px; padding: 4px 12px; font-weight: 600; cursor: pointer; font-size: 12px;">Save Note</button>
       </div>
     </div>
   </div>
+
+<div class="overlay" id="shortcuts-modal-overlay">
+    <div class="modal" style="width: 500px; max-width: 90%; padding: 32px; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); background: white;">
+      <h3 style="margin-top: 0; font-family: 'Outfit', sans-serif; font-weight: 700;">Keyboard Shortcuts</h3>
+      <div class="modal-body" style="font-family: var(--font-ui); font-size: 15px; color: #1e293b; margin: 24px 0;">
+        <table style="width: 100%; border-collapse: collapse;">
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 12px 0;">Next Question</td>
+              <td style="padding: 12px 0; text-align: right;"><kbd style="background: #f1f5f9; padding: 4px 8px; border-radius: 4px; border: 1px solid #cbd5e1; font-family: monospace;">Enter</kbd> or <kbd style="background: #f1f5f9; padding: 4px 8px; border-radius: 4px; border: 1px solid #cbd5e1; font-family: monospace;">→</kbd></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 12px 0;">Previous Question</td>
+              <td style="padding: 12px 0; text-align: right;"><kbd style="background: #f1f5f9; padding: 4px 8px; border-radius: 4px; border: 1px solid #cbd5e1; font-family: monospace;">←</kbd></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 12px 0;">Mark for Review</td>
+              <td style="padding: 12px 0; text-align: right;"><kbd style="background: #f1f5f9; padding: 4px 8px; border-radius: 4px; border: 1px solid #cbd5e1; font-family: monospace;">Ctrl + U</kbd></td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 0;">Hide Timer</td>
+              <td style="padding: 12px 0; text-align: right;"><kbd style="background: #f1f5f9; padding: 4px 8px; border-radius: 4px; border: 1px solid #cbd5e1; font-family: monospace;">Ctrl + H</kbd></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-actions" style="margin-top: 32px; display: flex; justify-content: flex-end;">
+        <button onclick="toggleShortcutsModal(false)" style="background: #facc15; color: #000; border-radius: 20px; padding: 6px 24px; border: none; font-weight: 600; cursor: pointer; font-size: 14px;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+
 
   <!-- SCORE / SUBMIT REPORT OVERLAY -->
   <div class="overlay" id="results-modal-overlay">
@@ -1334,15 +1626,336 @@
     
     let timerTotalSeconds = 32 * 60;
     let timerInterval = null;
+let isTimerHidden = false;
     let isTimerPaused = false;
-    let isTimerHidden = false;
+    let isHighlightMode = false;
+
+    let isLineReaderActive = false;
+    let currentZoomLevel = 1;
+
+    let savedHighlights = {}; // { questionIdx: [ { range, color, note, id } ] }
+    let currentSelectionRange = null;
+    let activeHighlightNode = null;
+
+    document.addEventListener('selectionchange', handleSelection);
+    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('mousedown', (e) => {
+      const toolbar = document.getElementById('highlight-toolbar');
+      if (toolbar && !toolbar.contains(e.target) && !e.target.closest('.user-highlight')) {
+        toolbar.style.display = 'none';
+        document.getElementById('highlight-note-input-container').style.display = 'none';
+      }
+    });
+
+    
+    function toggleHighlightMode() {
+      isHighlightMode = !isHighlightMode;
+      const btn = document.getElementById('highlighter-tool');
+      if (isHighlightMode) {
+        btn.style.background = '#e2e8f0'; // Active state
+      } else {
+        btn.style.background = 'transparent';
+      }
+    }
+
+    function handleSelection() {
+      const sel = window.getSelection();
+      if (!sel.rangeCount || sel.isCollapsed) {
+        // do not hide immediately on selection change to allow clicking toolbar
+      }
+    }
+
+    function handleMouseUp(e) {
+      if (e.target.closest('#highlight-toolbar')) return;
+      if (!isHighlightMode) return;
+      
+      const sel = window.getSelection();
+      if (!sel.rangeCount || sel.isCollapsed) return;
+      
+      const range = sel.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
+      
+      if (rect.width === 0) return;
+      
+      // Make sure selection is inside passage or question
+      if (!e.target.closest('.passage-panel') && !e.target.closest('.question-panel')) return;
+
+      currentSelectionRange = range;
+      activeHighlightNode = null;
+      
+      showToolbar(rect.left + rect.width / 2, rect.top);
+      document.getElementById('highlight-remove-btn').style.display = 'none';
+    }
+
+    function showToolbar(x, y) {
+      const tb = document.getElementById('highlight-toolbar');
+      tb.style.display = 'flex';
+      tb.style.left = x + 'px';
+      tb.style.top = (y + window.scrollY) + 'px';
+      document.getElementById('highlight-note-input-container').style.display = 'none';
+    }
+
+    function applyHighlight(styleVal) {
+      if (!currentSelectionRange && !activeHighlightNode) return;
+      
+      let span;
+      if (activeHighlightNode) {
+        span = activeHighlightNode;
+      } else {
+        span = document.createElement('span');
+        span.className = 'user-highlight';
+        span.style.cursor = 'pointer';
+        span.dataset.id = Date.now().toString();
+        
+        try {
+          span.appendChild(currentSelectionRange.extractContents());
+          currentSelectionRange.insertNode(span);
+        } catch(e) {
+          console.error("Highlight wrap failed", e);
+          return;
+        }
+      }
+
+      if (styleVal === 'underline') {
+        span.style.backgroundColor = 'transparent';
+        span.style.textDecoration = 'underline';
+        span.style.textDecorationColor = '#ef4444';
+        span.style.textDecorationThickness = '2px';
+      } else {
+        span.style.textDecoration = 'none';
+        span.style.backgroundColor = styleVal;
+      }
+      
+      span.onclick = function(e) {
+        e.stopPropagation();
+        const rect = span.getBoundingClientRect();
+        activeHighlightNode = span;
+        currentSelectionRange = null;
+        showToolbar(rect.left + rect.width / 2, rect.top);
+        document.getElementById('highlight-remove-btn').style.display = 'flex';
+      };
+
+      document.getElementById('highlight-toolbar').style.display = 'none';
+      window.getSelection().removeAllRanges();
+      persistHighlights();
+    }
+
+    function removeHighlight() {
+      if (activeHighlightNode) {
+        const parent = activeHighlightNode.parentNode;
+        while (activeHighlightNode.firstChild) {
+          parent.insertBefore(activeHighlightNode.firstChild, activeHighlightNode);
+        }
+        parent.removeChild(activeHighlightNode);
+        parent.normalize();
+        
+        document.getElementById('highlight-toolbar').style.display = 'none';
+        activeHighlightNode = null;
+        persistHighlights();
+      }
+    }
+
+    function addNote() {
+      document.getElementById('highlight-note-input-container').style.display = 'block';
+      const ta = document.getElementById('highlight-note-textarea');
+      if (activeHighlightNode) {
+        ta.value = activeHighlightNode.dataset.note || "";
+      } else {
+        ta.value = "";
+      }
+      ta.focus();
+    }
+
+    function saveNote() {
+      const val = document.getElementById('highlight-note-textarea').value;
+      if (activeHighlightNode) {
+        activeHighlightNode.dataset.note = val;
+      } else if (currentSelectionRange) {
+        // apply default yellow highlight to anchor the note
+        applyHighlight('#fef08a');
+        activeHighlightNode.dataset.note = val;
+      }
+      document.getElementById('highlight-toolbar').style.display = 'none';
+      persistHighlights();
+    }
+    
+    function persistHighlights() {
+      // Basic HTML persistence for this specific question
+      savedHighlights[currentIdx] = {
+        passage: document.getElementById('passage-body').innerHTML,
+        question: document.getElementById('question-text').innerHTML
+      };
+    }
+    
+    function restoreHighlights() {
+      if (savedHighlights[currentIdx]) {
+        document.getElementById('passage-body').innerHTML = savedHighlights[currentIdx].passage;
+        document.getElementById('question-text').innerHTML = savedHighlights[currentIdx].question;
+        
+        // Re-attach listeners
+        document.querySelectorAll('.user-highlight').forEach(span => {
+          span.onclick = function(e) {
+            e.stopPropagation();
+            const rect = span.getBoundingClientRect();
+            activeHighlightNode = span;
+            currentSelectionRange = null;
+            showToolbar(rect.left + rect.width / 2, rect.top);
+            document.getElementById('highlight-remove-btn').style.display = 'flex';
+          };
+        });
+      }
+    }
+
+
+
+    function handleMouseUp(e) {
+      if (e.target.closest('#highlight-toolbar')) return;
+      
+      const sel = window.getSelection();
+      if (!sel.rangeCount || sel.isCollapsed) return;
+      
+      const range = sel.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
+      
+      if (rect.width === 0) return;
+      
+      // Make sure selection is inside passage or question
+      if (!e.target.closest('.passage-panel') && !e.target.closest('.question-panel')) return;
+
+      currentSelectionRange = range;
+      activeHighlightNode = null;
+      
+      showToolbar(rect.left + rect.width / 2, rect.top);
+      document.getElementById('highlight-remove-btn').style.display = 'none';
+    }
+
+    function showToolbar(x, y) {
+      const tb = document.getElementById('highlight-toolbar');
+      tb.style.display = 'flex';
+      tb.style.left = x + 'px';
+      tb.style.top = (y + window.scrollY) + 'px';
+      document.getElementById('highlight-note-input-container').style.display = 'none';
+    }
+
+    function applyHighlight(styleVal) {
+      if (!currentSelectionRange && !activeHighlightNode) return;
+      
+      let span;
+      if (activeHighlightNode) {
+        span = activeHighlightNode;
+      } else {
+        span = document.createElement('span');
+        span.className = 'user-highlight';
+        span.style.cursor = 'pointer';
+        span.dataset.id = Date.now().toString();
+        
+        try {
+          span.appendChild(currentSelectionRange.extractContents());
+          currentSelectionRange.insertNode(span);
+        } catch(e) {
+          console.error("Highlight wrap failed", e);
+          return;
+        }
+      }
+
+      if (styleVal === 'underline') {
+        span.style.backgroundColor = 'transparent';
+        span.style.textDecoration = 'underline';
+        span.style.textDecorationColor = '#ef4444';
+        span.style.textDecorationThickness = '2px';
+      } else {
+        span.style.textDecoration = 'none';
+        span.style.backgroundColor = styleVal;
+      }
+      
+      span.onclick = function(e) {
+        e.stopPropagation();
+        const rect = span.getBoundingClientRect();
+        activeHighlightNode = span;
+        currentSelectionRange = null;
+        showToolbar(rect.left + rect.width / 2, rect.top);
+        document.getElementById('highlight-remove-btn').style.display = 'flex';
+      };
+
+      document.getElementById('highlight-toolbar').style.display = 'none';
+      window.getSelection().removeAllRanges();
+      persistHighlights();
+    }
+
+    function removeHighlight() {
+      if (activeHighlightNode) {
+        const parent = activeHighlightNode.parentNode;
+        while (activeHighlightNode.firstChild) {
+          parent.insertBefore(activeHighlightNode.firstChild, activeHighlightNode);
+        }
+        parent.removeChild(activeHighlightNode);
+        parent.normalize();
+        
+        document.getElementById('highlight-toolbar').style.display = 'none';
+        activeHighlightNode = null;
+        persistHighlights();
+      }
+    }
+
+    function addNote() {
+      document.getElementById('highlight-note-input-container').style.display = 'block';
+      const ta = document.getElementById('highlight-note-textarea');
+      if (activeHighlightNode) {
+        ta.value = activeHighlightNode.dataset.note || "";
+      } else {
+        ta.value = "";
+      }
+      ta.focus();
+    }
+
+    function saveNote() {
+      const val = document.getElementById('highlight-note-textarea').value;
+      if (activeHighlightNode) {
+        activeHighlightNode.dataset.note = val;
+      } else if (currentSelectionRange) {
+        // apply default yellow highlight to anchor the note
+        applyHighlight('#fef08a');
+        activeHighlightNode.dataset.note = val;
+      }
+      document.getElementById('highlight-toolbar').style.display = 'none';
+      persistHighlights();
+    }
+    
+    function persistHighlights() {
+      // Basic HTML persistence for this specific question
+      savedHighlights[currentIdx] = {
+        passage: document.getElementById('passage-body').innerHTML,
+        question: document.getElementById('question-text').innerHTML
+      };
+    }
+    
+    function restoreHighlights() {
+      if (savedHighlights[currentIdx]) {
+        document.getElementById('passage-body').innerHTML = savedHighlights[currentIdx].passage;
+        document.getElementById('question-text').innerHTML = savedHighlights[currentIdx].question;
+        
+        // Re-attach listeners
+        document.querySelectorAll('.user-highlight').forEach(span => {
+          span.onclick = function(e) {
+            e.stopPropagation();
+            const rect = span.getBoundingClientRect();
+            activeHighlightNode = span;
+            currentSelectionRange = null;
+            showToolbar(rect.left + rect.width / 2, rect.top);
+            document.getElementById('highlight-remove-btn').style.display = 'flex';
+          };
+        });
+      }
+    }
+
+
     
     // User answer sheets & bookmarks
     let userAnswers = {};
     let bookmarkedQuestions = {};
     let eliminatedOptions = {}; // format: { questionIdx: { "A": true } }
     
-    let isHighlightMode = false;
+
     let isExplanationsVisible = false;
 
     // Split screen resizing logic
@@ -1473,6 +2086,22 @@
           }
 
           loadQuestion(0);
+          
+    async function loadStudentName() {
+      try {
+        const token = localStorage.getItem('oneprep_token');
+        if (!token) return;
+        const res = await fetch('/api/user', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const user = await res.json();
+          document.getElementById('student-name-display').textContent = user.name || 'Student Name';
+        }
+      } catch(e) { console.error(e); }
+    }
+    loadStudentName();
+
           renderNavigatorGrid();
         } else {
           // Fallback questions if API returns error
@@ -1483,60 +2112,41 @@
       }
     }
 
-    // Timer functions
     function startTimer() {
       if (getSubmissionResult()) {
         document.getElementById('timer-text').textContent = "Reviewed";
-        document.getElementById('pause-timer-btn').style.display = 'none';
         document.getElementById('hide-timer-btn').style.display = 'none';
+        document.getElementById('pause-timer-btn').style.display = 'none';
         return;
       }
-      if (timerInterval) clearInterval(timerInterval);
-      updateTimerUI();
-      timerInterval = setInterval(() => {
-        if (!isTimerPaused) {
-          timerTotalSeconds--;
-          updateTimerUI();
-          if (timerTotalSeconds <= 0) {
-            clearInterval(timerInterval);
-            alert("Time's up! Submitting test.");
-            submitExam();
-          }
-        }
-      }, 1000);
-    }
-
-    function updateTimerUI() {
-      const m = Math.floor(timerTotalSeconds / 60);
-      const s = timerTotalSeconds % 60;
-      const text = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-      document.getElementById('timer-text').textContent = text;
-    }
-
-    function toggleTimerPause() {
-      isTimerPaused = !isTimerPaused;
-      const overlay = document.getElementById('pause-modal-overlay');
-      const pauseBtn = document.getElementById('pause-timer-btn');
       
-      if (isTimerPaused) {
-        overlay.classList.add('open');
-        pauseBtn.textContent = 'в–¶';
-      } else {
-        overlay.classList.remove('open');
-        pauseBtn.textContent = '||';
+      const savedTimer = localStorage.getItem(`timer_${examId}_${targetModule}`);
+      if (savedTimer !== null) {
+        timerTotalSeconds = parseInt(savedTimer, 10);
       }
+
+      if (timerInterval) clearInterval(timerInterval);
     }
 
-    function toggleTimerVisibility() {
-      isTimerHidden = !isTimerHidden;
-      const textEl = document.getElementById('timer-text');
-      const hideBtn = document.getElementById('hide-timer-btn');
-      if (isTimerHidden) {
-        textEl.style.visibility = 'hidden';
-        hideBtn.textContent = 'Show';
-      } else {
-        textEl.style.visibility = 'visible';
-        hideBtn.textContent = 'Hide';
+    
+    async function saveProgressToServer() {
+      const token = localStorage.getItem('oneprep_token');
+      if (!token || !examId || !targetModule) return;
+      
+      try {
+        await fetch(`/api/exams/${examId}/progress`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            targetModule: targetModule,
+            answers: userAnswers
+          })
+        });
+      } catch(e) {
+        console.error("Failed to save incremental progress", e);
       }
     }
 
@@ -1558,7 +2168,7 @@
       const isBookmarked = !!bookmarkedQuestions[q.questionNumber];
       const bkBtn = document.getElementById('bookmark-btn');
       bkBtn.classList.toggle('flagged', isBookmarked);
-      bkBtn.innerHTML = isBookmarked ? 'рџ”– Marked' : 'рџ”– Mark for Review';
+      // bkBtn text should not change, only the icon color changes via CSS
       
       // Load choices
       const choicesBox = document.getElementById('choices-box');
@@ -1622,14 +2232,23 @@
           }
           
           const cardHtml = `
-            <button class="${cardClass}" onclick="selectChoice('${letter}')" id="choice-${letter}">
-              <div class="choice-card-left">
-                <div class="choice-letter">${letter}</div>
-                <div class="choice-text">${choiceContent}</div>
-              </div>
-              <div class="crossout-trigger-btn ${isEliminated ? 'active-eliminated' : ''}" 
-                   onclick="toggleElimination(event, '${letter}')" title="Cross out option">${letter}</div>
-            </button>
+            <div style="display: flex; align-items: center; width: 100%; margin-bottom: 12px;">
+              <button class="${cardClass}" onclick="selectChoice('${letter}')" oncontextmenu="event.preventDefault(); toggleElimination(event, '${letter}');" id="choice-${letter}" style="flex: 1; padding: 16px 20px; border: 1px solid #94a3b8; border-radius: 6px; background: ${isEliminated ? '#f8fafc' : 'var(--bg-app)'}; cursor: pointer; text-align: left; transition: all 0.2s; position: relative; margin-right: ${isEliminated ? '16px' : '0'}; opacity: ${isEliminated ? '0.45' : '1'};">
+                <div class="choice-card-left" style="padding-right: 0; width: 100%; display: flex; align-items: center; gap: 16px;">
+                  <div class="choice-letter" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid #64748b; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; color: #475569; flex-shrink: 0;">${letter}</div>
+                  <div class="choice-text" style="flex: 1; font-family: var(--font-ui); font-size: 15px; line-height: 1.4; color: var(--text-main); ${isEliminated ? 'text-decoration: line-through;' : ''}">${choiceContent}</div>
+                </div>
+              </button>
+              ${isEliminated ? 
+                `<div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: 12px;">
+                   <div class="undo-btn" onclick="toggleElimination(event, '${letter}')" style="color: #0f172a; font-weight: 800; text-decoration: underline; text-decoration-thickness: 2px; font-size: 14px; cursor: pointer; padding: 10px;">Undo</div>
+                   <div class="eliminate-btn-right" onclick="toggleElimination(event, '${letter}')" style="width: 26px; height: 26px; border-radius: 50%; border: 1px solid #94a3b8; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: 600; font-size: 13px; color: #64748b;" >${letter}</div>
+                 </div>` : 
+                `<div class="eliminate-btn-right" onclick="toggleElimination(event, '${letter}')" style="width: 26px; height: 26px; border-radius: 50%; border: 1px solid #94a3b8; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; margin-left: 16px; font-weight: 600; font-size: 13px; color: #64748b;" >
+                  ${letter}
+                </div>`
+              }
+            </div>
           `;
           choicesBox.insertAdjacentHTML('beforeend', cardHtml);
         });
@@ -1682,6 +2301,7 @@
       // update navigator grid representation
       const node = document.getElementById(`nav-node-${qNum}`);
       if (node) node.classList.add('answered');
+      saveProgressToServer();
     }
 
     window.saveFreeResponseAnswer = function(value) {
@@ -1698,6 +2318,7 @@
           delete userAnswers[qNum];
         }
       }
+      saveProgressToServer();
     }
 
     function toggleElimination(event, letter) {
@@ -1717,6 +2338,7 @@
         // update navigator node state
         const node = document.getElementById(`nav-node-${qNum}`);
         if (node) node.classList.remove('answered');
+        saveProgressToServer();
       }
       
       // refresh option card visual state
@@ -1730,7 +2352,7 @@
       
       const bkBtn = document.getElementById('bookmark-btn');
       bkBtn.classList.toggle('flagged', isBookmarked);
-      bkBtn.innerHTML = isBookmarked ? 'рџ”– Marked' : 'рџ”– Mark for Review';
+      // bkBtn text should not change, only the icon color changes via CSS
       
       // update popover grid node representation
       const node = document.getElementById(`nav-node-${qNum}`);
@@ -1759,8 +2381,9 @@
       
       const range = selection.getRangeAt(0);
       const span = document.createElement('span');
-      span.style.background = '#fef08a'; // yellow-200
-      span.style.color = '#000000';
+      span.style.background = 'transparent';
+      span.style.borderBottom = '3px solid #fef08a';
+      // span.style.color = '#000000';
       span.className = 'highlighted-segment';
       
       try {
@@ -1791,7 +2414,7 @@
     async function triggerRemix() {
       const q = questions[currentIdx];
       const remixBtn = document.getElementById('remix-btn');
-      remixBtn.textContent = 'рџЊЂ Loading...';
+      remixBtn.textContent = '🌀 Loading...';
       try {
         const response = await fetch(`/api/questions/remix/${q.id}`);
         if (response.ok) {
@@ -1814,7 +2437,7 @@
         console.error(err);
         showToast("Error loading Remix variant.");
       }
-      remixBtn.innerHTML = 'рџЊЂ Remix';
+      remixBtn.innerHTML = '🌀 Remix';
     }
 
     // Ask Preppy AI panel
@@ -1861,7 +2484,59 @@
     }
 
     // Modal control helpers
+    
+    function toggleLineReader() {
+      isLineReaderActive = !isLineReaderActive;
+      const lr = document.getElementById('line-reader-overlay');
+      if (isLineReaderActive) {
+        if (!lr) {
+          const div = document.createElement('div');
+          div.id = 'line-reader-overlay';
+          div.style.position = 'fixed';
+          div.style.left = '0';
+          div.style.top = '0';
+          div.style.width = '100vw';
+          div.style.height = '100vh';
+          div.style.pointerEvents = 'none';
+          div.style.zIndex = '9000';
+          div.style.background = 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.4) calc(50% - 24px), transparent calc(50% - 24px), transparent calc(50% + 24px), rgba(0,0,0,0.4) calc(50% + 24px), rgba(0,0,0,0.4) 100%)';
+          document.body.appendChild(div);
+          
+          document.addEventListener('mousemove', updateLineReader);
+        } else {
+          lr.style.display = 'block';
+        }
+      } else {
+        if (lr) lr.style.display = 'none';
+      }
+    }
+
+    function updateLineReader(e) {
+      const lr = document.getElementById('line-reader-overlay');
+      if (lr && isLineReaderActive) {
+        lr.style.background = `linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.3) ${e.clientY - 24}px, transparent ${e.clientY - 24}px, transparent ${e.clientY + 24}px, rgba(0,0,0,0.3) ${e.clientY + 24}px, rgba(0,0,0,0.3) 100%)`;
+      }
+    }
+
+    function zoom(direction) {
+      if (direction === 'in' && currentZoomLevel < 1.6) {
+        currentZoomLevel += 0.1;
+      } else if (direction === 'out' && currentZoomLevel > 0.8) {
+        currentZoomLevel -= 0.1;
+      } else if (direction === 'reset') {
+        currentZoomLevel = 1;
+      }
+      document.documentElement.style.setProperty('--font-passage', (16 * currentZoomLevel) + 'px');
+      document.documentElement.style.setProperty('--font-ui', (15 * currentZoomLevel) + 'px');
+    }
+
+    function toggleShortcutsModal(open) {
+      document.getElementById('shortcuts-modal-overlay').classList.toggle('open', open);
+    }
+
     function toggleDirections(open) {
+      const arrow = document.getElementById('directions-arrow');
+      if (arrow) arrow.textContent = open ? '▲' : '▾';
       document.getElementById('directions-modal-overlay').classList.toggle('open', open);
     }
 
@@ -1872,7 +2547,15 @@
     function toggleFullscreen() {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(err => {
-          alert(`Error attempting to enable full-screen mode: ${err.message}`);
+          alert(`Error attempting to enable full-screen mode: ${err.message}
+
+    document.addEventListener('fullscreenchange', () => {
+      const btn = document.getElementById('fullscreen-btn-text');
+      if (btn) {
+        btn.textContent = document.fullscreenElement ? 'Exit Fullscreen' : 'Fullscreen';
+      }
+    });
+`);
         });
       } else {
         document.exitFullscreen();
@@ -1906,6 +2589,42 @@
     }
 
     // Navigation and Pager
+    
+    function toggleHighlightMode() {
+      isHighlightMode = !isHighlightMode;
+      const btn = document.getElementById('highlighter-tool');
+      btn.classList.toggle('active', isHighlightMode);
+      
+      // Basic highlight feature: when text is selected, wrap it in a yellow span
+      if (isHighlightMode) {
+        document.addEventListener('mouseup', highlightSelection);
+        showToast("Highlight tool active. Select passage text to highlight.");
+      } else {
+        document.removeEventListener('mouseup', highlightSelection);
+        showToast("Highlight tool disabled.");
+      }
+    }
+
+    function highlightSelection() {
+      if (!isHighlightMode) return;
+      const selection = window.getSelection();
+      if (!selection.rangeCount || selection.isCollapsed) return;
+      
+      const range = selection.getRangeAt(0);
+      const span = document.createElement('span');
+      // span.style.backgroundColor = '#fef08a'; // yellow
+      // span.style.color = '#000000';
+      span.className = 'highlighted-segment';
+      
+      try {
+        span.appendChild(range.extractContents());
+        range.insertNode(span);
+        selection.removeAllRanges();
+      } catch (e) {
+        console.error("Highlighting overlap error", e);
+      }
+    }
+
     function goToPrevQuestion() {
       if (currentIdx > 0) {
         loadQuestion(currentIdx - 1);

@@ -342,9 +342,10 @@ function renderPastExams() {
       
       const cardHtml = `
         <article class="ecl-card ecl-card-english" data-name="${cardName}">
-          <div class="ecl-card-header" style="border-bottom: 1px solid #F0F0F8; padding-bottom: 12px;">
+          <div class="ecl-card-header">
             <div>
-              <h4><span class="ecl-card-header-icon">🗓️</span> ${exam.month} ${exam.year} (Int-${v})</h4>
+              <h4>${exam.month} ${exam.year} (Int-${v})</h4>
+              <span class="ecl-card-sub">EBRW Practice</span>
             </div>
             <span class="ecl-badge official">INT-${v}</span>
           </div>
@@ -354,40 +355,40 @@ function renderPastExams() {
             
             <div class="ecl-row">
               <div class="ecl-row-info">
-                <strong>Module 1</strong>
+                <strong>Reading Comprehension</strong>
                 <small>32 min • 27 questions</small>
-                <div class="score-badge">0/27 Correct</div>
                 <div class="ecl-row-btns">
-                  <button class="btn-practice-pill" onclick="startModule('english_m1', '${title}')">▶ PRACTICE</button>
-                  <button class="btn-review-pill" style="opacity: 0.4; pointer-events: none;" onclick="show('review')">REVIEW</button>
+                  <button class="btn-practice-pill" onclick="startModule('english_m1', '${title}')">✓ PRACTICE</button>
+                  <button class="btn-review-pill" onclick="show('review')">REVIEW</button>
                 </div>
               </div>
-              <div class="progress-ring-box">
-  <svg width="54" height="54" style="transform: rotate(-90deg);">
-    <circle fill="none" stroke="#EEEDFE" stroke-width="5" r="22" cx="27" cy="27"></circle>
-    <circle fill="none" stroke="#6C63D4" stroke-width="5" r="22" cx="27" cy="27" stroke-dasharray="138.2" stroke-dashoffset="138.2" stroke-linecap="round"></circle>
-  </svg>
-  <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);; color: #6C63D4;">0%</span>
-</div>
+              <div class="progress-ring-box" style="--p:${progress1}">
+                <svg viewBox="0 0 36 36" class="pr-svg">
+                  <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="pr-fill" stroke-dasharray="${progress1}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <span>${progress1}%</span>
+              </div>
             </div>
+            
+            <div class="ecl-divider"></div>
             
             <div class="ecl-row">
               <div class="ecl-row-info">
-                <strong>Module 2</strong>
+                <strong>Writing & Language</strong>
                 <small>32 min • 27 questions</small>
-                <div class="score-badge">0/27 Correct</div>
                 <div class="ecl-row-btns">
-                  <button class="btn-practice-pill" onclick="startModule('english_m2', '${title}')">▶ PRACTICE</button>
-                  <button class="btn-review-pill" style="opacity: 0.4; pointer-events: none;" onclick="show('review')">REVIEW</button>
+                  <button class="btn-practice-pill" onclick="startModule('english_m2', '${title}')">✓ PRACTICE</button>
+                  <button class="btn-review-pill" onclick="show('review')">REVIEW</button>
                 </div>
               </div>
-              <div class="progress-ring-box">
-  <svg width="54" height="54" style="transform: rotate(-90deg);">
-    <circle fill="none" stroke="#EEEDFE" stroke-width="5" r="22" cx="27" cy="27"></circle>
-    <circle fill="none" stroke="#6C63D4" stroke-width="5" r="22" cx="27" cy="27" stroke-dasharray="138.2" stroke-dashoffset="138.2" stroke-linecap="round"></circle>
-  </svg>
-  <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);; color: #6C63D4;">0%</span>
-</div>
+              <div class="progress-ring-box" style="--p:${progress2}">
+                <svg viewBox="0 0 36 36" class="pr-svg">
+                  <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="pr-fill" stroke-dasharray="${progress2}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <span>${progress2}%</span>
+              </div>
             </div>
           </div>
         </article>
@@ -404,11 +405,12 @@ function renderPastExams() {
       
       const cardHtml = `
         <article class="ecl-card ecl-card-english" data-name="${cardName}">
-          <div class="ecl-card-header" style="border-bottom: 1px solid #F0F0F8; padding-bottom: 12px;">
+          <div class="ecl-card-header">
             <div>
-              <h4><span class="ecl-card-header-icon">🗓️</span> ${exam.month} ${exam.year} (US-${v})</h4>
+              <h4>${exam.month} ${exam.year} (US-${v})</h4>
+              <span class="ecl-card-sub">EBRW Practice</span>
             </div>
-            <span class="ecl-badge official" style="background: #EEEDFE; color: #6C63D4;">US-${v}</span>
+            <span class="ecl-badge official" style="background: var(--blue-glow); color: var(--blue);">US-${v}</span>
           </div>
           
           <div class="ecl-card-body">
@@ -416,40 +418,40 @@ function renderPastExams() {
             
             <div class="ecl-row">
               <div class="ecl-row-info">
-                <strong>Module 1</strong>
+                <strong>Reading Comprehension</strong>
                 <small>32 min • 27 questions</small>
-                <div class="score-badge">0/27 Correct</div>
                 <div class="ecl-row-btns">
-                  <button class="btn-practice-pill" onclick="startModule('english_m1', '${title}')">▶ PRACTICE</button>
-                  <button class="btn-review-pill" style="opacity: 0.4; pointer-events: none;" onclick="show('review')">REVIEW</button>
+                  <button class="btn-practice-pill" onclick="startModule('english_m1', '${title}')">✓ PRACTICE</button>
+                  <button class="btn-review-pill" onclick="show('review')">REVIEW</button>
                 </div>
               </div>
-              <div class="progress-ring-box">
-  <svg width="54" height="54" style="transform: rotate(-90deg);">
-    <circle fill="none" stroke="#EEEDFE" stroke-width="5" r="22" cx="27" cy="27"></circle>
-    <circle fill="none" stroke="#6C63D4" stroke-width="5" r="22" cx="27" cy="27" stroke-dasharray="138.2" stroke-dashoffset="138.2" stroke-linecap="round"></circle>
-  </svg>
-  <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);; color: #6C63D4;">0%</span>
-</div>
+              <div class="progress-ring-box" style="--p:${progress1}">
+                <svg viewBox="0 0 36 36" class="pr-svg">
+                  <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="pr-fill" stroke-dasharray="${progress1}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <span>${progress1}%</span>
+              </div>
             </div>
+            
+            <div class="ecl-divider"></div>
             
             <div class="ecl-row">
               <div class="ecl-row-info">
-                <strong>Module 2</strong>
+                <strong>Writing & Language</strong>
                 <small>32 min • 27 questions</small>
-                <div class="score-badge">0/27 Correct</div>
                 <div class="ecl-row-btns">
-                  <button class="btn-practice-pill" onclick="startModule('english_m2', '${title}')">▶ PRACTICE</button>
-                  <button class="btn-review-pill" style="opacity: 0.4; pointer-events: none;" onclick="show('review')">REVIEW</button>
+                  <button class="btn-practice-pill" onclick="startModule('english_m2', '${title}')">✓ PRACTICE</button>
+                  <button class="btn-review-pill" onclick="show('review')">REVIEW</button>
                 </div>
               </div>
-              <div class="progress-ring-box">
-  <svg width="54" height="54" style="transform: rotate(-90deg);">
-    <circle fill="none" stroke="#EEEDFE" stroke-width="5" r="22" cx="27" cy="27"></circle>
-    <circle fill="none" stroke="#6C63D4" stroke-width="5" r="22" cx="27" cy="27" stroke-dasharray="138.2" stroke-dashoffset="138.2" stroke-linecap="round"></circle>
-  </svg>
-  <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);; color: #6C63D4;">0%</span>
-</div>
+              <div class="progress-ring-box" style="--p:${progress2}">
+                <svg viewBox="0 0 36 36" class="pr-svg">
+                  <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="pr-fill" stroke-dasharray="${progress2}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <span>${progress2}%</span>
+              </div>
             </div>
           </div>
         </article>
@@ -467,9 +469,10 @@ function renderPastExams() {
       
       const cardHtml = `
         <article class="ecl-card ecl-card-math" data-name="${cardName}">
-          <div class="ecl-card-header" style="border-bottom: 1px solid #F0F0F8; padding-bottom: 12px;">
+          <div class="ecl-card-header">
             <div>
-              <h4><span class="ecl-card-header-icon">🗓️</span> ${exam.month} ${exam.year} (Int-${v})</h4>
+              <h4>${exam.month} ${exam.year} (Int-${v})</h4>
+              <span class="ecl-card-sub">Math Practice</span>
             </div>
             <span class="ecl-badge official btn-math">INT-${v}</span>
           </div>
@@ -481,38 +484,38 @@ function renderPastExams() {
               <div class="ecl-row-info">
                 <strong>Module 1</strong>
                 <small>35 min • 22 questions</small>
-                <div class="score-badge">0/22 Correct</div>
                 <div class="ecl-row-btns">
-                  <button class="btn-practice-pill btn-math" onclick="startModule('math_m1', '${title}')">▶ TRY NOW</button>
-                  <button class="btn-review-pill" style="opacity: 0.4; pointer-events: none;" onclick="show('review')">REVIEW</button>
+                  <button class="btn-practice-pill btn-math" onclick="startModule('math_m1', '${title}')">+ TRY NOW</button>
+                  <button class="btn-review-pill" onclick="show('review')">REVIEW</button>
                 </div>
               </div>
-              <div class="progress-ring-box math-ring">
-  <svg width="54" height="54" style="transform: rotate(-90deg);">
-    <circle fill="none" stroke="#EBF1FE" stroke-width="5" r="22" cx="27" cy="27"></circle>
-    <circle fill="none" stroke="#10b981" stroke-width="5" r="22" cx="27" cy="27" stroke-dasharray="138.2" stroke-dashoffset="138.2" stroke-linecap="round"></circle>
-  </svg>
-  <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);; color: #5B8DEF;">0%</span>
-</div>
+              <div class="progress-ring-box math-ring" style="--p:${progress1}">
+                <svg viewBox="0 0 36 36" class="pr-svg">
+                  <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="pr-fill" stroke-dasharray="${progress1}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <span>${progress1}%</span>
+              </div>
             </div>
+            
+            <div class="ecl-divider"></div>
             
             <div class="ecl-row">
               <div class="ecl-row-info">
                 <strong>Module 2</strong>
                 <small>35 min • 22 questions</small>
-                <div class="score-badge">0/22 Correct</div>
                 <div class="ecl-row-btns">
-                  <button class="btn-practice-pill btn-math" onclick="startModule('math_m2', '${title}')">▶ TRY NOW</button>
-                  <button class="btn-review-pill" style="opacity: 0.4; pointer-events: none;" onclick="show('review')">REVIEW</button>
+                  <button class="btn-practice-pill btn-math" onclick="startModule('math_m2', '${title}')">+ TRY NOW</button>
+                  <button class="btn-review-pill" onclick="show('review')">REVIEW</button>
                 </div>
               </div>
-              <div class="progress-ring-box math-ring">
-  <svg width="54" height="54" style="transform: rotate(-90deg);">
-    <circle fill="none" stroke="#EBF1FE" stroke-width="5" r="22" cx="27" cy="27"></circle>
-    <circle fill="none" stroke="#10b981" stroke-width="5" r="22" cx="27" cy="27" stroke-dasharray="138.2" stroke-dashoffset="138.2" stroke-linecap="round"></circle>
-  </svg>
-  <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);; color: #5B8DEF;">0%</span>
-</div>
+              <div class="progress-ring-box math-ring" style="--p:${progress2}">
+                <svg viewBox="0 0 36 36" class="pr-svg">
+                  <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="pr-fill" stroke-dasharray="${progress2}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <span>${progress2}%</span>
+              </div>
             </div>
           </div>
         </article>
@@ -529,11 +532,12 @@ function renderPastExams() {
       
       const cardHtml = `
         <article class="ecl-card ecl-card-math" data-name="${cardName}">
-          <div class="ecl-card-header" style="border-bottom: 1px solid #F0F0F8; padding-bottom: 12px;">
+          <div class="ecl-card-header">
             <div>
-              <h4><span class="ecl-card-header-icon">🗓️</span> ${exam.month} ${exam.year} (US-${v})</h4>
+              <h4>${exam.month} ${exam.year} (US-${v})</h4>
+              <span class="ecl-card-sub">Math Practice</span>
             </div>
-            <span class="ecl-badge official btn-math" style="background: #EEEDFE; color: #6C63D4;">US-${v}</span>
+            <span class="ecl-badge official btn-math" style="background: var(--blue-glow); color: var(--blue);">US-${v}</span>
           </div>
           
           <div class="ecl-card-body">
@@ -543,38 +547,38 @@ function renderPastExams() {
               <div class="ecl-row-info">
                 <strong>Module 1</strong>
                 <small>35 min • 22 questions</small>
-                <div class="score-badge">0/22 Correct</div>
                 <div class="ecl-row-btns">
-                  <button class="btn-practice-pill btn-math" onclick="startModule('math_m1', '${title}')">▶ TRY NOW</button>
-                  <button class="btn-review-pill" style="opacity: 0.4; pointer-events: none;" onclick="show('review')">REVIEW</button>
+                  <button class="btn-practice-pill btn-math" onclick="startModule('math_m1', '${title}')">+ TRY NOW</button>
+                  <button class="btn-review-pill" onclick="show('review')">REVIEW</button>
                 </div>
               </div>
-              <div class="progress-ring-box math-ring">
-  <svg width="54" height="54" style="transform: rotate(-90deg);">
-    <circle fill="none" stroke="#EBF1FE" stroke-width="5" r="22" cx="27" cy="27"></circle>
-    <circle fill="none" stroke="#10b981" stroke-width="5" r="22" cx="27" cy="27" stroke-dasharray="138.2" stroke-dashoffset="138.2" stroke-linecap="round"></circle>
-  </svg>
-  <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);; color: #5B8DEF;">0%</span>
-</div>
+              <div class="progress-ring-box math-ring" style="--p:${progress1}">
+                <svg viewBox="0 0 36 36" class="pr-svg">
+                  <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="pr-fill" stroke-dasharray="${progress1}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <span>${progress1}%</span>
+              </div>
             </div>
+            
+            <div class="ecl-divider"></div>
             
             <div class="ecl-row">
               <div class="ecl-row-info">
                 <strong>Module 2</strong>
                 <small>35 min • 22 questions</small>
-                <div class="score-badge">0/22 Correct</div>
                 <div class="ecl-row-btns">
-                  <button class="btn-practice-pill btn-math" onclick="startModule('math_m2', '${title}')">▶ TRY NOW</button>
-                  <button class="btn-review-pill" style="opacity: 0.4; pointer-events: none;" onclick="show('review')">REVIEW</button>
+                  <button class="btn-practice-pill btn-math" onclick="startModule('math_m2', '${title}')">+ TRY NOW</button>
+                  <button class="btn-review-pill" onclick="show('review')">REVIEW</button>
                 </div>
               </div>
-              <div class="progress-ring-box math-ring">
-  <svg width="54" height="54" style="transform: rotate(-90deg);">
-    <circle fill="none" stroke="#EBF1FE" stroke-width="5" r="22" cx="27" cy="27"></circle>
-    <circle fill="none" stroke="#10b981" stroke-width="5" r="22" cx="27" cy="27" stroke-dasharray="138.2" stroke-dashoffset="138.2" stroke-linecap="round"></circle>
-  </svg>
-  <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);; color: #5B8DEF;">0%</span>
-</div>
+              <div class="progress-ring-box math-ring" style="--p:${progress2}">
+                <svg viewBox="0 0 36 36" class="pr-svg">
+                  <path class="pr-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="pr-fill" stroke-dasharray="${progress2}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <span>${progress2}%</span>
+              </div>
             </div>
           </div>
         </article>
@@ -1720,7 +1724,7 @@ async function loadUserData() {
   try {
     const res = await fetch(API_BASE + '/api/user');
     const user = await res.json();
-    // Update header flames/coins if elements exist
+    // Update header flames/coins if elements 
     const flamesEl = document.getElementById('flames-count');
     const coinsEl = document.getElementById('coins-count');
     if (flamesEl) flamesEl.textContent = user.flames || 0;

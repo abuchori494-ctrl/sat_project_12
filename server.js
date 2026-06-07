@@ -1117,6 +1117,45 @@ const submitAttemptSchema = z.object({
  *       200:
  *         description: The graded attempt result
  */
+
+// ==========================================================
+// EXAM PROGRESS API
+// ==========================================================
+app.post('/api/exams/:examId/progress', verifyToken, asyncHandler(async (req, res) => {
+  res.set('Cache-Control', 'private, no-store');
+  const userId = req.userId;
+  const examId = req.params.examId;
+  const { targetModule, answers } = req.body;
+
+  if (!targetModule || !answers) {
+    return res.status(400).json({ error: "Missing module or answers" });
+  }
+
+  const exam = examQuestions.find(e => e.examId === examId);
+  if (!exam) return res.status(404).json({ error: "Exam not found" });
+
+  const questions = exam.questions.filter(q => q.module === targetModule);
+  const total = questions.length;
+  // Some answers might be empty strings for free response, filter them out
+  const answeredCount = Object.values(answers).filter(a => a && a.trim() !== '').length;
+
+  const attemptId = `${userId}_${examId}_${targetModule}_in_progress`;
+  
+  examAttempts[attemptId] = {
+    userId,
+    examId,
+    moduleId: targetModule,
+    answers,
+    answeredCount,
+    total,
+    isSubmitted: false,
+    updatedAt: new Date()
+  };
+  
+  persistAttempts();
+  res.json({ success: true });
+}));
+
 app.post('/api/exams/:examId/submit', verifyToken, submitLimiter, asyncHandler(async (req, res) => {
   res.set('Cache-Control', 'private, no-store');
   submitAttemptSchema.parse({ body: req.body, params: req.params });
@@ -1163,16 +1202,21 @@ app.post('/api/exams/:examId/submit', verifyToken, submitLimiter, asyncHandler(a
     const total = questions.length;
     const percentage = Math.round((correctCount / total) * 100);
 
-    const attempt = new Attempt({
+    const attemptId = `${userId}_${examId}_${targetModule}_${Date.now()}`;
+    const attempt = {
       userId,
       examId,
       moduleId: targetModule,
       correct: correctCount,
       total,
+      answeredCount: total,
       percentage,
-      answers
-    });
-    await attempt.save();
+      answers,
+      isSubmitted: true,
+      completedAt: new Date()
+    };
+    examAttempts[attemptId] = attempt;
+    persistAttempts();
 
     questions.forEach((q, idx) => {
       store.questions.answered.push({
@@ -1216,15 +1260,20 @@ app.get('/api/exams/attempts', verifyToken, asyncHandler(async (req, res) => {
   res.set('Cache-Control', 'private, no-store');
   const userId = req.userId;
   
-  const attempts = await Attempt.find({ userId });
+  const attempts = Object.values(examAttempts).filter(a => a.userId === userId);
   
   const safeAttempts = attempts.map(a => ({
     examId: a.examId,
     moduleId: a.moduleId,
     correct: a.correct,
     total: a.total,
-    percentage: a.percentage
+    percentage: a.percentage,
+    answeredCount: a.answeredCount || 0,
+    isSubmitted: !!a.isSubmitted,
+    updatedAt: a.updatedAt || a.completedAt
   }));
+  // Sort so newer attempts overwrite older ones in frontend iteration
+  safeAttempts.sort((a,b) => new Date(a.updatedAt) - new Date(b.updatedAt));
   
   res.json(safeAttempts);
 }));
