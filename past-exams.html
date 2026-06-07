@@ -437,6 +437,12 @@
     let totalPages = 1;
 
     async function fetchExams() {
+      const englishList = document.getElementById('english-list');
+      const mathList = document.getElementById('math-list');
+      
+      englishList.innerHTML = '<div style="padding: 24px; text-align: center; color: rgba(255, 255, 255, 0.5);">Loading exams...</div>';
+      mathList.innerHTML = '<div style="padding: 24px; text-align: center; color: rgba(255, 255, 255, 0.5);">Loading exams...</div>';
+
       try {
         const token = localStorage.getItem('jwt_token') || '';
         const params = new URLSearchParams({
@@ -453,17 +459,26 @@
         
         if (examsRes.ok) {
           const resJson = await examsRes.json();
-          pastExamsData = resJson.data;
+          pastExamsData = resJson.data || [];
           totalPages = resJson.totalPages || 1;
           
           document.getElementById('page-indicator').textContent = `Page ${currentPage} of ${totalPages}`;
           document.getElementById('prev-page-btn').disabled = currentPage <= 1;
           document.getElementById('next-page-btn').disabled = currentPage >= totalPages;
           
-          renderExams();
+          if (pastExamsData.length === 0) {
+            englishList.innerHTML = '<div style="padding: 24px; text-align: center; color: rgba(255, 255, 255, 0.5);">No exams found for these filters.</div>';
+            mathList.innerHTML = '<div style="padding: 24px; text-align: center; color: rgba(255, 255, 255, 0.5);">No exams found for these filters.</div>';
+          } else {
+            renderExams();
+          }
+        } else {
+          throw new Error('Server returned ' + examsRes.status);
         }
       } catch (err) {
         console.error("Failed to fetch exams", err);
+        englishList.innerHTML = '<div style="padding: 24px; text-align: center; color: #ef4444;">Failed to load exams. Please try again later.</div>';
+        mathList.innerHTML = '<div style="padding: 24px; text-align: center; color: #ef4444;">Failed to load exams. Please try again later.</div>';
       }
     }
 
@@ -501,20 +516,6 @@
         const token = authData.token;
         localStorage.setItem('jwt_token', token);
 
-        const attemptsRes = await fetch('/api/exams/attempts', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        
-        if (attemptsRes.ok) {
-          const attemptsArray = await attemptsRes.json();
-          attemptsArray.forEach(a => {
-            userAttempts[`${a.examId}-${a.moduleId}`] = {
-              score: a.correct,
-              total: a.total,
-              percentage: a.percentage
-            };
-          });
-        }
       } catch (err) {
         console.error("Failed to fetch data", err);
       }

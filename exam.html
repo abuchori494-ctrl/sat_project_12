@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -95,7 +95,7 @@
       transition: background-color 0.3s, color 0.3s;
     }
 
-    /* ── TOP BAR ── */
+    /* в”Ђв”Ђ TOP BAR в”Ђв”Ђ */
     .topbar {
       display: flex;
       align-items: center;
@@ -311,7 +311,7 @@
       background: var(--border);
     }
 
-    /* ── EXAM BODY ── */
+    /* в”Ђв”Ђ EXAM BODY в”Ђв”Ђ */
     .exam-body {
       display: flex;
       flex: 1;
@@ -662,7 +662,7 @@
       font-weight: 700;
     }
 
-    /* ── ACCORDION EXPLANATIONS ── */
+    /* в”Ђв”Ђ ACCORDION EXPLANATIONS в”Ђв”Ђ */
     .explanation-box {
       border: 1.5px dashed var(--purple);
       border-radius: var(--radius-md);
@@ -687,7 +687,7 @@
       color: var(--text-main);
     }
 
-    /* ── BOTTOM BAR ── */
+    /* в”Ђв”Ђ BOTTOM BAR в”Ђв”Ђ */
     .bottombar {
       height: 64px;
       border-top: 1px solid var(--border);
@@ -836,7 +836,7 @@
       opacity: 0.9;
     }
 
-    /* ── NAVIGATOR POPOVER GRID ── */
+    /* в”Ђв”Ђ NAVIGATOR POPOVER GRID в”Ђв”Ђ */
     .navigator-popover {
       display: none;
       position: absolute;
@@ -898,14 +898,14 @@
       box-shadow: inset 0 -3px 0 var(--primary);
     }
     .popover-node.flagged::after {
-      content: '🔖';
+      content: 'рџ”–';
       position: absolute;
       top: -3px;
       right: -3px;
       font-size: 10px;
     }
 
-    /* ── ASK PREPPY AI DRAWER ── */
+    /* в”Ђв”Ђ ASK PREPPY AI DRAWER в”Ђв”Ђ */
     .ai-drawer {
       position: fixed;
       top: 60px;
@@ -1005,7 +1005,7 @@
       cursor: pointer;
     }
 
-    /* ── MODALS & OVERLAYS ── */
+    /* в”Ђв”Ђ MODALS & OVERLAYS в”Ђв”Ђ */
     .overlay {
       display: none;
       position: fixed;
@@ -1120,7 +1120,7 @@
         &lt; Go back
       </button>
       <button class="directions-btn" onclick="toggleDirections(true)">
-        Directions ∨
+        Directions в€Ё
       </button>
     </div>
 
@@ -1134,26 +1134,26 @@
 
     <div class="topbar-right">
       <button class="tool-btn" id="highlighter-tool" onclick="toggleHighlightMode()">
-        ✏️ Highlight
+        вњЏпёЏ Highlight
       </button>
       <div class="more-dropdown-container">
         <button class="tool-btn" id="more-menu-btn" onclick="toggleMoreMenu()">
-          More ⋮
+          More в‹®
         </button>
         <div class="dropdown-menu" id="more-dropdown">
-          <button class="dropdown-item" onclick="confirmExit()">↩ Save and Exit</button>
+          <button class="dropdown-item" onclick="confirmExit()">в†© Save and Exit</button>
           <div class="dropdown-divider"></div>
-          <button class="dropdown-item" onclick="toggleFullscreen()">⛶ Fullscreen</button>
-          <button class="dropdown-item" onclick="toggleDarkMode()">🌙 Switch to dark mode</button>
+          <button class="dropdown-item" onclick="toggleFullscreen()">в›¶ Fullscreen</button>
+          <button class="dropdown-item" onclick="toggleDarkMode()">рџЊ™ Switch to dark mode</button>
           <div class="dropdown-divider"></div>
-          <button class="dropdown-item" onclick="triggerReport()">ℹ️ Bug Report</button>
+          <button class="dropdown-item" onclick="triggerReport()">в„№пёЏ Bug Report</button>
         </div>
       </div>
       <div class="badge-capsule streak">
-        🔥 <span id="streak-val">1</span>
+        рџ”Ґ <span id="streak-val">1</span>
       </div>
       <div class="badge-capsule score">
-        💧 <span id="score-val">80</span>
+        рџ’§ <span id="score-val">80</span>
       </div>
     </div>
   </header>
@@ -1180,11 +1180,11 @@
         <div class="q-badge-and-bookmark">
           <div class="q-badge" id="question-badge-num">1</div>
           <button class="bookmark-btn" id="bookmark-btn" onclick="toggleQuestionBookmark()">
-            🔖 Mark for Review
+            рџ”– Mark for Review
           </button>
         </div>
         <button class="report-btn" onclick="triggerReport()">
-          🚩 Report
+          рџљ© Report
         </button>
       </div>
 
@@ -1213,19 +1213,19 @@
     <div class="bottombar-left">
       <button class="info-circle-btn" onclick="toggleDirections(true)">i</button>
       <button class="navigator-dropdown-btn" id="navigator-btn" onclick="toggleNavigatorPopover()">
-        <span id="nav-badge-text">1 of 27</span> ∨
+        <span id="nav-badge-text">1 of 27</span> в€Ё
       </button>
     </div>
 
     <div class="bottombar-right">
       <button class="purple-btn" onclick="togglePreppyAI()">
-        🤖 Ask Preppy
+        рџ¤– Ask Preppy
       </button>
       <button class="pink-btn" id="remix-btn" onclick="triggerRemix()">
-        🌀 Remix
+        рџЊЂ Remix
       </button>
       <button class="purple-outline-btn" id="explain-btn" onclick="toggleExplanation()">
-        🔍 Explanation
+        рџ”Ќ Explanation
       </button>
       
       <div style="width: 12px;"></div> <!-- Spacer -->
@@ -1247,19 +1247,19 @@
   <aside class="ai-drawer" id="ai-drawer">
     <div class="ai-header">
       <div class="ai-header-left">
-        <span style="font-size:18px;">🤖</span>
+        <span style="font-size:18px;">рџ¤–</span>
         <span class="ai-title">Preppy AI Tutor</span>
       </div>
-      <button class="ai-close" onclick="togglePreppyAI(false)">×</button>
+      <button class="ai-close" onclick="togglePreppyAI(false)">Г—</button>
     </div>
     <div class="ai-chat-body" id="ai-chat-history">
       <div class="chat-bubble assistant">
-        Hi! I'm Preppy, your personal SAT prep tutor. 🌟 Need help understanding the grammar rule, reading context, or logic in this question? Just ask me!
+        Hi! I'm Preppy, your personal SAT prep tutor. рџЊџ Need help understanding the grammar rule, reading context, or logic in this question? Just ask me!
       </div>
     </div>
     <div class="ai-footer">
       <input type="text" class="ai-input" id="ai-chat-input" placeholder="Ask Preppy to explain..." onkeydown="if(event.key === 'Enter') sendPreppyMessage()" />
-      <button class="ai-send-btn" onclick="sendPreppyMessage()">➔</button>
+      <button class="ai-send-btn" onclick="sendPreppyMessage()">вћ”</button>
     </div>
   </aside>
 
@@ -1520,7 +1520,7 @@
       
       if (isTimerPaused) {
         overlay.classList.add('open');
-        pauseBtn.textContent = '▶';
+        pauseBtn.textContent = 'в–¶';
       } else {
         overlay.classList.remove('open');
         pauseBtn.textContent = '||';
@@ -1558,7 +1558,7 @@
       const isBookmarked = !!bookmarkedQuestions[q.questionNumber];
       const bkBtn = document.getElementById('bookmark-btn');
       bkBtn.classList.toggle('flagged', isBookmarked);
-      bkBtn.innerHTML = isBookmarked ? '🔖 Marked' : '🔖 Mark for Review';
+      bkBtn.innerHTML = isBookmarked ? 'рџ”– Marked' : 'рџ”– Mark for Review';
       
       // Load choices
       const choicesBox = document.getElementById('choices-box');
@@ -1579,10 +1579,10 @@
           if (resultObj) {
             if (resultObj.isCorrect) {
               statusClass = "correct";
-              badgeHtml = `<div class="free-response-badge-row"><span class="correct-badge">✓ Correct</span></div>`;
+              badgeHtml = `<div class="free-response-badge-row"><span class="correct-badge">вњ“ Correct</span></div>`;
             } else {
               statusClass = "wrong";
-              badgeHtml = `<div class="free-response-badge-row"><span class="wrong-badge">✗ Incorrect</span> (Correct: <strong>${resultObj.correctAnswer}</strong>)</div>`;
+              badgeHtml = `<div class="free-response-badge-row"><span class="wrong-badge">вњ— Incorrect</span> (Correct: <strong>${resultObj.correctAnswer}</strong>)</div>`;
             }
           }
         }
@@ -1730,7 +1730,7 @@
       
       const bkBtn = document.getElementById('bookmark-btn');
       bkBtn.classList.toggle('flagged', isBookmarked);
-      bkBtn.innerHTML = isBookmarked ? '🔖 Marked' : '🔖 Mark for Review';
+      bkBtn.innerHTML = isBookmarked ? 'рџ”– Marked' : 'рџ”– Mark for Review';
       
       // update popover grid node representation
       const node = document.getElementById(`nav-node-${qNum}`);
@@ -1791,7 +1791,7 @@
     async function triggerRemix() {
       const q = questions[currentIdx];
       const remixBtn = document.getElementById('remix-btn');
-      remixBtn.textContent = '🌀 Loading...';
+      remixBtn.textContent = 'рџЊЂ Loading...';
       try {
         const response = await fetch(`/api/questions/remix/${q.id}`);
         if (response.ok) {
@@ -1806,7 +1806,7 @@
             explanation: clone.explanation
           };
           loadQuestion(currentIdx);
-          showToast("Question cloned & modified using Remix AI! 🧬");
+          showToast("Question cloned & modified using Remix AI! рџ§¬");
         } else {
           showToast("Remix data unavailable for this question.");
         }
@@ -1814,7 +1814,7 @@
         console.error(err);
         showToast("Error loading Remix variant.");
       }
-      remixBtn.innerHTML = '🌀 Remix';
+      remixBtn.innerHTML = 'рџЊЂ Remix';
     }
 
     // Ask Preppy AI panel
@@ -1899,7 +1899,7 @@
     function triggerReport() {
       const issue = prompt("Enter bug details or content issue:");
       if (issue) {
-        showToast("Report submitted successfully! Thank you. 🎯");
+        showToast("Report submitted successfully! Thank you. рџЋЇ");
       }
       const menu = document.getElementById('more-dropdown');
       if (menu) menu.classList.remove('open');
