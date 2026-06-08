@@ -45,6 +45,10 @@ const asyncHandler = fn => (req, res, next) => Promise.resolve(fn(req, res, next
 
 const PORT = 3000;
 
+// Health Check
+app.get('/api/health', (req, res) => res.json({ status: 'ok', time: Date.now() }));
+
+
 const jwt = require('jsonwebtoken');
 const { z } = require('zod');
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secure-jwt-secret-key-123';
