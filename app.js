@@ -3,13 +3,125 @@
 // ==========================================================================
 
 // --- STATE MANAGEMENT ---
-let vocabularyDb = JSON.parse(localStorage.getItem('oneprep_vocab')) || [
-  { id: 1, word: 'Ambiguous', pos: 'adj', def: 'Open to more than one interpretation; unclear or inexact.', src: 'Q18, Jan 2024' },
-  { id: 2, word: 'Ephemeral', pos: 'adj', def: 'Lasting for a very short time; transient.', src: 'Q7, June 2024' },
-  { id: 3, word: 'Eloquent', pos: 'adj', def: 'Fluent or persuasive in speaking or writing.', src: 'Q3, March 2024' },
-  { id: 4, word: 'Aberration', pos: 'noun', def: 'A departure from what is normal, usual, or expected.', src: 'Q12, June 2024' },
-  { id: 5, word: 'Ameliorate', pos: 'verb', def: 'To make something bad or unsatisfactory better.', src: 'Q5, March 2024' }
-];
+let vocabularyDb = [];  // Real data will be fetched from MongoDB via API
+
+// 🔴 API HELPER FUNCTIONS FOR VOCABULARY
+async function getAuthToken() {
+  let token = localStorage.getItem('jwt_token');
+  if (!token) {
+    console.warn('[VOCAB] No JWT token found, attempting mock login...');
+    try {
+      const res = await fetch('/api/auth/mock-login', { method: 'POST' });
+      const data = await res.json();
+      token = data.token;
+      localStorage.setItem('jwt_token', token);
+      console.log('[VOCAB] Mock login successful, token saved');
+    } catch (e) {
+      console.error('[VOCAB] Mock login failed:', e);
+    }
+  }
+  return token;
+}
+
+async function fetchVocabularyFromAPI() {
+  console.log('[API CALL] GET /api/vocab/words');
+  try {
+    const token = await getAuthToken();
+    const res = await fetch('/api/vocab/words', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    if (!res.ok) {
+      console.error(`[API ERROR] GET /api/vocab/words - ${res.status} ${res.statusText}`);
+      return [];
+    }
+    
+    const words = await res.json();
+    console.log(`[API RESPONSE] GET /api/vocab/words - Fetched ${words.length} words from MongoDB:`, words);
+    return words;
+  } catch (e) {
+    console.error('[API FAILED] GET /api/vocab/words', e);
+    return [];
+  }
+}
+
+async function saveVocabularyToAPI(word, context = '') {
+  console.log(`[API CALL] POST /api/vocab/word - Payload:`, { word, context });
+  try {
+    const token = await getAuthToken();
+    const res = await fetch('/api/vocab/word', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ word, context })
+    });
+    
+    const data = await res.json();
+    
+    if (!res.ok) {
+      console.error(`[API ERROR] POST /api/vocab/word - ${data.error || res.statusText}`);
+      return null;
+    }
+    
+    console.log('[API RESPONSE] POST /api/vocab/word - Saved to MongoDB:', data.word);
+    return data.word;
+  } catch (e) {
+    console.error('[API FAILED] POST /api/vocab/word', e);
+    return null;
+  }
+}
+
+async function deleteVocabularyFromAPI(wordId) {
+  console.log(`[API CALL] DELETE /api/vocab/word/${wordId}`);
+  try {
+    const token = await getAuthToken();
+    const res = await fetch(`/api/vocab/word/${wordId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    if (!res.ok) {
+      console.error(`[API ERROR] DELETE /api/vocab/word/${wordId} - ${res.status}`);
+      return false;
+    }
+    
+    console.log(`[API RESPONSE] DELETE /api/vocab/word/${wordId} - Success`);
+    return true;
+  } catch (e) {
+    console.error(`[API FAILED] DELETE /api/vocab/word/${wordId}`, e);
+    return false;
+  }
+}
+
+async function updateMasteredStatus(wordId, mastered) {
+  console.log(`[API CALL] PATCH /api/vocab/word/${wordId}/mastered - Payload:`, { mastered });
+  try {
+    const token = await getAuthToken();
+    const res = await fetch(`/api/vocab/word/${wordId}/mastered`, {
+      method: 'PATCH',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ mastered })
+    });
+    
+    const data = await res.json();
+    
+    if (!res.ok) {
+      console.error(`[API ERROR] PATCH /api/vocab/word/${wordId}/mastered - ${data.error}`);
+      return null;
+    }
+    
+    console.log(`[API RESPONSE] PATCH /api/vocab/word/${wordId}/mastered - Updated in MongoDB:`, data.word);
+    return data.word;
+  } catch (e) {
+    console.error(`[API FAILED] PATCH /api/vocab/word/${wordId}/mastered`, e);
+    return null;
+  }
+}
 
 let mistakesDb = JSON.parse(localStorage.getItem('oneprep_mistakes')) || [
   {
@@ -92,11 +204,18 @@ let similarQuizDeck = [];
 let similarQuizIdx = 0;
 
 // --- INITIALIZATION ---
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  console.log('[APP] Initializing application...');
+  
   // Sync Theme
   const savedTheme = localStorage.getItem('oneprep_theme') || 'dark';
   document.body.classList.remove('light', 'dark');
   document.body.classList.add(savedTheme);
+  
+  // 🔴 FETCH VOCABULARY FROM MONGODB BEFORE RENDERING
+  console.log('[APP] Fetching vocabulary data from MongoDB...');
+  vocabularyDb = await fetchVocabularyFromAPI();
+  console.log(`[APP] Loaded ${vocabularyDb.length} vocab words into memory`);
   
   // Render views
   renderVocab();
@@ -108,6 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
   renderDashboardWidgets();
   renderPastExams();
   renderScoreSummary();
+  
+  console.log('[APP] Application initialization complete');
 });
 
 // --- SPA VIEW ROUTING ---
@@ -590,37 +711,49 @@ function renderPastExams() {
 
 // --- VOCABULARY CRUD ---
 function renderVocab() {
+  console.log('[VOCAB] renderVocab called, updating UI with', vocabularyDb.length, 'words');
+  
   const container = document.getElementById('vocab-list');
   const countSpan = document.getElementById('vocab-count');
   
-  if (!container) return;
+  if (!container) {
+    console.warn('[VOCAB] vocab-list container not found');
+    return;
+  }
   
-  countSpan.textContent = `${vocabularyDb.length} word${vocabularyDb.length !== 1 ? 's' : ''} mastered • ${20 - vocabularyDb.length} to go`;
+  const masteredCount = vocabularyDb.filter(w => w.mastered).length;
+  countSpan.textContent = `${masteredCount} word${masteredCount !== 1 ? 's' : ''} mastered • ${vocabularyDb.length} total`;
+  updateVocabWidget();
   
   if (vocabularyDb.length === 0) {
-    container.innerHTML = `<p style="color: var(--text-sub); text-align: center; padding: 20px; font-size: 13px;">No words saved yet.</p>`;
+    container.innerHTML = `<p style="color: var(--text-sub); text-align: center; padding: 20px; font-size: 13px;">No words saved yet. Start by typing a word in the exam.</p>`;
     return;
   }
   
   container.innerHTML = vocabularyDb.map(w => {
-    let icon = "✍️";
-    if (w.word.toLowerCase().includes("ambiguous")) icon = "✍️";
-    else if (w.word.toLowerCase().includes("ephemeral")) icon = "☁️";
-    else if (w.word.toLowerCase().includes("eloquent")) icon = "🗣️";
-    else if (w.word.toLowerCase().includes("aberration")) icon = "🏛️";
-    else if (w.word.toLowerCase().includes("ameliorate")) icon = "🌿";
+    // Generate icon based on word
+    let icon = "📚";
+    if (w.word && w.word.toLowerCase().includes("ambiguous")) icon = "✍️";
+    else if (w.word && w.word.toLowerCase().includes("ephemeral")) icon = "☁️";
+    else if (w.word && w.word.toLowerCase().includes("eloquent")) icon = "🗣️";
+    else if (w.word && w.word.toLowerCase().includes("aberration")) icon = "🏛️";
+    else if (w.word && w.word.toLowerCase().includes("ameliorate")) icon = "🌿";
     
+    // MongoDB structure: {_id, userId, word, definition, context, mastered, addedAt}
     return `
-      <div class="vocab-feed-item">
+      <div class="vocab-feed-item" style="opacity: ${w.mastered ? 0.6 : 1};">
         <div class="vfi-icon">${icon}</div>
         <div class="vfi-content">
           <div class="vfi-word-row">
             <strong class="vfi-word">${escapeHtml(w.word)}</strong>
-            <span class="vfi-pos">(${escapeHtml(w.pos)})</span>
-            <button class="vfi-del" onclick="deleteWord(${w.id})" title="Delete word">✕</button>
+            <button class="vfi-del" onclick="deleteWordHandler('${w._id}')" title="Delete word" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px;">✕</button>
           </div>
-          <p class="vfi-def">${escapeHtml(w.def)}</p>
-          ${w.src ? `<span class="vfi-src">${escapeHtml(w.src)}</span>` : ''}
+          <p class="vfi-def">${escapeHtml(w.definition || 'Definition not found')}</p>
+          ${w.context ? `<span class="vfi-src">${escapeHtml(w.context)}</span>` : ''}
+          <label style="margin-top: 8px; display: flex; align-items: center; gap: 6px; font-size: 12px; cursor: pointer;">
+            <input type="checkbox" ${w.mastered ? 'checked' : ''} onchange="toggleMastered('${w._id}', this.checked)" style="cursor: pointer;">
+            <span>Mastered</span>
+          </label>
         </div>
       </div>
     `;
@@ -644,37 +777,82 @@ function toggleAddForm() {
   }
 }
 
-function saveWord() {
-  const word = document.getElementById('f-word').value.trim();
-  const pos = document.getElementById('f-pos').value.trim();
-  const def = document.getElementById('f-def').value.trim();
-  const src = document.getElementById('f-src').value.trim();
+function saveWord(btnElement) {
+  let btn = btnElement;
+  if (btnElement && btnElement.target) {
+    btn = btnElement.target;
+  } else if (!btn) {
+    btn = document.getElementById('btn-add') || document.querySelector('.save-vocab-btn');
+  }
+
+  const wordEl = document.getElementById('f-word') || document.getElementById('vocab-word-input');
+  const defEl = document.getElementById('f-def') || document.getElementById('vocab-def-input');
+  const srcEl = document.getElementById('f-src') || document.getElementById('vocab-src-input');
   
-  if (!word || !def) {
-    showToast('Word and Definition are required! ⚠️');
+  if (!wordEl) return;
+  
+  const word = wordEl.value.trim();
+  const def = defEl ? defEl.value.trim() : '';
+  const src = srcEl ? srcEl.value.trim() : '';
+  
+  if (!word) {
+    showToast('Word is required! ⚠️');
     return;
   }
   
-  const newWord = {
-    id: Date.now(),
-    word,
-    pos: pos || 'noun',
-    def,
-    src
-  };
+  console.log(`[VOCAB-UI] User clicked save for word: ${word}`);
   
-  vocabularyDb.unshift(newWord);
-  localStorage.setItem('oneprep_vocab', JSON.stringify(vocabularyDb));
-  renderVocab();
-  toggleAddForm();
-  showToast(`Saved "${word}" to Vocabulary Bank!`);
+  saveVocabularyToAPI(word, src || 'Exam practice').then(savedWord => {
+    if (savedWord) {
+      vocabularyDb.unshift(savedWord);
+      renderVocab();
+      if (typeof toggleAddForm === 'function' && document.getElementById('add-form') && document.getElementById('add-form').style.display !== 'none') {
+        toggleAddForm();
+      }
+      showToast(`Saved "${word}" to Vocabulary Bank!`);
+      
+      if (btn) {
+        const originalText = btn.textContent;
+        const originalBg = btn.style.backgroundColor;
+        btn.textContent = '✓ Saved!';
+        btn.style.backgroundColor = '#22c55e';
+        btn.style.color = '#ffffff';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.backgroundColor = originalBg;
+        }, 2000);
+      }
+      
+      updateVocabWidget();
+    } else {
+      showToast(`Failed to save "${word}" - check console`);
+    }
+  });
 }
 
-function deleteWord(id) {
-  vocabularyDb = vocabularyDb.filter(w => w.id !== id);
-  localStorage.setItem('oneprep_vocab', JSON.stringify(vocabularyDb));
-  renderVocab();
-  showToast('Deleted word from bank.');
+async function deleteWordHandler(wordId) {
+  console.log('[VOCAB] deleteWordHandler called, wordId:', wordId);
+  const deleted = await deleteVocabularyFromAPI(wordId);
+  if (deleted) {
+    vocabularyDb = vocabularyDb.filter(w => w._id !== wordId);
+    renderVocab();
+    showToast('Deleted word from bank.');
+  } else {
+    showToast('Failed to delete word');
+  }
+}
+
+async function toggleMastered(wordId, mastered) {
+  console.log('[VOCAB] toggleMastered called, wordId:', wordId, 'mastered:', mastered);
+  const updated = await updateMasteredStatus(wordId, mastered);
+  if (updated) {
+    const idx = vocabularyDb.findIndex(w => w._id === wordId);
+    if (idx !== -1) {
+      vocabularyDb[idx].mastered = mastered;
+      renderVocab();
+      showToast(mastered ? 'Marked as mastered!' : 'Unmarked as mastered');
+    }
+  }
 }
 
 // --- VOCAB FLASHCARD QUIZ ---
@@ -714,8 +892,8 @@ function renderQuizSlide() {
     <div class="quiz-card">
       <span style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase;">Flashcard ${similarQuizIdx + 1} of ${similarQuizDeck.length}</span>
       <div class="qc-word" style="margin-top: 12px;">${escapeHtml(w.word)}</div>
-      <div class="qc-pos">(${escapeHtml(w.pos)})</div>
-      <div class="qc-def" style="margin: 20px 0; border: 1px dashed var(--border); padding: 16px; border-radius: var(--radius-md); background: var(--bg-app);">${escapeHtml(w.def)}</div>
+      <div class="qc-def" style="margin: 20px 0; border: 1px dashed var(--border); padding: 16px; border-radius: var(--radius-md); background: var(--bg-app);">${escapeHtml(w.definition || w.def || 'Definition not found')}</div>
+      ${w.context ? `<span class="qc-src">Context: ${escapeHtml(w.context)}</span>` : ''}
       ${w.src ? `<span class="qc-src">Source: ${escapeHtml(w.src)}</span>` : ''}
       <div class="modal-actions" style="margin-top: 24px;">
         <button class="btn-primary" onclick="nextQuizSlide()">Next Word →</button>
@@ -902,17 +1080,16 @@ function selectOption(char) {
   if (char !== q.answer && q.type === 'vocabulary') {
     // Attempt to parse out word title
     const wordClean = q.passage.match(/______ feelings/i) ? 'Engender' : 'Adept';
-    // Add to vocab bank silently if not already in
+    // Add to vocab bank if not already in
     if (!vocabularyDb.some(w => w.word.toLowerCase() === wordClean.toLowerCase())) {
-      vocabularyDb.push({
-        id: Date.now() + Math.random(),
-        word: wordClean,
-        pos: 'verb/adj',
-        def: 'Evoke, produce or be highly skilled at.',
-        src: `Simulator Error, Question ${currentSimIdx + 1}`
+      console.log('[VOCAB] Auto-saving missed vocabulary word:', wordClean);
+      saveVocabularyToAPI(wordClean, `Simulator Error, Question ${currentSimIdx + 1}`).then(savedWord => {
+        if (savedWord) {
+          vocabularyDb.push(savedWord);
+          renderVocab();
+          console.log('[VOCAB] Auto-saved word, vocabularyDb now has', vocabularyDb.length, 'words');
+        }
       });
-      localStorage.setItem('oneprep_vocab', JSON.stringify(vocabularyDb));
-      renderVocab();
     }
   }
 }
@@ -1421,6 +1598,13 @@ function showToast(msg) {
   toastTimer = setTimeout(() => {
     toast.classList.remove('active');
   }, 3000);
+}
+
+function updateVocabWidget() {
+  const vocabWidgetCount = document.getElementById('widget-vocab-count');
+  if (vocabWidgetCount && vocabularyDb) {
+    vocabWidgetCount.textContent = vocabularyDb.length;
+  }
 }
 
 // ==========================================================================

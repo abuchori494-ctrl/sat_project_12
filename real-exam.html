@@ -859,6 +859,24 @@
       <!-- Question body -->
       <div class="re-exam-body" id="exam-body"></div>
 
+      <!-- SAVE VOCAB BOX WIDGET -->
+      <div id="vocab-widget-container" style="position: fixed; bottom: 90px; left: 24px; z-index: 900; display: flex; flex-direction: column; gap: 8px;">
+        <button onclick="document.getElementById('re-save-vocab-box').style.display = document.getElementById('re-save-vocab-box').style.display === 'none' ? 'flex' : 'none'" style="background: #2563eb; color: white; border: none; border-radius: 20px; padding: 8px 16px; font-weight: 600; font-size: 13px; cursor: pointer; align-self: flex-start; display: flex; gap: 6px; align-items: center; box-shadow: 0 2px 8px rgba(37,99,235,0.3); transition: 0.2s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          Vocabulary
+        </button>
+        <div id="re-save-vocab-box" style="display: none; background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 280px; flex-direction: column; gap: 8px;">
+          <div style="font-weight: 600; font-size: 13px; color: #1e293b; display: flex; justify-content: space-between;">
+            <span>Save to Vocabulary Bank</span>
+            <span id="re-vocab-spinner" style="display: none; font-size: 12px;">⏳</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="re-vocab-input-field" placeholder="Type a word..." style="flex: 1; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; font-family: 'Outfit', sans-serif;" onkeydown="if(event.key === 'Enter') saveTypedVocabReal()">
+            <button id="re-vocab-save-btn" onclick="saveTypedVocabReal()" style="background: #1e293b; color: white; border: none; border-radius: 4px; padding: 6px 12px; font-weight: 600; font-size: 13px; cursor: pointer;">Save</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Fixed bottom bar -->
       <div class="re-exam-bottombar">
         <div class="re-nav-row">
@@ -957,6 +975,64 @@
   </div>
 
   <script>
+  async function saveTypedVocabReal() {
+    const input = document.getElementById('re-vocab-input-field');
+    const btn = document.getElementById('re-vocab-save-btn');
+    const spinner = document.getElementById('re-vocab-spinner');
+    let word = input.value.trim();
+    if (word.length > 50) word = word.substring(0, 50);
+    if (!word) return;
+
+    const contextEl = document.getElementById('exam-module-title');
+    const context = contextEl ? contextEl.textContent.trim() : 'Real Exam';
+    const token = localStorage.getItem('jwt_token') || '';
+
+    const originalText = btn.textContent || 'Save';
+    const originalBg = btn.style.backgroundColor || '';
+    const originalColor = btn.style.color || '';
+
+    btn.disabled = true;
+    btn.textContent = '⏳';
+    if (spinner) spinner.style.display = 'block';
+
+    try {
+      const res = await fetch('/api/vocab/word', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ word, context })
+      });
+      const data = await res.json();
+      
+      if (res.ok) {
+        btn.textContent = '✓ Saved!';
+        btn.style.backgroundColor = '#10b981';
+        btn.style.color = '#fff';
+        
+        await new Promise(resolve => setTimeout(resolve, 1200));
+        input.value = '';
+        document.getElementById('re-save-vocab-box').style.display = 'none';
+      } else {
+        btn.textContent = '✗ Error';
+        btn.style.backgroundColor = '#ef4444';
+        btn.style.color = '#fff';
+        
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
+    } catch (e) {
+      btn.textContent = '✗ Error';
+      btn.style.backgroundColor = '#ef4444';
+      btn.style.color = '#fff';
+      
+      await new Promise(resolve => setTimeout(resolve, 1500));
+    } finally {
+      btn.textContent = originalText;
+      btn.style.backgroundColor = originalBg;
+      btn.style.color = originalColor;
+      btn.disabled = false;
+      if (spinner) spinner.style.display = 'none';
+    }
+  }
+
   /* ================================================================
      THEME
   ================================================================ */

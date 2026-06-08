@@ -1,1 +1,14 @@
-{}
+{
+  "user_001_march-2026-int-a_ebrw1_1780861165563": {
+    "userId": "user_001",
+    "examId": "march-2026-int-a",
+    "moduleId": "ebrw1",
+    "correct": 0,
+    "total": 27,
+    "answeredCount": 27,
+    "percentage": 0,
+    "answers": {},
+    "isSubmitted": true,
+    "completedAt": "2026-06-07T19:39:25.563Z"
+  }
+}

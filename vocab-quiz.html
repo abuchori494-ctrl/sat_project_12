@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocabulary Quiz | OnePrep</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; margin: 0; padding: 0; }
+    .quiz-container { max-width: 700px; margin: 60px auto; padding: 0 20px; }
+    h1 { font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 700; color: #1e293b; margin-bottom: 8px; text-align: center; }
+    p.subtitle { color: #64748b; font-size: 15px; margin-bottom: 32px; text-align: center; }
+    
+    .card { background: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; padding: 40px; text-align: center; }
+    
+    .def-box { font-size: 22px; color: #334155; line-height: 1.5; margin-bottom: 32px; padding: 20px; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1; }
+    
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 500px) { .options-grid { grid-template-columns: 1fr; } }
+    
+    .option-btn { background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px 20px; font-size: 16px; font-weight: 600; color: #1e293b; cursor: pointer; transition: 0.2s; font-family: 'Outfit', sans-serif; }
+    .option-btn:hover:not(:disabled) { border-color: #2563eb; background: #eff6ff; color: #2563eb; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,0.1); }
+    .option-btn.correct { background: #10b981; border-color: #10b981; color: white; }
+    .option-btn.wrong { background: #ef4444; border-color: #ef4444; color: white; }
+    .option-btn:disabled { cursor: default; }
+
+    .progress-bar { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; margin-bottom: 32px; overflow: hidden; }
+    .progress-fill { height: 100%; background: #2563eb; transition: width 0.3s ease; }
+    
+    .start-btn { background: #2563eb; color: white; border: none; border-radius: 8px; padding: 12px 24px; font-weight: 600; font-size: 16px; cursor: pointer; transition: 0.2s; }
+    .start-btn:hover { background: #1d4ed8; }
+
+    .review-list { text-align: left; margin-top: 24px; }
+    .review-item { padding: 12px; border-bottom: 1px solid #e2e8f0; }
+    .review-item strong { font-family: 'Outfit', sans-serif; color: #ef4444; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="sidebar" id="sidebar" style="width: 250px; position: fixed; height: 100vh; background: white; border-right: 1px solid #e2e8f0; padding: 24px;">
+    <div style="font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 800; color: #2563eb; margin-bottom: 40px;">OnePrep</div>
+    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
+      <li><a href="/index.html" style="display: block; padding: 10px 16px; color: #64748b; text-decoration: none; font-weight: 600; border-radius: 8px;">Dashboard</a></li>
+      <li><a href="/past-exams.html" style="display: block; padding: 10px 16px; color: #64748b; text-decoration: none; font-weight: 600; border-radius: 8px;">Past Exams</a></li>
+      <li><a href="/vocabulary" style="display: block; padding: 10px 16px; color: #64748b; text-decoration: none; font-weight: 600; border-radius: 8px;">Vocabulary Bank</a></li>
+      <li><a href="/vocabulary/quiz" style="display: block; padding: 10px 16px; background: #eff6ff; color: #2563eb; text-decoration: none; font-weight: 600; border-radius: 8px;">Vocab Quiz</a></li>
+    </ul>
+  </nav>
+
+  <main style="margin-left: 250px;">
+    <div class="quiz-container">
+      <h1>Vocabulary Quiz</h1>
+      <p class="subtitle" id="quiz-subtitle">Test your knowledge of the words you've saved.</p>
+
+      <div class="card" id="state-loading">
+        <h2 style="font-size: 20px; color: #64748b;">Loading your vocabulary...</h2>
+      </div>
+
+      <div class="card" id="state-start" style="display: none;">
+        <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 16px;">Ready to practice?</h2>
+        <p style="color: #475569; margin-bottom: 24px;" id="start-desc"></p>
+        <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
+      </div>
+
+      <div class="card" id="state-quiz" style="display: none;">
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 0%;"></div></div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 14px; font-weight: 600; color: #64748b;">
+          <span id="quiz-progress-text">Question 1 of 10</span>
+          <span id="quiz-score-text">Score: 0</span>
+        </div>
+        
+        <div class="def-box" id="question-def"></div>
+        <div class="options-grid" id="options-container"></div>
+      </div>
+
+      <div class="card" id="state-results" style="display: none;">
+        <div style="font-size: 48px; margin-bottom: 16px;">🎯</div>
+        <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 8px;">Quiz Complete!</h2>
+        <p style="font-size: 18px; color: #475569; margin-bottom: 24px;" id="final-score">You scored X out of Y.</p>
+        
+        <div id="review-section" style="display: none;">
+          <h3 style="font-size: 18px; font-weight: 600; text-align: left; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">Words to Review</h3>
+          <div class="review-list" id="review-list"></div>
+        </div>
+
+        <button class="start-btn" style="margin-top: 32px;" onclick="location.reload()">Take Another Quiz</button>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    let allWords = [];
+    let quizQuestions = [];
+    let currentQIndex = 0;
+    let score = 0;
+    let reviewWords = [];
+    const fallbackWords = ['ubiquitous', 'ephemeral', 'cacophony', 'enigma', 'paradigm', 'alacrity', 'loquacious', 'mitigate', 'pragmatic', 'superfluous'];
+
+    async function init() {
+      const token = localStorage.getItem('jwt_token') || '';
+      try {
+        const res = await fetch('/api/vocab/words', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          allWords = await res.json();
+          prepareQuiz();
+        }
+      } catch (e) {
+        document.getElementById('state-loading').innerHTML = '<p style="color:red;">Error loading data.</p>';
+      }
+    }
+
+    function prepareQuiz() {
+      document.getElementById('state-loading').style.display = 'none';
+      
+      // Filter unmastered words, but if we have fewer than 5, just use all words
+      let pool = allWords.filter(w => !w.mastered);
+      if (pool.length < 5) pool = [...allWords];
+      
+      if (pool.length < 4) {
+        document.getElementById('state-start').style.display = 'block';
+        document.getElementById('state-start').innerHTML = `
+          <h2 style="font-size: 20px; font-weight: 600; color: #ef4444; margin-bottom: 16px;">Not Enough Words</h2>
+          <p style="color: #475569;">You need at least 4 saved words in your Vocabulary Bank to take a quiz. Please practice exams and save more words!</p>
+          <a href="/past-exams.html" style="display:inline-block; margin-top:16px; color:#2563eb; font-weight:600;">Go to Past Exams</a>
+        `;
+        return;
+      }
+
+      // Select up to 10 random words
+      const shuffled = [...pool].sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, 10);
+      
+      // Build questions
+      quizQuestions = selected.map(targetWord => {
+        // Find 3 distractors
+        let distractorPool = [...allWords].filter(w => w.word !== targetWord.word).map(w => w.word);
+        if (distractorPool.length < 3) {
+          distractorPool = distractorPool.concat(fallbackWords.filter(fw => fw !== targetWord.word));
+        }
+        
+        distractorPool = distractorPool.sort(() => 0.5 - Math.random());
+        const distractors = distractorPool.slice(0, 3);
+        
+        const options = [...distractors, targetWord.word].sort(() => 0.5 - Math.random());
+        
+        return {
+          definition: targetWord.definition,
+          correct: targetWord.word,
+          options: options
+        };
+      });
+
+      document.getElementById('start-desc').textContent = `You have ${quizQuestions.length} questions queued up based on your saved vocabulary.`;
+      document.getElementById('state-start').style.display = 'block';
+    }
+
+    function startQuiz() {
+      document.getElementById('state-start').style.display = 'none';
+      document.getElementById('state-quiz').style.display = 'block';
+      currentQIndex = 0;
+      score = 0;
+      reviewWords = [];
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = quizQuestions[currentQIndex];
+      
+      // Update Progress
+      const pct = (currentQIndex / quizQuestions.length) * 100;
+      document.getElementById('progress-fill').style.width = `${pct}%`;
+      document.getElementById('quiz-progress-text').textContent = `Question ${currentQIndex + 1} of ${quizQuestions.length}`;
+      document.getElementById('quiz-score-text').textContent = `Score: ${score}`;
+
+      document.getElementById('question-def').textContent = q.definition;
+      
+      const container = document.getElementById('options-container');
+      container.innerHTML = '';
+      
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.onclick = () => handleAnswer(btn, opt, q.correct);
+        container.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(btn, selected, correct) {
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach(b => b.disabled = true);
+      
+      if (selected === correct) {
+        btn.classList.add('correct');
+        score++;
+      } else {
+        btn.classList.add('wrong');
+        reviewWords.push({ word: correct, definition: quizQuestions[currentQIndex].definition });
+        // Highlight correct option
+        buttons.forEach(b => {
+          if (b.textContent === correct) b.classList.add('correct');
+        });
+      }
+      
+      setTimeout(() => {
+        currentQIndex++;
+        if (currentQIndex < quizQuestions.length) {
+          renderQuestion();
+        } else {
+          showResults();
+        }
+      }, 1500);
+    }
+
+    function showResults() {
+      document.getElementById('state-quiz').style.display = 'none';
+      document.getElementById('state-results').style.display = 'block';
+      
+      document.getElementById('final-score').textContent = `You scored ${score} out of ${quizQuestions.length}.`;
+      
+      if (reviewWords.length > 0) {
+        document.getElementById('review-section').style.display = 'block';
+        const list = document.getElementById('review-list');
+        list.innerHTML = '';
+        reviewWords.forEach(rw => {
+          list.innerHTML += `<div class="review-item"><strong>${rw.word}</strong>: ${rw.definition}</div>`;
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
