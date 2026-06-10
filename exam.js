@@ -597,6 +597,28 @@ let isTimerHidden = false;
         expBox.classList.remove('open');
       }
 
+      // Wire up the vocab bank save button
+      const vbBtn = document.getElementById('vb-open-btn');
+      if (vbBtn) {
+        vbBtn.onclick = function(e) {
+          e.stopPropagation();
+          const selWord = window.getSelection().toString().trim();
+          
+          let sourceStr = examId.toUpperCase();
+          if (currentModule) {
+            const modMatch = currentModule.match(/\d+/);
+            if (modMatch) sourceStr += ` · Module ${modMatch[0]}`;
+          }
+          sourceStr += ` · Q${q.questionNumber}`;
+          
+          if (window.VocabBank) {
+            window.VocabBank.openSavePopup({ word: selWord, context: '', source: sourceStr }, vbBtn);
+          } else {
+            console.warn('VocabBank script not loaded.');
+          }
+        };
+      }
+
       // Close popover
       document.getElementById('navigator-popover').classList.remove('open');
       updateActiveNavigatorNode();
@@ -1007,25 +1029,34 @@ let isTimerHidden = false;
       }
     }
 
-    async function saveTypedVocab() {
+    async function saveTypedVocab(wordArg, contextArg, btnArg) {
       const input = document.getElementById('vocab-input-field');
-      const btn = document.getElementById('vocab-save-btn');
+      const btn = btnArg || document.getElementById('vocab-save-btn');
       const spinner = document.getElementById('vocab-spinner');
-      let word = input.value.trim();
+      
+      let word = typeof wordArg === 'string' ? wordArg : (input ? input.value : '');
+      word = word.trim();
       if (word.length > 50) word = word.substring(0, 50);
       if (!word) return;
 
       const contextEl = document.getElementById('sh-title');
-      const context = contextEl ? contextEl.textContent.trim() : 'Practice Exam';
+      const defaultContext = contextEl ? contextEl.textContent.trim() : 'Practice Exam';
+      let context = contextArg || defaultContext;
+      if (!contextArg && typeof currentModule !== 'undefined' && typeof currentIdx !== 'undefined') {
+        context = `${examId ? examId.replace(/-/g, ' ').toUpperCase() : 'Exam'} — ${currentModule.toUpperCase()} — Question ${currentIdx + 1}`;
+      }
+      
       const token = localStorage.getItem('jwt_token') || '';
 
-      const originalText = btn.textContent || 'Save';
-      const originalBg = btn.style.backgroundColor || '';
-      const originalColor = btn.style.color || '';
+      const originalText = btn ? btn.textContent || 'Save' : '';
+      const originalBg = btn ? btn.style.backgroundColor || '' : '';
+      const originalColor = btn ? btn.style.color || '' : '';
 
-      btn.disabled = true;
-      btn.textContent = '⏳';
-      if (spinner) spinner.style.display = 'block';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = '⏳';
+      }
+      if (spinner && !btnArg) spinner.style.display = 'block';
 
       try {
         const res = await fetch('/api/vocab/word', {
@@ -1040,40 +1071,65 @@ let isTimerHidden = false;
             try { showToast(`Saved "${word}" to Vocabulary Bank`); } catch (err) { console.error(err); }
           }
           
-          btn.textContent = '✓ Saved!';
-          btn.style.backgroundColor = '#10b981';
-          btn.style.color = '#fff';
+          if (btn) {
+            btn.textContent = '✅ Saved!';
+            btn.style.backgroundColor = '#10b981';
+            btn.style.color = '#fff';
+          }
           
-          await new Promise(resolve => setTimeout(resolve, 1200));
-          input.value = '';
-          document.getElementById('save-vocab-box').style.display = 'none';
+          // Notify other tabs and components that vocabulary was updated
+          if (typeof BroadcastChannel !== 'undefined') {
+            try {
+              const vocabChannel = new BroadcastChannel('vocab_updates');
+              vocabChannel.postMessage({ type: 'VOCAB_UPDATED' });
+            } catch (e) {}
+          }
+          window.dispatchEvent(new CustomEvent('vocabUpdated'));
+          
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          if (input && !wordArg) input.value = '';
+          const saveBox = document.getElementById('save-vocab-box');
+          if (saveBox && !wordArg) saveBox.style.display = 'none';
+        } else if (data.error && data.error.toLowerCase().includes('already')) {
+          if (btn) {
+            btn.textContent = '⚠️ Already saved';
+            btn.style.backgroundColor = '#f59e0b';
+            btn.style.color = '#fff';
+          }
+          await new Promise(resolve => setTimeout(resolve, 2000));
         } else {
           if (typeof showToast === 'function') {
             try { showToast(data.error || "Error saving word"); } catch (err) { console.error(err); }
           }
           
-          btn.textContent = '✗ Error';
-          btn.style.backgroundColor = '#ef4444';
-          btn.style.color = '#fff';
+          if (btn) {
+            btn.textContent = '❌ Error';
+            btn.style.backgroundColor = '#ef4444';
+            btn.style.color = '#fff';
+          }
           
-          await new Promise(resolve => setTimeout(resolve, 1500));
+          await new Promise(resolve => setTimeout(resolve, 2000));
         }
       } catch (e) {
         if (typeof showToast === 'function') {
           try { showToast("Network error saving word"); } catch (err) { console.error(err); }
         }
         
-        btn.textContent = '✗ Error';
-        btn.style.backgroundColor = '#ef4444';
-        btn.style.color = '#fff';
+        if (btn) {
+          btn.textContent = '❌ Error';
+          btn.style.backgroundColor = '#ef4444';
+          btn.style.color = '#fff';
+        }
         
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        await new Promise(resolve => setTimeout(resolve, 2000));
       } finally {
-        btn.textContent = originalText;
-        btn.style.backgroundColor = originalBg;
-        btn.style.color = originalColor;
-        btn.disabled = false;
-        if (spinner) spinner.style.display = 'none';
+        if (btn) {
+          btn.textContent = originalText;
+          btn.style.backgroundColor = originalBg;
+          btn.style.color = originalColor;
+          btn.disabled = false;
+        }
+        if (spinner && !btnArg) spinner.style.display = 'none';
       }
     }
 
@@ -1158,5 +1214,6 @@ let isTimerHidden = false;
     window.renderNavigatorGrid = renderNavigatorGrid;
     window.updateActiveNavigatorNode = updateActiveNavigatorNode;
     window.showToast = showToast;
+    window.saveTypedVocab = saveTypedVocab;
     if (typeof toggleTimerPause !== 'undefined') window.toggleTimerPause = toggleTimerPause;
     window.addEventListener('beforeunload', () => { if (timerInterval) clearInterval(timerInterval); });

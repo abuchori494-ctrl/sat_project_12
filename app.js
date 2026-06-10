@@ -5,6 +5,33 @@
 // --- STATE MANAGEMENT ---
 let vocabularyDb = [];  // Real data will be fetched from MongoDB via API
 
+// Cross-tab and local state synchronization for Vocabulary Bank
+const vocabChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('vocab_updates') : null;
+if (vocabChannel) {
+  vocabChannel.onmessage = async (event) => {
+    if (event.data.type === 'VOCAB_UPDATED') {
+      console.log('[VOCAB] Received cross-tab update event. Re-fetching...');
+      if (typeof fetchVocabularyFromAPI === 'function') {
+        vocabularyDb = await fetchVocabularyFromAPI();
+        if (typeof renderVocab === 'function') renderVocab();
+      }
+    }
+  };
+}
+
+window.addEventListener('vocabUpdated', async () => {
+  console.log('[VOCAB] Received local update event. Re-fetching...');
+  if (typeof fetchVocabularyFromAPI === 'function') {
+    vocabularyDb = await fetchVocabularyFromAPI();
+    if (typeof renderVocab === 'function') renderVocab();
+  }
+});
+
+function notifyVocabUpdated() {
+  if (vocabChannel) vocabChannel.postMessage({ type: 'VOCAB_UPDATED' });
+  window.dispatchEvent(new CustomEvent('vocabUpdated'));
+}
+
 // 🔴 API HELPER FUNCTIONS FOR VOCABULARY
 async function getAuthToken() {
   let token = localStorage.getItem('jwt_token');
@@ -62,14 +89,14 @@ async function saveVocabularyToAPI(word, context = '') {
     
     if (!res.ok) {
       console.error(`[API ERROR] POST /api/vocab/word - ${data.error || res.statusText}`);
-      return null;
+      return { error: data.error || res.statusText };
     }
     
     console.log('[API RESPONSE] POST /api/vocab/word - Saved to MongoDB:', data.word);
-    return data.word;
+    return { word: data.word };
   } catch (e) {
     console.error('[API FAILED] POST /api/vocab/word', e);
-    return null;
+    return { error: e.message };
   }
 }
 
@@ -722,38 +749,66 @@ function renderVocab() {
   }
   
   const masteredCount = vocabularyDb.filter(w => w.mastered).length;
-  countSpan.textContent = `${masteredCount} word${masteredCount !== 1 ? 's' : ''} mastered • ${vocabularyDb.length} total`;
-  updateVocabWidget();
+  const unmasteredCount = vocabularyDb.length - masteredCount;
+  
+  if (countSpan) {
+    countSpan.textContent = `${masteredCount} word${masteredCount !== 1 ? 's' : ''} mastered, ${unmasteredCount} to go`;
+  }
+  
+  if (typeof updateVocabWidget === 'function') updateVocabWidget();
   
   if (vocabularyDb.length === 0) {
-    container.innerHTML = `<p style="color: var(--text-sub); text-align: center; padding: 20px; font-size: 13px;">No words saved yet. Start by typing a word in the exam.</p>`;
+    container.innerHTML = `
+      <div class="vocab-empty-state" style="border: 2px dashed var(--border); padding: 40px 20px; border-radius: 12px; text-align: center; color: var(--text-sub); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 20px;">
+        <div style="font-size: 48px; margin-bottom: 16px; opacity: 0.8;">📚</div>
+        <h3 style="color: var(--text-main); margin-bottom: 8px; font-weight: 600;">No words saved yet</h3>
+        <p style="font-size: 14px; max-width: 250px; line-height: 1.5; margin: 0 auto;">Start saving unfamiliar words from practice exams and reading passages. They'll appear here.</p>
+      </div>`;
     return;
   }
   
   container.innerHTML = vocabularyDb.map(w => {
     // Generate icon based on word
-    let icon = "📚";
+    let icon = "📝";
     if (w.word && w.word.toLowerCase().includes("ambiguous")) icon = "✍️";
     else if (w.word && w.word.toLowerCase().includes("ephemeral")) icon = "☁️";
     else if (w.word && w.word.toLowerCase().includes("eloquent")) icon = "🗣️";
     else if (w.word && w.word.toLowerCase().includes("aberration")) icon = "🏛️";
     else if (w.word && w.word.toLowerCase().includes("ameliorate")) icon = "🌿";
     
-    // MongoDB structure: {_id, userId, word, definition, context, mastered, addedAt}
+    // Fallback definition for robust display
+    const def = w.definition && w.definition !== 'Definition not found' 
+      ? w.definition 
+      : 'No definition provided. You can add one or use AI to generate it.';
+      
+    const contextHtml = w.context 
+      ? `<div class="vfi-src" style="margin-top: 8px; font-size: 12px; color: var(--text-sub); display: flex; align-items: center; gap: 4px;">
+           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+           ${escapeHtml(w.context)}
+         </div>` 
+      : '';
+    
     return `
-      <div class="vocab-feed-item" style="opacity: ${w.mastered ? 0.6 : 1};">
-        <div class="vfi-icon">${icon}</div>
-        <div class="vfi-content">
-          <div class="vfi-word-row">
-            <strong class="vfi-word">${escapeHtml(w.word)}</strong>
-            <button class="vfi-del" onclick="deleteWordHandler('${w._id}')" title="Delete word" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px;">✕</button>
+      <div class="vocab-feed-item" style="opacity: ${w.mastered ? 0.6 : 1}; background: var(--bg-app); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; display: flex; gap: 16px; align-items: flex-start; transition: opacity 0.2s;">
+        <div class="vfi-icon" style="background: var(--purple-light); color: var(--purple); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
+          ${icon}
+        </div>
+        <div class="vfi-content" style="flex: 1;">
+          <div class="vfi-word-row" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+            <strong class="vfi-word" style="font-size: 16px; color: var(--text-main); font-weight: 600; text-transform: capitalize;">${escapeHtml(w.word)}</strong>
+            <button class="vfi-del" onclick="deleteWordHandler('${w._id}')" title="Remove from bank" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px; padding: 4px; display: flex; align-items: center; justify-content: center; border-radius: 4px; transition: background 0.2s, color 0.2s;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
           </div>
-          <p class="vfi-def">${escapeHtml(w.definition || 'Definition not found')}</p>
-          ${w.context ? `<span class="vfi-src">${escapeHtml(w.context)}</span>` : ''}
-          <label style="margin-top: 8px; display: flex; align-items: center; gap: 6px; font-size: 12px; cursor: pointer;">
-            <input type="checkbox" ${w.mastered ? 'checked' : ''} onchange="toggleMastered('${w._id}', this.checked)" style="cursor: pointer;">
-            <span>Mastered</span>
-          </label>
+          <p class="vfi-def" style="margin: 0; font-size: 14px; color: var(--text-main); line-height: 1.4;">${escapeHtml(def)}</p>
+          ${contextHtml}
+          
+          <div style="margin-top: 12px; display: flex; align-items: center;">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; user-select: none; color: var(--text-main); font-weight: 500;">
+              <input type="checkbox" ${w.mastered ? 'checked' : ''} onchange="toggleMastered('${w._id}', this.checked)" style="cursor: pointer; width: 16px; height: 16px; accent-color: var(--purple);">
+              <span>${w.mastered ? 'Mastered' : 'Mark as Mastered'}</span>
+            </label>
+          </div>
         </div>
       </div>
     `;
@@ -802,10 +857,11 @@ function saveWord(btnElement) {
   
   console.log(`[VOCAB-UI] User clicked save for word: ${word}`);
   
-  saveVocabularyToAPI(word, src || 'Exam practice').then(savedWord => {
-    if (savedWord) {
-      vocabularyDb.unshift(savedWord);
+  saveVocabularyToAPI(word, src || 'Exam practice').then(result => {
+    if (result && result.word) {
+      vocabularyDb.unshift(result.word);
       renderVocab();
+      if (typeof notifyVocabUpdated === 'function') notifyVocabUpdated();
       if (typeof toggleAddForm === 'function' && document.getElementById('add-form') && document.getElementById('add-form').style.display !== 'none') {
         toggleAddForm();
       }
@@ -814,7 +870,7 @@ function saveWord(btnElement) {
       if (btn) {
         const originalText = btn.textContent;
         const originalBg = btn.style.backgroundColor;
-        btn.textContent = '✓ Saved!';
+        btn.textContent = '✅ Saved!';
         btn.style.backgroundColor = '#22c55e';
         btn.style.color = '#ffffff';
         setTimeout(() => {
@@ -824,6 +880,19 @@ function saveWord(btnElement) {
       }
       
       updateVocabWidget();
+    } else if (result && result.error && result.error.toLowerCase().includes('already')) {
+      showToast(`"${word}" is already in your Vocabulary Bank.`);
+      if (btn) {
+        const originalText = btn.textContent;
+        const originalBg = btn.style.backgroundColor;
+        btn.textContent = '⚠️ Already saved';
+        btn.style.backgroundColor = '#f59e0b'; // amber
+        btn.style.color = '#ffffff';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.backgroundColor = originalBg;
+        }, 2000);
+      }
     } else {
       showToast(`Failed to save "${word}" - check console`);
     }
@@ -836,6 +905,7 @@ async function deleteWordHandler(wordId) {
   if (deleted) {
     vocabularyDb = vocabularyDb.filter(w => w._id !== wordId);
     renderVocab();
+    if (typeof notifyVocabUpdated === 'function') notifyVocabUpdated();
     showToast('Deleted word from bank.');
   } else {
     showToast('Failed to delete word');
@@ -850,6 +920,7 @@ async function toggleMastered(wordId, mastered) {
     if (idx !== -1) {
       vocabularyDb[idx].mastered = mastered;
       renderVocab();
+      if (typeof notifyVocabUpdated === 'function') notifyVocabUpdated();
       showToast(mastered ? 'Marked as mastered!' : 'Unmarked as mastered');
     }
   }
@@ -1083,9 +1154,9 @@ function selectOption(char) {
     // Add to vocab bank if not already in
     if (!vocabularyDb.some(w => w.word.toLowerCase() === wordClean.toLowerCase())) {
       console.log('[VOCAB] Auto-saving missed vocabulary word:', wordClean);
-      saveVocabularyToAPI(wordClean, `Simulator Error, Question ${currentSimIdx + 1}`).then(savedWord => {
-        if (savedWord) {
-          vocabularyDb.push(savedWord);
+      saveVocabularyToAPI(wordClean, `Simulator Error, Question ${currentSimIdx + 1}`).then(result => {
+        if (result && result.word) {
+          vocabularyDb.push(result.word);
           renderVocab();
           console.log('[VOCAB] Auto-saved word, vocabularyDb now has', vocabularyDb.length, 'words');
         }

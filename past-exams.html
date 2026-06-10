@@ -15,6 +15,16 @@
       margin: 0 auto;
       padding: 32px 28px 60px;
     }
+    
+    .ecl-card {
+      border-radius: 12px !important;
+      border: 0.5px solid #E0DEFC !important;
+      border-left: 3px solid #7C6FE0 !important;
+      transition: transform 0.15s ease !important;
+    }
+    .ecl-card:hover {
+      transform: translateY(-2px) !important;
+    }
   </style>
 </head>
 
@@ -520,37 +530,75 @@
           vocab = await res.json();
         }
       } catch(e) {
-        console.error("Failed to load vocabulary");
+        console.error("[VocabBank] Failed to load vocabulary:", e);
       }
       
+      // Update word count in the header subtitle
+      if (vocabCount) {
+        vocabCount.textContent = vocab.length === 0
+          ? '0 words saved'
+          : `${vocab.length} ${vocab.length === 1 ? 'word' : 'words'} saved`;
+      }
+
       if (vocab.length === 0) {
+        // Show empty state only when truly 0 words
         if (emptyState) emptyState.style.display = 'block';
         if (listContainer) listContainer.style.display = 'none';
-        if (vocabCount) vocabCount.textContent = '0 words saved';
-      } else {
-        if (emptyState) emptyState.style.display = 'none';
-        if (listContainer) {
-          listContainer.style.display = 'flex';
-          listContainer.innerHTML = '';
-          // Show up to 10 recent words
-          vocab.slice(0, 10).forEach(w => {
-            const chip = document.createElement('div');
-            chip.style.padding = '4px 10px';
-            chip.style.background = w.mastered ? '#d1fae5' : '#EDE9FE';
-            chip.style.color = w.mastered ? '#065f46' : '#5B21B6';
-            chip.style.border = w.mastered ? '1px solid #10b981' : 'none';
-            chip.style.borderRadius = '16px';
-            chip.style.fontSize = '12px';
-            chip.style.fontWeight = '500';
-            chip.textContent = w.word;
-            listContainer.appendChild(chip);
-          });
-        }
-        if (vocabCount) {
-          vocabCount.textContent = `${vocab.length} ${vocab.length === 1 ? 'word' : 'words'} saved`;
-        }
+        return;
+      }
+
+      // Hide empty state; show cards
+      if (emptyState) emptyState.style.display = 'none';
+      if (listContainer) {
+        listContainer.style.display = 'flex';
+        listContainer.style.flexDirection = 'column';
+        listContainer.style.gap = '8px';
+        listContainer.innerHTML = vocab.map(w => {
+          const wordEsc = (w.word || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+          const defEsc = (w.definition && w.definition !== 'Definition not found' ? w.definition : '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          const ctxEsc = (w.context || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          const srcEsc = (w.source || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+          return `
+            <div style="
+              background: var(--bg-card, #fff);
+              border: 1px solid rgba(109,40,217,0.15);
+              border-radius: 10px;
+              padding: 12px 14px;
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+              transition: box-shadow 0.2s;
+            " onmouseover="this.style.boxShadow='0 2px 10px rgba(109,40,217,0.12)'" onmouseout="this.style.boxShadow='none'">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                <span style="
+                  font-size: 14px;
+                  font-weight: 700;
+                  color: #5b21b6;
+                  text-transform: capitalize;
+                  letter-spacing: -0.01em;
+                ">${wordEsc}</span>
+                ${w.mastered ? '<span style="font-size:10px;font-weight:700;color:#059669;background:#d1fae5;padding:2px 6px;border-radius:99px;">Mastered</span>' : ''}
+              </div>
+              ${defEsc ? `<p style="font-size:12px;color:var(--text-sub,#64748b);line-height:1.4;margin:0;">${defEsc}</p>` : ''}
+              ${ctxEsc ? `<div style="font-size:11px;color:var(--text-sub,#94a3b8);font-style:italic;line-height:1.35;margin-top:2px;border-left:2px solid #c4b5fd;padding-left:7px;">${ctxEsc}</div>` : ''}
+              ${srcEsc ? `<div style="font-size:10px;color:#9ca3af;margin-top:3px;">📍 ${srcEsc}</div>` : ''}
+            </div>
+          `;
+        }).join('');
       }
     }
+
+    // ── Real-time sync from other tabs ────────────────────────────────────────
+    try {
+      const _vbChannel = new BroadcastChannel('vocab_updates');
+      _vbChannel.addEventListener('message', (e) => {
+        if (e.data && (e.data.type === 'VOCAB_UPDATED' || e.data.type === 'word_saved')) {
+          console.log('[VocabBank] Received cross-tab update — refreshing panel…');
+          renderVocabBank();
+        }
+      });
+    } catch(e) { /* Safari private / unsupported */ }
 
     // Sync theme on load
     document.addEventListener('DOMContentLoaded', async () => {

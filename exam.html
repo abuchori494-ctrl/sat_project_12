@@ -1403,22 +1403,13 @@
 
       <!-- EXPLANATION BOX -->
       <div class="explanation-box" id="explanation-box">
-        <div class="explanation-title">Explanation</div>
-      </div>
-
-      <!-- QUESTION CONTENT -->
-      <div class="question-prompt" id="question-text">
-        <!-- Question prompt loaded dynamically -->
-      </div>
-
-      <!-- ANSWER CHOICES -->
-      <div class="choices-container" id="choices-box">
-        <!-- Choice options loaded dynamically -->
-      </div>
-
-      <!-- EXPLANATION BOX -->
-      <div class="explanation-box" id="explanation-box">
-        <div class="explanation-title">Explanation</div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+          <div class="explanation-title" style="margin-bottom: 0;">Explanation</div>
+          <button id="vb-open-btn" style="background: white; color: #6d28d9; border: 1px solid #c4b5fd; border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: 0.2s;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            Save to Vocab Bank
+          </button>
+        </div>
         <p class="explanation-text" id="explanation-content"></p>
       </div>
 
@@ -1426,23 +1417,6 @@
 
   </main>
 
-  <!-- SAVE VOCAB BOX WIDGET -->
-  <div id="vocab-widget-container" style="position: fixed; bottom: 80px; left: 24px; z-index: 900; display: flex; flex-direction: column; gap: 8px;">
-    <button onclick="document.getElementById('save-vocab-box').style.display = document.getElementById('save-vocab-box').style.display === 'none' ? 'flex' : 'none'" style="background: #2563eb; color: white; border: none; border-radius: 20px; padding: 8px 16px; font-weight: 600; font-size: 13px; cursor: pointer; align-self: flex-start; display: flex; gap: 6px; align-items: center; box-shadow: 0 2px 8px rgba(37,99,235,0.3); transition: 0.2s;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-      Vocabulary
-    </button>
-    <div id="save-vocab-box" style="display: none; background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 280px; flex-direction: column; gap: 8px;">
-      <div style="font-weight: 600; font-size: 13px; color: #1e293b; display: flex; justify-content: space-between;">
-        <span>Save to Vocabulary Bank</span>
-        <span id="vocab-spinner" style="display: none; font-size: 12px;">⏳</span>
-      </div>
-      <div style="display: flex; gap: 8px;">
-        <input type="text" id="vocab-input-field" placeholder="Type a word..." style="flex: 1; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; font-family: var(--font-ui);" onkeydown="if(event.key === 'Enter') saveTypedVocab()">
-        <button id="vocab-save-btn" onclick="saveTypedVocab()" style="background: #1e293b; color: white; border: none; border-radius: 4px; padding: 6px 12px; font-weight: 600; font-size: 13px; cursor: pointer;">Save</button>
-      </div>
-    </div>
-  </div>
 
   <!-- BOTTOM BAR -->
   <footer class="bottombar" style="justify-content: space-between; align-items: center; position: relative;">
@@ -1620,6 +1594,7 @@
   </div>
 
   <!-- SCRIPT FOR SIMULATOR ENGINE -->
+  <script src="/vocab-bank.js"></script>
   <script src="/exam.js" defer></script>
 
 </body>

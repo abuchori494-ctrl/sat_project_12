@@ -1,0 +1,71 @@
+{
+  "re_1781072327159": {
+    "attemptId": "re_1781072327159",
+    "examId": "march-2026-int-b",
+    "examType": "official",
+    "status": "in_progress",
+    "currentModuleIndex": 0,
+    "currentQuestionIndex": 0,
+    "timeLeftSeconds": 1912,
+    "modules": [
+      {
+        "id": "ebrw1",
+        "name": "Reading & Writing — Module 1",
+        "subject": "reading",
+        "timeSeconds": 1920,
+        "questionCount": 27,
+        "status": "active",
+        "answers": {},
+        "score": null,
+        "flagged": []
+      },
+      {
+        "id": "ebrw2",
+        "name": "Reading & Writing — Module 2",
+        "subject": "reading",
+        "timeSeconds": 1920,
+        "questionCount": 27,
+        "status": "locked",
+        "answers": {},
+        "score": null,
+        "flagged": []
+      },
+      {
+        "id": "break",
+        "name": "10-Minute Break",
+        "subject": "break",
+        "timeSeconds": 600,
+        "questionCount": 0,
+        "status": "locked",
+        "answers": {},
+        "score": null,
+        "flagged": []
+      },
+      {
+        "id": "math1",
+        "name": "Math — Module 1",
+        "subject": "math",
+        "timeSeconds": 2100,
+        "questionCount": 22,
+        "status": "locked",
+        "answers": {},
+        "score": null,
+        "flagged": []
+      },
+      {
+        "id": "math2",
+        "name": "Math — Module 2",
+        "subject": "math",
+        "timeSeconds": 2100,
+        "questionCount": 22,
+        "status": "locked",
+        "answers": {},
+        "score": null,
+        "flagged": []
+      }
+    ],
+    "results": null,
+    "startedAt": "2026-06-10T06:18:47.160Z",
+    "completedAt": null
+  }
+}

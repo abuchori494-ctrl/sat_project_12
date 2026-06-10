@@ -97,6 +97,7 @@ const vocabWordSchema = new mongoose.Schema({
   word: { type: String, required: true },
   definition: { type: String, default: 'Definition not found' },
   context: { type: String },
+  source: { type: String, default: '' },
   mastered: { type: Boolean, default: false },
   addedAt: { type: Date, default: Date.now }
 });
@@ -1786,7 +1787,7 @@ app.post('/api/vocab/word', verifyToken, async (req, res) => {
   console.log(`[VOCAB_API] User: ${req.userId}, Timestamp: ${new Date().toISOString()}`);
   
   try {
-    let { word, context } = req.body;
+    let { word, context, definition: userDef, source } = req.body;
     console.log(`[VOCAB_API] Request body - word: "${word}", context: "${context}"`);
     
     if (!word) return res.status(400).json({ error: 'Word is required' });
@@ -1796,30 +1797,33 @@ app.post('/api/vocab/word', verifyToken, async (req, res) => {
     const existing = await VocabWord.findOne({ userId: req.userId, word });
     if (existing) {
       console.log(`[VOCAB_API] Word "${word}" already exists for user ${req.userId}`);
-      return res.status(400).json({ error: 'Word already in Vocabulary Bank' });
+      return res.status(409).json({ error: 'Word already in Vocabulary Bank' });
     }
 
-    // Auto-fetch definition from dictionary API
-    let definition = 'Definition not found';
-    try {
-      const dictRes = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
-      if (dictRes.ok) {
-        const data = await dictRes.json();
-        // Extract the first definition
-        if (data && data[0] && data[0].meanings && data[0].meanings[0].definitions) {
-          definition = data[0].meanings[0].definitions[0].definition;
-          console.log(`[VOCAB_API] Fetched definition from Dictionary API: "${definition}"`);
+    // Auto-fetch definition from dictionary API if not provided
+    let definition = userDef || 'Definition not found';
+    if (!userDef) {
+      try {
+        const dictRes = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+        if (dictRes.ok) {
+          const data = await dictRes.json();
+          // Extract the first definition
+          if (data && data[0] && data[0].meanings && data[0].meanings[0].definitions) {
+            definition = data[0].meanings[0].definitions[0].definition;
+            console.log(`[VOCAB_API] Fetched definition from Dictionary API: "${definition}"`);
+          }
         }
+      } catch (e) {
+        console.log("[VOCAB_API] Dictionary fetch failed:", e.message);
       }
-    } catch (e) {
-      console.log("[VOCAB_API] Dictionary fetch failed:", e.message);
     }
 
     const newWord = new VocabWord({
       userId: req.userId,
       word,
       definition,
-      context,
+      context: context || '',
+      source: source || '',
       mastered: false
     });
     await newWord.save();
