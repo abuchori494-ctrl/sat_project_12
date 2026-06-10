@@ -8,44 +8,47 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Confetti script -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     :root {
-      --lav-bg: #F8F7FF;
-      --lav-sidebar: #4A4580;
-      --lav-sidebar-active: #5A5690;
-      --lav-card: #FFFFFF;
-      --lav-border: #EDE9FE;
-      --lav-accent: #7C6FE0;
+      --bg: #F5F6FA;
+      --surface: #FFFFFF;
+      --shadow: 0 4px 24px rgba(75, 68, 136, 0.08);
+      --shadow-hover: 0 8px 32px rgba(75, 68, 136, 0.12);
+      --border: #E8EAF2;
+      --heading: #1E1B4B;
+      --body: #374151;
+      --muted: #6B7280;
+      --primary: #7C69EF;
+      --primary-hover: #6B57E8;
+      --soft: #F5F3FF;
+      --soft-alt: #EDE9FE;
+
+      --craft: #8B5CF6;
+      --expr: #3B82F6;
+      --info: #EC4899;
+      --sec: #F59E0B;
+      --math: #0EA5E9;
+      --math-adv: #10B981;
+      
+      /* Sidebar */
+      --lav-sidebar: #4B4488;
+      --lav-sidebar-active: #5B5091;
       --lav-accent2: #B8B0F5;
-      --lav-light: #F0EFFE;
-      --lav-dark: #1A1035;
-      --lav-gray: #6B7280;
-      --lav-shadow: 0 2px 12px rgba(124, 111, 224, 0.08);
-      --lav-card-shadow-strong: 0 4px 24px rgba(124, 111, 224, 0.12);
-      --lav-radius: 16px;
-      --lav-grad: linear-gradient(135deg, #7C6FE0, #B8B0F5);
     }
-    body.dark {
-      --lav-bg: #000000;
-      --lav-sidebar: #000000;
-      --lav-card: #0A0A0A;
-      --lav-border: #1A1A1A;
-      --lav-dark: #8B5CF6;
-      --lav-gray: #A78BFA;
-      --lav-accent: #8B5CF6;
-      --lav-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
-    }
+    
     body {
-      background: var(--lav-bg);
+      background: var(--bg);
       font-family: 'Outfit', 'Inter', system-ui, sans-serif;
-      color: var(--lav-dark);
+      color: var(--body);
       margin: 0;
       overflow-x: hidden;
+      line-height: 1.5;
     }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+    h1, h2, h3, h4, h5, h6 { line-height: 1.2; text-transform: none; }
     
+    /* Sidebar matching existing */
     #sidebar {
       position: fixed; top: 0; left: 0; bottom: 0; width: 240px;
       background: var(--lav-sidebar); z-index: 200; overflow-y: auto;
@@ -62,74 +65,255 @@
     #sidebar .nav-links a.active { background: var(--lav-sidebar-active); color: #fff; box-shadow: inset 3px 0 0 var(--lav-accent2); }
     .badge-new { font-size: 10px; font-weight: 600; background: #EDE9FE; color: #7C6FE0; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; margin-left: auto; }
     
-    .views-wrap { margin-left: 240px; min-height: 100vh; background: var(--lav-bg); padding: 40px 48px 80px; }
-    .view { display: none; animation: viewFade 0.3s ease; }
+    .views-wrap { margin-left: 240px; min-height: 100vh; padding: 32px 32px 80px; }
+    
+    /* Animations */
+    .view { display: none; opacity: 0; animation: fadeUp 0.3s ease-out forwards; }
     .view.active { display: block; }
-    @keyframes viewFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Premium Cards & UI */
-    .lav-card {
-      background: var(--lav-card);
-      border: 1px solid var(--lav-border);
-      border-radius: var(--lav-radius);
-      box-shadow: var(--lav-shadow);
-      padding: 24px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .lav-card:hover {
+    
+    .stagger-item { opacity: 0; transform: translateY(10px); transition: all 0.4s ease-out; }
+    .stagger-item.show { opacity: 1; transform: translateY(0); }
+
+    .highlight { background: #FEF08A; color: #000; border-radius: 2px; padding: 0 2px; }
+
+    /* Button interaction */
+    button, a.btn { transition: all 0.2s ease-out; }
+    button:active, a.btn:active { transform: scale(0.97); }
+    button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+    /* Cards */
+    .premium-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      transition: all 0.2s ease-out;
+    }
+    .premium-card:hover {
+      box-shadow: var(--shadow-hover);
       transform: translateY(-2px);
-      box-shadow: var(--lav-card-shadow-strong);
     }
     
-    /* Buttons */
+    .cat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: all 0.2s ease-out;
+    }
+    .cat-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-1px);
+    }
+    .cat-card.zero-state {
+      border: 1px dashed var(--border);
+    }
+    .cat-card.completed-state {
+      border-color: #10B98140;
+    }
+    
+    .cat-header {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      user-select: none;
+      width: 100%;
+      text-align: left;
+      position: relative;
+      background: var(--surface);
+      border: none;
+      outline: none;
+    }
+    .cat-header:hover {
+      background: #FAFAFA;
+    }
+    
+    .cat-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 250ms ease-out;
+    }
+    .cat-card.open .cat-body {
+      grid-template-rows: 1fr;
+    }
+    .cat-body-inner {
+      overflow: hidden;
+    }
+    
+    /* Chevron Toggle */
+    .chevron-wrapper {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s ease-out;
+      background: var(--soft-alt);
+      color: var(--primary);
+    }
+    .cat-card.open .chevron-wrapper {
+      background: var(--primary);
+      color: #fff;
+    }
+    .chevron-icon { transition: transform 0.25s ease-out; }
+    .cat-card.open .chevron-icon { transform: rotate(180deg); }
+
+    /* Filter Pills */
+    .filter-btn {
+      background: var(--surface);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease-out;
+      white-space: nowrap;
+    }
+    .filter-btn:hover { background: var(--soft); }
+    .filter-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+    }
+    .filter-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 9999px;
+      background: var(--soft-alt);
+      color: var(--primary);
+    }
+    .filter-btn.active .filter-badge {
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+    }
+    
+    /* Sub-topic row */
+    .sub-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      transition: all 0.2s ease-out;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      border: none;
+      background: transparent;
+    }
+    .sub-row:hover {
+      background: var(--soft);
+    }
+    .sub-row.completed-row {
+      background: #10B98108;
+    }
+    .sub-row.completed-row:hover {
+      background: #10B98115;
+    }
+    .sub-row.glow-state {
+      box-shadow: 0 0 0 2px #7C69EF30;
+    }
+    
+    .progress-track {
+      background: var(--border);
+      border-radius: 9999px;
+      overflow: hidden;
+      height: 8px; /* h-2 */
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 9999px;
+      width: 0%; /* animates on load */
+      transition: width 500ms ease-out;
+    }
+    
+    /* CTAs */
+    .btn-solid-purple {
+      background: var(--primary);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .btn-solid-purple:hover {
+      background: var(--primary-hover);
+    }
+    .btn-outline-gray {
+      background: transparent;
+      color: var(--body);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .btn-outline-gray:hover {
+      background: #FAFAFA;
+      border-color: #D1D5DB;
+    }
+    
+    /* Badge Status */
+    .status-badge {
+      font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 99px; text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .status-not-started { background: #F3F4F6; color: #6B7280; }
+    .status-in-progress { background: #FEF3C7; color: #D97706; }
+    .status-completed { background: #D1FAE5; color: #059669; }
+
+    /* Utilities */
     .btn-primary {
-      background: var(--lav-accent); color: #fff; border: none; padding: 12px 26px; border-radius: 10px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 14px rgba(124, 111, 224, 0.25); display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--primary); color: #fff; padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 600;
+      box-shadow: 0 4px 14px rgba(124, 105, 239, 0.25); display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: none;
     }
-    .btn-primary:hover { background: #6a5ed4; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124, 111, 224, 0.35); }
+    .btn-primary:hover { background: var(--primary-hover); box-shadow: 0 6px 20px rgba(124, 105, 239, 0.35); }
     
-    .btn-secondary {
-      background: var(--lav-light); color: var(--lav-accent); border: 2px solid transparent; padding: 10px 22px; border-radius: 10px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    .stat-box {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 2px 8px rgba(75, 68, 136, 0.05);
+      padding: 16px 20px; display: flex; align-items: center; gap: 16px; flex: 1; min-width: 160px;
+      transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
     }
-    .btn-secondary:hover { background: rgba(124, 111, 224, 0.25); border-color: var(--lav-accent); }
+    .stat-box:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
 
-    /* Typography */
-    .hero-h1 { font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 800; line-height: 1.15; color: var(--lav-dark); letter-spacing: -0.02em; margin-bottom: 12px; }
-    .hero-sub { font-size: 1.1rem; color: var(--lav-gray); line-height: 1.6; max-width: 600px; margin-bottom: 24px; }
-    
-    /* Pills */
-    .hero-announce-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--lav-light); color: var(--lav-accent); font-size: 13px; font-weight: 700; padding: 6px 16px; border-radius: 99px; border: 1px solid var(--lav-border); letter-spacing: 0.01em; }
-    
-    /* Subject Card Internals */
-    .subject-icon-box { width: 56px; height: 56px; background: var(--lav-light); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 20px; }
-    .subject-title { font-size: 1.5rem; font-weight: 800; color: var(--lav-dark); margin-bottom: 8px; letter-spacing: -0.01em; }
-    .subject-desc { font-size: 0.95rem; color: var(--lav-gray); line-height: 1.5; margin-bottom: 24px; height: 42px; }
-    .subject-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; border-top: 1px solid var(--lav-border); border-bottom: 1px solid var(--lav-border); padding: 16px 0; }
-    .ss-item { display: flex; flex-direction: column; align-items: center; text-align: center; }
-    .ss-val { font-size: 1.2rem; font-weight: 800; color: var(--lav-dark); }
-    .ss-label { font-size: 0.75rem; font-weight: 600; color: var(--lav-gray); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+    .search-input {
+      width: 100%; border: none; outline: none; font-size: 15px; color: var(--heading); background: transparent;
+    }
+    .search-input::placeholder { color: #9CA3AF; }
 
-    /* Accordion / Skill Browser */
-    .skill-cat { background: #fff; border: 1px solid var(--lav-border); border-radius: 12px; margin-bottom: 16px; overflow: hidden; box-shadow: var(--lav-shadow); }
-    .skill-cat-header { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: background 0.2s ease; user-select: none; }
-    .skill-cat-header:hover { background: var(--lav-light); }
-    .skill-cat-title { font-size: 1.1rem; font-weight: 800; color: var(--lav-dark); letter-spacing: -0.01em; }
-    .skill-cat-icon { font-size: 1.2rem; color: var(--lav-accent); transition: transform 0.3s ease; font-weight: bold; }
-    .skill-cat.open .skill-cat-icon { transform: rotate(180deg); }
+    .list-container {
+      transition: opacity 150ms ease-out;
+    }
+    .list-container.fading {
+      opacity: 0;
+    }
     
-    .skill-cat-body { display: none; border-top: 1px solid var(--lav-border); background: #fafafa; }
-    .skill-cat.open .skill-cat-body { display: block; animation: slideDown 0.3s ease-out; }
-    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Skill Rows */
-    .skill-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: all 0.2s ease; }
-    .skill-row:last-child { border-bottom: none; }
-    .skill-row:hover { background: #fff; transform: translateX(4px); box-shadow: -4px 0 0 var(--lav-accent); }
-    .skill-name { font-size: 0.95rem; font-weight: 600; color: var(--lav-dark); }
-    .skill-meta { display: flex; items-center; gap: 16px; }
-    .skill-progress-text { font-size: 0.85rem; font-weight: 700; color: var(--lav-gray); background: #eee; padding: 4px 10px; border-radius: 99px; }
-    .skill-row:hover .skill-progress-text { background: var(--lav-light); color: var(--lav-accent); }
-    .skill-action { opacity: 0; color: var(--lav-accent); font-weight: 700; font-size: 0.85rem; transition: opacity 0.2s; display: flex; align-items: center; gap: 4px; }
-    .skill-row:hover .skill-action { opacity: 1; }
+    .checkmark-anim {
+      animation: scaleIn 200ms ease-out forwards;
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -148,461 +332,685 @@
       <ul class="nav-links">
         <li class="section-label">DASHBOARD</li>
         <li><a href="/" data-page="home">🏠 Home</a></li>
-        <li><a href="/study-planner">📅 Study Planner</a></li>
-        <li><a href="/analytics">📊 Analytics <span class="badge-new">New</span></a></li>
+        <li><a href="/study-planner.html">📅 Study Planner</a></li>
+        <li><a href="/analytics.html">📊 Analytics <span class="badge-new">New</span></a></li>
         <li><a href="/">🤖 Ask Preppy AI</a></li>
         <li class="section-label">PRACTICE</li>
-        <li><a href="/question-bank" class="active">🔲 Question Bank</a></li>
+        <li><a href="/question-bank.html" class="active">🔲 Question Bank</a></li>
         <li><a href="/past-exams.html">📝 Past Exams</a></li>
-        <li><a href="/real-exam">🎯 Real Exam Mode <span class="badge-new">New</span></a></li>
+        <li><a href="/real-exam.html">🎯 Real Exam Mode <span class="badge-new">New</span></a></li>
       </ul>
     </div>
   </nav>
 
   <div class="views-wrap">
-    <div class="max-w-[1120px] mx-auto">
-    
-    <!-- PAGE 1: OVERVIEW -->
-    <main id="view-overview" class="view active">
-      <div class="mb-12">
-        <h1 class="hero-h1">SAT Question Bank</h1>
-        <p class="hero-sub">Practice every tested skill with thousands of official-style SAT questions.</p>
-        <div class="flex flex-wrap gap-3">
-          <span class="hero-announce-pill">🎯 3,882 Questions</span>
-          <span class="hero-announce-pill">📚 38 Skills</span>
-          <span class="hero-announce-pill">✨ Reading & Writing + Math</span>
-        </div>
-      </div>
-
-      <!-- Subject Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        
-        <div class="lav-card flex flex-col">
-          <div class="subject-icon-box">📖</div>
-          <h2 class="subject-title">Reading & Writing</h2>
-          <p class="subject-desc">Master every reading and grammar skill tested on the Digital SAT.</p>
-          
-          <div class="subject-stats-grid">
-            <div class="ss-item">
-              <span class="ss-val text-[#7C6FE0]">1492</span>
-              <span class="ss-label">Questions</span>
-            </div>
-            <div class="ss-item" style="border-left: 1px solid var(--lav-border); border-right: 1px solid var(--lav-border);">
-              <span class="ss-val text-[#1A1035]">10</span>
-              <span class="ss-label">Skills</span>
-            </div>
-            <div class="ss-item">
-              <span class="ss-val text-[#059669]">78%</span>
-              <span class="ss-label">Accuracy</span>
-            </div>
-          </div>
-          
-          <button class="btn-primary w-full" onclick="navigate('rw-skills')">Browse Skills ➔</button>
-        </div>
-        
-        <div class="lav-card flex flex-col">
-          <div class="subject-icon-box">📐</div>
-          <h2 class="subject-title">Math</h2>
-          <p class="subject-desc">Build mastery across Algebra, Advanced Math, Problem Solving, Geometry, and Trigonometry.</p>
-          
-          <div class="subject-stats-grid">
-            <div class="ss-item">
-              <span class="ss-val text-[#7C6FE0]">2390</span>
-              <span class="ss-label">Questions</span>
-            </div>
-            <div class="ss-item" style="border-left: 1px solid var(--lav-border); border-right: 1px solid var(--lav-border);">
-              <span class="ss-val text-[#1A1035]">28</span>
-              <span class="ss-label">Skills</span>
-            </div>
-            <div class="ss-item">
-              <span class="ss-val text-[#059669]">65%</span>
-              <span class="ss-label">Accuracy</span>
-            </div>
-          </div>
-          
-          <button class="btn-primary w-full" onclick="navigate('math-skills')">Browse Skills ➔</button>
-        </div>
-
-      </div>
-    </main>
-
-
-    <!-- PAGE 2: READING & WRITING SKILLS -->
-    <main id="view-rw-skills" class="view hidden">
-      <button onclick="navigate('overview')" class="text-sm font-bold text-lav-gray hover:text-lav-accent flex items-center gap-1 mb-8 transition-colors">
-        ← Back to Overview
-      </button>
+    <div class="max-w-4xl mx-auto">
       
-      <!-- Header -->
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-        <div>
-          <h1 class="hero-h1 mb-2">Reading & Writing</h1>
-          <p class="hero-sub mb-0">1492 Questions Across 10 Skills</p>
+      <!-- VIEW: OVERVIEW -->
+      <main id="view-overview" class="view active">
+        <div class="mb-6">
+          <h1 class="text-[28px] font-bold text-[#1E1B4B] mb-1">Question Bank</h1>
+          <p class="text-[14px] text-[#6B7280] max-w-[600px]">Practice every tested skill with thousands of official-style SAT questions.</p>
         </div>
-        <div class="flex flex-wrap gap-3">
-          <button class="btn-secondary">⚙️ Filters</button>
-          <button class="btn-secondary">⋮ More Options</button>
-          <button class="btn-primary">Practice All Topics ➔</button>
-        </div>
-      </div>
 
-      <!-- Practice All Topics Card -->
-      <div class="lav-card flex flex-col md:flex-row justify-between items-center gap-6 mb-10" style="border-left: 4px solid var(--lav-accent);">
-        <div>
-          <h3 class="text-xl font-bold text-[#1A1035] mb-2">Practice all topics</h3>
-          <p class="text-[#6B7280] font-medium text-[0.95rem]">Start practicing a mixed set of all 10 skills in Reading & Writing.</p>
+        <!-- Tip Banner -->
+        <div id="overview-tip" class="mb-6 relative overflow-hidden flex items-start gap-4 p-5 rounded-2xl border border-[#E8EAF2]" style="background: linear-gradient(135deg, #F5F3FF 0%, #FFFFFF 100%);">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-[#7C69EF] rounded-l-2xl"></div>
+          <div class="text-[24px]">💡</div>
+          <div class="flex-1">
+            <p class="text-[15px] font-medium text-[#1E1B4B] leading-snug">
+              <span class="font-bold">Tip:</span> Focus on one skill at a time. Students who practice daily score 120+ points higher on average.
+            </p>
+          </div>
+          <button onclick="dismissTip('overview-tip')" class="text-[#9CA3AF] hover:text-[#4B5563] p-1">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
         </div>
-        <button class="btn-primary shrink-0">Start Practice ➔</button>
-      </div>
 
-      <!-- Collapsible Categories -->
-      <div class="space-y-4">
+        <!-- Subject Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="subject-cards-container">
+          <!-- Rendered via JS -->
+        </div>
+      </main>
+
+
+      <!-- VIEW: READING & WRITING -->
+      <main id="view-rw-skills" class="view hidden">
+        <button onclick="navigate('overview')" class="flex items-center gap-1 text-[14px] font-semibold mb-6 transition-colors hover:text-[#6B57E8]" style="color: var(--primary)">
+          ← Back to Overview
+        </button>
         
-        <!-- Category 1 -->
-        <div class="skill-cat open">
-          <div class="skill-cat-header" onclick="toggleCat(this)">
-            <h3 class="skill-cat-title">CRAFT AND STRUCTURE</h3>
-            <span class="skill-cat-icon">▼</span>
-          </div>
-          <div class="skill-cat-body">
-            <div class="skill-row" onclick="alert('Launch practice: Cross-Text Connections')">
-              <span class="skill-name">Cross-Text Connections</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/57</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Text Structure and Purpose')">
-              <span class="skill-name">Text Structure and Purpose</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/115</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Words in Context')">
-              <span class="skill-name">Words in Context</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/219</span>
-              </div>
-            </div>
-          </div>
+        <div class="mb-6">
+          <p class="text-[13px] font-bold uppercase tracking-wider mb-1" style="color: var(--primary)">Practice</p>
+          <h1 class="text-[28px] font-bold text-[#1E1B4B] mb-1">Reading & Writing</h1>
+          <p class="text-[14px] text-[#6B7280]">1492 questions across 10 skills</p>
         </div>
-
-        <!-- Category 2 -->
-        <div class="skill-cat">
-          <div class="skill-cat-header" onclick="toggleCat(this)">
-            <h3 class="skill-cat-title">EXPRESSION OF IDEAS</h3>
-            <span class="skill-cat-icon">▼</span>
-          </div>
-          <div class="skill-cat-body">
-            <div class="skill-row" onclick="alert('Launch practice: Rhetorical Synthesis')">
-              <span class="skill-name">Rhetorical Synthesis</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/171</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Transitions')">
-              <span class="skill-name">Transitions</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/139</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Category 3 -->
-        <div class="skill-cat">
-          <div class="skill-cat-header" onclick="toggleCat(this)">
-            <h3 class="skill-cat-title">INFORMATION AND IDEAS</h3>
-            <span class="skill-cat-icon">▼</span>
-          </div>
-          <div class="skill-cat-body">
-            <div class="skill-row" onclick="alert('Launch practice: Central Ideas and Details')">
-              <span class="skill-name">Central Ideas and Details</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/121</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Command of Evidence')">
-              <span class="skill-name">Command of Evidence</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/196</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Inferences')">
-              <span class="skill-name">Inferences</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/98</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Category 4 -->
-        <div class="skill-cat">
-          <div class="skill-cat-header" onclick="toggleCat(this)">
-            <h3 class="skill-cat-title">STANDARD ENGLISH CONVENTIONS</h3>
-            <span class="skill-cat-icon">▼</span>
-          </div>
-          <div class="skill-cat-body">
-            <div class="skill-row" onclick="alert('Launch practice: Boundaries')">
-              <span class="skill-name">Boundaries</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/185</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Form, Structure, and Sense')">
-              <span class="skill-name">Form, Structure, and Sense</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/180</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </main>
-
-
-    <!-- PAGE 3: MATH SKILLS -->
-    <main id="view-math-skills" class="view hidden">
-      <button onclick="navigate('overview')" class="text-sm font-bold text-lav-gray hover:text-lav-accent flex items-center gap-1 mb-8 transition-colors">
-        ← Back to Overview
-      </button>
-      
-      <!-- Header -->
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-        <div>
-          <h1 class="hero-h1 mb-2">Math</h1>
-          <p class="hero-sub mb-0">2390 Questions Across 28 Skills</p>
-        </div>
-        <div class="flex flex-wrap gap-3">
-          <button class="btn-secondary">⚙️ Filters</button>
-          <button class="btn-secondary">⋮ More Options</button>
-          <button class="btn-primary">Practice All Topics ➔</button>
-        </div>
-      </div>
-
-      <!-- Practice All Topics Card -->
-      <div class="lav-card flex flex-col md:flex-row justify-between items-center gap-6 mb-10" style="border-left: 4px solid var(--lav-accent);">
-        <div>
-          <h3 class="text-xl font-bold text-[#1A1035] mb-2">Practice all topics</h3>
-          <p class="text-[#6B7280] font-medium text-[0.95rem]">Start practicing a mixed set of all Math skills.</p>
-        </div>
-        <button class="btn-primary shrink-0">Start Practice ➔</button>
-      </div>
-
-      <!-- Collapsible Categories -->
-      <div class="space-y-4">
         
-        <!-- Category 1 -->
-        <div class="skill-cat open">
-          <div class="skill-cat-header" onclick="toggleCat(this)">
-            <h3 class="skill-cat-title">ALGEBRA</h3>
-            <span class="skill-cat-icon">▼</span>
+        <div class="flex flex-wrap gap-3 mb-6" id="rw-stats">
+          <!-- Rendered via JS to handle 0-state -->
+        </div>
+
+        <!-- Tip Banner -->
+        <div id="rw-tip" class="mb-6 relative overflow-hidden flex items-start gap-4 p-5 rounded-2xl border border-[#E8EAF2]" style="background: linear-gradient(135deg, #F5F3FF 0%, #FFFFFF 100%);">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-[#7C69EF] rounded-l-2xl"></div>
+          <div class="text-[24px]">💡</div>
+          <div class="flex-1">
+            <p class="text-[15px] font-medium text-[#1E1B4B] leading-snug">
+              <span class="font-bold">Tip:</span> Focus on one skill at a time. Students who practice daily score 120+ points higher on average.
+            </p>
           </div>
-          <div class="skill-cat-body">
-            <div class="skill-row" onclick="alert('Launch practice: Linear equations in one variable')">
-              <span class="skill-name">Linear equations in one variable</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/159</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Linear functions')">
-              <span class="skill-name">Linear functions</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/225</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Linear equations in two variables')">
-              <span class="skill-name">Linear equations in two variables</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/179</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Systems of two linear equations in two variables')">
-              <span class="skill-name">Systems of two linear equations in two variables</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/161</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Linear inequalities in one or two variables')">
-              <span class="skill-name">Linear inequalities in one or two variables</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/100</span>
-              </div>
-            </div>
+          <button onclick="dismissTip('rw-tip')" class="text-[#9CA3AF] hover:text-[#4B5563] p-1">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <!-- Practice All Banner -->
+        <div class="mb-6 relative flex flex-col sm:flex-row sm:items-center justify-between gap-5 p-6 rounded-2xl border border-[#E8EAF2] shadow-sm hover:shadow-md transition-shadow" style="background: linear-gradient(135deg, #FFFFFF 0%, #F5F3FF 100%);">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-[#8B5CF6] rounded-l-2xl"></div>
+          <div class="pl-2">
+            <h2 class="text-[18px] font-bold text-[#1E1B4B]">Practice all topics</h2>
+            <p class="text-[14px] text-[#6B7280] mt-1 font-medium">~45 min · 10 skills · Mixed difficulty</p>
+          </div>
+          <button id="rw-global-btn" onclick="window.location.href='/exam.html?mode=practice&type=mixed&subject=reading'" class="btn-primary shrink-0 w-full sm:w-auto" style="background: #8B5CF6;">
+            Start Practice →
+          </button>
+        </div>
+
+        <!-- Search & Filter Controls -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div class="flex overflow-x-auto pb-2 md:pb-0 gap-2 rw-filters flex-nowrap" style="scrollbar-width: none;">
+            <!-- Filters populated by JS -->
+          </div>
+          <div class="flex items-center gap-3 bg-white border border-[#E8EAF2] rounded-full px-4 py-2 w-full md:max-w-xs shadow-sm focus-within:border-[#8B5CF6] transition-all">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="rw-search" class="search-input" placeholder="Search skills..." oninput="debounceSearch('rw')" />
           </div>
         </div>
 
-        <!-- Category 2 -->
-        <div class="skill-cat">
-          <div class="skill-cat-header" onclick="toggleCat(this)">
-            <h3 class="skill-cat-title">ADVANCED MATH</h3>
-            <span class="skill-cat-icon">▼</span>
+        <div class="list-container" id="rw-lists"></div>
+      </main>
+
+      <!-- VIEW: MATH -->
+      <main id="view-math-skills" class="view hidden">
+        <button onclick="navigate('overview')" class="flex items-center gap-1 text-[14px] font-semibold mb-6 transition-colors hover:text-[#0284C7]" style="color: #0EA5E9">
+          ← Back to Overview
+        </button>
+        
+        <div class="mb-6">
+          <p class="text-[13px] font-bold uppercase tracking-wider mb-1" style="color: #0EA5E9">Practice</p>
+          <h1 class="text-[28px] font-bold text-[#1E1B4B] mb-1">Math</h1>
+          <p class="text-[14px] text-[#6B7280]">2390 questions across 28 skills</p>
+        </div>
+        
+        <div class="flex flex-wrap gap-3 mb-6" id="math-stats">
+          <!-- Rendered via JS to handle 0-state -->
+        </div>
+
+        <!-- Tip Banner -->
+        <div id="math-tip" class="mb-6 relative overflow-hidden flex items-start gap-4 p-5 rounded-2xl border border-[#E8EAF2]" style="background: linear-gradient(135deg, #F0F9FF 0%, #FFFFFF 100%);">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-[#0EA5E9] rounded-l-2xl"></div>
+          <div class="text-[24px]">💡</div>
+          <div class="flex-1">
+            <p class="text-[15px] font-medium text-[#1E1B4B] leading-snug">
+              <span class="font-bold">Tip:</span> Focus on one skill at a time. Students who practice daily score 120+ points higher on average.
+            </p>
           </div>
-          <div class="skill-cat-body">
-            <div class="skill-row" onclick="alert('Launch practice: Equivalent expressions')">
-              <span class="skill-name">Equivalent expressions</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/158</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Nonlinear equations in one variable and systems of equations in two variables')">
-              <span class="skill-name">Nonlinear equations in one variable and systems of equations in two variables</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/211</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Nonlinear functions')">
-              <span class="skill-name">Nonlinear functions</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/320</span>
-              </div>
-            </div>
+          <button onclick="dismissTip('math-tip')" class="text-[#9CA3AF] hover:text-[#4B5563] p-1">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <!-- Practice All Banner -->
+        <div class="mb-6 relative flex flex-col sm:flex-row sm:items-center justify-between gap-5 p-6 rounded-2xl border border-[#E8EAF2] shadow-sm hover:shadow-md transition-shadow" style="background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 100%);">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-[#0EA5E9] rounded-l-2xl"></div>
+          <div class="pl-2">
+            <h2 class="text-[18px] font-bold text-[#1E1B4B]">Practice all topics</h2>
+            <p class="text-[14px] text-[#6B7280] mt-1 font-medium">~60 min · 28 skills · Mixed difficulty</p>
+          </div>
+          <button id="math-global-btn" onclick="window.location.href='/exam.html?mode=practice&type=mixed&subject=math'" class="btn-primary shrink-0 w-full sm:w-auto" style="background: #0EA5E9;">
+            Start Practice →
+          </button>
+        </div>
+
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div class="flex overflow-x-auto pb-2 md:pb-0 gap-2 math-filters flex-nowrap" style="scrollbar-width: none;">
+             <!-- Filters populated by JS -->
+          </div>
+          <div class="flex items-center gap-3 bg-white border border-[#E8EAF2] rounded-full px-4 py-2 w-full md:max-w-xs shadow-sm focus-within:border-[#0EA5E9] transition-all">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="math-search" class="search-input" placeholder="Search skills..." oninput="debounceSearch('math')" />
           </div>
         </div>
 
-        <!-- Category 3 -->
-        <div class="skill-cat">
-          <div class="skill-cat-header" onclick="toggleCat(this)">
-            <h3 class="skill-cat-title">PROBLEM-SOLVING AND DATA ANALYSIS</h3>
-            <span class="skill-cat-icon">▼</span>
-          </div>
-          <div class="skill-cat-body">
-            <div class="skill-row" onclick="alert('Launch practice: Ratios, rates, proportional relationships, and units')">
-              <span class="skill-name">Ratios, rates, proportional relationships, and units</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/119</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Percentages')">
-              <span class="skill-name">Percentages</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/101</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: One-variable data: Distributions and measures of center and spread')">
-              <span class="skill-name">One-variable data: Distributions and measures of center and spread</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/103</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Two-variable data: Models and scatterplots')">
-              <span class="skill-name">Two-variable data: Models and scatterplots</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/74</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Probability and conditional probability')">
-              <span class="skill-name">Probability and conditional probability</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/56</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Inference from sample statistics and margin of error')">
-              <span class="skill-name">Inference from sample statistics and margin of error</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/33</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Evaluating statistical claims: Observational studies and experiments')">
-              <span class="skill-name">Evaluating statistical claims: Observational studies and experiments</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/12</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Category 4 -->
-        <div class="skill-cat">
-          <div class="skill-cat-header" onclick="toggleCat(this)">
-            <h3 class="skill-cat-title">GEOMETRY AND TRIGONOMETRY</h3>
-            <span class="skill-cat-icon">▼</span>
-          </div>
-          <div class="skill-cat-body">
-            <div class="skill-row" onclick="alert('Launch practice: Area and volume')">
-              <span class="skill-name">Area and volume</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/113</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Lines, angles, and triangles')">
-              <span class="skill-name">Lines, angles, and triangles</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/110</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Right triangles and trigonometry')">
-              <span class="skill-name">Right triangles and trigonometry</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/83</span>
-              </div>
-            </div>
-            <div class="skill-row" onclick="alert('Launch practice: Circles')">
-              <span class="skill-name">Circles</span>
-              <div class="skill-meta">
-                <span class="skill-action">Practice ➔</span>
-                <span class="skill-progress-text">0/73</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </main>
+        <div class="list-container" id="math-lists"></div>
+      </main>
 
     </div>
   </div>
 
   <script>
-    // Navigation logic
+    // DATA
+    const RW_CATEGORIES = [
+      {
+        id: "craft-and-structure", label: "Craft and Structure", desc: "Analyze how authors build arguments", icon: "✦", accentHex: "#8B5CF6",
+        subTopics: [
+          { id: "cross-text", label: "Cross-Text Connections", completed: 10, total: 57 },
+          { id: "text-structure", label: "Text Structure and Purpose", completed: 115, total: 115 },
+          { id: "words-in-context", label: "Words in Context", completed: 0, total: 219 },
+        ]
+      },
+      {
+        id: "expression-of-ideas", label: "Expression of Ideas", desc: "Improve clarity and flow of writing", icon: "✎", accentHex: "#3B82F6",
+        subTopics: [
+          { id: "rhetorical-synthesis", label: "Rhetorical Synthesis", completed: 0, total: 171 },
+          { id: "transitions", label: "Transitions", completed: 0, total: 139 },
+        ]
+      },
+      {
+        id: "information-and-ideas", label: "Information and Ideas", desc: "Interpret and analyze informational texts", icon: "◈", accentHex: "#EC4899",
+        subTopics: [
+          { id: "central-ideas", label: "Central Ideas and Details", completed: 0, total: 142 },
+          { id: "command-of-evidence", label: "Command of Evidence", completed: 0, total: 128 },
+          { id: "inferences", label: "Inferences", completed: 0, total: 91 },
+        ]
+      },
+      {
+        id: "standard-english-conventions", label: "Standard English Conventions", desc: "Master grammar, punctuation, and sentence structure", icon: "¶", accentHex: "#F59E0B",
+        subTopics: [
+          { id: "boundaries", label: "Boundaries", completed: 0, total: 103 },
+          { id: "form-structure", label: "Form, Structure, and Sense", completed: 0, total: 117 },
+        ]
+      }
+    ];
+
+    const MATH_CATEGORIES = [
+      {
+        id: "algebra", label: "Algebra", desc: "Master linear equations and inequalities", icon: "∑", accentHex: "#0EA5E9",
+        subTopics: [
+          { id: "lin1", label: "Linear equations in one variable", completed: 0, total: 159 },
+          { id: "linf", label: "Linear functions", completed: 0, total: 225 },
+          { id: "lin2", label: "Linear equations in two variables", completed: 0, total: 179 },
+          { id: "sys", label: "Systems of two linear equations in two variables", completed: 0, total: 161 },
+          { id: "ineq", label: "Linear inequalities in one or two variables", completed: 0, total: 100 },
+        ]
+      },
+      {
+        id: "advanced-math", label: "Advanced Math", desc: "Navigate complex nonlinear equations and functions", icon: "ƒ", accentHex: "#10B981",
+        subTopics: [
+          { id: "equiv", label: "Equivalent expressions", completed: 0, total: 158 },
+          { id: "nonlin1", label: "Nonlinear equations in one variable and systems of equations", completed: 0, total: 211 },
+          { id: "nonlinf", label: "Nonlinear functions", completed: 0, total: 320 },
+        ]
+      },
+      {
+        id: "problem-solving", label: "Problem-Solving and Data Analysis", desc: "Interpret data, rates, and probabilities", icon: "📊", accentHex: "#F59E0B",
+        subTopics: [
+          { id: "ratios", label: "Ratios, rates, proportional relationships, and units", completed: 0, total: 119 },
+          { id: "percent", label: "Percentages", completed: 0, total: 101 },
+          { id: "dist", label: "One-variable data: Distributions and measures of center", completed: 0, total: 103 },
+          { id: "scatter", label: "Two-variable data: Models and scatterplots", completed: 0, total: 74 },
+          { id: "prob", label: "Probability and conditional probability", completed: 0, total: 56 },
+          { id: "infer", label: "Inference from sample statistics", completed: 0, total: 33 },
+          { id: "eval", label: "Evaluating statistical claims", completed: 0, total: 12 },
+        ]
+      },
+      {
+        id: "geometry", label: "Geometry and Trigonometry", desc: "Understand shapes, angles, and trigonometric ratios", icon: "△", accentHex: "#EC4899",
+        subTopics: [
+          { id: "area", label: "Area and volume", completed: 0, total: 113 },
+          { id: "lines", label: "Lines, angles, and triangles", completed: 0, total: 110 },
+          { id: "trig", label: "Right triangles and trigonometry", completed: 0, total: 83 },
+          { id: "circles", label: "Circles", completed: 0, total: 73 },
+        ]
+      }
+    ];
+
+    let state = {
+      rw: { filter: 'all', search: '' },
+      math: { filter: 'all', search: '' }
+    };
+    
+    let searchTimeout = null;
+
+    // CORE FUNCTIONS
     function navigate(viewId) {
       document.querySelectorAll('.view').forEach(v => {
         v.classList.remove('active');
         v.classList.add('hidden');
       });
-      
       const target = document.getElementById('view-' + viewId);
       if (target) {
         target.classList.remove('hidden');
         target.classList.add('active');
+        runCountUp();
+        
+        // Stagger list on enter
+        const type = viewId === 'rw-skills' ? 'rw' : (viewId === 'math-skills' ? 'math' : null);
+        if (type) {
+          const container = document.getElementById(`${type}-lists`);
+          container.classList.add('fading');
+          setTimeout(() => {
+            container.classList.remove('fading');
+            const items = container.querySelectorAll('.stagger-item');
+            items.forEach((item, i) => setTimeout(() => item.classList.add('show'), i * 60));
+          }, 50);
+        }
       }
       window.scrollTo(0, 0);
     }
 
-    // Accordion Logic
-    function toggleCat(headerEl) {
-      const parent = headerEl.parentElement;
+    function dismissTip(id) {
+      const el = document.getElementById(id);
+      if(el) {
+        el.style.display = 'none';
+        localStorage.setItem(`qb-${id}-dismissed`, 'true');
+      }
+    }
+
+    function checkTips() {
+      ['overview-tip', 'rw-tip', 'math-tip'].forEach(id => {
+        if(localStorage.getItem(`qb-${id}-dismissed`) === 'true') {
+          const el = document.getElementById(id);
+          if(el) el.style.display = 'none';
+        }
+      });
+    }
+
+    function runCountUp() {
+      document.querySelectorAll('.view.active [data-count]').forEach(el => {
+        const target = parseInt(el.getAttribute('data-count'));
+        if (target === 0) { el.innerText = '0'; return; }
+        
+        let count = 0;
+        const duration = 400; // ms
+        const increment = target / (duration / 16); // 60fps
+        
+        const update = () => {
+          count += increment;
+          if (count < target) {
+            el.innerText = Math.ceil(count);
+            requestAnimationFrame(update);
+          } else {
+            el.innerText = target;
+          }
+        };
+        update();
+      });
+    }
+
+    // LIST RENDERER
+    function matchesFilter(completed, total, filter) {
+      if (filter === "all") return true;
+      if (filter === "not-started") return completed === 0;
+      if (filter === "in-progress") return completed > 0 && completed < total;
+      if (filter === "completed") return completed === total && total > 0;
+      return true;
+    }
+    
+    function triggerConfetti() {
+      if (typeof confetti !== 'undefined') {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+
+    function renderList(type) {
+      const isMath = type === 'math';
+      const containerId = isMath ? 'math-lists' : 'rw-lists';
+      const container = document.getElementById(containerId);
+      const categories = isMath ? MATH_CATEGORIES : RW_CATEGORIES;
+      const { filter, search } = state[type];
+      
+      container.classList.add('fading');
+      
+      setTimeout(() => {
+        container.innerHTML = '';
+        const searchLower = search.toLowerCase().trim();
+
+        categories.forEach((cat, index) => {
+          let visibleSubs = cat.subTopics.filter(s => {
+            const mFilter = matchesFilter(s.completed, s.total, filter);
+            const mSearch = searchLower === '' || s.label.toLowerCase().includes(searchLower);
+            return mFilter && mSearch;
+          });
+
+          if (visibleSubs.length === 0) return;
+
+          const catCompleted = cat.subTopics.reduce((s, t) => s + t.completed, 0);
+          const catTotal = cat.subTopics.reduce((s, t) => s + t.total, 0);
+          const catPct = catTotal > 0 ? Math.round((catCompleted / catTotal) * 100) : 0;
+          
+          let badgeHtml = '';
+          if (catPct === 0) {
+            badgeHtml = `<span class="status-badge status-not-started">NOT STARTED</span>`;
+          } else if (catPct === 100) {
+            badgeHtml = `<span class="status-badge status-completed"><span class="checkmark-anim inline-block mr-1">✓</span> COMPLETED</span>`;
+          } else {
+            badgeHtml = `<span class="status-badge status-in-progress">IN PROGRESS</span>`;
+          }
+          
+          const isZeroState = catPct === 0;
+          const isCompleteState = catPct === 100;
+
+          const catEl = document.createElement('div');
+          catEl.className = `cat-card stagger-item open ${isZeroState ? 'zero-state' : ''} ${isCompleteState ? 'completed-state' : ''}`; 
+          
+          // ZONE A: Header
+          const headerHtml = `
+            <button type="button" class="cat-header" onclick="toggleCat(this)" aria-expanded="true">
+              <div class="absolute left-0 top-0 bottom-0 w-1 bg-[${cat.accentHex}]"></div>
+              
+              <div class="w-[40px] h-[40px] rounded-[12px] flex items-center justify-center text-[20px] shrink-0" style="background: ${cat.accentHex}15; color: ${cat.accentHex}; font-family: system-ui;">
+                ${cat.icon}
+              </div>
+              
+              <div class="flex-1 min-w-0 pr-2">
+                <div class="flex flex-col mb-2">
+                  <h3 class="text-[18px] font-semibold text-[#1E1B4B] leading-tight">${cat.label}</h3>
+                  <p class="text-[13px] text-[#6B7280] font-medium truncate">${cat.desc}</p>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                  <p class="text-[13px] text-[#9CA3AF] font-medium whitespace-nowrap">${cat.subTopics.length} skills · ${catCompleted} of ${catTotal} completed</p>
+                  <div class="h-2 flex-1 max-w-[120px] bg-[#E8EAF2] rounded-full overflow-hidden ml-2">
+                    <div class="h-full rounded-full transition-all duration-500" style="width: ${catPct}%; background: ${cat.accentHex}"></div>
+                  </div>
+                  <span class="text-[11px] font-bold" style="color: ${cat.accentHex}">${catPct}%</span>
+                </div>
+              </div>
+              
+              <div class="flex items-center gap-4 shrink-0">
+                ${badgeHtml}
+                <div class="chevron-wrapper" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="chevron-icon"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+              </div>
+            </button>
+          `;
+
+          // ZONE B: Rows
+          let bodyHtml = `<div class="cat-body"><div class="cat-body-inner flex flex-col gap-1 px-2 pb-2">`;
+          
+          if (isZeroState) {
+            bodyHtml += `<div class="px-4 py-3 text-[14px] text-[#6B7280] font-medium">Ready to begin? Pick any skill below.</div>`;
+          }
+
+          visibleSubs.forEach((sub, i) => {
+            const subPct = sub.total > 0 ? Math.round((sub.completed / sub.total) * 100) : 0;
+            const estMin = Math.round(sub.total * 1.5);
+            const isZero = subPct === 0;
+            const isRowComplete = subPct === 100;
+            const isFirstRow = i === 0 && isZeroState;
+            
+            // Highlight search text
+            let labelHtml = sub.label;
+            if (searchLower) {
+              const regex = new RegExp(`(${searchLower})`, 'gi');
+              labelHtml = sub.label.replace(regex, '<span class="highlight">$1</span>');
+            }
+            
+            let ctaHtml = '';
+            if (isZero) {
+              ctaHtml = `<button class="btn-solid-purple" style="background: ${cat.accentHex}">Start →</button>`;
+            } else if (isRowComplete) {
+              ctaHtml = `<button class="btn-outline-gray">Review →</button>`;
+            } else {
+              ctaHtml = `<button class="btn-solid-purple" style="background: ${cat.accentHex}">Continue →</button>`;
+            }
+            
+            let progressHtml = '';
+            if (isRowComplete) {
+              progressHtml = `<span class="text-[13px] font-bold text-[#6B7280] flex items-center gap-1">${sub.completed}/${sub.total} <span class="text-[#10B981] checkmark-anim">✓</span></span>`;
+            } else {
+              progressHtml = `<span class="text-[12px] font-bold text-[${isZero ? '#9CA3AF' : '#6B7280'}] tabular-nums whitespace-nowrap">${sub.completed}/${sub.total}</span>`;
+            }
+
+            bodyHtml += `
+              <div onclick="window.location.href='/exam.html?mode=practice&category=${cat.id}&topic=${sub.id}'" class="sub-row group ${isRowComplete ? 'completed-row' : ''} ${isFirstRow ? 'glow-state' : ''}">
+                <div class="flex items-center gap-3 min-w-0 flex-1">
+                  <div class="w-[3px] h-[32px] rounded-full shrink-0" style="background: ${isZero ? '#E8EAF2' : cat.accentHex}"></div>
+                  <div class="text-left flex-1 min-w-0 pr-4">
+                    <p class="text-[15px] font-medium text-[#374151] truncate leading-snug group-hover:text-[${cat.accentHex}] transition-colors">${labelHtml}</p>
+                    <p class="text-[13px] text-[#9CA3AF] font-regular mt-0.5">~${estMin} min</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-center gap-4 shrink-0">
+                  ${ctaHtml}
+                  <div class="flex items-center gap-3 w-[140px]">
+                    <div class="progress-track flex-1" style="background: ${isZero ? '#EDE9FE' : '#E8EAF2'}">
+                      <div class="progress-fill" style="width: ${subPct}%; background: ${cat.accentHex}"></div>
+                    </div>
+                    ${progressHtml}
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+          
+          // ZONE C: Footer
+          bodyHtml += `<div class="border-t border-[#E8EAF2] mt-2 px-4 py-4 flex items-center justify-between">`;
+          if (isCompleteState) {
+            bodyHtml += `<span class="text-[14px] text-[#10B981] font-bold">Category mastered! 🎉</span>`;
+            bodyHtml += `<button onclick="window.location.href='/exam.html?mode=practice&category=${cat.id}'" class="btn-outline-gray">Review All →</button>`;
+          } else {
+            bodyHtml += `<span class="text-[13px] text-[#6B7280] font-medium">${visibleSubs.length} of ${cat.subTopics.length} skills in this category</span>`;
+            bodyHtml += `<button onclick="window.location.href='/exam.html?mode=practice&category=${cat.id}'" class="btn-solid-purple" style="background: ${cat.accentHex}">Practice All →</button>`;
+          }
+          bodyHtml += `</div></div></div>`;
+
+          catEl.innerHTML = headerHtml + bodyHtml;
+          container.appendChild(catEl);
+        });
+
+        // Trigger stagger animation
+        requestAnimationFrame(() => {
+          container.classList.remove('fading');
+          const items = container.querySelectorAll('.stagger-item');
+          items.forEach((item, i) => {
+            setTimeout(() => item.classList.add('show'), i * 60);
+          });
+        });
+      }, 150);
+    }
+
+    function toggleCat(btn) {
+      const parent = btn.parentElement;
+      const isExpanded = parent.classList.contains('open');
+      btn.setAttribute('aria-expanded', !isExpanded);
       parent.classList.toggle('open');
     }
+
+    // SEARCH LOGIC
+    function debounceSearch(type) {
+      clearTimeout(searchTimeout);
+      const input = document.getElementById(`${type}-search`);
+      searchTimeout = setTimeout(() => {
+        state[type].search = input.value;
+        renderList(type);
+      }, 150);
+    }
+    
+    // RENDER PAGE LEVEL LOGIC
+    function renderPageLayout() {
+      const rwTotal = RW_CATEGORIES.reduce((s, cat) => s + cat.subTopics.reduce((a, b) => a + b.total, 0), 0);
+      const rwCompleted = RW_CATEGORIES.reduce((s, cat) => s + cat.subTopics.reduce((a, b) => a + b.completed, 0), 0);
+      const rwPct = rwTotal > 0 ? Math.round((rwCompleted / rwTotal) * 100) : 0;
+
+      const mathTotal = MATH_CATEGORIES.reduce((s, cat) => s + cat.subTopics.reduce((a, b) => a + b.total, 0), 0);
+      const mathCompleted = MATH_CATEGORIES.reduce((s, cat) => s + cat.subTopics.reduce((a, b) => a + b.completed, 0), 0);
+      const mathPct = mathTotal > 0 ? Math.round((mathCompleted / mathTotal) * 100) : 0;
+
+      // Overview Subjects
+      const subjectsGrid = document.getElementById('subject-cards-container');
+      subjectsGrid.innerHTML = `
+        <div class="premium-card p-6 flex flex-col hover:cursor-pointer" onclick="navigate('rw-skills')">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-[56px] h-[56px] rounded-[16px] flex items-center justify-center text-[28px]" style="background: #EDE9FE; color: #8B5CF6;">📖</div>
+            <span class="status-badge ${rwPct === 0 ? 'status-not-started' : (rwPct === 100 ? 'status-completed' : 'status-in-progress')}">${rwPct === 0 ? 'NOT STARTED' : (rwPct === 100 ? 'COMPLETED' : 'IN PROGRESS')}</span>
+          </div>
+          <h2 class="text-[22px] font-bold text-[#1E1B4B] mb-1">Reading & Writing</h2>
+          <p class="text-[15px] text-[#6B7280] mb-6">1492 questions · 10 skills</p>
+          <div class="mt-auto">
+            <div class="flex justify-between text-[13px] font-semibold mb-2">
+              <span class="text-[#8B5CF6]">${rwPct}% Completed</span>
+              <span class="text-[#6B7280]">${rwCompleted} / ${rwTotal}</span>
+            </div>
+            <div class="h-2 w-full bg-[#E8EAF2] rounded-full overflow-hidden mb-6">
+              <div class="h-full rounded-full bg-[#8B5CF6] transition-all duration-500" style="width: ${rwPct}%"></div>
+            </div>
+            <button class="w-full py-3 rounded-xl font-semibold text-white transition-all hover:scale-[0.97]" style="background: #8B5CF6; box-shadow: 0 4px 14px rgba(139,92,246,0.25);">Explore →</button>
+          </div>
+        </div>
+
+        <div class="premium-card p-6 flex flex-col hover:cursor-pointer" onclick="navigate('math-skills')">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-[56px] h-[56px] rounded-[16px] flex items-center justify-center text-[28px]" style="background: #E0F2FE; color: #0EA5E9;">📐</div>
+             <span class="status-badge ${mathPct === 0 ? 'status-not-started' : (mathPct === 100 ? 'status-completed' : 'status-in-progress')}">${mathPct === 0 ? 'NOT STARTED' : (mathPct === 100 ? 'COMPLETED' : 'IN PROGRESS')}</span>
+          </div>
+          <h2 class="text-[22px] font-bold text-[#1E1B4B] mb-1">Math</h2>
+          <p class="text-[15px] text-[#6B7280] mb-6">2390 questions · 28 skills</p>
+          <div class="mt-auto">
+            <div class="flex justify-between text-[13px] font-semibold mb-2">
+              <span class="text-[#0EA5E9]">${mathPct}% Completed</span>
+              <span class="text-[#6B7280]">${mathCompleted} / ${mathTotal}</span>
+            </div>
+            <div class="h-2 w-full bg-[#E8EAF2] rounded-full overflow-hidden mb-6">
+              <div class="h-full rounded-full bg-[#0EA5E9] transition-all duration-500" style="width: ${mathPct}%"></div>
+            </div>
+            <button class="w-full py-3 rounded-xl font-semibold text-white transition-all hover:scale-[0.97]" style="background: #0EA5E9; box-shadow: 0 4px 14px rgba(14,165,233,0.25);">Explore →</button>
+          </div>
+        </div>
+      `;
+
+      // Stat Cards and Zero States
+      const rwIsZero = rwPct === 0;
+      document.getElementById('rw-stats').innerHTML = `
+        <div class="stat-box relative overflow-hidden">
+          <div class="absolute top-4 right-4 text-[#8B5CF6] opacity-20"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg></div>
+          <div class="w-1 self-stretch rounded-full shrink-0" style="background: #8B5CF6"></div>
+          <div>
+            <p class="text-[24px] font-bold text-[#1E1B4B]" data-count="10">0</p>
+            <p class="text-[11px] font-medium text-[#6B7280]">Skills</p>
+          </div>
+        </div>
+        <div class="stat-box relative overflow-hidden">
+          <div class="absolute top-4 right-4 text-[#3B82F6] opacity-20"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 22h20L12 2zm0 3.8L18.2 18H5.8L12 5.8z"/></svg></div>
+          <div class="w-1 self-stretch rounded-full shrink-0" style="background: #3B82F6"></div>
+          <div>
+            <p class="text-[24px] font-bold text-[#1E1B4B]" data-count="${rwCompleted}">0</p>
+            <p class="text-[11px] font-medium text-[#6B7280]">${rwIsZero ? 'Your journey starts here' : 'Attempted'}</p>
+          </div>
+        </div>
+        <div class="stat-box relative overflow-hidden">
+          <div class="absolute top-4 right-4 text-[#10B981] opacity-20"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg></div>
+          <div class="w-1 self-stretch rounded-full shrink-0" style="background: #10B981"></div>
+          <div>
+            <p class="text-[24px] font-bold text-[#1E1B4B]"><span data-count="${rwPct}">0</span>%</p>
+            <p class="text-[11px] font-medium text-[#6B7280]">Completion</p>
+          </div>
+        </div>
+      `;
+
+      if(rwIsZero) {
+        document.getElementById('rw-global-btn').innerText = "Start Your First Session →";
+      }
+
+      const mathIsZero = mathPct === 0;
+      document.getElementById('math-stats').innerHTML = `
+        <div class="stat-box relative overflow-hidden">
+          <div class="absolute top-4 right-4 text-[#0EA5E9] opacity-20"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg></div>
+          <div class="w-1 self-stretch rounded-full shrink-0" style="background: #0EA5E9"></div>
+          <div>
+            <p class="text-[24px] font-bold text-[#1E1B4B]" data-count="28">0</p>
+            <p class="text-[11px] font-medium text-[#6B7280]">Skills</p>
+          </div>
+        </div>
+        <div class="stat-box relative overflow-hidden">
+          <div class="absolute top-4 right-4 text-[#10B981] opacity-20"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 22h20L12 2zm0 3.8L18.2 18H5.8L12 5.8z"/></svg></div>
+          <div class="w-1 self-stretch rounded-full shrink-0" style="background: #10B981"></div>
+          <div>
+            <p class="text-[24px] font-bold text-[#1E1B4B]" data-count="${mathCompleted}">0</p>
+            <p class="text-[11px] font-medium text-[#6B7280]">${mathIsZero ? 'Your journey starts here' : 'Attempted'}</p>
+          </div>
+        </div>
+        <div class="stat-box relative overflow-hidden">
+          <div class="absolute top-4 right-4 text-[#F59E0B] opacity-20"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg></div>
+          <div class="w-1 self-stretch rounded-full shrink-0" style="background: #F59E0B"></div>
+          <div>
+            <p class="text-[24px] font-bold text-[#1E1B4B]"><span data-count="${mathPct}">0</span>%</p>
+            <p class="text-[11px] font-medium text-[#6B7280]">Completion</p>
+          </div>
+        </div>
+      `;
+      if(mathIsZero) {
+        document.getElementById('math-global-btn').innerText = "Start Your First Session →";
+      }
+      
+      renderFilters('rw');
+      renderFilters('math');
+    }
+
+    function renderFilters(type) {
+      const isMath = type === 'math';
+      const categories = isMath ? MATH_CATEGORIES : RW_CATEGORIES;
+      const color = isMath ? '#0EA5E9' : 'var(--primary)';
+      const bg = isMath ? '#E0F2FE' : 'rgba(255,255,255,0.2)';
+      
+      let all = 0, notStarted = 0, inProg = 0, comp = 0;
+      categories.forEach(cat => {
+        cat.subTopics.forEach(sub => {
+          all++;
+          if (sub.completed === 0) notStarted++;
+          else if (sub.completed === sub.total) comp++;
+          else inProg++;
+        });
+      });
+
+      const container = document.querySelector(`.${type}-filters`);
+      const { filter } = state[type];
+
+      const makePill = (id, icon, label, count) => {
+        const isActive = filter === id;
+        return `
+          <button class="filter-btn ${isActive ? 'active' : ''}" data-filter="${id}">
+            <span>${icon}</span> ${label} <span class="filter-badge" ${isActive ? `style="background:${bg}; color:#fff;"` : (isMath ? `style="background:#E0F2FE; color:#0EA5E9;"` : '')}>${count}</span>
+          </button>
+        `;
+      };
+
+      container.innerHTML = `
+        ${makePill('all', '⊞', 'All', all)}
+        ${makePill('not-started', '◯', 'Not Started', notStarted)}
+        ${makePill('in-progress', '⏱', 'In Progress', inProg)}
+        ${makePill('completed', '✓', 'Completed', comp)}
+      `;
+
+      container.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          state[type].filter = e.currentTarget.getAttribute('data-filter');
+          renderFilters(type);
+          renderList(type);
+        });
+      });
+    }
+
+    // INITIALIZATION
+    document.addEventListener('DOMContentLoaded', () => {
+      checkTips();
+      renderPageLayout();
+      renderList('rw');
+      renderList('math');
+      runCountUp();
+      
+      // Global click handler to attach confetti trigger loosely.
+      // (When clicking a row that is close to complete, or testing... here we just mock it)
+      window.triggerConfetti = triggerConfetti;
+    });
+
   </script>
 </body>
 </html>
