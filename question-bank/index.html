@@ -55,12 +55,12 @@
       box-shadow: 4px 0 24px rgba(61, 56, 117, 0.18);
     }
     #sidebar .logo { display: flex; align-items: center; gap: 10px; padding: 24px 20px 20px; cursor: pointer; user-select: none; }
-    #sidebar .logo-icon { font-size: 26px; }
-    #sidebar .logo-text { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+    #sidebar .logo-icon { font-size: 36px; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 4px; }
+    #sidebar .logo-text { font-size: 20px; font-weight: 900; color: #fff; letter-spacing: -0.03em; font-family: "Inter", sans-serif; }
     #sidebar .exam-selector { margin: 0 16px 20px; width: calc(100% - 32px); background: rgba(255, 255, 255, 0.08); color: #fff; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; padding: 9px 14px; font-size: 13px; font-weight: 600; outline: none; }
     #sidebar .nav-links { list-style: none; padding: 0 10px; flex: 1; margin: 0; }
-    #sidebar .nav-links li.section-label { font-size: 10px; font-weight: 800; color: rgba(255, 255, 255, 0.45); letter-spacing: 0.1em; text-transform: uppercase; padding: 16px 12px 6px 14px; }
-    #sidebar .nav-links a { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; color: rgba(255, 255, 255, 0.82); font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s ease; }
+    #sidebar .nav-links li.section-label { font-size: 10.5px; font-weight: 800; color: rgba(255, 255, 255, 0.35); letter-spacing: 0.1em; text-transform: uppercase; padding: 16px 12px 6px 14px; }
+    #sidebar .nav-links a { display: flex; align-items: center; gap: 10px; padding: 9px 16px; border-radius: 10px; color: rgba(255, 255, 255, 0.82); font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s ease; }
     #sidebar .nav-links a:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
     #sidebar .nav-links a.active { background: var(--lav-sidebar-active); color: #fff; box-shadow: inset 3px 0 0 var(--lav-accent2); }
     .badge-new { font-size: 10px; font-weight: 600; background: #EDE9FE; color: #7C6FE0; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; margin-left: auto; }
@@ -119,7 +119,7 @@
     }
     
     .cat-header {
-      padding: 20px;
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       gap: 16px;
@@ -137,12 +137,12 @@
     }
     
     .cat-body {
-      display: grid;
-      grid-template-rows: 0fr;
-      transition: grid-template-rows 250ms ease-out;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.25s ease;
     }
     .cat-card.open .cat-body {
-      grid-template-rows: 1fr;
+      max-height: 400px;
     }
     .cat-body-inner {
       overflow: hidden;
@@ -169,7 +169,7 @@
     .cat-card.open .chevron-icon { transform: rotate(180deg); }
 
     /* Filter Pills */
-    .filter-btn {
+    .filter-btn { border: 0.5px solid var(--border);
       background: var(--surface);
       color: var(--muted);
       border: 1px solid var(--border);
@@ -184,12 +184,7 @@
       white-space: nowrap;
     }
     .filter-btn:hover { background: var(--soft); }
-    .filter-btn.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-      box-shadow: var(--shadow);
-    }
+    .filter-btn.active { background: #CECBF6; color: #26215C; border: 0.5px solid #7F77DD; font-weight: 500; box-shadow: none; }
     .filter-badge {
       font-size: 12px;
       font-weight: 600;
@@ -199,18 +194,19 @@
       color: var(--primary);
     }
     .filter-btn.active .filter-badge {
-      background: rgba(255,255,255,0.2);
-      color: #fff;
+      background: rgba(255,255,255,0.4);
+      color: #26215C;
     }
     
     /* Sub-topic row */
     .sub-row {
-      display: flex;
       align-items: center;
+      display: flex;
       justify-content: space-between;
-      gap: 16px;
-      padding: 16px;
-      border-radius: 12px;
+      gap: 12px;
+      padding: 10px 14px 10px 16px;
+      border-left: 2px solid var(--color-border-tertiary);
+      border-radius: 10px;
       transition: all 0.2s ease-out;
       cursor: pointer;
       text-align: left;
@@ -235,7 +231,10 @@
       background: var(--border);
       border-radius: 9999px;
       overflow: hidden;
-      height: 8px; /* h-2 */
+      height: 6px;
+    }
+    .sub-row .progress-track {
+      height: 5px;
     }
     .progress-fill {
       height: 100%;
@@ -273,13 +272,11 @@
     }
     
     /* Badge Status */
-    .status-badge {
-      font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 99px; text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .status-not-started { background: #F3F4F6; color: #6B7280; }
-    .status-in-progress { background: #FEF3C7; color: #D97706; }
-    .status-completed { background: #D1FAE5; color: #059669; }
+    .status-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 99px; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 6px; }
+    .status-not-started { background: transparent; border: none; color: var(--muted); font-weight: 400; padding: 0; font-size: 12px; }
+    .status-in-progress { background: #EEEDFE; color: #3C3489; font-size: 11px; padding: 3px 10px; border-radius: 99px; }
+    .status-in-progress::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
+    .status-completed { background: #E1F5EE; color: #085041; font-size: 11px; padding: 3px 10px; border-radius: 99px; }
 
     /* Utilities */
     .btn-primary {
@@ -290,7 +287,7 @@
     
     .stat-box {
       background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 2px 8px rgba(75, 68, 136, 0.05);
-      padding: 16px 20px; display: flex; align-items: center; gap: 16px; flex: 1; min-width: 160px;
+      padding: 12px 16px; display: flex; align-items: center; gap: 16px; flex: 1; min-width: 160px;
       transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
     }
     .stat-box:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
@@ -314,175 +311,123 @@
       from { transform: scale(0); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
+  
+    .stat-box { transition: border-color 0.15s ease-out; border: 1px solid transparent; }
+    .stat-box:hover { border-color: var(--primary-hover); }
+    button:focus-visible, a:focus-visible, input:focus-visible, .filter-btn:focus-visible { outline: 2px solid #7F77DD; outline-offset: 2px; }
+    .premium-card, .cat-card { box-shadow: 0 1px 0 rgba(0,0,0,0.06), 0 0 0 0.5px rgba(0,0,0,0.06); }
+    .sub-action { min-width: 80px; text-align: center; justify-content: center; display: inline-flex; }
+    @media (max-width: 600px) {
+      #sidebar { display: none; }
+      body.sidebar-collapsed #sidebar { display: block; z-index: 999; }
+      .views-wrap { margin-left: 0; padding: 16px; }
+      
+    }
+    
+
+  
+    .practice-all-link { font-size: 13px; color: #534AB7; border-bottom: 1px solid transparent; padding: 0 0 2px 0; background: none; border-radius: 0; border: none; font-weight: 600; cursor: pointer; }
+    .practice-all-link:hover { border-bottom: 1px solid #534AB7; background: none; transform: none; border-color: #534AB7; }
+
+  
+    .time-pill { background: var(--surface); border: 0.5px solid var(--border); border-radius: 99px; padding: 2px 8px; font-size: 11px; color: var(--muted); }
+
+  
+    .sub-row.completed-row { background: #E1F5EE; }
+    .sub-row.completed-row .sub-name { color: var(--muted); }
+
+  
+    .banner-btn { background: #7F77DD; color: #EEEDFE; border: none; padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: background 0.2s; position: relative; z-index: 10; }
+    .banner-btn:hover { background: #6B57E8; }
+
+  .cat-card:hover { border-color: var(--border); transition: border-color 0.15s; }
+  
+    .cat-body { display: none; }
+    .cat-card.open .cat-body { display: block; }
   </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 </head>
 <body>
 
   <!-- SIDEBAR -->
-  <nav id="sidebar">
-    <div class="sidebar-inner">
-      <div class="logo" onclick="window.location.href='/'">
-        <span class="logo-icon">🤖</span>
-        <span class="logo-text">SAT Platform</span>
-      </div>
-      <select class="exam-selector">
-        <option>SAT</option>
-        <option>ACT</option>
-      </select>
-      <ul class="nav-links">
-        <li class="section-label">DASHBOARD</li>
-        <li><a href="/" data-page="home">🏠 Home</a></li>
-        <li><a href="/study-planner.html">📅 Study Planner</a></li>
-        <li><a href="/analytics.html">📊 Analytics <span class="badge-new">New</span></a></li>
-        <li><a href="/">🤖 Ask Preppy AI</a></li>
-        <li class="section-label">PRACTICE</li>
-        <li><a href="/question-bank.html" class="active">🔲 Question Bank</a></li>
-        <li><a href="/past-exams.html">📝 Past Exams</a></li>
-        <li><a href="/real-exam.html">🎯 Real Exam Mode <span class="badge-new">New</span></a></li>
-      </ul>
-    </div>
-  </nav>
+  <nav id="sidebar"></nav>
 
   <div class="views-wrap">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-[1400px] mx-auto">
       
-      <!-- VIEW: OVERVIEW -->
-      <main id="view-overview" class="view active">
+      <!-- DASHBOARD VIEW -->
+      <main id="view-dashboard" class="view active">
         <div class="mb-6">
           <h1 class="text-[28px] font-bold text-[#1E1B4B] mb-1">Question Bank</h1>
           <p class="text-[14px] text-[#6B7280] max-w-[600px]">Practice every tested skill with thousands of official-style SAT questions.</p>
         </div>
 
         <!-- Tip Banner -->
-        <div id="overview-tip" class="mb-6 relative overflow-hidden flex items-start gap-4 p-5 rounded-2xl border border-[#E8EAF2]" style="background: linear-gradient(135deg, #F5F3FF 0%, #FFFFFF 100%);">
-          <div class="absolute left-0 top-0 bottom-0 w-1 bg-[#7C69EF] rounded-l-2xl"></div>
-          <div class="text-[24px]">💡</div>
-          <div class="flex-1">
-            <p class="text-[15px] font-medium text-[#1E1B4B] leading-snug">
-              <span class="font-bold">Tip:</span> Focus on one skill at a time. Students who practice daily score 120+ points higher on average.
-            </p>
-          </div>
-          <button onclick="dismissTip('overview-tip')" class="text-[#9CA3AF] hover:text-[#4B5563] p-1">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          </button>
-        </div>
-
-        <!-- Subject Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="subject-cards-container">
-          <!-- Rendered via JS -->
-        </div>
-      </main>
-
-
-      <!-- VIEW: READING & WRITING -->
-      <main id="view-rw-skills" class="view hidden">
-        <button onclick="navigate('overview')" class="flex items-center gap-1 text-[14px] font-semibold mb-6 transition-colors hover:text-[#6B57E8]" style="color: var(--primary)">
-          ← Back to Overview
-        </button>
-        
-        <div class="mb-6">
-          <p class="text-[13px] font-bold uppercase tracking-wider mb-1" style="color: var(--primary)">Practice</p>
-          <h1 class="text-[28px] font-bold text-[#1E1B4B] mb-1">Reading & Writing</h1>
-          <p class="text-[14px] text-[#6B7280]">1492 questions across 10 skills</p>
-        </div>
-        
-        <div class="flex flex-wrap gap-3 mb-6" id="rw-stats">
-          <!-- Rendered via JS to handle 0-state -->
-        </div>
-
         <!-- Tip Banner -->
-        <div id="rw-tip" class="mb-6 relative overflow-hidden flex items-start gap-4 p-5 rounded-2xl border border-[#E8EAF2]" style="background: linear-gradient(135deg, #F5F3FF 0%, #FFFFFF 100%);">
-          <div class="absolute left-0 top-0 bottom-0 w-1 bg-[#7C69EF] rounded-l-2xl"></div>
-          <div class="text-[24px]">💡</div>
+        <div id="overview-tip" class="mb-6 relative flex items-start gap-3 p-4" style="border: 0.5px solid #E8EAF2; border-radius: 8px; background: #F5F6FA;">
+          <i class="ti ti-info-circle" style="font-size: 16px; color: #6B7280; margin-top: 2px;"></i>
           <div class="flex-1">
-            <p class="text-[15px] font-medium text-[#1E1B4B] leading-snug">
+            <p class="text-[14px] font-medium text-[#1E1B4B] leading-snug">
               <span class="font-bold">Tip:</span> Focus on one skill at a time. Students who practice daily score 120+ points higher on average.
             </p>
           </div>
-          <button onclick="dismissTip('rw-tip')" class="text-[#9CA3AF] hover:text-[#4B5563] p-1">
+          <button onclick="dismissTip('overview-tip')" class="text-[#9CA3AF] hover:text-[#4B5563] p-1 -mt-1 -mr-1">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
           </button>
         </div>
 
-        <!-- Practice All Banner -->
-        <div class="mb-6 relative flex flex-col sm:flex-row sm:items-center justify-between gap-5 p-6 rounded-2xl border border-[#E8EAF2] shadow-sm hover:shadow-md transition-shadow" style="background: linear-gradient(135deg, #FFFFFF 0%, #F5F3FF 100%);">
-          <div class="absolute left-0 top-0 bottom-0 w-1 bg-[#8B5CF6] rounded-l-2xl"></div>
-          <div class="pl-2">
-            <h2 class="text-[18px] font-bold text-[#1E1B4B]">Practice all topics</h2>
-            <p class="text-[14px] text-[#6B7280] mt-1 font-medium">~45 min · 10 skills · Mixed difficulty</p>
-          </div>
-          <button id="rw-global-btn" onclick="window.location.href='/exam.html?mode=practice&type=mixed&subject=reading'" class="btn-primary shrink-0 w-full sm:w-auto" style="background: #8B5CF6;">
-            Start Practice →
-          </button>
-        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_1px_1fr] gap-8 lg:gap-0">
+          <!-- LEFT COLUMN: READING & WRITING -->
+          <div class="flex flex-col min-w-0 lg:pr-[20px]">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <i class="ti ti-book" style="font-size: 18px; color: #534AB7;"></i>
+                  <h2 class="text-[20px] font-bold text-[#1E1B4B]">Reading & Writing</h2>
+                </div>
+                <div id="rw-stats-summary" class="text-[13px] text-[#6B7280] font-medium">1492 questions · 10 skills</div>
+              </div>
+              <button id="rw-global-btn" onclick="window.location.href='/exam.html?mode=practice&type=mixed&subject=reading'" class="shadow-sm hover:shadow-md transition-all hover:scale-[0.98] self-start sm:self-auto" style="background: #7F77DD; color: #EEEDFE; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; border: none; cursor: pointer;">
+                Practice all <i class="ti ti-arrow-right" style="font-size: 13px;"></i>
+              </button>
+            </div>
+            
+            <div style="margin-top: 12px; margin-bottom: 12px;">
+              <div class="flex flex-wrap rw-filters" style="gap: 6px;">
+                <!-- Filters populated by JS -->
+              </div>
+            </div>
 
-        <!-- Search & Filter Controls -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-          <div class="flex overflow-x-auto pb-2 md:pb-0 gap-2 rw-filters flex-nowrap" style="scrollbar-width: none;">
-            <!-- Filters populated by JS -->
+            <div class="list-container" id="rw-lists"></div>
           </div>
-          <div class="flex items-center gap-3 bg-white border border-[#E8EAF2] rounded-full px-4 py-2 w-full md:max-w-xs shadow-sm focus-within:border-[#8B5CF6] transition-all">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-            <input type="text" id="rw-search" class="search-input" placeholder="Search skills..." oninput="debounceSearch('rw')" />
-          </div>
-        </div>
 
-        <div class="list-container" id="rw-lists"></div>
-      </main>
+          <!-- DIVIDER -->
+          <div style="width:1px; background: var(--color-border-tertiary); align-self: stretch"></div>
 
-      <!-- VIEW: MATH -->
-      <main id="view-math-skills" class="view hidden">
-        <button onclick="navigate('overview')" class="flex items-center gap-1 text-[14px] font-semibold mb-6 transition-colors hover:text-[#0284C7]" style="color: #0EA5E9">
-          ← Back to Overview
-        </button>
-        
-        <div class="mb-6">
-          <p class="text-[13px] font-bold uppercase tracking-wider mb-1" style="color: #0EA5E9">Practice</p>
-          <h1 class="text-[28px] font-bold text-[#1E1B4B] mb-1">Math</h1>
-          <p class="text-[14px] text-[#6B7280]">2390 questions across 28 skills</p>
-        </div>
-        
-        <div class="flex flex-wrap gap-3 mb-6" id="math-stats">
-          <!-- Rendered via JS to handle 0-state -->
-        </div>
+          <!-- RIGHT COLUMN: MATH -->
+          <div class="flex flex-col min-w-0 lg:pl-[20px]">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <i class="ti ti-math" style="font-size: 18px; color: #0F6E56;"></i>
+                  <h2 class="text-[20px] font-bold text-[#1E1B4B]">Math</h2>
+                </div>
+                <div id="math-stats-summary" class="text-[13px] text-[#6B7280] font-medium">2390 questions · 28 skills</div>
+              </div>
+              <button id="math-global-btn" onclick="window.location.href='/exam.html?mode=practice&type=mixed&subject=math'" class="shadow-sm hover:shadow-md transition-all hover:scale-[0.98] self-start sm:self-auto" style="background: #1D9E75; color: #E1F5EE; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; border: none; cursor: pointer;">
+                Start first session <i class="ti ti-arrow-right" style="font-size: 13px;"></i>
+              </button>
+            </div>
+            
+            <div style="margin-top: 12px; margin-bottom: 12px;">
+              <div class="flex flex-wrap math-filters" style="gap: 6px;">
+                <!-- Filters populated by JS -->
+              </div>
+            </div>
 
-        <!-- Tip Banner -->
-        <div id="math-tip" class="mb-6 relative overflow-hidden flex items-start gap-4 p-5 rounded-2xl border border-[#E8EAF2]" style="background: linear-gradient(135deg, #F0F9FF 0%, #FFFFFF 100%);">
-          <div class="absolute left-0 top-0 bottom-0 w-1 bg-[#0EA5E9] rounded-l-2xl"></div>
-          <div class="text-[24px]">💡</div>
-          <div class="flex-1">
-            <p class="text-[15px] font-medium text-[#1E1B4B] leading-snug">
-              <span class="font-bold">Tip:</span> Focus on one skill at a time. Students who practice daily score 120+ points higher on average.
-            </p>
-          </div>
-          <button onclick="dismissTip('math-tip')" class="text-[#9CA3AF] hover:text-[#4B5563] p-1">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          </button>
-        </div>
-
-        <!-- Practice All Banner -->
-        <div class="mb-6 relative flex flex-col sm:flex-row sm:items-center justify-between gap-5 p-6 rounded-2xl border border-[#E8EAF2] shadow-sm hover:shadow-md transition-shadow" style="background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 100%);">
-          <div class="absolute left-0 top-0 bottom-0 w-1 bg-[#0EA5E9] rounded-l-2xl"></div>
-          <div class="pl-2">
-            <h2 class="text-[18px] font-bold text-[#1E1B4B]">Practice all topics</h2>
-            <p class="text-[14px] text-[#6B7280] mt-1 font-medium">~60 min · 28 skills · Mixed difficulty</p>
-          </div>
-          <button id="math-global-btn" onclick="window.location.href='/exam.html?mode=practice&type=mixed&subject=math'" class="btn-primary shrink-0 w-full sm:w-auto" style="background: #0EA5E9;">
-            Start Practice →
-          </button>
-        </div>
-
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-          <div class="flex overflow-x-auto pb-2 md:pb-0 gap-2 math-filters flex-nowrap" style="scrollbar-width: none;">
-             <!-- Filters populated by JS -->
-          </div>
-          <div class="flex items-center gap-3 bg-white border border-[#E8EAF2] rounded-full px-4 py-2 w-full md:max-w-xs shadow-sm focus-within:border-[#0EA5E9] transition-all">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-            <input type="text" id="math-search" class="search-input" placeholder="Search skills..." oninput="debounceSearch('math')" />
+            <div class="list-container" id="math-lists"></div>
           </div>
         </div>
-
-        <div class="list-container" id="math-lists"></div>
       </main>
 
     </div>
@@ -509,8 +454,8 @@
       {
         id: "information-and-ideas", label: "Information and Ideas", desc: "Interpret and analyze informational texts", icon: "◈", accentHex: "#EC4899",
         subTopics: [
-          { id: "central-ideas", label: "Central Ideas and Details", completed: 0, total: 142 },
-          { id: "command-of-evidence", label: "Command of Evidence", completed: 0, total: 128 },
+          { id: "central-ideas", label: "Central Ideas", completed: 0, total: 142 },
+          { id: "command-of-evidence", label: "Evidence", completed: 0, total: 128 },
           { id: "inferences", label: "Inferences", completed: 0, total: 91 },
         ]
       },
@@ -518,7 +463,7 @@
         id: "standard-english-conventions", label: "Standard English Conventions", desc: "Master grammar, punctuation, and sentence structure", icon: "¶", accentHex: "#F59E0B",
         subTopics: [
           { id: "boundaries", label: "Boundaries", completed: 0, total: 103 },
-          { id: "form-structure", label: "Form, Structure, and Sense", completed: 0, total: 117 },
+          { id: "form-structure", label: "Form & Structure", completed: 0, total: 117 },
         ]
       }
     ];
@@ -530,27 +475,27 @@
           { id: "lin1", label: "Linear equations in one variable", completed: 0, total: 159 },
           { id: "linf", label: "Linear functions", completed: 0, total: 225 },
           { id: "lin2", label: "Linear equations in two variables", completed: 0, total: 179 },
-          { id: "sys", label: "Systems of two linear equations in two variables", completed: 0, total: 161 },
-          { id: "ineq", label: "Linear inequalities in one or two variables", completed: 0, total: 100 },
+          { id: "sys", label: "Systems of linear eq", completed: 0, total: 161 },
+          { id: "ineq", label: "Linear inequalities", completed: 0, total: 100 },
         ]
       },
       {
         id: "advanced-math", label: "Advanced Math", desc: "Navigate complex nonlinear equations and functions", icon: "ƒ", accentHex: "#10B981",
         subTopics: [
-          { id: "equiv", label: "Equivalent expressions", completed: 0, total: 158 },
-          { id: "nonlin1", label: "Nonlinear equations in one variable and systems of equations", completed: 0, total: 211 },
+          { id: "equiv", label: "Expressions", completed: 0, total: 158 },
+          { id: "nonlin1", label: "Nonlinear equations", completed: 0, total: 211 },
           { id: "nonlinf", label: "Nonlinear functions", completed: 0, total: 320 },
         ]
       },
       {
         id: "problem-solving", label: "Problem-Solving and Data Analysis", desc: "Interpret data, rates, and probabilities", icon: "📊", accentHex: "#F59E0B",
         subTopics: [
-          { id: "ratios", label: "Ratios, rates, proportional relationships, and units", completed: 0, total: 119 },
+          { id: "ratios", label: "Ratios & proportions", completed: 0, total: 119 },
           { id: "percent", label: "Percentages", completed: 0, total: 101 },
-          { id: "dist", label: "One-variable data: Distributions and measures of center", completed: 0, total: 103 },
-          { id: "scatter", label: "Two-variable data: Models and scatterplots", completed: 0, total: 74 },
-          { id: "prob", label: "Probability and conditional probability", completed: 0, total: 56 },
-          { id: "infer", label: "Inference from sample statistics", completed: 0, total: 33 },
+          { id: "dist", label: "Data distributions", completed: 0, total: 103 },
+          { id: "scatter", label: "Scatterplots & models", completed: 0, total: 74 },
+          { id: "prob", label: "Probability", completed: 0, total: 56 },
+          { id: "infer", label: "Sample statistics", completed: 0, total: 33 },
           { id: "eval", label: "Evaluating statistical claims", completed: 0, total: 12 },
         ]
       },
@@ -558,8 +503,8 @@
         id: "geometry", label: "Geometry and Trigonometry", desc: "Understand shapes, angles, and trigonometric ratios", icon: "△", accentHex: "#EC4899",
         subTopics: [
           { id: "area", label: "Area and volume", completed: 0, total: 113 },
-          { id: "lines", label: "Lines, angles, and triangles", completed: 0, total: 110 },
-          { id: "trig", label: "Right triangles and trigonometry", completed: 0, total: 83 },
+          { id: "lines", label: "Lines & angles", completed: 0, total: 110 },
+          { id: "trig", label: "Trigonometry", completed: 0, total: 83 },
           { id: "circles", label: "Circles", completed: 0, total: 73 },
         ]
       }
@@ -669,6 +614,9 @@
       setTimeout(() => {
         container.innerHTML = '';
         const searchLower = search.toLowerCase().trim();
+        const clearBtn = document.getElementById(`${type}-search-clear`);
+        if(clearBtn) clearBtn.style.display = search.length > 0 ? "block" : "none";
+        let hasVisible = false;
 
         categories.forEach((cat, index) => {
           let visibleSubs = cat.subTopics.filter(s => {
@@ -677,7 +625,10 @@
             return mFilter && mSearch;
           });
 
+          
           if (visibleSubs.length === 0) return;
+          hasVisible = true;
+
 
           const catCompleted = cat.subTopics.reduce((s, t) => s + t.completed, 0);
           const catTotal = cat.subTopics.reduce((s, t) => s + t.total, 0);
@@ -691,34 +642,41 @@
           } else {
             badgeHtml = `<span class="status-badge status-in-progress">IN PROGRESS</span>`;
           }
-          
           const isZeroState = catPct === 0;
           const isCompleteState = catPct === 100;
 
           const catEl = document.createElement('div');
-          catEl.className = `cat-card stagger-item open ${isZeroState ? 'zero-state' : ''} ${isCompleteState ? 'completed-state' : ''}`; 
+          const isOpen = (!isZeroState && !isCompleteState);
+          catEl.className = `cat-card stagger-item ${isZeroState ? 'zero-state' : ''} ${isCompleteState ? 'completed-state' : ''} ${isOpen ? 'open' : ''}`; 
           
+          const positionColors = [
+            { border: '#7F77DD', bg: '#EEEDFE', icon: '#534AB7', prog: '#7F77DD', btnBg: '#7F77DD', btnText: '#EEEDFE' },
+            { border: '#1D9E75', bg: '#E1F5EE', icon: '#0F6E56', prog: '#1D9E75', btnBg: '#1D9E75', btnText: '#E1F5EE' },
+            { border: '#D4537E', bg: '#FBEAF0', icon: '#993556', prog: '#D4537E', btnBg: '#D4537E', btnText: '#FBEAF0' },
+            { border: '#378ADD', bg: '#E6F1FB', icon: '#185FA5', prog: '#378ADD', btnBg: '#378ADD', btnText: '#E6F1FB' }
+          ];
+          const colorSet = positionColors[index % positionColors.length];
+
           // ZONE A: Header
           const headerHtml = `
             <button type="button" class="cat-header" onclick="toggleCat(this)" aria-expanded="true">
-              <div class="absolute left-0 top-0 bottom-0 w-1 bg-[${cat.accentHex}]"></div>
+              <div class="absolute left-0 top-0 bottom-0 w-1" style="background: ${colorSet.border};"></div>
               
-              <div class="w-[40px] h-[40px] rounded-[12px] flex items-center justify-center text-[20px] shrink-0" style="background: ${cat.accentHex}15; color: ${cat.accentHex}; font-family: system-ui;">
+              <div class="w-[36px] h-[36px] rounded-[8px] flex items-center justify-center text-[16px] shrink-0 flex-shrink-0" style="background: ${colorSet.bg}; color: ${colorSet.icon}; font-family: system-ui;">
                 ${cat.icon}
               </div>
               
               <div class="flex-1 min-w-0 pr-2">
-                <div class="flex flex-col mb-2">
-                  <h3 class="text-[18px] font-semibold text-[#1E1B4B] leading-tight">${cat.label}</h3>
-                  <p class="text-[13px] text-[#6B7280] font-medium truncate">${cat.desc}</p>
+                <div class="flex flex-col mb-1">
+                  <h3 class="text-[16px] font-semibold text-[#1E1B4B] leading-tight truncate">${cat.label}</h3>
                 </div>
                 
                 <div class="flex items-center gap-2">
-                  <p class="text-[13px] text-[#9CA3AF] font-medium whitespace-nowrap">${cat.subTopics.length} skills · ${catCompleted} of ${catTotal} completed</p>
+                  <p class="text-[12px] text-[#9CA3AF] font-medium whitespace-nowrap">${cat.subTopics.length} skills · ${catCompleted} of ${catTotal} completed</p>
                   <div class="h-2 flex-1 max-w-[120px] bg-[#E8EAF2] rounded-full overflow-hidden ml-2">
-                    <div class="h-full rounded-full transition-all duration-500" style="width: ${catPct}%; background: ${cat.accentHex}"></div>
+                    <div class="h-full rounded-full transition-all duration-500" style="width: ${catPct}%; background: ${colorSet.prog}"></div>
                   </div>
-                  <span class="text-[11px] font-bold" style="color: ${cat.accentHex}">${catPct}%</span>
+                  <span class="text-[11px] font-bold" style="color: ${colorSet.prog}">${catPct}%</span>
                 </div>
               </div>
               
@@ -734,9 +692,7 @@
           // ZONE B: Rows
           let bodyHtml = `<div class="cat-body"><div class="cat-body-inner flex flex-col gap-1 px-2 pb-2">`;
           
-          if (isZeroState) {
-            bodyHtml += `<div class="px-4 py-3 text-[14px] text-[#6B7280] font-medium">Ready to begin? Pick any skill below.</div>`;
-          }
+          
 
           visibleSubs.forEach((sub, i) => {
             const subPct = sub.total > 0 ? Math.round((sub.completed / sub.total) * 100) : 0;
@@ -754,11 +710,11 @@
             
             let ctaHtml = '';
             if (isZero) {
-              ctaHtml = `<button class="btn-solid-purple" style="background: ${cat.accentHex}">Start →</button>`;
+              ctaHtml = `<button class="sub-action" style="background: ${colorSet.btnBg}; color: ${colorSet.btnText}; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; border: none;">Start →</button>`;
             } else if (isRowComplete) {
-              ctaHtml = `<button class="btn-outline-gray">Review →</button>`;
+              ctaHtml = `<button class="sub-action" style="background: ${colorSet.btnBg}; color: ${colorSet.btnText}; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; border: none;">Review →</button>`;
             } else {
-              ctaHtml = `<button class="btn-solid-purple" style="background: ${cat.accentHex}">Continue →</button>`;
+              ctaHtml = `<button class="sub-action" style="background: ${colorSet.btnBg}; color: ${colorSet.btnText}; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; border: none;">Continue →</button>`;
             }
             
             let progressHtml = '';
@@ -771,10 +727,10 @@
             bodyHtml += `
               <div onclick="window.location.href='/exam.html?mode=practice&category=${cat.id}&topic=${sub.id}'" class="sub-row group ${isRowComplete ? 'completed-row' : ''} ${isFirstRow ? 'glow-state' : ''}">
                 <div class="flex items-center gap-3 min-w-0 flex-1">
-                  <div class="w-[3px] h-[32px] rounded-full shrink-0" style="background: ${isZero ? '#E8EAF2' : cat.accentHex}"></div>
+                  <div class="w-[3px] h-[28px] rounded-full shrink-0" style="background: ${isZero ? '#E8EAF2' : colorSet.border}"></div>
                   <div class="text-left flex-1 min-w-0 pr-4">
-                    <p class="text-[15px] font-medium text-[#374151] truncate leading-snug group-hover:text-[${cat.accentHex}] transition-colors">${labelHtml}</p>
-                    <p class="text-[13px] text-[#9CA3AF] font-regular mt-0.5">~${estMin} min</p>
+                    <p class="text-[14px] font-medium text-[#374151] leading-snug group-hover:text-[${colorSet.border}] transition-colors" style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${labelHtml}</p>
+                    
                   </div>
                 </div>
                 
@@ -782,7 +738,7 @@
                   ${ctaHtml}
                   <div class="flex items-center gap-3 w-[140px]">
                     <div class="progress-track flex-1" style="background: ${isZero ? '#EDE9FE' : '#E8EAF2'}">
-                      <div class="progress-fill" style="width: ${subPct}%; background: ${cat.accentHex}"></div>
+                      <div class="progress-fill" style="width: ${subPct}%; background: ${colorSet.prog}"></div>
                     </div>
                     ${progressHtml}
                   </div>
@@ -792,19 +748,20 @@
           });
           
           // ZONE C: Footer
-          bodyHtml += `<div class="border-t border-[#E8EAF2] mt-2 px-4 py-4 flex items-center justify-between">`;
+          bodyHtml += `<div class="border-t border-[#E8EAF2] mt-1 px-5 py-3 flex items-center justify-between">`;
           if (isCompleteState) {
-            bodyHtml += `<span class="text-[14px] text-[#10B981] font-bold">Category mastered! 🎉</span>`;
-            bodyHtml += `<button onclick="window.location.href='/exam.html?mode=practice&category=${cat.id}'" class="btn-outline-gray">Review All →</button>`;
+            bodyHtml += `<span class="text-[13px] text-[#10B981] font-bold">Category mastered! 🎉</span>`;
           } else {
-            bodyHtml += `<span class="text-[13px] text-[#6B7280] font-medium">${visibleSubs.length} of ${cat.subTopics.length} skills in this category</span>`;
-            bodyHtml += `<button onclick="window.location.href='/exam.html?mode=practice&category=${cat.id}'" class="btn-solid-purple" style="background: ${cat.accentHex}">Practice All →</button>`;
+            bodyHtml += `<span class="text-[12px] text-[#6B7280] font-medium">${visibleSubs.length} of ${cat.subTopics.length} skills in this category</span>`;
           }
-          bodyHtml += `</div></div></div>`;
+          bodyHtml += `<div class="flex items-center gap-4 shrink-0"><a href="/exam.html?mode=practice&category=${cat.id}" style="font-size: 13px; color: #534AB7; font-weight: 500; background: transparent; border: none; cursor: pointer; text-decoration: none;">Practice All →</a></div></div></div></div>`;
 
           catEl.innerHTML = headerHtml + bodyHtml;
           container.appendChild(catEl);
         });
+        if (!hasVisible) {
+          container.innerHTML = '<div class="text-center" style="padding: 32px 0;"><i class="ti ti-circle-dashed" style="font-size: 24px; color: #9CA3AF; margin-bottom: 12px; display: inline-block;"></i><p style="font-size: 13px; color: #6B7280;">No skills match</p></div>';
+        }
 
         // Trigger stagger animation
         requestAnimationFrame(() => {
@@ -825,6 +782,13 @@
     }
 
     // SEARCH LOGIC
+    
+    function clearSearch(type) {
+      document.getElementById(type + '-search').value = '';
+      document.getElementById(type + '-search-clear').style.display = 'none';
+      debounceSearch(type);
+    }
+  
     function debounceSearch(type) {
       clearTimeout(searchTimeout);
       const input = document.getElementById(`${type}-search`);
@@ -839,116 +803,136 @@
       const rwTotal = RW_CATEGORIES.reduce((s, cat) => s + cat.subTopics.reduce((a, b) => a + b.total, 0), 0);
       const rwCompleted = RW_CATEGORIES.reduce((s, cat) => s + cat.subTopics.reduce((a, b) => a + b.completed, 0), 0);
       const rwPct = rwTotal > 0 ? Math.round((rwCompleted / rwTotal) * 100) : 0;
+      const rwSkillsCount = RW_CATEGORIES.reduce((s, cat) => s + cat.subTopics.length, 0);
 
       const mathTotal = MATH_CATEGORIES.reduce((s, cat) => s + cat.subTopics.reduce((a, b) => a + b.total, 0), 0);
       const mathCompleted = MATH_CATEGORIES.reduce((s, cat) => s + cat.subTopics.reduce((a, b) => a + b.completed, 0), 0);
       const mathPct = mathTotal > 0 ? Math.round((mathCompleted / mathTotal) * 100) : 0;
+      const mathSkillsCount = MATH_CATEGORIES.reduce((s, cat) => s + cat.subTopics.length, 0);
 
-      // Overview Subjects
-      const subjectsGrid = document.getElementById('subject-cards-container');
-      subjectsGrid.innerHTML = `
-        <div class="premium-card p-6 flex flex-col hover:cursor-pointer" onclick="navigate('rw-skills')">
-          <div class="flex items-start justify-between mb-4">
-            <div class="w-[56px] h-[56px] rounded-[16px] flex items-center justify-center text-[28px]" style="background: #EDE9FE; color: #8B5CF6;">📖</div>
-            <span class="status-badge ${rwPct === 0 ? 'status-not-started' : (rwPct === 100 ? 'status-completed' : 'status-in-progress')}">${rwPct === 0 ? 'NOT STARTED' : (rwPct === 100 ? 'COMPLETED' : 'IN PROGRESS')}</span>
-          </div>
-          <h2 class="text-[22px] font-bold text-[#1E1B4B] mb-1">Reading & Writing</h2>
-          <p class="text-[15px] text-[#6B7280] mb-6">1492 questions · 10 skills</p>
-          <div class="mt-auto">
-            <div class="flex justify-between text-[13px] font-semibold mb-2">
-              <span class="text-[#8B5CF6]">${rwPct}% Completed</span>
-              <span class="text-[#6B7280]">${rwCompleted} / ${rwTotal}</span>
-            </div>
-            <div class="h-2 w-full bg-[#E8EAF2] rounded-full overflow-hidden mb-6">
-              <div class="h-full rounded-full bg-[#8B5CF6] transition-all duration-500" style="width: ${rwPct}%"></div>
-            </div>
-            <button class="w-full py-3 rounded-xl font-semibold text-white transition-all hover:scale-[0.97]" style="background: #8B5CF6; box-shadow: 0 4px 14px rgba(139,92,246,0.25);">Explore →</button>
-          </div>
+      document.getElementById('rw-stats-summary').innerText = `${rwTotal} questions · ${rwSkillsCount} skills · ${rwPct}% completed`;
+      document.getElementById('math-stats-summary').innerText = `${mathTotal} questions · ${mathSkillsCount} skills · ${mathPct}% completed`;
+      
+      renderFilters('rw');
+      renderFilters('math');
+    }
+
+    function renderFilters(type) {
+      const isMath = type === 'math';
+      const categories = isMath ? MATH_CATEGORIES : RW_CATEGORIES;
+      const color = isMath ? '#0EA5E9' : '#7C69EF';
+      const bg = isMath ? '#E0F2FE' : 'rgba(255,255,255,0.2)';
+      
+      let all = 0, notStarted = 0, inProg = 0, comp = 0;
+      categories.forEach(cat => {
+        cat.subTopics.forEach(sub => {
+          all++;
+          if (sub.completed === 0) notStarted++;
+          else if (sub.completed === sub.total) comp++;
+          else inProg++;
+        });
+      });
+
+      const container = document.querySelector(`.${type}-filters`);
+      const { filter, search } = state[type];
+      
+      // Ensure row styling for container
+      container.style.flexWrap = 'nowrap';
+      container.style.alignItems = 'center';
+      container.style.justifyContent = 'space-between';
+      container.style.gap = '8px';
+
+      const makePill = (id, label, count) => {
+        const isActive = filter === id;
+        let pillStyle = '';
+        if (isActive) {
+          if (isMath) {
+            pillStyle = 'background: #9FE1CB !important; border-color: #1D9E75 !important; color: #04342C !important; font-weight: 500;';
+          } else {
+            pillStyle = 'background: #CECBF6 !important; border-color: #7F77DD !important; color: #26215C !important; font-weight: 500;';
+          }
+        } else {
+          pillStyle = 'background: #FFFFFF; border-color: #E8EAF2; color: #6B7280; font-weight: 400;';
+        }
+        return `
+          <button class="filter-btn shrink-0" data-filter="${id}" style="${pillStyle} padding: 4px 10px; border-radius: 99px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px; border-width: 0.5px; border-style: solid; margin: 0; outline: none;">
+            ${label} <span style="font-weight: 600; color: inherit;">${count}</span>
+          </button>
+        `;
+      };
+
+      container.innerHTML = `
+        <div class="flex items-center shrink-0 no-scrollbar" style="gap: 5px; overflow-x: auto; padding-bottom: 2px;">
+          ${makePill('all', 'All', all)}
+          ${makePill('not-started', 'Not Started', notStarted)}
+          ${makePill('in-progress', '<i class="ti ti-clock" style="font-size: 11px;"></i> In Progress', inProg)}
+          ${makePill('completed', '<i class="ti ti-check" style="font-size: 11px;"></i> Completed', comp)}
         </div>
-
-        <div class="premium-card p-6 flex flex-col hover:cursor-pointer" onclick="navigate('math-skills')">
-          <div class="flex items-start justify-between mb-4">
-            <div class="w-[56px] h-[56px] rounded-[16px] flex items-center justify-center text-[28px]" style="background: #E0F2FE; color: #0EA5E9;">📐</div>
-             <span class="status-badge ${mathPct === 0 ? 'status-not-started' : (mathPct === 100 ? 'status-completed' : 'status-in-progress')}">${mathPct === 0 ? 'NOT STARTED' : (mathPct === 100 ? 'COMPLETED' : 'IN PROGRESS')}</span>
-          </div>
-          <h2 class="text-[22px] font-bold text-[#1E1B4B] mb-1">Math</h2>
-          <p class="text-[15px] text-[#6B7280] mb-6">2390 questions · 28 skills</p>
-          <div class="mt-auto">
-            <div class="flex justify-between text-[13px] font-semibold mb-2">
-              <span class="text-[#0EA5E9]">${mathPct}% Completed</span>
-              <span class="text-[#6B7280]">${mathCompleted} / ${mathTotal}</span>
-            </div>
-            <div class="h-2 w-full bg-[#E8EAF2] rounded-full overflow-hidden mb-6">
-              <div class="h-full rounded-full bg-[#0EA5E9] transition-all duration-500" style="width: ${mathPct}%"></div>
-            </div>
-            <button class="w-full py-3 rounded-xl font-semibold text-white transition-all hover:scale-[0.97]" style="background: #0EA5E9; box-shadow: 0 4px 14px rgba(14,165,233,0.25);">Explore →</button>
-          </div>
+        <div class="flex-1 relative min-w-[100px]">
+          <i class="ti ti-search absolute left-[10px] top-1/2 -translate-y-1/2 text-[#9CA3AF]" style="font-size: 14px; pointer-events: none;"></i>
+          <input type="text" id="${type}-search" value="${search || ''}" placeholder="Search skills…" class="w-full bg-white border border-[#E8EAF2] rounded-full text-[12px] text-[#374151] placeholder-[#9CA3AF] focus:outline-none transition-colors" style="padding: 5px 28px 5px 30px; border-color: #E8EAF2;" onfocus="this.style.borderColor='${color}'" onblur="this.style.borderColor='#E8EAF2'">
+          <button id="${type}-search-clear" onclick="clearSearch('${type}')" class="absolute right-[8px] top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#374151] transition-colors" style="display: ${search ? 'block' : 'none'}; border: none; background: transparent; cursor: pointer; padding: 2px;">
+            <i class="ti ti-x" style="font-size: 14px;"></i>
+          </button>
         </div>
       `;
 
-      // Stat Cards and Zero States
-      const rwIsZero = rwPct === 0;
-      document.getElementById('rw-stats').innerHTML = `
-        <div class="stat-box relative overflow-hidden">
-          <div class="absolute top-4 right-4 text-[#8B5CF6] opacity-20"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg></div>
-          <div class="w-1 self-stretch rounded-full shrink-0" style="background: #8B5CF6"></div>
-          <div>
-            <p class="text-[24px] font-bold text-[#1E1B4B]" data-count="10">0</p>
-            <p class="text-[11px] font-medium text-[#6B7280]">Skills</p>
-          </div>
-        </div>
-        <div class="stat-box relative overflow-hidden">
-          <div class="absolute top-4 right-4 text-[#3B82F6] opacity-20"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 22h20L12 2zm0 3.8L18.2 18H5.8L12 5.8z"/></svg></div>
-          <div class="w-1 self-stretch rounded-full shrink-0" style="background: #3B82F6"></div>
-          <div>
-            <p class="text-[24px] font-bold text-[#1E1B4B]" data-count="${rwCompleted}">0</p>
-            <p class="text-[11px] font-medium text-[#6B7280]">${rwIsZero ? 'Your journey starts here' : 'Attempted'}</p>
-          </div>
-        </div>
-        <div class="stat-box relative overflow-hidden">
-          <div class="absolute top-4 right-4 text-[#10B981] opacity-20"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg></div>
-          <div class="w-1 self-stretch rounded-full shrink-0" style="background: #10B981"></div>
-          <div>
-            <p class="text-[24px] font-bold text-[#1E1B4B]"><span data-count="${rwPct}">0</span>%</p>
-            <p class="text-[11px] font-medium text-[#6B7280]">Completion</p>
-          </div>
-        </div>
-      `;
-
-      if(rwIsZero) {
-        document.getElementById('rw-global-btn').innerText = "Start Your First Session →";
+      container.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          state[type].filter = e.currentTarget.getAttribute('data-filter');
+          renderFilters(type);
+          renderList(type);
+        });
+      });
+      
+      const searchInput = document.getElementById(`${type}-search`);
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          state[type].search = e.target.value;
+          document.getElementById(`${type}-search-clear`).style.display = e.target.value.length > 0 ? 'block' : 'none';
+          debounceSearch(type);
+        });
       }
+    }
 
-      const mathIsZero = mathPct === 0;
-      document.getElementById('math-stats').innerHTML = `
-        <div class="stat-box relative overflow-hidden">
-          <div class="absolute top-4 right-4 text-[#0EA5E9] opacity-20"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg></div>
-          <div class="w-1 self-stretch rounded-full shrink-0" style="background: #0EA5E9"></div>
-          <div>
-            <p class="text-[24px] font-bold text-[#1E1B4B]" data-count="28">0</p>
-            <p class="text-[11px] font-medium text-[#6B7280]">Skills</p>
-          </div>
-        </div>
-        <div class="stat-box relative overflow-hidden">
-          <div class="absolute top-4 right-4 text-[#10B981] opacity-20"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 22h20L12 2zm0 3.8L18.2 18H5.8L12 5.8z"/></svg></div>
-          <div class="w-1 self-stretch rounded-full shrink-0" style="background: #10B981"></div>
-          <div>
-            <p class="text-[24px] font-bold text-[#1E1B4B]" data-count="${mathCompleted}">0</p>
-            <p class="text-[11px] font-medium text-[#6B7280]">${mathIsZero ? 'Your journey starts here' : 'Attempted'}</p>
-          </div>
-        </div>
-        <div class="stat-box relative overflow-hidden">
-          <div class="absolute top-4 right-4 text-[#F59E0B] opacity-20"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg></div>
-          <div class="w-1 self-stretch rounded-full shrink-0" style="background: #F59E0B"></div>
-          <div>
-            <p class="text-[24px] font-bold text-[#1E1B4B]"><span data-count="${mathPct}">0</span>%</p>
-            <p class="text-[11px] font-medium text-[#6B7280]">Completion</p>
-          </div>
-        </div>
-      `;
-      if(mathIsZero) {
-        document.getElementById('math-global-btn').innerText = "Start Your First Session →";
-      }
+    function toggleCat(btn) {
+      const parent = btn.parentElement;
+      const isExpanded = parent.classList.contains('open');
+      btn.setAttribute('aria-expanded', !isExpanded);
+      parent.classList.toggle('open');
+    }
+
+    // SEARCH LOGIC
+    
+    function clearSearch(type) {
+      document.getElementById(type + '-search').value = '';
+      document.getElementById(type + '-search-clear').style.display = 'none';
+      debounceSearch(type);
+    }
+  
+    function debounceSearch(type) {
+      clearTimeout(searchTimeout);
+      const input = document.getElementById(`${type}-search`);
+      searchTimeout = setTimeout(() => {
+        state[type].search = input.value;
+        renderList(type);
+      }, 150);
+    }
+    
+    // RENDER PAGE LEVEL LOGIC
+    function renderPageLayout() {
+      const rwTotal = RW_CATEGORIES.reduce((s, cat) => s + cat.subTopics.reduce((a, b) => a + b.total, 0), 0);
+      const rwCompleted = RW_CATEGORIES.reduce((s, cat) => s + cat.subTopics.reduce((a, b) => a + b.completed, 0), 0);
+      const rwPct = rwTotal > 0 ? Math.round((rwCompleted / rwTotal) * 100) : 0;
+      const rwSkillsCount = RW_CATEGORIES.reduce((s, cat) => s + cat.subTopics.length, 0);
+
+      const mathTotal = MATH_CATEGORIES.reduce((s, cat) => s + cat.subTopics.reduce((a, b) => a + b.total, 0), 0);
+      const mathCompleted = MATH_CATEGORIES.reduce((s, cat) => s + cat.subTopics.reduce((a, b) => a + b.completed, 0), 0);
+      const mathPct = mathTotal > 0 ? Math.round((mathCompleted / mathTotal) * 100) : 0;
+      const mathSkillsCount = MATH_CATEGORIES.reduce((s, cat) => s + cat.subTopics.length, 0);
+
+      document.getElementById('rw-stats-summary').innerText = `${rwTotal} questions · ${rwSkillsCount} skills · ${rwPct}% completed`;
+      document.getElementById('math-stats-summary').innerText = `${mathTotal} questions · ${mathSkillsCount} skills · ${mathPct}% completed`;
       
       renderFilters('rw');
       renderFilters('math');
@@ -973,20 +957,30 @@
       const container = document.querySelector(`.${type}-filters`);
       const { filter } = state[type];
 
-      const makePill = (id, icon, label, count) => {
+      const makePill = (id, label, count) => {
         const isActive = filter === id;
+        let pillStyle = '';
+        if (isActive) {
+          if (isMath) {
+            pillStyle = 'background: #9FE1CB !important; border-color: #1D9E75 !important; color: #04342C !important; font-weight: 500;';
+          } else {
+            pillStyle = 'background: #CECBF6 !important; border-color: #7F77DD !important; color: #26215C !important; font-weight: 500;';
+          }
+        } else {
+          pillStyle = 'background: #FFFFFF; border-color: #E8EAF2; color: #6B7280; font-weight: 400;';
+        }
         return `
-          <button class="filter-btn ${isActive ? 'active' : ''}" data-filter="${id}">
-            <span>${icon}</span> ${label} <span class="filter-badge" ${isActive ? `style="background:${bg}; color:#fff;"` : (isMath ? `style="background:#E0F2FE; color:#0EA5E9;"` : '')}>${count}</span>
+          <button class="filter-btn" data-filter="${id}" style="${pillStyle} padding: 5px 11px; border-radius: 99px; font-size: 12px; display: inline-flex; align-items: center; gap: 5px; border-width: 0.5px; border-style: solid; margin: 0;">
+            ${label} <span style="font-weight: 500; color: inherit;">${count}</span>
           </button>
         `;
       };
 
       container.innerHTML = `
-        ${makePill('all', '⊞', 'All', all)}
-        ${makePill('not-started', '◯', 'Not Started', notStarted)}
-        ${makePill('in-progress', '⏱', 'In Progress', inProg)}
-        ${makePill('completed', '✓', 'Completed', comp)}
+        ${makePill('all', 'All', all)}
+        ${makePill('not-started', 'Not Started', notStarted)}
+        ${makePill('in-progress', '<i class="ti ti-clock" style="font-size: 12px;"></i> In Progress', inProg)}
+        ${makePill('completed', '<i class="ti ti-check" style="font-size: 12px;"></i> Completed', comp)}
       `;
 
       container.querySelectorAll('.filter-btn').forEach(btn => {
@@ -1012,5 +1006,6 @@
     });
 
   </script>
+<script src="/sidebar.js"></script>
 </body>
 </html>

@@ -1335,7 +1335,493 @@
   <!-- ═══════════════════════════════════════════════
        SIDEBAR NAV
   ═══════════════════════════════════════════════ -->
-  <nav id="sidebar"></nav>
+  <nav id="sidebar">
+  <style>
+    :root {
+      --lav-sidebar: #4A4580;
+      --lav-sidebar-active: #5A5690;
+      --lav-accent: #7C6FE0;
+      --lav-accent2: #B8B0F5;
+      --sidebar-width: 240px;
+    }
+    html.dark, body.dark, .dark {
+      --lav-sidebar: #130C27;
+      --lav-sidebar-active: #251B4D;
+    }
+    #sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width) !important;
+      background: var(--lav-sidebar);
+      z-index: 200;
+      box-shadow: 4px 0 24px rgba(61, 56, 117, 0.18);
+      transition: width 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+      font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+      overflow: hidden;
+    }
+    .sidebar-inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 240px;
+      overflow-y: auto;
+      transition: opacity 0.2s;
+    }
+    .sidebar-inner::-webkit-scrollbar { width: 4px; }
+    .sidebar-inner::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 2px; }
+    
+    #sidebar .logo { display: flex; align-items: center; gap: 10px; padding: 24px 20px 20px; cursor: pointer; user-select: none; }
+    #sidebar .logo-icon { font-size: 26px; }
+    #sidebar .logo-text { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+    #sidebar .exam-selector { margin: 0 16px 20px; width: calc(100% - 32px); background: rgba(255, 255, 255, 0.08); color: #fff; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; padding: 9px 14px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; outline: none; }
+    #sidebar .exam-selector option { background: var(--lav-sidebar); color: #fff; }
+    #sidebar .nav-links { list-style: none; padding: 0 10px; flex: 1; margin: 0; }
+    #sidebar .nav-links li { margin-bottom: 2px; }
+    #sidebar .nav-links li.section-label { font-size: 10px; font-weight: 800; color: rgba(255, 255, 255, 0.45); letter-spacing: 0.1em; text-transform: uppercase; padding: 16px 12px 6px 14px; }
+    #sidebar .nav-links a { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; color: rgba(255, 255, 255, 0.82); font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s ease; position: relative; }
+    #sidebar .nav-links a:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+    #sidebar .nav-links a.active { background: var(--lav-sidebar-active); color: #fff; box-shadow: inset 3px 0 0 var(--lav-accent2); }
+    #sidebar .badge-new { font-size: 10px; font-weight: 600; background: #EDE9FE; color: #7C6FE0; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; position: absolute; right: 10px; }
+    #sidebar .sidebar-bottom { padding: 16px 10px; border-top: 1px solid rgba(255, 255, 255, 0.07); display: flex; flex-direction: column; gap: 2px; }
+    #sidebar .sidebar-bottom a, #sidebar .sidebar-bottom button { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; color: rgba(255, 255, 255, 0.7); font-size: 13px; font-weight: 600; text-decoration: none; background: transparent; border: none; font-family: inherit; cursor: pointer; width: 100%; text-align: left; transition: all 0.2s ease; }
+    #sidebar .sidebar-bottom a:hover, #sidebar .sidebar-bottom button:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+    #sidebar .user-profile { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: rgba(0, 0, 0, 0.2); margin-top: 8px; cursor: pointer; transition: background 0.2s; }
+    #sidebar .user-profile:hover { background: rgba(0, 0, 0, 0.3); }
+    #sidebar .avatar { width: 32px; height: 32px; background: var(--lav-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    #sidebar .user-profile span:nth-child(2) { flex: 1; font-size: 12px; font-weight: 600; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Toggle Logic */
+    body.sidebar-collapsed {
+      --sidebar-width: 0px;
+    }
+    body.sidebar-collapsed #sidebar {
+      background: transparent !important;
+      box-shadow: none !important;
+      border: none !important;
+      pointer-events: none;
+    }
+    body.sidebar-collapsed .sidebar-inner {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    /* Dynamically shift main containers to make room for fixed sidebar and floating pill */
+    .views-wrap, .main-content, .page-wrap {
+      margin-left: var(--sidebar-width) !important;
+      width: auto !important;
+      padding-right: 48px !important;
+      transition: margin-left 0.3s ease, width 0.3s ease !important;
+    }
+    
+    /* Floating Theme Toggle Pill */
+    #theme-pill-toggle {
+      position: fixed;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1000;
+      width: 36px;
+      height: 72px;
+      border-radius: 18px 0 0 18px; /* Assuming it touches the right edge as requested */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px;
+      transition: all 0.2s ease;
+      background: #ffffff;
+      border: 1px solid rgba(108,99,255,0.2);
+      pointer-events: auto !important; /* Ensure it works even if sidebar is collapsed */
+    }
+    #theme-pill-toggle:hover {
+      box-shadow: 0 4px 20px rgba(108,99,255,0.15);
+    }
+    .theme-pill-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    /* Light Mode */
+    body:not(.dark) #theme-pill-toggle .sun-icon {
+      background: #fef3c7;
+      color: #f59e0b;
+    }
+    body:not(.dark) #theme-pill-toggle .moon-icon {
+      color: rgba(108,99,255,0.3);
+      background: transparent;
+    }
+    /* Dark Mode */
+    body.dark #theme-pill-toggle {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(108,99,255,0.25);
+    }
+    body.dark #theme-pill-toggle .moon-icon {
+      background: rgba(108,99,255,0.2);
+      color: #a5b4fc;
+    }
+    body.dark #theme-pill-toggle .sun-icon {
+      color: rgba(255,255,255,0.2);
+      background: transparent;
+    }
+    
+    #uncollapse-btn {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      background: var(--lav-sidebar-active);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    body.sidebar-collapsed #uncollapse-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #toggle-sidebar-btn {
+      position: absolute;
+      top: 24px;
+      right: 16px;
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.5);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+      transition: color 0.2s;
+      z-index: 200;
+    }
+    #toggle-sidebar-btn:hover {
+      color: white;
+    }
+
+    /* ── Component CSS Classes & Dark Mode Overrides ── */
+    .ctc-day-rest { background-color: rgba(156, 163, 175, 0.15); border-color: #D1D5DB; }
+    .ctc-day-incomplete { background-color: #FEE2E2; border-color: #FEE2E2; color: #FCA5A5; }
+    .ctc-day-incomplete-today { color: #ef4444; }
+    .ctc-day-future { border-style: dashed; border-color: #DDD6FE; }
+
+    /* ── Component CSS Classes & Dark Mode Overrides (Deep Space Theme) ── */
+    /* ── Component CSS Classes & Dark Mode Overrides (Refined Deep Space Theme) ── */
+    body.dark {
+      background-color: #0F0E1A !important;
+      --lav-bg: #0F0E1A !important;
+    }
+    body.dark #sidebar {
+      background: #14131F !important;
+      border-right: 1px solid #2B2645 !important;
+    }
+    body.dark #sidebar .nav-links a {
+      color: #B8B4DC !important;
+    }
+    body.dark #sidebar .nav-links a.active {
+      background: #1E1B38 !important;
+      color: #EAE7FF !important;
+    }
+    body.dark #sidebar .section-label,
+    body.dark #sidebar .nav-links li.section-label {
+      color: #4A4670 !important;
+    }
+    body.dark #sidebar .badge-new {
+      background: #242040 !important;
+      color: #B8B4DC !important;
+    }
+    body.dark #sidebar .exam-selector {
+      background: #1C1A30 !important;
+      border: 1px solid #2B2645 !important;
+      color: #C8C4E8 !important;
+    }
+    body.dark #sidebar .sidebar-bottom a,
+    body.dark #sidebar .sidebar-bottom button,
+    body.dark .dm-text {
+      color: #B8B4DC !important;
+    }
+    body.dark #sidebar .nav-icon {
+      background: #3A3660 !important;
+    }
+
+    body.dark .founder-quote {
+      color: #9B97C0 !important;
+    }
+    body.dark .founder-author {
+      color: #5A5680 !important;
+    }
+
+    body.dark .hero-announce-pill {
+      background: #1C1A30 !important;
+      border: 1px solid #2B2645 !important;
+      color: #A8A4D8 !important;
+    }
+    body.dark .hero-announce-pill span[style*="#E8874A"], body.dark .hero-announce-pill span:first-child {
+      color: #E8874A !important;
+    }
+
+    body.dark .hero-h1 {
+      color: #F0EEFF !important;
+    }
+    body.dark .hero-sub {
+      color: #7C78A8 !important;
+    }
+    body.dark .btn-hero-outline {
+      border: 1.5px solid #2B2645 !important;
+      color: #A8A4D8 !important;
+      background: transparent !important;
+    }
+    body.dark .stat-item strong,
+    body.dark .stat-item span {
+      color: #6B6890 !important;
+    }
+    body.dark .stat-div {
+      background: #1C1A30 !important;
+    }
+    body.dark .hero-countdown-pill {
+      background: #1C1A30 !important;
+      border: 1px solid #2B2645 !important;
+      color: #7C78A8 !important;
+    }
+    body.dark .hero-countdown-pill strong {
+      color: #E8874A !important;
+    }
+
+    body.dark .consistency-tracker-card {
+      background: #14131F !important;
+      border: 1px solid #2B2645 !important;
+    }
+    body.dark .ctc-header h3 {
+      color: #EAE7FF !important;
+    }
+    body.dark #ctc-summary {
+      color: #4A4670 !important;
+      background: transparent !important;
+    }
+    body.dark .ctc-week-labels span {
+      color: #4A4670 !important;
+    }
+    body.dark .ctc-day {
+      background: #1C1A30 !important;
+      border: 1px solid transparent !important;
+      color: #4A4670 !important;
+    }
+    body.dark .ctc-day.missed,
+    body.dark .ctc-day-incomplete,
+    body.dark .ctc-day-incomplete-today {
+      background: #2E1A1A !important;
+      border: 1px solid transparent !important;
+      color: #F87171 !important;
+    }
+    body.dark .ctc-day.today {
+      background: #1E1B38 !important;
+      border: 1.5px dashed #5B54A8 !important;
+      color: #A8A4D8 !important;
+    }
+    body.dark .ctc-day-future {
+      background: #1C1A30 !important;
+      border: 1px dashed #2B2645 !important;
+      color: #383560 !important;
+    }
+    body.dark a[href="#MainDashboardAgenda"] {
+      color: #7C6FE0 !important;
+    }
+
+    body.dark .scores-split-card,
+    body.dark .lav-card {
+      background: #14131F !important;
+      border: 1px solid #2B2645 !important;
+    }
+    body.dark .ssc-title,
+    body.dark .ssc-title + div {
+      color: #6B68A0 !important;
+    }
+    body.dark .ssc-score,
+    body.dark #latest-score-val,
+    body.dark #target-score-val {
+      color: #F0EEFF !important;
+    }
+    body.dark .ssc-sub {
+      color: #4A4670 !important;
+    }
+    body.dark .ssc-sub a,
+    body.dark a[onclick*="openGoalModal"] {
+      color: #7C6FE0 !important;
+    }
+    body.dark #latest-score-val span {
+      color: #8884B0 !important;
+    }
+    body.dark #latest-score-sub {
+      color: #4A4670 !important;
+    }
+
+    body.dark .daily-agenda-card {
+      background: #14131F !important;
+      border: 1px solid #2B2645 !important;
+    }
+    body.dark .daily-agenda-card h3 {
+      color: #EAE7FF !important;
+    }
+    body.dark .da-progress-text,
+    body.dark #agenda-progress-text {
+      color: #4A4670 !important;
+    }
+    body.dark .da-progress-track,
+    body.dark #agenda-progress-track {
+      background: #242040 !important;
+    }
+    body.dark .da-task-card,
+    body.dark .agenda-item {
+      background: transparent !important;
+      border-color: #2B2645 !important;
+    }
+    body.dark .da-task-card:hover,
+    body.dark .agenda-item:hover {
+      background: #1C1A30 !important;
+    }
+    body.dark .badge-math, body.dark .da-meta-pill[style*="math"], body.dark .da-meta-pill.math, body.dark .math-badge {
+      background: #1A2A4A !important; color: #7EB3F7 !important; border:none!important;
+    }
+    body.dark .badge-english, body.dark .da-meta-pill[style*="english"], body.dark .da-meta-pill.english, body.dark .english-badge {
+      background: #2A1A4A !important; color: #B39DFF !important; border:none!important;
+    }
+    body.dark .badge-vocab, body.dark .da-meta-pill[style*="vocab"], body.dark .da-meta-pill.vocab, body.dark .vocab-badge {
+      background: #1A3A2A !important; color: #6FCF97 !important; border:none!important;
+    }
+    body.dark .da-task-card h4, body.dark .agenda-item h4 {
+      color: #EAE7FF !important;
+    }
+    body.dark .da-task-card.completed h4, body.dark .agenda-item.completed h4 {
+      color: #5A5680 !important;
+      text-decoration: line-through !important;
+    }
+    body.dark .da-task-card .da-meta span, body.dark .agenda-item .da-meta span {
+      color: #7C78A8 !important;
+    }
+    body.dark .task-check.completed, body.dark .da-check.completed, body.dark .da-check-icon.completed, body.dark .da-circle-check.completed {
+      background: #7C6FE0 !important;
+      color: #FFFFFF !important;
+      border: none !important;
+    }
+    body.dark .task-check:not(.completed), body.dark .da-check:not(.completed), body.dark .da-check-icon:not(.completed), body.dark .da-circle-check:not(.completed) {
+      background: transparent !important;
+      border: 1px solid #3A3660 !important;
+    }
+
+    body.dark .dsps-empty-card, body.dark .all-caught-up-card, body.dark .review-stack-card {
+      background: #14131F !important;
+      border: 1px solid #2B2645 !important;
+    }
+    body.dark .dsps-empty-card h3, body.dark .all-caught-up-card h3, body.dark .review-stack-card h3 {
+      color: #EAE7FF !important;
+    }
+    body.dark .dsps-empty-card p, body.dark .all-caught-up-card p, body.dark .review-stack-card p {
+      color: #7C78A8 !important;
+    }
+
+    body.dark .db-analytics-header h2 {
+      color: #EAE7FF !important;
+    }
+    body.dark .analytics-strip {
+      background: #14131F !important;
+      border: 1px solid #2B2645 !important;
+      color: #7C78A8 !important;
+    }
+    body.dark .analytics-strip strong {
+      color: #EAE7FF !important;
+    }
+    body.dark .analytics-strip a {
+      color: #7C6FE0 !important;
+    }
+    body.dark .analytics-strip span[id*="divider"] {
+      color: #383560 !important;
+    }
+  </style>
+
+  <button id="toggle-sidebar-btn" onclick="document.body.classList.toggle('sidebar-collapsed')" title="Collapse Menu">◀</button>
+
+  <div class="sidebar-inner">
+    <!-- Logo -->
+    <div class="logo" onclick="window.location.href='/'" style="cursor:pointer">
+      <span class="logo-icon">🤖</span>
+      <span class="logo-text">SAT Platform</span>
+    </div>
+
+    <!-- Exam Selector -->
+    <select class="exam-selector" onchange="if(typeof showToast === 'function') showToast('Selected ' + this.value.toUpperCase())">
+      <option>SAT</option>
+      <option>ACT</option>
+    </select>
+
+    <!-- Nav Links -->
+    <ul class="nav-links">
+      <li class="section-label">DASHBOARD</li>
+      <li><a href="/" onclick="if(typeof show === 'function'){show('dashboard'); return false;}" data-page="home" class="active">🏠 Home</a></li>
+      <li><a href="/study-planner" data-page="study-planner">📅 Study Planner</a></li>
+      <li>
+        <a href="/analytics" data-page="analytics">
+          📊 Analytics <span class="badge-new">New</span>
+        </a>
+      </li>
+      <li><a href="/" onclick="if(typeof show === 'function'){show('chat'); return false;}" data-page="ask-preppy">🤖 Ask Preppy AI</a></li>
+
+      <li class="section-label">PRACTICE</li>
+      <li><a href="/question-bank" data-page="question-bank">🔲 Question Bank</a></li>
+      <li><a href="/past-exams.html" data-page="past-exams">📝 Past Exams</a></li>
+      <li><a href="/real-exam" data-page="real-exam">🎯 Real Exam Mode <span class="badge-new">New</span></a></li>
+    </ul>
+
+    <!-- Bottom items -->
+    <div class="sidebar-bottom">
+      <style>
+        body:not(.dark) .dm-icon::before { content: '🌙'; }
+        body.dark .dm-icon::before { content: '☀️'; }
+        body:not(.dark) .dm-text::before { content: 'Dark Mode'; }
+        body.dark .dm-text::before { content: 'Light Mode'; }
+        body.dark .dm-switch { background: var(--lav-accent) !important; }
+        body.dark .dm-knob { transform: translateX(12px); }
+      </style>
+      <button onclick="toggleTheme()" style="justify-content: space-between;">
+        <span style="display: flex; align-items: center; gap: 10px;">
+          <span class="dm-icon"></span>
+          <span class="dm-text"></span>
+        </span>
+        <span class="dm-switch" style="width: 28px; height: 16px; background: rgba(255,255,255,0.2); border-radius: 8px; position: relative; transition: background 0.2s; flex-shrink: 0; display: inline-block;">
+          <span class="dm-knob" style="width: 12px; height: 12px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: transform 0.2s; display: inline-block;"></span>
+        </span>
+      </button>
+
+      <a href="#" onclick="if(typeof showToast === 'function') showToast('Pro features unlocked!'); return false;">⬆️ Upgrade</a>
+      
+      <!-- Profile with Dropdown -->
+      <div class="user-profile" style="position: relative; cursor: pointer;" onclick="const d = this.querySelector('.profile-dropdown'); if(d.style.display==='none'){d.style.display='block'}else{d.style.display='none'}">
+        <span class="avatar">A</span>
+        <span>Abdullah Abdus...</span>
+        <span>⚙️</span>
+        <!-- Dropdown Menu -->
+        <div class="profile-dropdown" style="display: none; position: absolute; bottom: 100%; left: 0; width: 100%; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 50; margin-bottom: 0.5rem; overflow: hidden;">
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151; border-bottom: 1px solid #f3f4f6;" onclick="event.stopPropagation(); if(typeof showToast === 'function') showToast('Account Settings')">⚙️ Account Settings</a>
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151; border-bottom: 1px solid #f3f4f6;" onclick="event.stopPropagation(); if(typeof showToast === 'function') showToast('Join Us loaded!')">👥 Join Us</a>
+          <a href="#" style="display: block; padding: 0.5rem 1rem; font-size: 0.875rem; color: #374151;" onclick="event.stopPropagation(); if(typeof showToast === 'function') showToast('Other options')">⋯ Other</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button id="uncollapse-btn" onclick="document.body.classList.toggle('sidebar-collapsed')" title="Expand Menu">▶</button>
+  
+
+  
+  </nav>
 
   <!-- ═══════════════════════════════════════════════
        VIEWS WRAPPER
@@ -2119,7 +2605,6 @@
       }
     });
   </script>
-<script src="/sidebar.js"></script>
 </body>
 
 </html>

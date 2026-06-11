@@ -678,44 +678,7 @@
   <!-- ===========================
        SIDEBAR (exact from study-planner.html)
   =========================== -->
-  <nav id="sidebar">
-    <button id="toggle-sidebar-btn" onclick="document.body.classList.toggle('sidebar-collapsed')" title="Collapse Menu">◀</button>
-    <div class="sidebar-inner">
-      <div class="logo" onclick="window.location.href='/'">
-        <span class="logo-icon">🤖</span>
-        <span class="logo-text">SAT Platform</span>
-      </div>
-      <select class="exam-selector">
-        <option>SAT</option>
-        <option>ACT</option>
-      </select>
-      <ul class="nav-links">
-        <li class="section-label">DASHBOARD</li>
-        <li><a href="/" data-page="home">🏠 Home</a></li>
-        <li><a href="/study-planner" data-page="study-planner">📅 Study Planner</a></li>
-        <li><a href="/analytics" data-page="analytics">📊 Analytics <span class="badge-new">New</span></a></li>
-        <li><a href="/" data-page="ask-preppy">🤖 Ask Preppy AI</a></li>
-        <li class="section-label">PRACTICE</li>
-        <li><a href="/question-bank" data-page="question-bank">🔲 Question Bank</a></li>
-        <li><a href="/past-exams.html" data-page="past-exams">📝 Past Exams</a></li>
-        <li><a href="/real-exam" data-page="real-exam" class="active">🎯 Real Exam Mode <span class="badge-new">New</span></a></li>
-      </ul>
-      <div class="sidebar-bottom">
-        <a href="#">⬆️ Upgrade</a>
-        <div class="user-profile" style="position:relative;cursor:pointer" onclick="const d=this.querySelector('.profile-dropdown');d.style.display=d.style.display==='none'?'block':'none'">
-          <span class="avatar">A</span>
-          <span>Abdullah Abdus...</span>
-          <span>⚙️</span>
-          <div class="profile-dropdown" style="display:none;position:absolute;bottom:100%;left:0;width:100%;background:white;border:1px solid #e5e7eb;border-radius:0.5rem;box-shadow:0 10px 15px -3px rgba(0,0,0,0.1);z-index:50;margin-bottom:0.5rem;overflow:hidden;">
-            <a href="#" style="display:block;padding:0.5rem 1rem;font-size:0.875rem;color:#374151;border-bottom:1px solid #f3f4f6;" onclick="event.stopPropagation()">⚙️ Account Settings</a>
-            <a href="#" style="display:block;padding:0.5rem 1rem;font-size:0.875rem;color:#374151;border-bottom:1px solid #f3f4f6;" onclick="event.stopPropagation()">👥 Join Us</a>
-            <a href="#" style="display:block;padding:0.5rem 1rem;font-size:0.875rem;color:#374151;" onclick="event.stopPropagation()">⋯ Other</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <button id="uncollapse-btn" onclick="document.body.classList.toggle('sidebar-collapsed')" title="Expand Menu">▶</button>
-  </nav>
+  <nav id="sidebar"></nav>
 
   <!-- ===========================
        MAIN CONTENT
@@ -1578,5 +1541,6 @@
   ================================================================ */
   document.addEventListener('DOMContentLoaded', initSelectionScreen);
   </script>
+<script src="/sidebar.js"></script>
 </body>
 </html>
