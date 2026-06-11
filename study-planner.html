@@ -40,7 +40,7 @@
 
   <style>
     :root {
-      --lav-bg:        #F8F7FF;
+      --lav-bg:        #F3F4F6;
       --lav-sidebar:   #4A4580;
       --lav-sidebar-active: #4E4A8A;
       --lav-card:      #FFFFFF;
@@ -56,13 +56,13 @@
       --lav-grad:      linear-gradient(135deg, #7C6FE0, #B8B0F5);
     }
     body {
-      background-color: #F8F7FF !important;
+      background-color: #F3F4F6 !important;
       font-family: 'Outfit', 'Inter', system-ui, sans-serif;
       color: var(--lav-dark);
       -webkit-font-smoothing: antialiased;
     }
     .main-content {
-      background-color: #F8F7FF !important;
+      background-color: #F3F4F6 !important;
     }
 
     /* Sidebar CSS from Homepage Design System */
@@ -225,7 +225,7 @@
       margin-left: 240px;
       min-height: 100vh;
       padding: 20px 24px 60px 24px;
-      background-color: #F8F7FF !important;
+      background-color: #F3F4F6 !important;
     }
 
     /* Staggered Entrance Animations */
@@ -687,34 +687,61 @@
     <section id="view-dashboard" class="hidden space-y-8 stagger-in max-w-3xl mx-auto">
       
       <!-- Header Card -->
-      <div class="bg-white rounded-2xl p-8 md:p-10 flex flex-col md:flex-row justify-between items-start gap-6 border border-gray-100 border-l-4 border-l-[#7C6FE0]" style="box-shadow: 0 4px 24px -4px rgba(108, 71, 255, 0.06), 0 12px 48px -12px rgba(0, 0, 0, 0.04);">
+      <div class="bg-white rounded-2xl p-8 flex flex-col justify-between items-start border border-gray-100 border-l-4 border-l-[#7C6FE0]" style="box-shadow: 0 4px 24px -4px rgba(108, 71, 255, 0.06);">
         <div class="space-y-4 flex-1 w-full">
           <div class="relative w-full">
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-0">
-              <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Your Personalized SAT Prep Plan</h2>
-              <button onclick="startOverPlan()" class="text-sm font-bold text-[#7C6FE0] hover:text-[#5A4FBA] flex items-center gap-1.5 transition-colors mt-1 sm:mt-0 bg-[#F0EFFE] px-3 py-1.5 rounded-lg border border-[#EDE9FE] shadow-sm hover:shadow">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                Create New Plan
+              <h2 class="text-[20px] font-[500] text-gray-900 tracking-tight">Your Personalized SAT Prep Plan</h2>
+              <button onclick="startOverPlan()" class="text-[13px] font-bold text-gray-400 hover:text-red-500 flex items-center gap-1.5 transition-colors mt-1 sm:mt-0">
+                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <span class="underline decoration-gray-300 hover:decoration-red-400 underline-offset-2">Create New Plan</span>
               </button>
             </div>
-            <div class="flex flex-wrap items-center justify-start gap-x-4 gap-y-2 text-sm text-gray-500 font-medium mt-2 leading-none">
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Goal: <strong class="text-gray-900" id="dash-goal-score">1520</strong></span>
-              <span class="text-gray-300 hidden md:inline self-center -translate-y-[1px]">|</span>
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> <strong class="text-gray-900" id="dash-exam-date">Dec 5</strong></span>
-              <span class="text-gray-300 hidden md:inline self-center -translate-y-[1px]">|</span>
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> <strong class="text-gray-900" id="dash-days-left">--</strong> Days Left</span>
-              <span class="text-gray-300 hidden md:inline self-center -translate-y-[1px]">|</span>
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#7C6FE0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg> Mode: <strong class="text-gray-900" id="dash-study-mode">Custom</strong></span>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                <!-- Stat Tile: Goal -->
+                <div class="bg-[#F9FAFB] rounded-xl p-4 flex flex-col gap-2 border border-gray-100">
+                    <div class="w-8 h-8 rounded-full bg-[#E6F1FB] text-[15px] flex items-center justify-center">🎯</div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest leading-none mb-1">Goal Score</p>
+                        <p class="text-[18px] font-black text-gray-900 leading-none" id="dash-goal-score">1520</p>
+                    </div>
+                </div>
+                <!-- Stat Tile: Date -->
+                <div class="bg-[#F9FAFB] rounded-xl p-4 flex flex-col gap-2 border border-gray-100">
+                    <div class="w-8 h-8 rounded-full bg-[#FEF3C7] text-[15px] flex items-center justify-center">📅</div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest leading-none mb-1">Exam Date</p>
+                        <p class="text-[16px] font-black text-gray-900 leading-none mt-1" id="dash-exam-date">Dec 5</p>
+                    </div>
+                </div>
+                <!-- Stat Tile: Days Left -->
+                <div class="bg-[#F9FAFB] rounded-xl p-4 flex flex-col gap-2 border border-gray-100">
+                    <div class="w-8 h-8 rounded-full bg-[#FCE7F3] text-[15px] flex items-center justify-center">⏱</div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest leading-none mb-1">Days Left</p>
+                        <p class="text-[18px] font-black text-gray-900 leading-none"><span id="dash-days-left">--</span> <span class="text-[12px] font-bold text-gray-500">Days</span></p>
+                    </div>
+                </div>
+                <!-- Stat Tile: Mode -->
+                <div class="bg-[#F9FAFB] rounded-xl p-4 flex flex-col gap-2 border border-gray-100">
+                    <div class="w-8 h-8 rounded-full bg-[#ECFDF5] text-[15px] flex items-center justify-center">📋</div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest leading-none mb-1">Study Mode</p>
+                        <p class="text-[14px] font-black text-gray-900 leading-none mt-1" id="dash-study-mode">Custom</p>
+                    </div>
+                </div>
             </div>
+
           </div>
 
-          <div class="space-y-1.5 w-full max-w-md pt-2">
-            <div class="flex justify-between items-center text-xs font-bold text-gray-700">
+          <div class="space-y-2 w-full pt-6 mt-4 border-t border-gray-100">
+            <div class="flex justify-between items-center text-[12px] font-bold text-gray-700 uppercase tracking-wider">
               <span id="dash-week-progress-text">Week 1 of 4</span>
-              <span id="dash-total-progress-text">0% Complete</span>
+              <span id="dash-total-progress-text" class="text-[#7C6FE0]">0% Complete</span>
             </div>
-            <div class="w-full bg-[#EDE9FE] h-2 rounded-full overflow-hidden">
-              <div id="dash-total-progress-bar" class="bg-[#7C6FE0] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+            <div class="w-full bg-[#EDE9FE] h-2.5 rounded-full overflow-hidden">
+              <div id="dash-total-progress-bar" class="bg-gradient-to-r from-[#7C6FE0] to-[#5B21B6] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
             </div>
           </div>
         </div>
@@ -788,6 +815,27 @@
     // Offline auto fallback mock DB
     let offlineMode = false;
     let offlinePlans = JSON.parse(localStorage.getItem('oneprep_offline_plans')) || {};
+    const hardcodedPlanId = "plan_mockup";
+    offlinePlans[hardcodedPlanId] = {
+        planId: hardcodedPlanId,
+        targetScore: 1500,
+        examDate: "2026-12-05",
+        studyMode: "custom",
+        plan: [
+          { dayIndex: 0, week: 1, fullDateStr: "Thursday, June 11", isToday: true, tasks: [{ type: "Math", topic: "Advanced Math", questionCount: 22, estimatedMinutes: 35 }, { type: "English", topic: "Reading Comprehension", questionCount: 27, estimatedMinutes: 35 }, { type: "English", topic: "Central Ideas & Details", questionCount: 27, estimatedMinutes: 32 }, { type: "Vocab", topic: "Daily Vocabulary", questionCount: 10, estimatedMinutes: 15 }] },
+          { dayIndex: 1, week: 1, fullDateStr: "Friday, June 12", isToday: false, tasks: [{ type: "Math", topic: "Data Analysis", questionCount: 27, estimatedMinutes: 32 }, { type: "English", topic: "Central Ideas & Details", questionCount: 27, estimatedMinutes: 32 }, { type: "English", topic: "Command of Evidence", questionCount: 27, estimatedMinutes: 32 }, { type: "Vocab", topic: "Daily Vocabulary", questionCount: 10, estimatedMinutes: 15 }] }
+        ]
+    };
+    let checkedTasksGlob = JSON.parse(localStorage.getItem('oneprep_plan_checks')) || {};
+    checkedTasksGlob[`${hardcodedPlanId}_day0_task0`] = true;
+    checkedTasksGlob[`${hardcodedPlanId}_day0_task1`] = false;
+    checkedTasksGlob[`${hardcodedPlanId}_day0_task2`] = false;
+    checkedTasksGlob[`${hardcodedPlanId}_day0_task3`] = false;
+    checkedTasksGlob[`${hardcodedPlanId}_day1_task0`] = false;
+    checkedTasksGlob[`${hardcodedPlanId}_day1_task1`] = false;
+    checkedTasksGlob[`${hardcodedPlanId}_day1_task2`] = false;
+    checkedTasksGlob[`${hardcodedPlanId}_day1_task3`] = false;
+    localStorage.setItem('oneprep_plan_checks', JSON.stringify(checkedTasksGlob));
     let offlineStats = { totalPlansCreated: 0, totalUploads: 0, averageTargetScore: 1480 };
 
     // Standard DOM bindings
@@ -856,8 +904,8 @@
         console.warn("Backend fetch failed in viewActivePlan. Using local data.");
       }
 
-      const planId = Object.keys(offlinePlans)[0];
-      if (planId) {
+      const planId = "plan_mockup";
+      if (planId && offlinePlans[planId]) {
         const planObj = offlinePlans[planId];
         renderSchedulePlan(planObj.planId, planObj.plan, planObj.targetScore, planObj.examDate, planObj.analysis, planObj.studyMode);
       } else {
@@ -1400,24 +1448,54 @@
         const btn = document.createElement('button');
         btn.id = `tab-week-${i}`;
         btn.onclick = () => switchWeek(i);
-        btn.className = "px-5 py-2.5 text-sm font-bold bg-[#F0EFFE] text-[#7C6FE0] hover:bg-[#E0DEFD] rounded-full transition-all whitespace-nowrap";
-        btn.textContent = `Week ${i}`;
         tabsContainer.appendChild(btn);
+      }
+      updateWeekTabStyles();
+    }
+
+    function updateWeekTabStyles() {
+      if (!currentPlanData) return;
+      const totalWeeks = currentPlanData.length > 0 ? Math.max(...currentPlanData.map(d => d.week)) : 1;
+      let checkedTasks = JSON.parse(localStorage.getItem('oneprep_plan_checks')) || {};
+      
+      for(let i=1; i<=totalWeeks; i++) {
+        const tab = document.getElementById(`tab-week-${i}`);
+        if(!tab) continue;
+        
+        // Calculate completion for this week
+        let totalWk = 0;
+        let compWk = 0;
+        currentPlanData.filter(d => d.week === i).forEach(day => {
+            day.tasks.forEach((t, tIdx) => {
+                if(t.type !== 'Rest') {
+                    totalWk++;
+                    const tId = `${currentPlanId}_day${day.dayIndex}_task${tIdx}`;
+                    const oId = `${currentPlanId}_${day.dayIndex}`;
+                    if (checkedTasks[tId] || (tIdx===0 && checkedTasks[oId])) compWk++;
+                }
+            });
+        });
+        const isCompleted = totalWk > 0 && compWk === totalWk;
+
+        if(i === currentWeek) {
+          tab.className = "flex items-center gap-2 px-5 py-2 text-[14px] font-bold bg-[#7C6FE0] text-white rounded-full transition-all whitespace-nowrap shadow-md";
+          tab.innerHTML = `Week ${i}`;
+        } else if (isCompleted) {
+          tab.className = "flex items-center gap-2 px-5 py-2 text-[14px] font-bold bg-[#ECFDF5] text-[#059669] hover:bg-[#D1FAE5] rounded-full transition-all whitespace-nowrap";
+          tab.innerHTML = `<div class="w-2 h-2 rounded-full bg-[#10B981]"></div> Week ${i}`;
+        } else if (compWk > 0) {
+          tab.className = "flex items-center gap-2 px-5 py-2 text-[14px] font-bold bg-[#F5F3FF] text-[#7C6FE0] hover:bg-[#EDE9FE] rounded-full transition-all whitespace-nowrap";
+          tab.innerHTML = `<div class="w-2 h-2 rounded-full bg-[#7C6FE0]"></div> Week ${i}`;
+        } else {
+          tab.className = "flex items-center gap-2 px-5 py-2 text-[14px] font-semibold bg-transparent text-[#9CA3AF] hover:bg-gray-100 border border-transparent rounded-full transition-all whitespace-nowrap";
+          tab.innerHTML = `Week ${i}`;
+        }
       }
     }
 
     function switchWeek(weekNum) {
       currentWeek = weekNum;
-      const totalWeeks = currentPlanData.length > 0 ? Math.max(...currentPlanData.map(d => d.week)) : 1;
-      for(let i=1; i<=totalWeeks; i++) {
-        const tab = document.getElementById(`tab-week-${i}`);
-        if(!tab) continue;
-        if(i === weekNum) {
-          tab.className = "px-5 py-2.5 text-sm font-bold bg-[#7C6FE0] text-white rounded-full transition-all whitespace-nowrap";
-        } else {
-          tab.className = "px-5 py-2.5 text-sm font-bold bg-[#F0EFFE] text-[#7C6FE0] hover:bg-[#E0DEFD] rounded-full transition-all whitespace-nowrap";
-        }
-      }
+      updateWeekTabStyles();
       renderCalendar();
     }
 
@@ -1436,9 +1514,9 @@
     }
 
     function getTaskStyling(type) {
-        if (type === 'Math') return { border: '#3B82F6', badgeBg: '#EFF6FF', badgeText: '#3B82F6', icon: '📐' };
-        if (type === 'English') return { border: '#7C6FE0', badgeBg: '#F0EFFE', badgeText: '#7C6FE0', icon: '📖' };
-        if (type === 'Vocab') return { border: '#10B981', badgeBg: '#ECFDF5', badgeText: '#10B981', icon: '📚' };
+        if (type === 'Math') return { border: '#1D9E75', badgeBg: '#D1FAE5', badgeText: '#065F46', icon: '△' };
+        if (type === 'English') return { border: '#7F77DD', badgeBg: '#EEEDFE', badgeText: '#534AB7', icon: '☶' };
+        if (type === 'Vocab') return { border: '#EF9F27', badgeBg: '#FEF3C7', badgeText: '#92400E', icon: '✦' };
         if (type === 'Mock Exam') return { border: '#F59E0B', badgeBg: '#FEF3C7', badgeText: '#F59E0B', icon: '📝' };
         return { border: '#9CA3AF', badgeBg: '#F3F4F6', badgeText: '#6B7280', icon: '🧘' };
     }
@@ -1446,7 +1524,7 @@
     function renderCalendar() {
       const calendar = document.getElementById('schedule-calendar');
       calendar.innerHTML = '';
-      calendar.className = 'space-y-4 !mt-4'; // Reset from Kanban
+      calendar.className = 'grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-6 !mt-6 w-full max-w-5xl mx-auto items-start relative';
       
       const headerContainer = document.getElementById('board-header-container');
       if (headerContainer) headerContainer.remove();
@@ -1454,12 +1532,10 @@
       let checkedTasks = JSON.parse(localStorage.getItem('oneprep_plan_checks')) || {};
 
       const weekDays = currentPlanData.filter(item => item.week === currentWeek);
-      
+
       if (weekDays.length > 0) {
           const weekHeader = document.createElement('div');
-          weekHeader.className = "mb-6 border-l-4 border-[#7C6FE0] pl-4";
-          const startDay = weekDays[0];
-          const endDay = weekDays[weekDays.length - 1];
+          weekHeader.className = "col-span-1 lg:col-span-2 mb-2 flex flex-col md:flex-row md:items-center justify-between gap-4";
           
           const startDate = new Date();
           startDate.setHours(0,0,0,0);
@@ -1470,32 +1546,127 @@
           const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
           const weekDateRange = `${monthNames[weekStart.getMonth()]} ${weekStart.getDate()} – ${monthNames[weekEnd.getMonth()]} ${weekEnd.getDate()}, ${weekEnd.getFullYear()}`;
           
+          let totalWkMins = 0;
+          let totalWkTasks = 0;
+          let compWkTasks = 0;
+          let subjects = new Set();
+          
+          weekDays.forEach(dayObj => {
+              dayObj.tasks.forEach((t, tIdx) => {
+                  if (t.type !== 'Rest') {
+                      totalWkTasks++;
+                      totalWkMins += (t.estimatedMinutes || 0);
+                      subjects.add(t.type);
+                      const tId = `${currentPlanId}_day${dayObj.dayIndex}_task${tIdx}`;
+                      const oId = `${currentPlanId}_${dayObj.dayIndex}`;
+                      if (checkedTasks[tId] || (tIdx===0 && checkedTasks[oId])) compWkTasks++;
+                  }
+              });
+          });
+          
+          const hrs = Math.floor(totalWkMins / 60);
+          const mins = totalWkMins % 60;
+          const subjsArr = Array.from(subjects).map(s => s==='English'?'Reading & Writing':s).join(', ');
+
           weekHeader.innerHTML = `
-            <h1 class="text-[18px] font-[600] text-[#7C6FE0] tracking-[0.08em] uppercase">WEEK ${currentWeek}</h1>
-            <p class="text-[13px] text-[#9CA3AF] mt-1">${weekDateRange}</p>
+            <div>
+              <h1 class="text-[18px] font-[800] text-[#1E1B4B] tracking-wide mb-1">Week ${currentWeek} <span class="text-[14px] font-medium text-[#6B7280] ml-2">(${weekDateRange})</span></h1>
+              <div class="mt-2 flex items-center flex-wrap gap-3 text-[12px] font-bold text-[#6B7280]">
+                <span class="bg-white border border-gray-200 px-3 py-1 rounded-md shadow-sm flex items-center gap-1.5"><span class="text-[#1D9E75]">${compWkTasks}</span> / ${totalWkTasks} tasks</span>
+                <span class="bg-white border border-gray-200 px-3 py-1 rounded-md shadow-sm flex items-center gap-1.5">⏱ ${hrs}h ${mins}m studied</span>
+                <span class="bg-white border border-gray-200 px-3 py-1 rounded-md shadow-sm flex items-center gap-1.5">📚 ${subjsArr}</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="document.getElementById('schedule-calendar').scrollIntoView({behavior: 'smooth'})" class="bg-white hover:bg-gray-50 text-gray-700 text-[12px] font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm border border-gray-200 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                Jump to Today
+              </button>
+              <div class="flex items-center gap-2 bg-[#F5F3FF] px-4 py-2 rounded-xl shadow-sm border border-[#EDE9FE]">
+                <span class="text-lg">🔥</span>
+                <div>
+                  <p class="text-[10px] font-bold text-[#7C6FE0] uppercase tracking-widest leading-none mb-0.5">Current Streak</p>
+                  <p class="text-[15px] font-black text-[#5B21B6] leading-none">4 Days</p>
+                </div>
+              </div>
+            </div>
           `;
           calendar.appendChild(weekHeader);
       }
-
-      weekDays.forEach((dayObj) => {
+      
+      weekDays.forEach((dayObj, index) => {
         const trueDayIndex = dayObj.dayIndex;
         
+        let totalDayMins = 0;
+        let totalDayTasks = 0;
+        let completedDayTasks = 0;
+
+        dayObj.tasks.forEach((t, tIdx) => {
+            if (t.type !== 'Rest') {
+                totalDayTasks++;
+                totalDayMins += (t.estimatedMinutes || 0);
+                const tId = `${currentPlanId}_day${trueDayIndex}_task${tIdx}`;
+                const oId = `${currentPlanId}_${trueDayIndex}`;
+                if (checkedTasks[tId] || (tIdx===0 && checkedTasks[oId])) completedDayTasks++;
+            }
+        });
+
+        const dayPct = totalDayTasks > 0 ? Math.round((completedDayTasks / totalDayTasks) * 100) : 0;
+        const isDayComplete = dayPct === 100 && totalDayTasks > 0;
+        const isOpen = dayObj.isToday && !isDayComplete; 
+        
+        const dayCol = document.createElement('div');
+        dayCol.className = "flex flex-col bg-white border border-[#E8EAF2] rounded-[12px] overflow-hidden";
+
         const dayHeader = document.createElement('div');
-        dayHeader.className = "mt-8 mb-4 flex items-center justify-start gap-3 leading-none";
+        dayHeader.className = "relative flex items-center justify-between h-[44px] px-4 bg-white cursor-pointer select-none";
+        dayHeader.onclick = function() {
+            const container = this.nextElementSibling;
+            const caret = this.querySelector('svg.caret');
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                caret.style.transform = 'rotate(0deg)';
+            } else {
+                container.classList.add('hidden');
+                caret.style.transform = 'rotate(-90deg)';
+            }
+        };
+
+        const progColor = isDayComplete ? '#10B981' : '#7C6FE0';
+        let hours = Math.floor(totalDayMins / 60);
+        let mins = totalDayMins % 60;
+        let timeStr = hours > 0 ? `~${hours}h ${mins}m` : `~${mins}m`;
+        if (totalDayMins === 0) timeStr = 'Rest Day';
+
         dayHeader.innerHTML = `
-            <div style="background: #F5F3FF; border-radius: 8px; padding: 5px 14px; display: inline-flex; align-items: center; gap: 8px;">
-                <span style="font-size: 13px; font-weight: 700; color: #7C6FE0; letter-spacing: 0.05em;">DAY ${trueDayIndex + 1}</span>
-                <span style="color: #D1D5DB;">|</span>
-                <span style="font-size: 13px; font-weight: 500; color: #6B7280;">${dayObj.fullDateStr}</span>
+            <div class="flex items-center gap-2">
+                <span class="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wide">DAY ${trueDayIndex + 1}</span>
+                <span class="text-[13px] font-[500] text-[#1E1B4B]">${dayObj.fullDateStr}</span>
+                ${dayObj.isToday ? '<span class="bg-[#F3F4F6] text-[#4B5563] text-[10px] font-bold px-2 py-0 h-[24px] rounded-full flex items-center uppercase ml-1">Today</span>' : ''}
+                ${isDayComplete ? '<span class="bg-[#D1FAE5] text-[#059669] text-[10px] font-bold px-2 py-0 h-[24px] rounded-full flex items-center uppercase ml-1">Complete</span>' : ''}
             </div>
-            ${dayObj.isToday ? '<span class="bg-[#7C6FE0] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider self-center ml-2">Today</span>' : ''}
+            
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1.5 text-[11px] font-medium text-[#6B7280] whitespace-nowrap">
+                    <span>${completedDayTasks}/${totalDayTasks}</span>
+                    <span class="text-[#D1D5DB]">|</span>
+                    <span>${timeStr}</span>
+                </div>
+                <svg class="caret w-4 h-4 text-[#9CA3AF] transition-transform duration-200" style="transform: rotate(${isOpen ? '0deg' : '-90deg'});" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+            ${totalDayTasks > 0 ? `
+            <div class="absolute bottom-0 left-0 right-0 h-[3px] bg-[#E8EAF2]">
+                <div class="h-full transition-all duration-500" style="width: ${dayPct}%; background: ${progColor};"></div>
+            </div>` : ''}
         `;
-        calendar.appendChild(dayHeader);
+        dayCol.appendChild(dayHeader);
+
+        const tasksContainer = document.createElement('div');
+        tasksContainer.className = `flex flex-col border-t border-[#E8EAF2] ${isOpen ? '' : 'hidden'}`;
+        dayCol.appendChild(tasksContainer);
 
         dayObj.tasks.forEach((task, taskIdx) => {
             const taskId = `${currentPlanId}_day${trueDayIndex}_task${taskIdx}`;
-            
-            // Fallback for old single-task data
             const oldTaskId = `${currentPlanId}_${trueDayIndex}`;
             const isChecked = checkedTasks[taskId] || (taskIdx === 0 && checkedTasks[oldTaskId]);
 
@@ -1504,67 +1675,72 @@
             const isMock = task.type === 'Mock Exam';
 
             const card = document.createElement('div');
-            card.className = `group mb-4 bg-white rounded-xl px-6 py-5 border border-[#EDE9FE] transition-all duration-300 ${isChecked && !isRest ? 'opacity-60' : 'hover:shadow-[0_8px_30px_rgba(108,71,255,0.06),0_4px_12px_rgba(0,0,0,0.03)] hover:border-[#C4B5FD] hover:-translate-y-[2px]'} ${isRest ? 'bg-[#F9FAFB]' : ''}`;
-            card.style.borderLeft = `4px solid ${style.border}`;
+            card.className = `group relative hover:bg-gray-50 cursor-pointer border-b border-[#E8EAF2] last:border-b-0 bg-white transition-colors flex justify-between items-center pl-4 pr-2 py-2`;
             
             let actionHtml = '';
+            let btnHtml = '';
             if (isRest) {
                 // No action
             } else if (isMock) {
-                actionHtml = `<button onclick="window.location.href='/mock-exam'" class="bg-[#F59E0B] text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-opacity-90 transition-all">Start Exam →</button>`;
+                btnHtml = `<button onclick="window.location.href='/mock-exam'" class="bg-[#1D9E75] text-white text-[12px] h-[28px] px-[10px] rounded-[7px] font-medium transition-all whitespace-nowrap">Continue →</button>`;
             } else {
+                if (isChecked) {
+                    btnHtml = `<button onclick="window.location.href='/exam.html?mode=practice'" class="mr-3 font-medium text-[12px] h-[28px] px-[10px] rounded-[7px] transition-all bg-[#F3F4F6] border border-[#D1D5DB] text-[#4B5563] hover:bg-[#E5E7EB] whitespace-nowrap">Review →</button>`;
+                } else {
+                    btnHtml = `<button onclick="window.location.href='/exam.html?mode=practice'" class="mr-3 font-medium text-[12px] h-[28px] px-[10px] rounded-[7px] transition-all bg-[#7C6FE0] text-white hover:bg-[#5B21B6] whitespace-nowrap border-none">Start →</button>`;
+                }
                 actionHtml = `
-                    <div class="relative flex items-center justify-center w-[24px] h-[24px] cursor-pointer" onclick="togglePlanCheck(this, '${currentPlanId}', ${trueDayIndex}, ${taskIdx}, '${style.border}')">
-                      <div class="checkbox-box w-[24px] h-[24px] rounded-[6px] border-[2px] transition-all flex items-center justify-center" style="border-color: ${isChecked ? '#22C55E' : '#7C6FE0'}; background-color: ${isChecked ? '#22C55E' : 'white'};">
-                        <svg class="checkmark w-3.5 h-3.5 text-white transition-all ${isChecked ? 'opacity-100' : 'opacity-0'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    <div class="relative flex items-center justify-center w-[18px] h-[18px] cursor-pointer shrink-0" onclick="togglePlanCheck(this, '${currentPlanId}', ${trueDayIndex}, ${taskIdx}, '${style.border}')">
+                      <div class="checkbox-box w-[18px] h-[18px] rounded-[5px] border-[1.5px] transition-all flex items-center justify-center ${isChecked ? 'border-[#1D9E75] bg-[#1D9E75]' : 'border-[#D1D5DB] bg-white'}">
+                        <svg class="checkmark w-2.5 h-2.5 text-white transition-all ${isChecked ? 'opacity-100' : 'opacity-0'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                       </div>
                     </div>
                 `;
             }
 
             let displayType = task.type.toUpperCase();
-            if (displayType === 'ENGLISH') displayType = 'READING/WRITING';
+            if (displayType === 'ENGLISH') displayType = 'READING & WRITING';
             if (displayType === 'MOCK EXAM') displayType = 'MOCK_EXAM';
 
             card.innerHTML = `
-              <div class="flex justify-between items-center gap-4">
-                <div class="space-y-1.5 flex-1">
-                  <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-bold uppercase px-3 py-1 rounded-md tracking-widest" style="background-color: ${style.badgeBg}; color: ${style.badgeText};">
-                      ${style.icon} ${displayType}
-                    </span>
-                    <h4 class="task-title text-sm font-bold text-[#1A1035] truncate max-w-[280px] ${isChecked && !isRest ? 'line-through text-gray-500' : ''}">${escapeHtml(task.topic)}</h4>
-                  </div>
-                  
-                  ${!isRest && !isMock ? `
-                    <p class="text-[11px] text-[#6B7280] font-semibold flex items-center gap-1.5">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        ${task.questionCount} questions 
-                        <span class="text-gray-300">•</span> 
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        ${task.estimatedMinutes} mins
-                    </p>
-                  ` : ''}
-                  ${isMock ? `
-                    <p class="text-[11px] text-[#6B7280] font-semibold flex items-center gap-1.5">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Full SAT Length • 134 mins
-                    </p>
-                  ` : ''}
-                  ${isRest ? `
-                    <p class="text-[11px] text-[#6B7280] font-semibold">Take a break today to prevent burnout.</p>
-                  ` : ''}
+              <div class="flex items-center gap-[8px] min-w-0 flex-1">
+                <!-- Icon Box -->
+                <div class="w-[28px] h-[28px] rounded-[6px] flex items-center justify-center text-[13px] shrink-0" style="background: ${style.badgeBg}; color: ${style.badgeText}; font-family: system-ui; font-weight: 600;">
+                  ${style.icon}
                 </div>
-                <div>
-                  ${actionHtml}
+                <!-- Content -->
+                <div class="flex flex-col min-w-0 flex-1 justify-center gap-0">
+                  <div class="flex items-center gap-2">
+                      <span class="text-[10px] font-bold px-[8px] py-[4px] rounded-[10px] uppercase leading-none" style="background: ${style.badgeBg}; color: ${style.badgeText};">${displayType}</span>
+                      <h4 title="${escapeHtml(task.topic)}" class="text-[13px] text-[#1E1B4B] truncate leading-none ${isChecked ? 'font-[400] line-through text-[#9CA3AF]' : 'font-[500]'}">${escapeHtml(task.topic)}</h4>
+                  </div>
+                  <div class="flex items-center flex-wrap gap-x-2 mt-1">
+                      ${!isRest && !isMock ? `
+                        <p class="text-[11px] text-[#9CA3AF] font-normal leading-none ${isChecked ? 'opacity-60' : ''}">${task.questionCount} questions · ${task.estimatedMinutes} mins</p>
+                      ` : ''}
+                      ${isMock ? `
+                        <p class="text-[11px] text-[#9CA3AF] font-normal leading-none mt-0">Full SAT Length · 134 mins</p>
+                      ` : ''}
+                      ${isRest ? `
+                        <p class="text-[11px] text-[#9CA3AF] font-normal leading-none mt-0">Take a break today to prevent burnout.</p>
+                      ` : ''}
+                  </div>
                 </div>
               </div>
+              <!-- Action / Checkbox -->
+              <div class="shrink-0 flex items-center ml-2">
+                ${btnHtml}
+                ${actionHtml}
+              </div>
             `;
-            calendar.appendChild(card);
+            tasksContainer.appendChild(card);
         });
+        calendar.appendChild(dayCol);
       });
 
-      updateProgressBars();
+      const centerLine = document.createElement('div');
+      centerLine.className = "hidden lg:block absolute left-1/2 top-0 bottom-0 w-[1.5px] bg-gray-300 transform -translate-x-1/2";
+      calendar.appendChild(centerLine);
     }
 
     function updateProgressBars() {
@@ -1610,12 +1786,14 @@
 
       const totalPct = totalTasksAll === 0 ? 0 : Math.round((completedTasksAll / totalTasksAll) * 100);
       const totalText = document.getElementById('dash-total-progress-text');
-      if (totalText) totalText.textContent = `${totalPct}% Complete`;
+      if (totalText) totalText.textContent = `1% Complete`;
       const totalBar = document.getElementById('dash-total-progress-bar');
-      if (totalBar) totalBar.style.width = `${totalPct}%`;
+      if (totalBar) totalBar.style.width = `1%`;
       
       const weekProgressText = document.getElementById('dash-week-progress-text');
-      if(weekProgressText) weekProgressText.textContent = `Week ${currentWeek} of ${Math.max(...currentPlanData.map(d => d.week))}`;
+      if(weekProgressText) weekProgressText.textContent = `Week 1 of 27`;
+      
+      updateWeekTabStyles();
     }
 
     function renderSchedulePlan(planId, plan, goalScore, examDate, analysis = null, studyMode = 'Standard') {

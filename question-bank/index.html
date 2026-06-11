@@ -376,7 +376,7 @@
           </button>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-[1fr_1px_1fr] gap-8 lg:gap-0">
+        <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_4px_minmax(0,1fr)] gap-8 lg:gap-0">
           <!-- LEFT COLUMN: READING & WRITING -->
           <div class="flex flex-col min-w-0 lg:pr-[20px]">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -402,7 +402,7 @@
           </div>
 
           <!-- DIVIDER -->
-          <div style="width:1px; background: var(--color-border-tertiary); align-self: stretch"></div>
+          <div style="width:4px; background: url('../assets/vertical_divider.png') center center / cover no-repeat; align-self: stretch; opacity: 0.8; border-radius: 2px;"></div>
 
           <!-- RIGHT COLUMN: MATH -->
           <div class="flex flex-col min-w-0 lg:pl-[20px]">
