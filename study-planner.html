@@ -99,7 +99,7 @@
             display: grid;
             grid-template-columns: repeat(5, minmax(0, 1fr));
             gap: 12px;
-            align-items: stretch;
+            align-items: stretch !important;
             margin-bottom: 16px;
         }
 
@@ -217,8 +217,8 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             margin: 0 6px;
             font-size: 14px;
@@ -252,7 +252,7 @@
 
         .journey-actions {
             display: flex;
-            justify-content: space-between;
+            gap: 10px;
             align-items: center;
             margin-bottom: 12px;
         }
@@ -398,7 +398,7 @@
         .sp-body {
             display: flex;
             flex-direction: row !important;
-            align-items: stretch;
+            align-items: stretch !important;
             gap: 16px;
             padding: 16px 28px 24px;
         }
@@ -408,11 +408,12 @@
             width: 42%;
             flex-shrink: 0;
             align-self: stretch !important;
+            height: 100%;
             background: var(--lav-card);
-            border: 0.5px solid var(--color-border-tertiary, var(--lav-border));
+            border: 1px solid var(--color-border-tertiary, var(--lav-border));
             border-radius: var(--lav-radius);
             box-shadow: none;
-            padding: 20px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
             gap: 0;
@@ -421,7 +422,7 @@
         .sp-tasks-col::-webkit-scrollbar-thumb { background: var(--lav-border); border-radius: 3px; }
 
         .sp-tasks-header {
-            display: flex; align-items: center; justify-content: space-between;
+            display: flex; align-items: center; gap: 10px;
             margin-bottom: 16px;
         }
         .sp-tasks-header h2 {
@@ -460,7 +461,7 @@
         }
 
         /* Task cards &mdash; IDENTICAL to home page da-task-card */
-        .dac-tasks { display: flex; flex-direction: column; justify-content: space-between; flex: 1; gap: 8px; }
+        .dac-tasks { display: flex; flex-direction: column; gap: 10px; flex: 1; gap: 8px; }
 
         .da-task-card {
             padding: 10px 16px;
@@ -469,7 +470,7 @@
             border-radius: 0 20px 20px 0;
             border-left-width: 4px;
             display: flex;
-            align-items: stretch;
+            align-items: stretch !important;
             gap: 12px;
             margin-bottom: 8px;
             cursor: pointer;
@@ -572,11 +573,12 @@
         }
 
         .sp-table-card {
+            height: 100%;
             background: var(--lav-card);
-            border: 0.5px solid var(--color-border-tertiary, var(--lav-border));
+            border: 1px solid var(--color-border-tertiary, var(--lav-border));
             border-radius: var(--lav-radius);
             box-shadow: none;
-            padding: 20px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
             flex: 1;
@@ -586,7 +588,7 @@
             padding: 16px 20px;
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
+            gap: 10px;
             align-items: center;
             gap: 12px;
             border-bottom: 0.5px solid var(--color-border-tertiary, #D1D5DB);
@@ -619,10 +621,10 @@
             gap: 4px;
         }
         .wt-box { width: 14px; height: 14px; border-radius: 4px; }
-        .wt-box.math { background: #DBEAFE; border: 1px solid #93C5FD; }
-        .wt-box.reading { background: #D1FAE5; border: 1px solid #6EE7B7; }
+        .wt-box.math { background: #D1FAE5; border: 1px solid #6EE7B7; }
+        .wt-box.reading { background: #DBEAFE; border: 1px solid #93C5FD; }
         .wt-box.vocab { background: #FEF3C7; border: 1px solid #FCD34D; }
-        .wt-box.exam { background: #FFEDD5; border: 1px solid #FDBA74; }
+        .wt-box.exam { background: #FCE7F3; border: 1px solid #F9A8D4; }
         .wt-icon { font-size: 10px; font-weight: bold; }
         .wt-icon.done { color: #059669; }
         .wt-icon.missed { color: #EF4444; }
@@ -645,10 +647,10 @@
             top: 0;
             right: 0;
             bottom: 0;
-            width: 40px;
-            background: linear-gradient(to right, transparent, var(--lav-card));
+            width: 80px;
+            background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1));
             pointer-events: none;
-            z-index: 10;
+            z-index: 20;
         }
         .sp-week-scroll {
             width: 100%;
@@ -672,7 +674,10 @@
 
         /* Each day column */
         .wt-col {
+            flex: 0 0 170px;
             width: 170px;
+            min-width: 170px;
+            max-width: 170px;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
@@ -727,23 +732,14 @@
             border-bottom: 1px solid var(--lav-border);
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 10px;
             gap: 8px;
         }
-        .wt-col.past .wt-task-cell { background: transparent !important; }
-        .wt-col.today .wt-task-cell { background: transparent !important; }
-        .wt-task-cell.math { background: #F3F8FF; border-left: 3px solid #3B82F6 !important; }
-        .wt-task-cell.reading { background: #F0FDF4; border-left: 3px solid #10B981 !important; }
-        .wt-task-cell.writing { background: #FFF7ED; border-left: 3px solid #F97316 !important; }
-        .wt-task-cell.vocab { background: #F3F2FF; border-left: 3px solid #7C6FE0 !important; }
-        .wt-task-cell.exam { background: #FFF7ED; border-left: 3px solid #EA580C !important; }
-
-        /* Subject left borders in weekly table by row index */
-        .wt-col-tasks .wt-task-cell:nth-child(1) { border-left: 3px solid #378ADD !important; }
-        .wt-col-tasks .wt-task-cell:nth-child(2) { border-left: 3px solid #1D9E75 !important; }
-        .wt-col-tasks .wt-task-cell:nth-child(3) { border-left: 3px solid #378ADD !important; }
-        .wt-col-tasks .wt-task-cell:nth-child(4) { border-left: 3px solid #EF9F27 !important; }
-        .wt-col-tasks .wt-task-cell:nth-child(5) { border-left: 3px solid #7F77DD !important; }
+        .wt-task-cell.math { background: #EFF6FF !important; border-left: 3px solid #3B82F6 !important; }
+        .wt-task-cell.reading { background: #F0FDF4 !important; border-left: 3px solid #10B981 !important; }
+        .wt-task-cell.writing { background: #FFF7ED !important; border-left: 3px solid #F97316 !important; }
+        .wt-task-cell.vocab { background: #F5F3FF !important; border-left: 3px solid #7C6FE0 !important; }
+        .wt-task-cell.exam { background: #FFF7ED !important; border-left: 3px solid #EA580C !important; }
 
         
         .wt-task-info {
@@ -1627,7 +1623,7 @@
     <header class="sp-header">
 
         <!-- Title &mdash; standalone, above cards -->
-        <div class="sp-header-title-row" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-start; gap:16px; margin-bottom: 16px;">
+        <div class="sp-header-title-row" style="display:none; flex-wrap:wrap; align-items:center; justify-content:flex-start; gap:16px; margin-bottom: 16px;">
             <div style="display:flex; align-items:center; gap:12px;">
                 <h1 id="header-today-date">Friday, June 12, 2026</h1>
                 <span class="sp-week-label" style="background: #F3F2FF; color: #7C6FE0; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">Week 13 of 27</span>
@@ -1639,50 +1635,44 @@
 
 
         <!-- Row 1: 4 stat cards side by side -->
-        <div class="sp-cards-row" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 16px; align-items: stretch; margin-bottom: 16px;">
+        <div class="sp-cards-row" style="display: grid; grid-template-columns: 2fr 1.2fr 1fr 1fr; gap: 16px; align-items: stretch !important; margin-bottom: 16px;">
             
             <!-- Merged Target+Latest Card -->
-            <div class="card stat-card-double" style="display: flex; flex-direction: row; border: 0.5px solid var(--color-border-tertiary); border-radius: 12px; background: white; overflow: hidden; height: 100%;">
-                
-                <!-- Left panel: Target -->
-                <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
-                    <div style="display:flex; align-items:center; gap:4px;">
-                        <i class="ti ti-target" style="font-size: 16px; color: var(--lav-accent);"></i>
-                        <span style="font-size:12px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Target</span>
+            <div style="display:flex;flex-direction:row;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden">
+                <div style="flex:1;padding:18px 20px;display:flex;flex-direction:column;justify-content:center;gap:4px">
+                    <div style="display:flex;align-items:center;gap:4px">
+                        <span style="font-size:16px">🎯</span>
+                        <span style="font-size:12px;font-weight:700;color:var(--lav-gray);letter-spacing:0.05em">Target</span>
                     </div>
-                    <div id="dash-goal-score" style="font-size:32px; font-weight:800; color:var(--lav-dark); line-height:1; letter-spacing:-0.02em;">1500</div>
-                    <div style="font-size: 12px; color: var(--color-text-secondary); font-weight: 400; margin-top: 2px;">Math: 800 | R&W: 700</div>
-                    <a href="#" style="text-decoration: none !important; color: var(--color-purple-primary, #7C6FE0); font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 2px;">Set goal &rarr;</a>
+                    <div id="dash-goal-score" style="font-size:32px;font-weight:800;color:var(--lav-dark);line-height:1;letter-spacing:-0.02em">1500</div>
+                    <div style="font-size:12px;color:var(--color-text-secondary);font-weight:400;margin-top:2px">Math: 800 | R&W: 700</div>
+                    <style>.no-underline-goal, .no-underline-goal:hover, .no-underline-goal:focus, .no-underline-goal:visited { text-decoration: none !important; }</style>
+                    <a href="#" class="no-underline-goal" style="text-decoration:none!important;color:var(--color-purple-primary,#7C6FE0);font-size:13px;font-weight:500;cursor:pointer;margin-top:2px">Set goal &rarr;</a>
                 </div>
-
-                <!-- Vertical Divider -->
-                <div style="width: 0.5px; background: var(--color-border-tertiary); margin: 16px 0;"></div>
-
-                <!-- Right panel: Latest -->
-                <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
-                    <div style="display:flex; align-items:center; gap:4px;">
-                        <i class="ti ti-chart-line" style="font-size: 16px; color: var(--lav-accent);"></i>
-                        <span style="font-size:12px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Latest</span>
+                <div style="width:0.5px;background:var(--color-border-tertiary);margin:14px 0"></div>
+                <div style="flex:1;padding:18px 20px;display:flex;flex-direction:column;justify-content:center;gap:4px">
+                    <div style="display:flex;align-items:center;gap:4px">
+                        <span style="font-size:16px">📈</span>
+                        <span style="font-size:12px;font-weight:700;color:var(--lav-gray);letter-spacing:0.05em">Latest</span>
                     </div>
-                    <div id="stat-latest-has-score" style="display:block;">
-                        <div style="font-size:32px; font-weight:800; color:var(--color-purple-primary, #7C6FE0); line-height:1; letter-spacing:-0.02em;">1240</div>
-                        <div style="font-size: 12px; color: var(--color-text-secondary); font-weight: 400; margin-top: 2px;">Math: 620 | R&W: 620</div>
+                    <div id="stat-latest-has-score" style="display:block">
+                        <div style="font-size:32px;font-weight:800;color:var(--color-purple-primary,#7C6FE0);line-height:1;letter-spacing:-0.02em">1240</div>
+                        <div style="font-size:12px;color:var(--color-text-secondary);font-weight:400;margin-top:2px">Math: 620 | R&W: 620</div>
                     </div>
-                    <!-- State: No Diagnostic -->
-                    <div id="stat-latest-empty" style="display:none;">
-                        <div style="font-size:11px; color:var(--lav-dark); line-height:1.3;">One exam away from knowing your baseline.</div>
-                        <div style="font-size:11px; color:var(--lav-gray);">No practice yet</div>
+                    <div id="stat-latest-empty" style="display:none">
+                        <div style="font-size:11px;color:var(--lav-dark);line-height:1.3">One exam away from knowing your baseline.</div>
+                        <div style="font-size:11px;color:var(--lav-gray)">No practice yet</div>
                     </div>
                 </div>
             </div>
 
             <!-- Card 2: Diagnostic Timeline -->
-            <div class="sp-stat-card" style="height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 20px 24px; gap: 6px;">
+            <div class="sp-stat-card" style="white-space: nowrap; min-width: 170px; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 20px 24px; gap: 6px;">
                 <div style="display:flex; align-items:center; gap:4px;">
-                    <i class="ti ti-calendar" style="font-size: 16px; color: var(--lav-accent);"></i> <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Your SAT date</span>
+                    <span style="font-size: 16px;">📅</span> <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Your SAT date</span>
                 </div>
                 <div class="spc-val" style="font-size:20px; letter-spacing:-0.01em; margin-bottom:0; cursor:pointer; position:relative;" onclick="document.getElementById('sat-date-picker').showPicker()">
-                    <span id="dash-exam-date">Dec 5, 2026</span> <i class="ti ti-pencil" style="font-size: 12px; color: #7C6FE0; margin-left: 4px; cursor: pointer;"></i>
+                    <span style="display:flex; align-items:center; gap:6px"><span id="dash-exam-date">Dec 5, 2026</span><i class="ti ti-pencil" style="font-size:14px; color:var(--color-text-secondary); cursor:pointer"></i></span>
                     <input type="date" id="sat-date-picker" value="2026-12-05" style="position:absolute; bottom:0; left:0; width:1px; height:1px; opacity:0; pointer-events:none; border:none;" onchange="updateSatDate(this.value)" />
                 </div>
             </div>
@@ -1690,7 +1680,7 @@
             <!-- Card 3: Time to Go -->
             <div class="sp-stat-card" style="height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 20px 24px; gap: 6px;">
                 <div style="display:flex; align-items:center; gap:4px;">
-                    <i class="ti ti-hourglass" style="font-size: 16px; color: var(--lav-accent);"></i> <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Days to exam</span>
+                    <i class="ti ti-hourglass" style="font-size: 16px; color: #534AB7; vertical-align: -2px;"></i> <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Days to exam</span>
                 </div>
                 <div class="spc-val" id="dash-days-left" style="margin-bottom:0;">175</div>
                 <span class="spc-sub" style="margin-bottom:0;">days until your exam</span>
@@ -1699,7 +1689,7 @@
             <!-- Card 4: Plan Intelligence -->
             <div class="sp-stat-card" style="height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 20px 24px; gap: 6px;">
                 <div style="display:flex; align-items:center; gap:4px;">
-                    <i class="ti ti-clipboard-list" style="font-size: 16px; color: var(--lav-accent);"></i> <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">This week</span>
+                    <i class="ti ti-clipboard-list" style="font-size: 16px; color: #534AB7; vertical-align: -2px;"></i> <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">This week</span>
                 </div>
                 <div class="spc-val" style="font-size:22px; letter-spacing:-0.01em; margin-bottom:0;">31 tasks</div>
                 <span class="spc-sub" style="font-size: 10px; color: var(--lav-gray); white-space: nowrap; margin-bottom:0;">~17h total &middot; 2h 26m/day</span>
@@ -1708,7 +1698,7 @@
 
         <!-- Row 2: Progress Journey Strip -->
         <div class="sp-journey-card">
-            <div class="journey-actions" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+            <div class="journey-actions" style="display:none; justify-content:space-between; align-items:center; margin-bottom: 8px;">
                 <span class="journey-title" style="font-weight: 500; font-size: 14px; color: var(--color-text-primary, var(--lav-dark)); letter-spacing: 0;">Weekly plan progress &mdash; Week 13 of 27</span>
                 <a href="#" id="jump-to-today" class="journey-link" style="margin-right: 16px; transition: opacity 0.2s;">Jump to Today</a>
             </div>
@@ -1728,78 +1718,68 @@
     <!-- Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В 
          SECTION 2: SPLIT BODY
     Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В  -->
-    <div class="sp-body" style="display:flex;flex-direction:row;align-items:stretch;gap:16px;">
+    <div class="sp-body" style="display:flex;flex-direction:row;align-items: stretch !important;gap:16px;">
 
         <!-- LEFT: Today's Agenda (42%) -->
-        <aside class="sp-tasks-col" style="width:32%;flex-shrink:0;display:flex;flex-direction:column;">
-            <div class="sp-tasks-header">
-                <div>
-                    <h2><i class="ti ti-clipboard-list"></i> Today's Agenda</h2>
-                </div>
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <span id="agenda-progress-text" style="display:none; margin:0; white-space:nowrap; font-size:13px; font-weight:500; color:var(--lav-gray);"></span>
-                    <button class="sp-cta-btn" onclick="window.location.href='exam.html'" style="margin: 0; white-space: nowrap; padding: 7px 16px; height: 32px; border-radius: 6px; background: #F3F2FF; color: var(--lav-accent); box-shadow: none; font-weight: 700; border: none; font-size: 13px;">
-                        Continue Session &rarr;
-                    </button>
-                </div>
+        <aside class="sp-tasks-col" style="flex: 0 0 45%; display: flex; flex-direction: column; height: 100%; display: flex !important; flex-direction: column !important; height: 100% !important;">
+            <div class="sp-tasks-header" style="min-height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 18px; flex-wrap: nowrap; border-bottom: 0.5px solid var(--color-border-tertiary); margin-bottom: 12px;">
+                <h2 style="white-space: nowrap; margin: 0;"><i class="ti ti-clipboard-list"></i> Today's Agenda</h2>
+                <span id="agenda-progress-text" style="display:none; white-space: nowrap; color: var(--color-text-secondary, #A0A0B0); font-size: 13px; margin: 0;"></span>
+                <button class="sp-cta-btn" onclick="window.location.href='exam.html'" style="background: #534AB7; color: #fff; border: none; border-radius: var(--border-radius-md, 6px); padding: 6px 16px; font-size: 13px; font-weight: 500; white-space: nowrap; flex-shrink: 0; margin-left: auto;">
+                    Continue &rarr;
+                </button>
             </div>
             <div class="progress-track-wrap">
                 <div id="agenda-progress-track">
                     <div id="agenda-progress-fill"></div>
                 </div>
             </div>
-            <div id="daily-agenda-tasks" class="dac-tasks">
+            <div id="daily-agenda-tasks" class="dac-tasks" style="display: flex; flex-direction: column; gap: 8px;">
                 <!-- Static tasks with local toggle enabled -->
-                <div class="da-task-card completed" style="border-left-color:#3B82F6;" onclick="toggleLocalAgendaTask(this)">
-                    <span class="da-subject-badge" style="background:#DBEAFE;">Math</span>
-                    <h4>Heart of Algebra</h4>
-                    <span class="da-pill">20 Questions</span>
-                    <span class="da-pill">~30 min</span>
+                <div class="da-task-card completed" style="border-left-color:#3B82F6; border-left: 4px solid #10B981 !important; background: #D1FAE544 !important; border-radius: 0 8px 8px 0 !important; padding-left: 12px !important;" onclick="toggleLocalAgendaTask(this)">
+                    <span class="da-subject-badge" style="background:#D1FAE5;">Math</span>
+                    <h4 style="font-size: 13px; flex: 1; min-width: 0; margin: 0;">Heart of Algebra</h4>
+                    <span class="da-pill" style="white-space: nowrap; flex-shrink: 0; font-size: 12px; color: var(--color-text-secondary);">20 Questions &middot; ~30 min</span>
                     <div class="da-task-checkbox checked">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity:1;"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     </div>
                 </div>
-                <div class="da-task-card completed" style="border-left-color:#7C6FE0;" onclick="toggleLocalAgendaTask(this)">
-                    <span class="da-subject-badge" style="background:#FAE8FF;">English</span>
-                    <h4>Command of Evidence</h4>
-                    <span class="da-pill">20 Questions</span>
-                    <span class="da-pill">~25 min</span>
+                <div class="da-task-card completed" style="border-left-color:#7C6FE0; border-left: 4px solid #3B82F6 !important; background: #DBEAFE44 !important; border-radius: 0 8px 8px 0 !important; padding-left: 12px !important;" onclick="toggleLocalAgendaTask(this)">
+                    <span class="da-subject-badge" style="background:#DBEAFE;">English</span>
+                    <h4 style="font-size: 13px; flex: 1; min-width: 0; margin: 0;">Command of Evidence</h4>
+                    <span class="da-pill" style="white-space: nowrap; flex-shrink: 0; font-size: 12px; color: var(--color-text-secondary);">20 Questions &middot; ~25 min</span>
                     <div class="da-task-checkbox checked">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity:1;"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     </div>
                 </div>
-                <div class="da-task-card" style="border-left-color:#3B82F6;" onclick="toggleLocalAgendaTask(this)">
-                    <span class="da-subject-badge" style="background:#DBEAFE;">Math</span>
-                    <h4>Advanced Math (1 of 2)</h4>
-                    <span class="da-pill">30 Questions</span>
-                    <span class="da-pill">~30 min</span>
+                <div class="da-task-card" style="border-left-color:#3B82F6; border-left: 4px solid #10B981 !important; background: #D1FAE544 !important; border-radius: 0 8px 8px 0 !important; padding-left: 12px !important;" onclick="toggleLocalAgendaTask(this)">
+                    <span class="da-subject-badge" style="background:#D1FAE5;">Math</span>
+                    <h4 style="font-size: 13px; flex: 1; min-width: 0; margin: 0;">Advanced Math (1 of 2)</h4>
+                    <span class="da-pill" style="white-space: nowrap; flex-shrink: 0; font-size: 12px; color: var(--color-text-secondary);">30 Questions &middot; ~30 min</span>
                     <div class="da-task-checkbox">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity:0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     </div>
                 </div>
-                <div class="da-task-card" style="border-left-color:#7C6FE0;" onclick="toggleLocalAgendaTask(this)">
-                    <span class="da-subject-badge" style="background:#FAE8FF;">English</span>
-                    <h4>English Conventions</h4>
-                    <span class="da-pill">20 Questions</span>
-                    <span class="da-pill">~25 min</span>
+                <div class="da-task-card" style="border-left-color:#7C6FE0; border-left: 4px solid #3B82F6 !important; background: #DBEAFE44 !important; border-radius: 0 8px 8px 0 !important; padding-left: 12px !important;" onclick="toggleLocalAgendaTask(this)">
+                    <span class="da-subject-badge" style="background:#DBEAFE;">English</span>
+                    <h4 style="font-size: 13px; flex: 1; min-width: 0; margin: 0;">English Conventions</h4>
+                    <span class="da-pill" style="white-space: nowrap; flex-shrink: 0; font-size: 12px; color: var(--color-text-secondary);">20 Questions &middot; ~25 min</span>
                     <div class="da-task-checkbox">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity:0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     </div>
                 </div>
-                <div class="da-task-card" style="border-left-color:#3B82F6;" onclick="toggleLocalAgendaTask(this)">
-                    <span class="da-subject-badge" style="background:#DBEAFE;">Math</span>
-                    <h4>Advanced Math (2 of 2)</h4>
-                    <span class="da-pill">20 Questions</span>
-                    <span class="da-pill">~20 min</span>
+                <div class="da-task-card" style="border-left-color:#3B82F6; border-left: 4px solid #10B981 !important; background: #D1FAE544 !important; border-radius: 0 8px 8px 0 !important; padding-left: 12px !important;" onclick="toggleLocalAgendaTask(this)">
+                    <span class="da-subject-badge" style="background:#D1FAE5;">Math</span>
+                    <h4 style="font-size: 13px; flex: 1; min-width: 0; margin: 0;">Advanced Math (2 of 2)</h4>
+                    <span class="da-pill" style="white-space: nowrap; flex-shrink: 0; font-size: 12px; color: var(--color-text-secondary);">20 Questions &middot; ~20 min</span>
                     <div class="da-task-checkbox">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity:0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     </div>
                 </div>
-                <div class="da-task-card" style="border-left-color:#10B981;" onclick="toggleLocalAgendaTask(this)">
+                <div class="da-task-card" style="border-left-color:#10B981; border-left: 4px solid #F59E0B !important; background: #FEF3C744 !important; border-radius: 0 8px 8px 0 !important; padding-left: 12px !important;" onclick="toggleLocalAgendaTask(this)">
                     <span class="da-subject-badge" style="background:#FEF3C7;">Vocab</span>
-                    <h4>Daily Vocabulary</h4>
-                    <span class="da-pill">10 Questions</span>
-                    <span class="da-pill">~15 min</span>
+                    <h4 style="font-size: 13px; flex: 1; min-width: 0; margin: 0;">Daily Vocabulary</h4>
+                    <span class="da-pill" style="white-space: nowrap; flex-shrink: 0; font-size: 12px; color: var(--color-text-secondary);">10 Questions &middot; ~15 min</span>
                     <div class="da-task-checkbox">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity:0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     </div>
@@ -1807,343 +1787,287 @@
             </div>
         </aside>
 
-        <!-- RIGHT: Weekly Table (65%) -->
-        <main class="sp-table-col" style="flex:1;min-width:0;">
-            <div class="sp-table-card">
-                <div class="sp-table-header">
-                    <h2><i class="ti ti-calendar-week"></i> This week's progress</h2>
-                    <div class="wt-legend">
-                        <div class="wt-legend-group">
-                            <div class="wt-legend-item"><div class="wt-box math"></div> Math</div>
-                            <div class="wt-legend-item"><div class="wt-box reading"></div> Reading</div>
-                            <div class="wt-legend-item"><div class="wt-box vocab"></div> Vocab</div>
-                            <div class="wt-legend-item"><div class="wt-box exam"></div> Exam</div>
-                        </div>
-                        <div class="wt-legend-divider"></div>
-                        <div class="wt-legend-group" style="display: flex; gap: 16px; font-weight: 700; color: var(--lav-gray);">
-                            <span><span style="color:#10B981;">&#10003;</span> Done</span>
-                            <span><span style="color:#EF4444;">&#10007;</span> Missed</span>
-                            <span><span style="color:var(--lav-accent); font-size:14px;">&#9679;</span> Today</span>
-                        </div>
+        <!-- RIGHT: Weekly Table (58%) -->
+        <main class="sp-table-col" style="flex: 1; display: flex; flex-direction: column; min-height: 0; display: flex !important; flex-direction: column !important; height: 100% !important;">
+            <div class="sp-table-card" style="display: flex; flex-direction: column; height: 100%; flex: 1; padding: 0; padding-bottom: 24px; display: flex !important; flex-direction: column !important; height: 100% !important;">
+                <div class="sp-table-header" style="min-height: 56px; display: flex; align-items: center; border-bottom: 0.5px solid var(--color-border-tertiary); padding: 0 18px;">
+                    <h2 style="white-space: nowrap; margin: 0; flex-shrink: 0;"><i class="ti ti-calendar-week"></i> This week's progress</h2>
+                </div>
+                <div class="wt-legend" style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; align-items: center; padding: 12px 24px 8px; width: 100%;">
+                    <div class="wt-legend-item"><div class="wt-box math"></div> Math</div>
+                    <div class="wt-legend-item"><div class="wt-box reading"></div> Reading</div>
+                    <div class="wt-legend-item"><div class="wt-box vocab"></div> Vocab</div>
+                    <div class="wt-legend-item"><div class="wt-box exam"></div> Exam</div>
+                    <div style="display: flex; align-items: center; gap: 12px; margin-left: auto;">
+                        <span style="color:#16a34a; font-weight: 700;"><span style="font-size: 13px; display: inline-block; width: 16px; text-align: center;">&#10003;</span> Done</span>
+                        <span style="color:#dc2626; font-weight: 700;"><span style="font-size: 13px; display: inline-block; width: 16px; text-align: center;">&#10007;</span> Missed</span>
+                        <span style="display:flex; align-items:center; gap:4px;"><span style="color:#534AB7; font-weight: 700; font-size: 14px; display: inline-block; width: 16px; text-align: center;">&#9679;</span> <span style="font-weight: 700; color: var(--lav-gray);">Today</span></span>
                     </div>
                 </div>
 
-                <div class="sp-table-scroll-container">
-                    <div class="sp-week-scroll">
-                        <div class="sp-week-inner">
-
-                        <!-- Thu 12 (Past) -->
-                        <div class="wt-col past">
-                            <div class="wt-col-head">
-                                <div class="wt-day-name">Thu</div>
-                                <div class="wt-day-num">12</div>
-                                <div class="wt-day-status wt-status-up">&mdash; Ahead</div>
-                            </div>
-                            <div class="wt-col-tasks" style="padding-bottom: 0;">
-                                <div class="wt-task-cell math">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Heart of Algebra</span>
-                                        <span class="wt-task-time">35m</span>
-                                    </div>
-                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold; font-size: 14px;">&#10003;</span>
-                                </div>
-                                <div class="wt-task-cell reading">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Command of Evidence</span>
-                                        <span class="wt-task-time">32m</span>
-                                    </div>
-                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold; font-size: 14px;">&#10003;</span>
-                                </div>
-                                <div class="wt-task-cell math">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Advanced Math</span>
-                                        <span class="wt-task-time">30m</span>
-                                    </div>
-                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold; font-size: 14px;">&#10003;</span>
-                                </div>
-                                <div class="wt-task-cell writing">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Rhetorical Synthesis</span>
-                                        <span class="wt-task-time">25m</span>
-                                    </div>
-                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold; font-size: 14px;">&#10003;</span>
-                                </div>
-                                <div class="wt-task-cell vocab">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Daily Vocab</span>
-                                        <span class="wt-task-time">15m</span>
-                                    </div>
-                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold; font-size: 14px;">&#10003;</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Fri 13 (Today) -->
-                        <div class="wt-col today">
-                            <div class="wt-col-head">
-                                <div class="wt-day-name">Fri</div>
-                                <div class="wt-day-num">13</div>
-                                <div class="wt-day-status wt-status-up"><span style="color:var(--lav-accent); font-size: 14px;">&#9679;</span> Today</div>
-                            </div>
-                            <div class="wt-col-tasks" style="padding-bottom: 0;">
-                                <div class="wt-task-cell math">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Heart of Algebra</span>
-                                        <span class="wt-task-time">35m</span>
-                                    </div>
-                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold; font-size: 14px;">&#10003;</span>
-                                </div>
-                                <div class="wt-task-cell reading">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Command of Evidence</span>
-                                        <span class="wt-task-time">32m</span>
-                                    </div>
-                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold; font-size: 14px;">&#10003;</span>
-                                </div>
-                                <div class="wt-task-cell math" style="opacity: 0.7;">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Advanced Math</span>
-                                        <span class="wt-task-time">30m</span>
-                                    </div>
-                                    <span class="wt-task-icon" style="color: var(--lav-accent); font-weight: bold; font-size: 14px;">&#9679;</span>
-                                </div>
-                                <div class="wt-task-cell writing" style="opacity: 0.5;">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Rhetorical Synthesis</span>
-                                        <span class="wt-task-time">25m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell vocab" style="opacity: 0.5;">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Daily Vocab</span>
-                                        <span class="wt-task-time">15m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Sat 14 -->
-                        <div class="wt-col future">
-                            <div class="wt-col-head">
-                                <div class="wt-day-name">Sat</div>
-                                <div class="wt-day-num">14</div>
-                                <div class="wt-day-status wt-status-up"><span style="font-size:16px;">&middot;</span> Ahead</div>
-                            </div>
-                            <div class="wt-col-tasks" style="padding-bottom: 0;">
-                                <div class="wt-task-cell math">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Geometry</span>
-                                        <span class="wt-task-time">35m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell reading">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Command of Evidence</span>
-                                        <span class="wt-task-time">32m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell math">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Advanced Math</span>
-                                        <span class="wt-task-time">30m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell writing">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Rhetorical Synthesis</span>
-                                        <span class="wt-task-time">25m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell vocab">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Daily Vocab</span>
-                                        <span class="wt-task-time">15m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Sun 15 -->
-                        <div class="wt-col future">
-                            <div class="wt-col-head">
-                                <div class="wt-day-name">Sun</div>
-                                <div class="wt-day-num">15</div>
-                                <div class="wt-day-status wt-status-up"><span style="font-size:16px;">&middot;</span> Ahead</div>
-                            </div>
-                            <div class="wt-col-tasks" style="padding-bottom: 0;">
-                                <div class="wt-task-cell math">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Geometry</span>
-                                        <span class="wt-task-time">35m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell writing">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Rhetorical Synthesis</span>
-                                        <span class="wt-task-time">32m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell math">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Heart of Algebra</span>
-                                        <span class="wt-task-time">30m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell reading">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Standard English</span>
-                                        <span class="wt-task-time">25m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell vocab">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Daily Vocab</span>
-                                        <span class="wt-task-time">15m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Mon 16 -->
-                        <div class="wt-col future">
-                            <div class="wt-col-head">
-                                <div class="wt-day-name">Mon</div>
-                                <div class="wt-day-num">16</div>
-                                <div class="wt-day-status wt-status-up">&mdash; Ahead</div>
-                            </div>
-                            <div class="wt-col-tasks" style="padding-bottom: 0;">
-                                <div class="wt-task-cell exam">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Mock Exam</span>
-                                        <span class="wt-task-time">35m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell reading">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Reading Comp.</span>
-                                        <span class="wt-task-time">32m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell math">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Advanced Math</span>
-                                        <span class="wt-task-time">30m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell reading">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">English Conv.</span>
-                                        <span class="wt-task-time">25m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell vocab">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Daily Vocab</span>
-                                        <span class="wt-task-time">15m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tue 17 -->
-                        <div class="wt-col future">
-                            <div class="wt-col-head">
-                                <div class="wt-day-name">Tue</div>
-                                <div class="wt-day-num">17</div>
-                                <div class="wt-day-status wt-status-up">&mdash; Ahead</div>
-                            </div>
-                            <div class="wt-col-tasks" style="padding-bottom: 0;">
-                                <div class="wt-task-cell math">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Advanced Math</span>
-                                        <span class="wt-task-time">35m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell reading">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Reading Comp.</span>
-                                        <span class="wt-task-time">32m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell math">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Advanced Math</span>
-                                        <span class="wt-task-time">30m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell reading">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Central Ideas</span>
-                                        <span class="wt-task-time">25m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell vocab">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Daily Vocab</span>
-                                        <span class="wt-task-time">15m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Wed 18 &mdash; Practice Test -->
-                        <div class="wt-col future">
-                            <div class="wt-col-head">
-                                <div class="wt-day-name">Wed</div>
-                                <div class="wt-day-num">18</div>
-                                <div class="wt-day-status wt-status-up">&mdash; Ahead</div>
-                            </div>
-                            <div class="wt-col-tasks" style="padding-bottom: 0;">
-                                <div class="wt-task-cell exam">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Full Math Module</span>
-                                        <span class="wt-task-time">70m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell exam">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Full R&W Module</span>
-                                        <span class="wt-task-time">64m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                                <div class="wt-task-cell reading">
-                                    <div class="wt-task-info">
-                                        <span class="wt-task-name">Review Errors</span>
-                                        <span class="wt-task-time">30m</span>
-                                    </div>
-                                    <span class="wt-task-icon"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        </div>
+                <div class="sp-table-scroll-container" style="position: relative; flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 0 24px;">
+                    <div style="flex: 1; overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                        <table class="wt-table" style="table-layout: fixed; width: 100%; border-collapse: collapse; min-width: 175%; text-align: left;">
+                            <thead>
+                                <tr>
+                                    <!-- Thu 12 -->
+                                    <th style="width: 25%; padding: 12px; border-bottom: 2px solid var(--lav-border); background: #f0fdf418;">
+                                        <div style="font-size: 12px; color: var(--lav-gray); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Thu <span style="font-size:16px; font-weight:700; color:var(--lav-dark);">12</span></div>
+                                        <div style="color:#16a34a; font-size: 12px; font-weight: 600; margin-top: 4px; display:flex; align-items:center; gap:4px;"><span style="font-size: 13px; display: inline-block; width: 16px; text-align: center;">&#10003;</span> All done</div>
+                                    </th>
+                                    <!-- Fri 13 -->
+                                    <th style="width: 25%; padding: 12px; border-bottom: 2px solid var(--lav-border); background: #EEEDFE18;">
+                                        <div style="font-size: 12px; color: #534AB7; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Fri <span style="font-size:16px;">13</span></div>
+                                        <div style="color:#534AB7; font-size: 12px; font-weight: 600; margin-top: 4px; display:flex; align-items:center; gap:4px;"><span style="font-size: 13px; font-weight: bold; display: inline-block; width: 16px; text-align: center;">&#9679;</span> Today</div>
+                                    </th>
+                                    <!-- Sat 14 -->
+                                    <th style="width: 25%; padding: 12px; border-bottom: 2px solid var(--lav-border); background: #ffffff;">
+                                        <div style="font-size: 12px; color: var(--lav-gray); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Sat <span style="font-size:16px; font-weight:700; color:var(--lav-dark);">14</span></div>
+                                        <div style="color:var(--lav-gray); font-size: 12px; font-weight: 500; margin-top: 4px;">&mdash; Upcoming</div>
+                                    </th>
+                                    <!-- Sun 15 -->
+                                    <th style="width: 25%; padding: 12px; border-bottom: 2px solid var(--lav-border); background: #ffffff;">
+                                        <div style="font-size: 12px; color: var(--lav-gray); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Sun <span style="font-size:16px; font-weight:700; color:var(--lav-dark);">15</span></div>
+                                        <div style="color:var(--lav-gray); font-size: 12px; font-weight: 500; margin-top: 4px;">&mdash; Upcoming</div>
+                                    </th>
+                                    <!-- Mon 16 -->
+                                    <th style="width: 25%; padding: 12px; border-bottom: 2px solid var(--lav-border); background: #ffffff;">
+                                        <div style="font-size: 12px; color: var(--lav-gray); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Mon <span style="font-size:16px; font-weight:700; color:var(--lav-dark);">16</span></div>
+                                        <div style="color:var(--lav-gray); font-size: 12px; font-weight: 500; margin-top: 4px;">&mdash; Upcoming</div>
+                                    </th>
+                                    <!-- Tue 17 -->
+                                    <th style="width: 25%; padding: 12px; border-bottom: 2px solid var(--lav-border); background: #ffffff;">
+                                        <div style="font-size: 12px; color: var(--lav-gray); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Tue <span style="font-size:16px; font-weight:700; color:var(--lav-dark);">17</span></div>
+                                        <div style="color:var(--lav-gray); font-size: 12px; font-weight: 500; margin-top: 4px;">&mdash; Upcoming</div>
+                                    </th>
+                                    <!-- Wed 18 -->
+                                    <th style="width: 25%; padding: 12px; border-bottom: 2px solid var(--lav-border); background: #ffffff;">
+                                        <div style="font-size: 12px; color: var(--lav-gray); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Wed <span style="font-size:16px; font-weight:700; color:var(--lav-dark);">18</span></div>
+                                        <div style="color:var(--lav-gray); font-size: 12px; font-weight: 500; margin-top: 4px;">&mdash; Upcoming</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Row 1: Math -->
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #D1FAE5 !important; border-left: 4px solid #378ADD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <span style="font-weight: 500; font-size: 13px; color: var(--color-text-secondary, #A0A0B0); text-decoration: line-through;">Heart of Algebra</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">35m</span>
+                                            </div>
+                                            <span style="color: #16a34a; font-weight: bold; font-size: 13px; display: inline-block; width: 16px; text-align: center; flex-shrink: 0; margin-left: 4px;">&#10003;</span>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #D1FAE5 !important; border-left: 4px solid #378ADD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <span style="font-weight: 500; font-size: 13px; color: var(--color-text-secondary, #A0A0B0); text-decoration: line-through;">Heart of Algebra</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">35m</span>
+                                            </div>
+                                            <span style="color: #16a34a; font-weight: bold; font-size: 13px; display: inline-block; width: 16px; text-align: center; flex-shrink: 0; margin-left: 4px;">&#10003;</span>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #D1FAE5 !important; border-left: 4px solid #378ADD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Geometry</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">35m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #D1FAE5 !important; border-left: 4px solid #378ADD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Geometry</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">35m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #FCE7F3 !important; border-left: 4px solid #378ADD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Mock Exam</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">35m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #D1FAE5 !important; border-left: 4px solid #378ADD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Advanced Math</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">35m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #D1FAE5 !important; border-left: 4px solid #378ADD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Full Math Module</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">70m</span></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Row 2: Reading -->
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #DBEAFE !important; border-left: 4px solid #7F77DD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <span style="font-weight: 500; font-size: 13px; color: var(--color-text-secondary, #A0A0B0); text-decoration: line-through;">Command of Evidence</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">32m</span>
+                                            </div>
+                                            <span style="color: #16a34a; font-weight: bold; font-size: 13px; display: inline-block; width: 16px; text-align: center; flex-shrink: 0; margin-left: 4px;">&#10003;</span>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #DBEAFE !important; border-left: 4px solid #7F77DD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <span style="font-weight: 500; font-size: 13px; color: var(--color-text-secondary, #A0A0B0); text-decoration: line-through;">Command of Evidence</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">32m</span>
+                                            </div>
+                                            <span style="color: #16a34a; font-weight: bold; font-size: 13px; display: inline-block; width: 16px; text-align: center; flex-shrink: 0; margin-left: 4px;">&#10003;</span>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #DBEAFE !important; border-left: 4px solid #7F77DD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Command of Evidence</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">32m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #DBEAFE !important; border-left: 4px solid #7F77DD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Rhetorical Synthesis</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">32m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #DBEAFE !important; border-left: 4px solid #7F77DD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Reading Comp.</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">32m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #DBEAFE !important; border-left: 4px solid #7F77DD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Reading Comp.</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">32m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #DBEAFE !important; border-left: 4px solid #7F77DD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Full R&W Module</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">64m</span></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Row 3: Math -->
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #D1FAE5 !important; border-left: 4px solid #378ADD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <span style="font-weight: 500; font-size: 13px; color: var(--color-text-secondary, #A0A0B0); text-decoration: line-through;">Advanced Math</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">30m</span>
+                                            </div>
+                                            <span style="color: #16a34a; font-weight: bold; font-size: 13px; display: inline-block; width: 16px; text-align: center; flex-shrink: 0; margin-left: 4px;">&#10003;</span>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #D1FAE5 !important; border-left: 4px solid #378ADD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Advanced Math</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">30m</span>
+                                            </div>
+                                            <span style="color: #534AB7; font-weight: bold; font-size: 13px; display: inline-block; width: 16px; text-align: center; margin-left: 6px; flex-shrink: 0;">&#9679;</span>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #D1FAE5 !important; border-left: 4px solid #378ADD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Advanced Math</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">30m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #D1FAE5 !important; border-left: 4px solid #378ADD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Heart of Algebra</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">30m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #D1FAE5 !important; border-left: 4px solid #378ADD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Advanced Math</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">30m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #D1FAE5 !important; border-left: 4px solid #378ADD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Advanced Math</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">30m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #ffffff !important; border-left: 4px solid #378ADD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Review Errors</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">30m</span></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Row 4: English -->
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #DBEAFE !important; border-left: 4px solid #7F77DD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <span style="font-weight: 500; font-size: 13px; color: var(--color-text-secondary, #A0A0B0); text-decoration: line-through;">Rhetorical Synthesis</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">25m</span>
+                                            </div>
+                                            <span style="color: #16a34a; font-weight: bold; font-size: 13px; display: inline-block; width: 16px; text-align: center; flex-shrink: 0; margin-left: 4px;">&#10003;</span>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #DBEAFE !important; border-left: 4px solid #7F77DD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Rhetorical Synthesis</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">25m</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #DBEAFE !important; border-left: 4px solid #7F77DD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Rhetorical Synthesis</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">25m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #DBEAFE !important; border-left: 4px solid #7F77DD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Standard English</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">25m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #DBEAFE !important; border-left: 4px solid #7F77DD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">English Conv.</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">25m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #ffffff !important; border-left: 4px solid #7F77DD !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Central Ideas</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">25m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #ffffff !important; border-left: 4px solid #7F77DD !important;">
+                                    </td>
+                                </tr>
+                                <!-- Row 5: Vocab -->
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #FEF3C7 !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <span style="font-weight: 500; font-size: 13px; color: var(--color-text-secondary, #A0A0B0); text-decoration: line-through;">Daily Vocab</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">15m</span>
+                                            </div>
+                                            <span style="color: #16a34a; font-weight: bold; font-size: 13px; display: inline-block; width: 16px; text-align: center; flex-shrink: 0; margin-left: 4px;">&#10003;</span>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #FEF3C7 !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Daily Vocab</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">15m</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #FEF3C7 !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Daily Vocab</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">15m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #FEF3C7 !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Daily Vocab</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">15m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #FEF3C7 !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Daily Vocab</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">15m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #FEF3C7 !important;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span style="font-weight: 500; font-size: 13px; color: var(--lav-dark);">Daily Vocab</span><span style="font-size: 11px; color: var(--lav-gray); margin-left: 6px;">15m</span></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--lav-border); background: #ffffff !important;">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
+                    <div style="position: absolute; right: 0; top: 0; height: 100%; width: 60px; background: linear-gradient(to right, transparent, #ffffff); pointer-events: none; z-index: 2;"></div>
                 </div>
-                <div style="width: 100%; text-align: center;"><div style="display: inline-block; font-size: 11px; color: var(--lav-gray); padding: 8px 20px 12px;">&larr; scroll to see full week &rarr;</div></div>
+                <div style="display: flex; justify-content: center; width: 100%; padding: 8px 0 4px; margin-top: auto;">
+                    <div style="display: block; width: 100%; text-align: center; font-size: 11px; color: var(--color-text-secondary, #A0A0B0);">&larr; scroll to see full week &rarr;</div>
+                </div>
             </div>
         </main>
 
@@ -3456,42 +3380,57 @@
       if (!container) return;
 
       const mockupTasks = [
-        { id: 'mock_geometry', topic: "Geometry", subject: "MATH", questions: 22, time: 35, border: "#3B82F6", badgeBg: "#DBEAFE" },
-        { id: 'mock_heart_of_algebra', topic: "Heart of Algebra", subject: "MATH", questions: 22, time: 35, border: "#3B82F6", badgeBg: "#DBEAFE" },
-        { id: 'mock_command_of_evidence', topic: "Command of Evidence", subject: "ENGLISH", questions: 27, time: 32, border: "#7C6FE0", badgeBg: "#FAE8FF" },
-        { id: 'mock_rhetorical_synthesis', topic: "Rhetorical Synthesis", subject: "ENGLISH", questions: 27, time: 32, border: "#7C6FE0", badgeBg: "#FAE8FF" },
-        { id: 'mock_daily_vocabulary', topic: "Daily Vocabulary", subject: "VOCAB", questions: 10, time: 15, border: "#10B981", badgeBg: "#FEF3C7" }
+        { id: 'mock_geometry', topic: "Geometry", subject: "MATH", questions: 22, time: 35, border: "#10B981", badgeBg: "#D1FAE5", rowBg: "#D1FAE544", rowBg: "#E6F1FB44" },
+        { id: 'mock_heart_of_algebra', topic: "Heart of Algebra", subject: "MATH", questions: 22, time: 35, border: "#378ADD", badgeBg: "#DBEAFE" },
+        { id: 'mock_command_of_evidence', topic: "Command of Evidence", subject: "ENGLISH", questions: 27, time: 32, border: "#3B82F6", badgeBg: "#DBEAFE", rowBg: "#DBEAFE44", rowBg: "#EEEDFE44" },
+        { id: 'mock_rhetorical_synthesis', topic: "Rhetorical Synthesis", subject: "ENGLISH", questions: 27, time: 32, border: "#7F77DD", badgeBg: "#FAE8FF" },
+        { id: 'mock_daily_vocabulary', topic: "Daily Vocabulary", subject: "VOCAB", questions: 10, time: 15, border: "#F59E0B", badgeBg: "#FEF3C7", rowBg: "#FEF3C744" }
       ];
 
       let checkedTasks = JSON.parse(localStorage.getItem('oneprep_plan_checks')) || {};
       
       // Seed default state: mock_geometry is checked, others are unchecked if not set yet
-      if (checkedTasks['mock_geometry'] === undefined) {
-        checkedTasks['mock_geometry'] = true;
-        checkedTasks['mock_heart_of_algebra'] = false;
-        checkedTasks['mock_command_of_evidence'] = false;
-        checkedTasks['mock_rhetorical_synthesis'] = false;
-        checkedTasks['mock_daily_vocabulary'] = false;
-        localStorage.setItem('oneprep_plan_checks', JSON.stringify(checkedTasks));
-      }
+      
 
-      container.innerHTML = mockupTasks.map(task => {
+      // Sort tasks: completed first
+      const sortedTasks = [...mockupTasks].sort((a, b) => {
+        const aChecked = !!checkedTasks[a.id];
+        const bChecked = !!checkedTasks[b.id];
+        if (aChecked && !bChecked) return -1;
+        if (!aChecked && bChecked) return 1;
+        return 0;
+      });
+
+      let foundFirstIncomplete = false;
+
+      container.innerHTML = sortedTasks.map(task => {
         const isChecked = !!checkedTasks[task.id];
         const cbBg = isChecked ? '#7C6FE0' : '#fff';
         const cbBorder = isChecked ? '#7C6FE0' : '#D0CBF5';
         const checkOp = isChecked ? '1' : '0';
-        const cardBg = '#ffffff';
+        const cardBg = task.rowBg;
+        const cardOp = isChecked ? '0.6' : '1';
+
+        let buttonHtml = '';
+        if (!isChecked) {
+            if (!foundFirstIncomplete) {
+                buttonHtml = `<div style="background: #534AB7; color: #fff; border-radius: var(--border-radius-md, 6px); padding: 6px 16px; font-size: 13px; font-weight: 500; margin-right: 4px; white-space: nowrap;">Continue &rarr;</div>`;
+                foundFirstIncomplete = true;
+            } else {
+                buttonHtml = `<div style="background: transparent; color: #534AB7; border: 1px solid #534AB7; border-radius: var(--border-radius-md, 6px); padding: 6px 14px; font-size: 13px; font-weight: 500; margin-right: 4px; white-space: nowrap;">Start</div>`;
+            }
+        }
 
         return `
-          <div class="da-task-card ${isChecked ? 'completed' : ''}" onclick="toggleMockAgendaTask('${task.id}')" style="padding: 10px 14px; background: ${cardBg}; border: 0.5px solid var(--color-border-tertiary, var(--lav-border)); border-radius: 0 20px 20px 0; border-left: 4px solid ${task.border}; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; cursor: pointer; transition: all 0.2s ease; min-height: 52px;">
-              <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
-                  <span class="da-subject-badge" style="background: ${task.badgeBg}; color: #1E293B; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; width: 60px; text-align: center;">${task.subject}</span>
-                  <h4 style="margin: 0; font-size: 14px; font-weight: 500; color: var(--lav-dark); line-height: 1.4; ${isChecked ? 'text-decoration: line-through; opacity: 0.6;' : ''}" title="${task.topic}">${task.topic}</h4>
+          <div class="da-task-card ${isChecked ? 'completed' : ''}" onclick="toggleMockAgendaTask('${task.id}')" style="padding: 10px 14px; background: ${cardBg} !important; opacity: ${cardOp}; border: 0.5px solid var(--color-border-tertiary, var(--lav-border)); border-radius: 0 8px 8px 0 !important; border-left: 4px solid ${task.border} !important; padding-left: 12px !important; display: flex; align-items: center; gap: 10px; margin-bottom: 0; cursor: pointer; transition: all 0.2s ease; min-height: 52px;">
+              <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;">
+                  <span class="da-subject-badge" style="background: ${task.badgeBg}; color: #1E293B; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; width: 68px; flex-shrink: 0; text-align: center;">${task.subject}</span>
+                  <h4 style="margin: 0; font-size: 13px; font-weight: 500; flex: 1; min-width: 0; color: ${isChecked ? 'var(--color-text-secondary, #A0A0B0)' : 'var(--lav-dark)'}; line-height: 1.4; ${isChecked ? 'text-decoration: line-through; text-decoration-color: #A0A0B0;' : ''}" title="${task.topic}">${task.topic}</h4>
               </div>
-              <div style="display: flex; align-items: center; gap: 12px;">
-                  <span class="da-pill" style="font-size: 12px; color: var(--color-text-secondary); white-space: nowrap;">${task.questions} Qs</span>
-                  <span class="da-pill" style="font-size: 12px; color: var(--color-text-secondary); white-space: nowrap;">~${task.time}m</span>
-                  <div class="da-task-checkbox ${isChecked ? 'checked' : ''}" style="width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid ${cbBorder}; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; background: ${cbBg}; flex-shrink: 0;">
+              <div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
+                  <span class="da-pill" style="white-space: nowrap; flex-shrink: 0; font-size: 12px; color: var(--color-text-secondary);">${task.questions} Qs &middot; ~${task.time}m</span>
+                  ${buttonHtml}
+                  <div class="da-task-checkbox ${isChecked ? 'checked' : ''}" style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid ${cbBorder}; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; background: ${cbBg}; flex-shrink: 0;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="check-icon" style="opacity: ${checkOp}; transition: opacity 0.2s;"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </div>
               </div>
