@@ -1657,7 +1657,7 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-let toastTimer = null;
+var toastTimer = toastTimer || null;
 function showToast(msg) {
   const toast = document.getElementById('toast');
   if (!toast) return;
@@ -1973,7 +1973,7 @@ Please paste the exact question you're struggling with, or let me know if you wa
 }
 
 // ── UNIFIED FULL-STACK HELPERS ──
-const API_BASE = '';  // same origin
+var API_BASE = window.API_BASE || '';  // same origin
 
 async function loadUserData() {
   try {

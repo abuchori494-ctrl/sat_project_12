@@ -1,0 +1,530 @@
+<section id="view-dashboard" class="hidden">
+
+
+    <!-- тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР
+         SECTION 1: HEADER BAR
+    тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР -->
+    <header class="sp-header">
+
+        <!-- Title тАФ standalone, above cards -->
+        <div class="sp-header-title-row" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-start; gap:16px;">
+            <div style="display:flex; align-items:baseline; gap:12px;">
+                <h1>Friday, June 12, 2026</h1>
+                <span class="sp-week-label">Week 13 of 27</span>
+            </div>
+            <!-- MATCHED ROUTE: Found the setup flow (study days, plan mode) and restored it to plan-setup.html. Wiring button to navigate to plan-setup.html -->
+            <button id="btn-create-plan" class="sp-btn-secondary" onclick="startOverPlan()"><i class="ti ti-refresh"></i> Rebuild my plan</button>
+        </div>
+
+        <!-- Row 1: 4 equal-width stat cards side by side -->
+        <div class="sp-cards-row">
+            <!-- Card 1: Target Score -->
+            <div class="sp-stat-card" style="flex-direction: row; padding: 0; gap: 0;">
+                <!-- Left Side: Target -->
+                <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; justify-content: center;">
+                    <div style="display:flex; align-items:center; gap:4px; margin-bottom:4px;">
+                        <span style="font-size:12px;">ЁЯОп</span>
+                        <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Target</span>
+                    </div>
+                    <div style="font-size:28px; font-weight:800; color:var(--lav-dark); line-height:1; margin-bottom:4px; letter-spacing:-0.02em;">1500</div>
+                    <div style="font-size:11px; color:var(--lav-gray); margin-bottom:6px; white-space: nowrap;">Math: 800 | R&W: 700</div>
+                    <a href="#" style="font-size:11px; font-weight:600; color:var(--lav-accent); text-decoration:none;">Set goal &rarr;</a>
+                </div>
+
+                <!-- Vertical Divider -->
+                <div style="width:1px; background:var(--lav-border); margin: 12px 0;"></div>
+
+                <!-- Right Side: Latest -->
+                <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; justify-content: center;">
+                    <div style="display:flex; align-items:center; gap:4px; margin-bottom:4px;">
+                        <span style="font-size:12px;">ЁЯУИ</span>
+                        <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Latest</span>
+                    </div>
+                    <!-- State: Diagnostic Exists -->
+                    <div id="stat-latest-has-score" style="display:block;">
+                        <div style="font-size:28px; font-weight:800; color:var(--lav-dark); line-height:1; margin-bottom:4px; letter-spacing:-0.02em;">1240</div>
+                        <div style="font-size:11px; color:var(--lav-gray); white-space: nowrap;">Math: 620 | R&W: 620</div>
+                    </div>
+                    <!-- State: No Diagnostic (Hidden by default for this view) -->
+                    <div id="stat-latest-empty" style="display:none;">
+                        <div style="font-size:11px; color:var(--lav-dark); margin-bottom:4px; line-height:1.3;">One exam away from knowing your baseline.</div>
+                        <div style="font-size:11px; color:var(--lav-gray); white-space: nowrap;">No practice yet</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Diagnostic Timeline -->
+            <div class="sp-stat-card">
+                <div style="display:flex; align-items:center; gap:4px; margin-bottom:4px;">
+                    <span style="font-size:12px;">ЁЯУЕ</span>
+                    <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Your SAT date</span>
+                </div>
+                <div class="spc-val" style="font-size:20px; letter-spacing:-0.01em; margin-bottom:0; cursor:pointer; position:relative;" onclick="document.getElementById('sat-date-picker').showPicker()">
+                    <span id="sat-date-display">Dec 5, 2026</span> <span style="font-size:12px; opacity:0.6; margin-left:4px;">тЬПя╕П</span>
+                    <input type="date" id="sat-date-picker" value="2026-12-05" style="position:absolute; bottom:0; left:0; width:1px; height:1px; opacity:0; pointer-events:none; border:none;" onchange="updateSatDate(this.value)" />
+                </div>
+            </div>
+
+            <!-- Card 3: Time to Go -->
+            <div class="sp-stat-card">
+                <div style="display:flex; align-items:center; gap:4px; margin-bottom:4px;">
+                    <span style="font-size:12px;">тП│</span>
+                    <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Days to exam</span>
+                </div>
+                <div class="spc-val" id="days-until-exam" style="margin-bottom:4px;">175</div>
+                <span class="spc-sub">days until your exam</span>
+            </div>
+
+            <!-- Card 4: Plan Intelligence -->
+            <div class="sp-stat-card">
+                <div style="display:flex; align-items:center; gap:4px; margin-bottom:4px;">
+                    <span style="font-size:12px;">ЁЯУЛ</span>
+                    <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">This week</span>
+                </div>
+                <div class="spc-val" style="font-size:22px; letter-spacing:-0.01em; margin-bottom:4px;">31 tasks</div>
+                <span class="spc-sub">~17h total &middot; 2h 26m/day average</span>
+            </div>
+        </div>
+
+        <!-- Row 2: Progress Journey Strip -->
+        <div class="sp-journey-card">
+            <div class="journey-actions">
+                <span class="journey-title">Weekly plan progress тАФ Week 13 of 27</span>
+                <a href="#" class="journey-link">Jump to Today</a>
+            </div>
+            <div class="journey-scroll">
+                <div class="journey-track" id="week-journey-track">
+                    <!-- Dots rendered by JS -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР
+         SECTION 2: SPLIT BODY
+    тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР -->
+    <div class="sp-body">
+
+        <!-- LEFT: Today's Agenda (42%) -->
+        <aside class="sp-tasks-col">
+            <div class="sp-tasks-header" style="align-items:flex-start;">
+                <div>
+                    <h2>ЁЯУЛ Today's agenda</h2>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <span id="agenda-progress-text" style="display:none; margin:0;"></span>
+                    <button class="sp-cta-btn" onclick="window.location.href='exam.html'" style="margin: 0; white-space: nowrap;">
+                        Continue Session &rarr;
+                    </button>
+                </div>
+            </div>
+            <div class="progress-track-wrap">
+                <div id="agenda-progress-track" style="display:none;">
+                    <div id="agenda-progress-fill"></div>
+                </div>
+            </div>
+            <div id="daily-agenda-tasks" class="dac-tasks">
+                <!-- Static tasks with local toggle enabled -->
+                <div class="da-task-card completed" style="border-left-color:#3B82F6;" onclick="toggleLocalAgendaTask(this)">
+                    <span class="da-subject-badge" style="background:#DBEAFE;">Math</span>
+                    <h4>Heart of Algebra</h4>
+                    <span class="da-pill">20 Questions</span>
+                    <span class="da-pill">~30 min</span>
+                    <div class="da-task-checkbox checked">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity:1;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                </div>
+                <div class="da-task-card completed" style="border-left-color:#7C6FE0;" onclick="toggleLocalAgendaTask(this)">
+                    <span class="da-subject-badge" style="background:#FAE8FF;">English</span>
+                    <h4>Command of Evidence</h4>
+                    <span class="da-pill">20 Questions</span>
+                    <span class="da-pill">~25 min</span>
+                    <div class="da-task-checkbox checked">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity:1;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                </div>
+                <div class="da-task-card" style="border-left-color:#3B82F6;" onclick="toggleLocalAgendaTask(this)">
+                    <span class="da-subject-badge" style="background:#DBEAFE;">Math</span>
+                    <h4>Advanced Math (1 of 2)</h4>
+                    <span class="da-pill">30 Questions</span>
+                    <span class="da-pill">~30 min</span>
+                    <div class="da-task-checkbox">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity:0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                </div>
+                <div class="da-task-card" style="border-left-color:#7C6FE0;" onclick="toggleLocalAgendaTask(this)">
+                    <span class="da-subject-badge" style="background:#FAE8FF;">English</span>
+                    <h4>English Conventions</h4>
+                    <span class="da-pill">20 Questions</span>
+                    <span class="da-pill">~25 min</span>
+                    <div class="da-task-checkbox">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity:0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                </div>
+                <div class="da-task-card" style="border-left-color:#3B82F6;" onclick="toggleLocalAgendaTask(this)">
+                    <span class="da-subject-badge" style="background:#DBEAFE;">Math</span>
+                    <h4>Advanced Math (2 of 2)</h4>
+                    <span class="da-pill">20 Questions</span>
+                    <span class="da-pill">~20 min</span>
+                    <div class="da-task-checkbox">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity:0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                </div>
+                <div class="da-task-card" style="border-left-color:#10B981;" onclick="toggleLocalAgendaTask(this)">
+                    <span class="da-subject-badge" style="background:#FEF3C7;">Vocab</span>
+                    <h4>Daily Vocabulary</h4>
+                    <span class="da-pill">10 Questions</span>
+                    <span class="da-pill">~15 min</span>
+                    <div class="da-task-checkbox">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity:0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- RIGHT: Weekly Table (65%) -->
+        <main class="sp-table-col">
+            <div class="sp-table-card">
+                <div class="sp-table-header">
+                    <h2>ЁЯУЖ This week's progress</h2>
+                    <div class="wt-legend">
+                        <div class="wt-legend-group">
+                            <div class="wt-legend-item"><div class="wt-box math"></div> Math</div>
+                            <div class="wt-legend-item"><div class="wt-box reading"></div> Reading</div>
+                            <div class="wt-legend-item"><div class="wt-box vocab"></div> Vocab</div>
+                            <div class="wt-legend-item"><div class="wt-box exam"></div> Exam</div>
+                        </div>
+                        <div class="wt-legend-divider"></div>
+                        <div class="wt-legend-group">
+                            <div class="wt-legend-item"><span class="wt-icon done">тЬУ</span> Done</div>
+                            <div class="wt-legend-item"><span class="wt-icon missed">тЬЧ</span> Missed</div>
+                            <div class="wt-legend-item"><span class="wt-icon prog">тАв</span> Today</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sp-table-scroll-container">
+                    <div class="sp-week-scroll">
+                        <div class="sp-week-inner">
+
+                        <!-- Thu 12 тАФ Past -->
+                        <div class="wt-col past">
+                            <div class="wt-col-head">
+                                <div class="wt-day-name">Thu</div>
+                                <div class="wt-day-num">12</div>
+                                <div class="wt-day-status wt-status-done">тЬУ All done</div>
+                            </div>
+                            <div class="wt-col-tasks">
+                                <div class="wt-task-cell math">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Heart of Algebra</span>
+                                        <span class="wt-task-time">35m</span>
+                                    </div>
+                                    <span class="wt-task-icon done">тЬУ</span>
+                                </div>
+                                <div class="wt-task-cell reading">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Command of Ev.</span>
+                                        <span class="wt-task-time">32m</span>
+                                    </div>
+                                    <span class="wt-task-icon done">тЬУ</span>
+                                </div>
+                                <div class="wt-task-cell math">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Advanced Math</span>
+                                        <span class="wt-task-time">30m</span>
+                                    </div>
+                                    <span class="wt-task-icon missed">тЬЧ</span>
+                                </div>
+                                <div class="wt-task-cell reading">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">English Conv.</span>
+                                        <span class="wt-task-time">25m</span>
+                                    </div>
+                                    <span class="wt-task-icon done">тЬУ</span>
+                                </div>
+                                <div class="wt-task-cell vocab">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Daily Vocab</span>
+                                        <span class="wt-task-time">15m</span>
+                                    </div>
+                                    <span class="wt-task-icon done">тЬУ</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fri 13 тАФ Today -->
+                        <div class="wt-col today">
+                            <div class="wt-col-head">
+                                <div class="wt-day-name">Fri</div>
+                                <div class="wt-day-num">13</div>
+                                <div class="wt-day-status wt-status-prog">тАв Today</div>
+                            </div>
+                            <div class="wt-col-tasks">
+                                <div class="wt-task-cell math">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Advanced Math</span>
+                                        <span class="wt-task-time">35m</span>
+                                    </div>
+                                    <span class="wt-task-icon done">тЬУ</span>
+                                </div>
+                                <div class="wt-task-cell reading">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Central Ideas</span>
+                                        <span class="wt-task-time">32m</span>
+                                    </div>
+                                    <span class="wt-task-icon done">тЬУ</span>
+                                </div>
+                                <div class="wt-task-cell math">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Advanced Math</span>
+                                        <span class="wt-task-time">30m</span>
+                                    </div>
+                                    <span class="wt-task-icon prog">тАв</span>
+                                </div>
+                                <div class="wt-task-cell reading">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">English Conv.</span>
+                                        <span class="wt-task-time">25m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell vocab">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Daily Vocab</span>
+                                        <span class="wt-task-time">15m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sat 14 -->
+                        <div class="wt-col">
+                            <div class="wt-col-head">
+                                <div class="wt-day-name">Sat</div>
+                                <div class="wt-day-num">14</div>
+                                <div class="wt-day-status wt-status-up">тАФ Ahead</div>
+                            </div>
+                            <div class="wt-col-tasks">
+                                <div class="wt-task-cell math">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Data Analysis</span>
+                                        <span class="wt-task-time">35m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell reading">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Command of Ev.</span>
+                                        <span class="wt-task-time">32m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell math">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Advanced Math</span>
+                                        <span class="wt-task-time">30m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell reading">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Rhetorical Syn.</span>
+                                        <span class="wt-task-time">25m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell vocab">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Daily Vocab</span>
+                                        <span class="wt-task-time">15m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sun 15 -->
+                        <div class="wt-col">
+                            <div class="wt-col-head">
+                                <div class="wt-day-name">Sun</div>
+                                <div class="wt-day-num">15</div>
+                                <div class="wt-day-status wt-status-up">тАФ Ahead</div>
+                            </div>
+                            <div class="wt-col-tasks">
+                                <div class="wt-task-cell math">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Geometry</span>
+                                        <span class="wt-task-time">35m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell reading">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Rhetorical Syn.</span>
+                                        <span class="wt-task-time">32m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell math">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Heart of Algebra</span>
+                                        <span class="wt-task-time">30m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell reading">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Standard English</span>
+                                        <span class="wt-task-time">25m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell vocab">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Daily Vocab</span>
+                                        <span class="wt-task-time">15m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mon 16 -->
+                        <div class="wt-col">
+                            <div class="wt-col-head">
+                                <div class="wt-day-name">Mon</div>
+                                <div class="wt-day-num">16</div>
+                                <div class="wt-day-status wt-status-up">тАФ Ahead</div>
+                            </div>
+                            <div class="wt-col-tasks">
+                                <div class="wt-task-cell exam">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Mock Exam</span>
+                                        <span class="wt-task-time">35m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell reading">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Reading Comp.</span>
+                                        <span class="wt-task-time">32m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell math">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Advanced Math</span>
+                                        <span class="wt-task-time">30m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell reading">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">English Conv.</span>
+                                        <span class="wt-task-time">25m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell vocab">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Daily Vocab</span>
+                                        <span class="wt-task-time">15m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tue 17 -->
+                        <div class="wt-col">
+                            <div class="wt-col-head">
+                                <div class="wt-day-name">Tue</div>
+                                <div class="wt-day-num">17</div>
+                                <div class="wt-day-status wt-status-up">тАФ Ahead</div>
+                            </div>
+                            <div class="wt-col-tasks">
+                                <div class="wt-task-cell math">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Advanced Math</span>
+                                        <span class="wt-task-time">35m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell reading">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Reading Comp.</span>
+                                        <span class="wt-task-time">32m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell math">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Advanced Math</span>
+                                        <span class="wt-task-time">30m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell reading">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Central Ideas</span>
+                                        <span class="wt-task-time">25m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell vocab">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Daily Vocab</span>
+                                        <span class="wt-task-time">15m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Wed 18 тАФ Practice Test -->
+                        <div class="wt-col">
+                            <div class="wt-col-head">
+                                <div class="wt-day-name">Wed</div>
+                                <div class="wt-day-num">18</div>
+                                <div class="wt-day-status wt-status-up">тАФ Ahead</div>
+                            </div>
+                            <div class="wt-col-tasks">
+                                <div class="wt-task-cell exam">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Full Math Module</span>
+                                        <span class="wt-task-time">70m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell exam">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Full R&W Module</span>
+                                        <span class="wt-task-time">64m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                                <div class="wt-task-cell reading">
+                                    <div class="wt-task-info">
+                                        <span class="wt-task-name">Review Errors</span>
+                                        <span class="wt-task-time">30m</span>
+                                    </div>
+                                    <span class="wt-task-icon"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right; font-size: 11px; color: var(--lav-gray); padding: 8px 20px 12px;">&larr; scroll to see full week &rarr;</div>
+            </div>
+        </main>
+
+    </div>
+</div>
+
+<script src="app.js"></script>
+<script src="/sidebar.js"></script>
+</section>
