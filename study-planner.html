@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* ---тФА Root tokens &mdash; exact match to home page тФА--- */
+        /* ---Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В¤Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС› Root tokens &mdash; exact match to home page Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В¤Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС›--- */
         :root {
             --lav-bg: #F8F7FF;
             --lav-card: #FFFFFF;
@@ -32,12 +32,12 @@
         html, body {
             margin: 0; padding: 0; min-height: 100vh;
             font-family: 'Outfit', 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
-            background: var(--lav-bg);
+            background: var(--bg-app, var(--lav-bg));
             color: var(--lav-dark);
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ---тФА Sidebar &mdash; identical to home page тФА--- */
+        /* ---Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В¤Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС› Sidebar &mdash; identical to home page Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В¤Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС›--- */
         #sidebar {
             position: fixed;
             top: 0; left: 0; bottom: 0;
@@ -49,13 +49,13 @@
             box-shadow: 4px 0 24px rgba(61,56,117,0.18);
         }
 
-        /* ---тФА Main layout shell тФА--- */
+        /* ---Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В¤Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС› Main layout shell Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В¤Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС›--- */
         .sp-shell {
             margin-left: 240px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background: var(--lav-bg);
+            background: var(--bg-app, var(--lav-bg));
         }
         @media (max-width: 768px) {
             #sidebar { display: none; }
@@ -63,9 +63,9 @@
         }
 
         /* ========================================================== */SECTION 1: HEADER BAR
-        тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР */
+        Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В  */
         .sp-header {
-            background: var(--lav-bg);
+            background: var(--bg-app, var(--lav-bg));
             border-bottom: 1px solid var(--lav-border);
             padding: 18px 28px 20px;
         }
@@ -97,16 +97,15 @@
         /* 5-card row -> 4-card row now */
         .sp-cards-row {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
             gap: 12px;
             align-items: stretch;
             margin-bottom: 16px;
         }
 
-        /* Base stat card */
         .sp-stat-card {
             background: var(--lav-card);
-            border: 1px solid var(--lav-border);
+            border: 0.5px solid var(--color-border-tertiary, var(--lav-border));
             border-radius: 12px;
             box-shadow: var(--lav-shadow);
             padding: 14px 16px;
@@ -161,7 +160,7 @@
         /* ROW 2: Progress Journey Strip */
         .sp-journey-card {
             background: var(--lav-card);
-            border: 1px solid var(--lav-border);
+            border: 0.5px solid var(--color-border-tertiary, var(--lav-border));
             border-radius: 12px;
             box-shadow: var(--lav-shadow);
             padding: 10px 20px;
@@ -187,20 +186,21 @@
         .journey-track {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
+            gap: 28px;
             position: relative;
-            padding: 8px 0 12px 0; min-width: 1200px;
+            padding: 8px 24px 20px 24px;
+            width: max-content;
         }
         /* The connecting line behind dots */
         .journey-track::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 16px;
-            right: 16px;
+            top: calc(50% - 6px);
+            left: 24px;
+            right: 24px;
             height: 2px;
             background: var(--lav-border);
-            transform: translateY(-50%);
             z-index: 1;
         }
 
@@ -214,51 +214,40 @@
         }
 
         .jdot {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 13px;
-            font-weight: 700;
-            background: var(--lav-card);
-            border: 2px solid var(--lav-border);
-            color: var(--lav-gray);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            margin: 0 6px;
+            font-size: 14px;
+            font-weight: 600;
+            background: #f0f0f5;
+            color: #9999bb;
+            border: none;
             transition: all 0.2s;
             cursor: pointer;
+            position: relative;
         }
-        
+
         .jdot.done {
-            background: var(--lav-accent);
-            border-color: var(--lav-accent);
-            color: #fff;
+            background: var(--color-purple-primary, #7C6FE0);
+            color: white;
+            border: none;
         }
         
         .jdot.current {
-            background: #fff;
-            border-color: var(--lav-accent);
-            border-width: 3px;
-            color: var(--lav-dark);
-            font-size: 15px;
-            font-weight: 800;
-            width: 40px;
-            height: 40px;
-            box-shadow: 0 4px 12px rgba(124,111,224,0.25);
+            background: white;
+            border: 2.5px solid var(--color-purple-primary, #7C6FE0);
+            color: var(--color-purple-primary, #7C6FE0);
+            width: 50px;
+            height: 50px;
+            box-shadow: none;
         }
 
-        .jdot-label {
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--lav-accent);
-            position: absolute;
-            top: 100%;
-            margin-top: 4px;
-            white-space: nowrap;
-            display: none;
-        }
-        .jdot.current + .jdot-label {
-            display: block;
+        .jdot:hover {
+            transform: scale(1.15);
         }
 
         .journey-actions {
@@ -405,23 +394,25 @@
         .sp-cta-btn:active { transform: translateY(0); }
 
         /* ========================================================== */SECTION 2: SPLIT BODY
-        тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР */
+        Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В  */
         .sp-body {
             display: flex;
-            gap: 24px;
-            padding: 16px 28px 24px;
+            flex-direction: row !important;
             align-items: stretch;
+            gap: 16px;
+            padding: 16px 28px 24px;
         }
 
         /* --- LEFT: Task List (42%) --- */
         .sp-tasks-col {
-            width: 42%;
+            width: 32%;
+            flex-shrink: 0;
             align-self: stretch !important;
             background: var(--lav-card);
-            border: 1px solid var(--lav-border);
+            border: 0.5px solid var(--color-border-tertiary, var(--lav-border));
             border-radius: var(--lav-radius);
-            box-shadow: var(--lav-shadow);
-            padding: 24px;
+            box-shadow: none;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 0;
@@ -430,8 +421,8 @@
         .sp-tasks-col::-webkit-scrollbar-thumb { background: var(--lav-border); border-radius: 3px; }
 
         .sp-tasks-header {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 16px;
+            display: flex; flex-direction: column; gap: 8px;
+            margin-bottom: 24px;
         }
         .sp-tasks-header h2 {
             font-size: 14px;
@@ -474,11 +465,11 @@
         .da-task-card {
             padding: 10px 16px;
             background: #ffffff;
-            border: 1px solid var(--lav-border);
+            border: 0.5px solid var(--color-border-tertiary, var(--lav-border));
             border-radius: 0 20px 20px 0;
             border-left-width: 4px;
             display: flex;
-            align-items: flex-start;
+            align-items: stretch;
             gap: 12px;
             margin-bottom: 8px;
             cursor: pointer;
@@ -525,12 +516,12 @@
         .dac-tasks .da-task-card {
             padding: 12px 16px !important;
             background: #ffffff !important;
-            border: 1px solid var(--lav-border) !important;
+            border: 0.5px solid var(--color-border-tertiary, var(--lav-border)) !important;
             border-left-width: 4px !important;
             border-left-style: solid !important;
             border-radius: 0 20px 20px 0 !important;
             display: flex !important;
-            align-items: flex-start !important;
+            align-items: stretch !important;
             gap: 12px !important;
             margin-bottom: 8px !important;
             cursor: pointer !important;
@@ -582,16 +573,17 @@
 
         .sp-table-card {
             background: var(--lav-card);
-            border: 1px solid var(--lav-border);
+            border: 0.5px solid var(--color-border-tertiary, var(--lav-border));
             border-radius: var(--lav-radius);
-            box-shadow: var(--lav-shadow);
+            box-shadow: none;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             flex: 1;
         }
 
         .sp-table-header {
-            padding: 16px 20px;
+            padding: 0 0 16px 0;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -610,8 +602,8 @@
         .wt-legend {
             display: flex;
             align-items: center;
-            gap: 16px;
-            font-size: 11px;
+            gap: 12px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--lav-gray);
         }
@@ -625,7 +617,7 @@
             align-items: center;
             gap: 4px;
         }
-        .wt-box { width: 10px; height: 10px; border-radius: 2px; }
+        .wt-box { width: 14px; height: 14px; border-radius: 4px; }
         .wt-box.math { background: #DBEAFE; border: 1px solid #93C5FD; }
         .wt-box.reading { background: #D1FAE5; border: 1px solid #6EE7B7; }
         .wt-box.vocab { background: #FEF3C7; border: 1px solid #FCD34D; }
@@ -639,11 +631,12 @@
         /* The scrollable columns wrapper */
         .sp-table-scroll-container {
             position: relative;
-            width: 100%;
+            flex: 1;
             display: flex;
             flex-direction: column;
-            flex: 1;
             min-height: 0;
+            overflow: hidden;
+            z-index: 1;
         }
         .sp-table-scroll-container::after {
             content: '';
@@ -654,7 +647,7 @@
             width: 40px;
             background: linear-gradient(to right, transparent, var(--lav-card));
             pointer-events: none;
-            z-index: 5;
+            z-index: 10;
         }
         .sp-week-scroll {
             width: 100%;
@@ -685,26 +678,26 @@
             border-right: 1px solid var(--lav-border);
         }
         .wt-col:last-child { border-right: none; }
-        .wt-col.today { background: #f5f3ff !important; }
-        .wt-col.past { background: #f0fdf4 !important; opacity: 1 !important; }
-        .wt-col.past { opacity: 0.85; }
+        .wt-col.today { background: rgba(124, 111, 224, 0.1) !important; }
+        .wt-col.past { background: rgba(16, 185, 129, 0.04) !important; opacity: 1 !important; }
+        .wt-col.future { background: #f9f9f9 !important; }
 
         .wt-col-head {
-            padding: 14px 16px 12px;
+            padding: 12px 16px;
             border-bottom: 1px solid var(--lav-border);
             flex-shrink: 0;
             text-align: center;
         }
         .wt-day-name {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
-            color: var(--lav-gray);
+            color: var(--color-text-secondary);
             letter-spacing: 0.05em;
             margin-bottom: 2px;
         }
         .wt-day-num {
-            font-size: 24px;
-            font-weight: 800;
+            font-size: 22px;
+            font-weight: 700;
             color: var(--lav-dark);
             line-height: 1;
             margin-bottom: 6px;
@@ -713,12 +706,13 @@
         .wt-col.today .wt-day-num { color: var(--lav-accent); }
         
         .wt-day-status {
-            font-size: 11px;
+            font-size: 12px;
+            margin-top: 4px;
             font-weight: 700;
         }
-        .wt-status-done { color: #059669; }
-        .wt-status-prog { color: var(--lav-accent); }
-        .wt-status-up { color: var(--lav-gray); }
+        .wt-status-done { color: var(--lav-dark); }
+        .wt-status-prog { color: var(--lav-accent); display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .wt-status-up { color: var(--lav-gray); display: flex; align-items: center; justify-content: center; gap: 4px; }
 
         /* Tasks inside day column */
         .wt-col-tasks {
@@ -737,10 +731,11 @@
         }
         .wt-col.past .wt-task-cell { background: transparent !important; }
         .wt-col.today .wt-task-cell { background: transparent !important; }
-        .wt-task-cell.math { background: #F3F8FF; border-left: 3px solid #3B82F6; }
-        .wt-task-cell.reading { background: #F0FDF4; border-left: 3px solid #10B981; }
-        .wt-task-cell.vocab { background: #FFFBEB; border-left: 3px solid #F59E0B; }
-        .wt-task-cell.exam { background: #FFF7ED; border-left: 3px solid #EA580C; }
+        .wt-task-cell.math { background: #F3F8FF; border-left: 3px solid #3B82F6 !important; }
+        .wt-task-cell.reading { background: #F0FDF4; border-left: 3px solid #10B981 !important; }
+        .wt-task-cell.writing { background: #FFF7ED; border-left: 3px solid #F97316 !important; }
+        .wt-task-cell.vocab { background: #F3F2FF; border-left: 3px solid #7C6FE0 !important; }
+        .wt-task-cell.exam { background: #FFF7ED; border-left: 3px solid #EA580C !important; }
 
         /* Subject left borders in weekly table by row index */
         .wt-col-tasks .wt-task-cell:nth-child(1) { border-left: 3px solid #378ADD !important; }
@@ -785,7 +780,7 @@
 
         /* Weekly table cell layout overrides */
         .wt-task-cell {
-            padding: 8px 12px !important;
+            padding: 8px 10px !important;
             display: flex !important;
             justify-content: space-between !important;
             align-items: center !important;
@@ -795,8 +790,9 @@
         .wt-task-info {
             display: flex !important;
             flex-direction: row !important;
+            justify-content: space-between !important;
             align-items: center !important;
-            gap: 6px !important;
+            gap: 8px !important;
             min-width: 0 !important;
             flex: 1 !important;
         }
@@ -844,8 +840,8 @@
         /* 1025px - 1194px (large tablet/iPad Pro) */
         @media (max-width: 1194px) {
             .sp-cards-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-            .sp-tasks-col { width: 38%; padding-left: 20px; }
-            .sp-table-col { width: 62%; padding-right: 20px; }
+            .sp-tasks-col { padding-left: 20px; }
+            .sp-table-col { padding-right: 20px; }
             .wt-col { min-width: calc(50% - 12px); }
         }
 
@@ -862,11 +858,6 @@
             #sidebar .dm-text { display: none; }
             #sidebar .user-profile { padding: 10px; border-radius: 50%; }
             .sp-shell { margin-left: 72px; }
-            
-            /* Body Stacks */
-            .sp-body { flex-direction: column; padding: 24px; gap: 24px; }
-            .sp-tasks-col { width: 100%; padding: 24px; }
-            .sp-table-col { padding: 0; width: 100%; }
             
             /* Scrollable Journey */
             .journey-scroll { overflow-x: auto; padding-bottom: 8px; }
@@ -906,6 +897,11 @@
             #sidebar .nav-links a { margin: 0; }
             .sp-shell { margin-left: 0; padding-bottom: 60px; }
             
+            /* Body Stacks */
+            .sp-body { flex-direction: column !important; padding: 24px; gap: 24px; }
+            .sp-tasks-col { width: 100% !important; padding: 24px; }
+            .sp-table-col { padding: 0; width: 100% !important; }
+
             /* Header adjustments */
             .sp-header { display: flex; flex-direction: column; }
             .sp-header-title-row { order: 1; flex-direction: column !important; align-items: stretch !important; gap: 12px !important; }
@@ -939,6 +935,7 @@
             .spc-val { font-size: 18px; }
             .spc-sub, .wt-task-time, .sp-week-label { font-size: 11px; }
         }
+    .journey-scroll::-webkit-scrollbar { display: none; }
     </style>
 </head>
   <title>Study Planner - OnePrep</title>
@@ -1161,7 +1158,7 @@
       margin-left: 240px;
       min-height: 100vh;
       padding: 20px 24px 60px 24px;
-      background-color: #F3F4F6 !important;
+      background-color: #F5F5F7 !important;
     }
 
     /* Staggered Entrance Animations */
@@ -1210,7 +1207,8 @@
     .dot-extended {
       background-color: #8b5cf6;
     }
-  </style>
+  .journey-scroll::-webkit-scrollbar { display: none; }
+    </style>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 </head>
@@ -1224,7 +1222,7 @@
     })();
   </script>
 
-  <!-- ═══ VERTICAL SIDEBAR NAV (EXACT MOCKUP MATCH) ═══ -->
+  <!-- Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРІР‚С”Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРІР‚С”Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРІР‚С”Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС› VERTICAL SIDEBAR NAV (EXACT MOCKUP MATCH) Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРІР‚С”Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРІР‚С”Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРІР‚С”Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС› -->
   <nav id="sidebar"></nav>
   
 
@@ -1248,8 +1246,8 @@
       <!-- Headline & Subheadline -->
       <div class="space-y-3">
         <h1 style="font-size: 1.9rem; font-weight: 700; line-height: 1.2;" class="text-lavDark tracking-tight">Build Your Personal SAT Study Plan</h1>
-        <p class="text-lavGray text-lg">Tell us your goal and exam date — we'll create a day-by-day plan tailored to you.</p>
-        <span style="display:inline-flex;align-items:center;gap:6px;background-color:#F0EFFE;color:#7C6FE0;border-radius:99px;padding:4px 14px;font-size:0.85rem;font-weight:600;">⏱ Takes less than 2 minutes to set up</span>
+        <p class="text-lavGray text-lg">Tell us your goal and exam date Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ў we'll create a day-by-day plan tailored to you.</p>
+        <span style="display:inline-flex;align-items:center;gap:6px;background-color:#F0EFFE;color:#7C6FE0;border-radius:99px;padding:4px 14px;font-size:0.85rem;font-weight:600;">Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В Р РЏР В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В± Takes less than 2 minutes to set up</span>
       </div>
 
       <!-- Dynamic Container for Active Study Plan vs New Setup -->
@@ -1281,7 +1279,7 @@
             <p class="text-sm text-lavGray leading-relaxed font-medium">Answer a few quick questions about your target score and exam date. We'll build a personalized day-by-day plan.</p>
           </div>
           <button onclick="openModal('modal-days')" class="mt-auto bg-lavAccent text-white text-sm font-bold px-7 py-3 rounded-[10px] w-fit hover:bg-opacity-90 transition-all z-10 shadow-sm active:scale-95">
-            Get Started →
+            Get Started Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р вЂ Р Р†Р вЂљРЎвЂєР РЋРЎвЂє
           </button>
         </div>
 
@@ -1350,7 +1348,7 @@
       <div class="bg-lavCard border border-lavBorder rounded-[16px] p-6 md:p-8 max-w-3xl w-full shadow-lav relative flex flex-col md:flex-row gap-8 transform scale-95 opacity-0 transition-all duration-200" id="modal-days-card" onclick="event.stopPropagation()">
         
         <!-- X close button -->
-        <button onclick="closeModal('modal-days')" class="absolute top-5 right-5 text-gray-400 hover:text-black font-bold text-lg p-1">✕</button>
+        <button onclick="closeModal('modal-days')" class="absolute top-5 right-5 text-gray-400 hover:text-black font-bold text-lg p-1">Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В Р вЂ№Р В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРІР‚С”</button>
         
         <!-- Step label -->
         <span class="absolute top-5 left-5 text-[11px] font-extrabold text-gray-400 uppercase tracking-widest" id="modal-step-label">Step 1 of 2</span>
@@ -1363,7 +1361,7 @@
           <p class="text-sm text-lavGray font-medium leading-relaxed">We'll schedule sessions on these days</p>
         </div>
 
-        <!-- Right Side — Day Selector -->
+        <!-- Right Side Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ў Day Selector -->
         <div class="flex-1 space-y-6 pt-4 relative">
           
           <!-- 7 day pills row -->
@@ -1428,7 +1426,7 @@
               <select id="mock-exam-day" class="border border-lavBorder rounded-[8px] p-2 text-xs outline-none focus:border-lavAccent"></select>
             </div>
             <button id="btn-next-step" onclick="goToStep2()" disabled class="bg-gray-300 text-gray-500 text-xs font-bold px-8 py-4 rounded-[10px] transition-all cursor-not-allowed shadow-sm ml-auto">
-              Next →
+              Next Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р вЂ Р Р†Р вЂљРЎвЂєР РЋРЎвЂє
             </button>
           </div>
 
@@ -1450,7 +1448,7 @@
               </div>
               <div>
                 <h3 class="font-bold text-lavDark text-base">Alternating Focus</h3>
-                <p class="text-xs text-lavGray mt-1">One day Math, next day English — with Vocabulary practiced every single day.</p>
+                <p class="text-xs text-lavGray mt-1">One day Math, next day English Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ў with Vocabulary practiced every single day.</p>
               </div>
             </div>
 
@@ -1501,16 +1499,16 @@
               <!-- Dynamically populated -->
             </div>
             <div class="text-[11px] font-bold text-lavGray pt-2 border-t border-[#EDE9FE]">
-              📚 Vocabulary is practiced every day automatically
+              Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРІвЂћСћР В Р’В Р В Р вЂ№Р В Р вЂ Р Р†Р вЂљРЎвЂєР РЋРЎвЂє Vocabulary is practiced every day automatically
             </div>
           </div>
 
           <div class="flex justify-between items-center pt-6 border-t border-lavBorder mt-4">
             <button onclick="goToStep1()" class="text-lavGray hover:text-lavDark text-sm font-bold transition-all px-4 py-2">
-              ← Back
+              Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС› Back
             </button>
             <button id="btn-create-plan" onclick="submitDaysPlan()" disabled class="bg-gray-300 text-gray-500 text-xs font-bold px-8 py-4 rounded-[10px] transition-all cursor-not-allowed shadow-sm">
-              Create Plan →
+              Create Plan Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р вЂ Р Р†Р вЂљРЎвЂєР РЋРЎвЂє
             </button>
           </div>
         </div>
@@ -1524,7 +1522,7 @@
     <section id="view-upload" class="hidden max-w-2xl mx-auto space-y-8 stagger-in">
       
       <!-- Back button -->
-      <button onclick="navigate('landing')" class="text-xs font-bold text-gray-500 hover:text-black transition-all">← Back to landing</button>
+      <button onclick="navigate('landing')" class="text-xs font-bold text-gray-500 hover:text-black transition-all">Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС› Back to landing</button>
       
       <!-- Heading -->
       <h1 class="text-2xl md:text-4xl font-bold tracking-tight text-center leading-snug text-lavDark">
@@ -1550,7 +1548,7 @@
             <ol class="text-[11px] text-lavGray list-decimal pl-4 font-medium leading-relaxed space-y-1">
               <li>Navigate to <a href="https://www.collegeboard.org" target="_blank" class="text-lavAccent underline font-bold">collegeboard.org</a>.</li>
               <li>Sign in to your student dashboard.</li>
-              <li>Go to <strong>My SAT</strong> ➔ <strong>Score Reports</strong>.</li>
+              <li>Go to <strong>My SAT</strong> Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р РЋРІР‚СњР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ў <strong>Score Reports</strong>.</li>
               <li>Click <strong>Download PDF Report</strong>.</li>
             </ol>
           </div>
@@ -1598,13 +1596,13 @@
 
         <!-- File Ready state -->
         <div id="upload-success-state" class="hidden flex flex-col items-center gap-3">
-          <div class="w-10 h-10 bg-[#d1fae5] text-[#16a34a] rounded-full flex items-center justify-center text-lg font-bold">✓</div>
+          <div class="w-10 h-10 bg-[#d1fae5] text-[#16a34a] rounded-full flex items-center justify-center text-lg font-bold">Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В Р вЂ№Р В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРІвЂћСћ</div>
           <div class="space-y-1">
             <strong id="success-filename" class="text-sm font-bold text-lavDark max-w-[280px] truncate block">score_report.pdf</strong>
             <span id="success-filesize" class="text-xs text-lavGray font-medium">1.2 MB</span>
           </div>
           <button onclick="resetFileSelector(event)" class="text-xs font-bold text-red-500 hover:text-red-700 transition-all border border-red-100 hover:bg-red-50 px-4 py-1.5 rounded-[10px] mt-1">
-            Remove file (✕)
+            Remove file (Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В Р вЂ№Р В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРІР‚С”)
           </button>
         </div>
       </div>
@@ -1624,124 +1622,125 @@
     <section id="view-dashboard" class="hidden">
 
 
-    <!-- тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР
+    <!-- Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В 
          SECTION 1: HEADER BAR
-    тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР -->
+    Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В  -->
     <header class="sp-header">
 
         <!-- Title &mdash; standalone, above cards -->
-        <div class="sp-header-title-row" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-start; gap:16px;">
-            <div style="display:flex; align-items:baseline; gap:12px;">
-                <h1>Friday, June 12, 2026</h1>
-                <span class="sp-week-label">Week 13 of 27</span>
+        <div class="sp-header-title-row" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-start; gap:16px; margin-bottom: 16px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <h1 id="header-today-date">Friday, June 12, 2026</h1>
+                <span class="sp-week-label" style="background: #F3F2FF; color: #7C6FE0; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">Week 13 of 27</span>
+                <button id="btn-create-plan" class="sp-btn-secondary" onclick="startOverPlan()" style="margin-left: 8px; border-radius: 8px; display: flex; align-items: center; gap: 6px;"><i class="ti ti-refresh" style="display: inline-flex; align-items: center; line-height: 1; position: static;"></i> Rebuild my plan</button>
             </div>
-            <!-- MATCHED ROUTE: Found the setup flow (study days, plan mode) and restored it to plan-setup.html. Wiring button to navigate to plan-setup.html -->
-            <button id="btn-create-plan" class="sp-btn-secondary" onclick="startOverPlan()"><i class="ti ti-refresh"></i> Rebuild my plan</button>
         </div>
 
-        <!-- Row 1: 4 equal-width stat cards side by side -->
-        <div class="sp-cards-row">
-            <!-- Card 1: Target Score -->
-            <div class="sp-stat-card" style="flex-direction: row; padding: 0; gap: 0;">
-                <!-- Left Side: Target -->
-                <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; justify-content: center;">
-                    <div style="display:flex; align-items:center; gap:4px; margin-bottom:4px;">
+        <div class="sp-header-cards-wrapper" style="background: #ffffff; padding: 20px; border-radius: 16px; border: 0.5px solid var(--color-border-tertiary, var(--lav-border)); box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-bottom: 24px;">
+
+
+        <!-- Row 1: 4 stat cards side by side -->
+        <div class="sp-cards-row" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 16px; align-items: stretch; margin-bottom: 16px;">
+            
+            <!-- Merged Target+Latest Card -->
+            <div class="card stat-card-double" style="display: flex; flex-direction: row; border: 0.5px solid var(--color-border-tertiary); border-radius: 12px; background: white; overflow: hidden; height: 100%;">
+                
+                <!-- Left panel: Target -->
+                <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
+                    <div style="display:flex; align-items:center; gap:4px;">
                         <i class="ti ti-target" style="font-size: 16px; color: var(--lav-accent);"></i>
-                        <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Target</span>
+                        <span style="font-size:12px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Target</span>
                     </div>
-                    <div id="dash-goal-score" style="font-size:28px; font-weight:800; color:var(--lav-dark); line-height:1; margin-bottom:4px; letter-spacing:-0.02em;">1500</div>
-                    <div style="font-size:11px; color:var(--lav-gray); margin-bottom:6px; white-space: nowrap;">Math: 800 | R&W: 700</div>
-                    <a href="#" style="font-size:11px; font-weight:600; color:var(--lav-accent); text-decoration:none;">Set goal &rarr;</a>
+                    <div id="dash-goal-score" style="font-size:32px; font-weight:800; color:var(--lav-dark); line-height:1; letter-spacing:-0.02em;">1500</div>
+                    <div style="font-size: 12px; color: var(--color-text-secondary); font-weight: 400; margin-top: 2px;">Math: 800 | R&W: 700</div>
+                    <a href="#" style="text-decoration: none !important; color: var(--color-purple-primary, #7C6FE0); font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 2px;">Set goal &rarr;</a>
                 </div>
 
                 <!-- Vertical Divider -->
-                <div style="width:1px; background:var(--lav-border); margin: 12px 0;"></div>
+                <div style="width: 0.5px; background: var(--color-border-tertiary); margin: 16px 0;"></div>
 
-                <!-- Right Side: Latest -->
-                <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; justify-content: center;">
-                    <div style="display:flex; align-items:center; gap:4px; margin-bottom:4px;">
+                <!-- Right panel: Latest -->
+                <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
+                    <div style="display:flex; align-items:center; gap:4px;">
                         <i class="ti ti-chart-line" style="font-size: 16px; color: var(--lav-accent);"></i>
-                        <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Latest</span>
+                        <span style="font-size:12px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Latest</span>
                     </div>
-                    <!-- State: Diagnostic Exists -->
                     <div id="stat-latest-has-score" style="display:block;">
-                        <div style="font-size:28px; font-weight:800; color:var(--lav-dark); line-height:1; margin-bottom:4px; letter-spacing:-0.02em;">1240</div>
-                        <div style="font-size:11px; color:var(--lav-gray); white-space: nowrap;">Math: 620 | R&W: 620</div>
+                        <div style="font-size:32px; font-weight:800; color:var(--color-purple-primary, #7C6FE0); line-height:1; letter-spacing:-0.02em;">1240</div>
+                        <div style="font-size: 12px; color: var(--color-text-secondary); font-weight: 400; margin-top: 2px;">Math: 620 | R&W: 620</div>
                     </div>
-                    <!-- State: No Diagnostic (Hidden by default for this view) -->
+                    <!-- State: No Diagnostic -->
                     <div id="stat-latest-empty" style="display:none;">
-                        <div style="font-size:11px; color:var(--lav-dark); margin-bottom:4px; line-height:1.3;">One exam away from knowing your baseline.</div>
-                        <div style="font-size:11px; color:var(--lav-gray); white-space: nowrap;">No practice yet</div>
+                        <div style="font-size:11px; color:var(--lav-dark); line-height:1.3;">One exam away from knowing your baseline.</div>
+                        <div style="font-size:11px; color:var(--lav-gray);">No practice yet</div>
                     </div>
                 </div>
             </div>
 
             <!-- Card 2: Diagnostic Timeline -->
-            <div class="sp-stat-card">
-                <div style="display:flex; align-items:center; gap:4px; margin-bottom:4px;">
-                    <i class="ti ti-calendar" style="font-size: 16px; color: var(--lav-accent);"></i> <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">YOUR SAT DATE</span>
+            <div class="sp-stat-card" style="height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 20px 24px; gap: 6px;">
+                <div style="display:flex; align-items:center; gap:4px;">
+                    <i class="ti ti-calendar" style="font-size: 16px; color: var(--lav-accent);"></i> <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Your SAT date</span>
                 </div>
                 <div class="spc-val" style="font-size:20px; letter-spacing:-0.01em; margin-bottom:0; cursor:pointer; position:relative;" onclick="document.getElementById('sat-date-picker').showPicker()">
-                    <span id="dash-exam-date">Dec 5, 2026</span> <i class="ti ti-pencil" style="font-size: 12px; color: var(--lav-accent); margin-left: 4px; cursor: pointer;"></i>
+                    <span id="dash-exam-date">Dec 5, 2026</span> <i class="ti ti-pencil" style="font-size: 12px; color: #7C6FE0; margin-left: 4px; cursor: pointer;"></i>
                     <input type="date" id="sat-date-picker" value="2026-12-05" style="position:absolute; bottom:0; left:0; width:1px; height:1px; opacity:0; pointer-events:none; border:none;" onchange="updateSatDate(this.value)" />
                 </div>
             </div>
 
             <!-- Card 3: Time to Go -->
-            <div class="sp-stat-card">
-                <div style="display:flex; align-items:center; gap:4px; margin-bottom:4px;">
-                    <i class="ti ti-hourglass" style="font-size: 16px; color: var(--lav-accent);"></i> <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">DAYS TO EXAM</span>
+            <div class="sp-stat-card" style="height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 20px 24px; gap: 6px;">
+                <div style="display:flex; align-items:center; gap:4px;">
+                    <i class="ti ti-hourglass" style="font-size: 16px; color: var(--lav-accent);"></i> <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">Days to exam</span>
                 </div>
-                <div class="spc-val" id="dash-days-left" style="margin-bottom:4px;">175</div>
-                <span class="spc-sub">days until your exam</span>
+                <div class="spc-val" id="dash-days-left" style="margin-bottom:0;">175</div>
+                <span class="spc-sub" style="margin-bottom:0;">days until your exam</span>
             </div>
 
             <!-- Card 4: Plan Intelligence -->
-            <div class="sp-stat-card">
-                <div style="display:flex; align-items:center; gap:4px; margin-bottom:4px;">
-                    <i class="ti ti-clipboard-list" style="font-size: 16px; color: var(--lav-accent);"></i> <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">THIS WEEK</span>
+            <div class="sp-stat-card" style="height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 20px 24px; gap: 6px;">
+                <div style="display:flex; align-items:center; gap:4px;">
+                    <i class="ti ti-clipboard-list" style="font-size: 16px; color: var(--lav-accent);"></i> <span style="font-size:10px; font-weight:700; color:var(--lav-gray); letter-spacing:0.05em;">This week</span>
                 </div>
-                <div class="spc-val" style="font-size:22px; letter-spacing:-0.01em; margin-bottom:4px;">31 tasks</div>
-                <span class="spc-sub" style="white-space: nowrap; font-size: 10px;">~17h total &middot; 2h 26m/day average</span>
+                <div class="spc-val" style="font-size:22px; letter-spacing:-0.01em; margin-bottom:0;">31 tasks</div>
+                <span class="spc-sub" style="font-size: 10px; color: var(--lav-gray); white-space: nowrap; margin-bottom:0;">~17h total &middot; 2h 26m/day</span>
             </div>
         </div>
 
         <!-- Row 2: Progress Journey Strip -->
         <div class="sp-journey-card">
-            <div class="journey-actions">
-                <span class="journey-title">Weekly plan progress &mdash; Week 13 of 27</span>
-                <a href="#" class="journey-link">Jump to Today</a>
+            <div class="journey-actions" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                <span class="journey-title" style="font-weight: 500; font-size: 14px; color: var(--color-text-primary, var(--lav-dark)); letter-spacing: 0;">Weekly plan progress &mdash; Week 13 of 27</span>
+                <a href="#" id="jump-to-today" class="journey-link" style="margin-right: 16px; transition: opacity 0.2s;">Jump to Today</a>
             </div>
-            <div class="journey-scroll">
-                <div class="journey-track" id="week-journey-track">
-                    <!-- Dots rendered by JS -->
+            <div class="journey-scroll-wrapper" style="position: relative; width: 100%;">
+                <div class="journey-scroll" style="overflow-x: auto; white-space: nowrap; scrollbar-width: none; padding: 8px 0 24px 0; -webkit-overflow-scrolling: touch;">
+                    <div class="journey-track" id="week-journey-track">
+                        <!-- Dots rendered by JS -->
+                    </div>
                 </div>
+                <!-- Fade out hint at the right edge -->
+                <div style="position: absolute; top: 0; right: 0; bottom: 0; width: 60px; background: linear-gradient(to right, transparent, var(--bg-app, var(--lav-bg))); pointer-events: none; z-index: 2;"></div>
             </div>
         </div>
+        </div> <!-- End header-cards-wrapper -->
     </header>
 
-    <!-- тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР
+    <!-- Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В 
          SECTION 2: SPLIT BODY
-    тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР -->
-    <div class="sp-body">
+    Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В РІР‚в„–Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В  -->
+    <div class="sp-body" style="display:flex;flex-direction:row;align-items:stretch;gap:16px;">
 
-        <!-- LEFT: Today's Agenda (42%) -->
-        <aside class="sp-tasks-col">
-            <div class="sp-tasks-header">
-                <div>
-                    <h2><i class="ti ti-clipboard-list"></i> Today's agenda</h2>
+        <!-- LEFT: Today's Agenda (33%) -->
+        <aside class="sp-tasks-col" style="width:34%;flex-shrink:0;">
+            <div class="sp-tasks-header" style="display:flex; flex-direction:column; gap:8px; margin-bottom:24px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+                    <h2 style="font-size:16px; font-weight:700; color:var(--lav-dark); margin:0; display:flex; align-items:center; gap:6px;">
+                        <i class="ti ti-clipboard-list" style="color:var(--lav-accent); font-size:18px;"></i> Today's Agenda
+                    </h2>
+                    <span id="agenda-progress-text" style="font-size:12px; font-weight:600; color:var(--lav-gray); margin-top:2px;"></span>
                 </div>
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <span id="agenda-progress-text" style="display:none; margin:0;"></span>
-                    <button class="sp-cta-btn" onclick="window.location.href='exam.html'" style="margin: 0; white-space: nowrap;">
-                        Continue Session &rarr;
-                    </button>
-                </div>
-            </div>
-            <div class="progress-track-wrap">
-                <div id="agenda-progress-track" style="display:none;">
-                    <div id="agenda-progress-fill"></div>
-                </div>
+                <div style="width: 24px; height: 3px; background: var(--lav-accent); border-radius: 2px;"></div>
             </div>
             <div id="daily-agenda-tasks" class="dac-tasks">
                 <!-- Static tasks with local toggle enabled -->
@@ -1803,7 +1802,7 @@
         </aside>
 
         <!-- RIGHT: Weekly Table (65%) -->
-        <main class="sp-table-col">
+        <main class="sp-table-col" style="flex:1;min-width:0;">
             <div class="sp-table-card">
                 <div class="sp-table-header">
                     <h2><i class="ti ti-calendar-week"></i> This week's progress</h2>
@@ -1815,8 +1814,10 @@
                             <div class="wt-legend-item"><div class="wt-box exam"></div> Exam</div>
                         </div>
                         <div class="wt-legend-divider"></div>
-                        <div class="wt-legend-group" style="display: flex; gap: 12px; font-weight: bold;">
-                            &#10003; Done &middot; &#10007; Missed &middot; &bull; Today
+                        <div class="wt-legend-group" style="display: flex; gap: 16px; font-weight: 700; color: var(--lav-gray);">
+                            <span><span style="color:#10B981;">&#10003;</span> Done</span>
+                            <span><span style="color:#EF4444;">&#10007;</span> Missed</span>
+                            <span><span style="color:var(--lav-accent); font-size:14px;">&#9679;</span> Today</span>
                         </div>
                     </div>
                 </div>
@@ -1825,89 +1826,89 @@
                     <div class="sp-week-scroll">
                         <div class="sp-week-inner">
 
-                        <!-- Thu 12 &mdash; Past -->
+                        <!-- Thu 12 (Past) -->
                         <div class="wt-col past">
                             <div class="wt-col-head">
                                 <div class="wt-day-name">Thu</div>
                                 <div class="wt-day-num">12</div>
-                                <div class="wt-day-status wt-status-done">&#10003; All done</div>
+                                <div class="wt-day-status wt-status-up">&mdash; Ahead</div>
                             </div>
-                            <div class="wt-col-tasks">
+                            <div class="wt-col-tasks" style="padding-bottom: 0;">
                                 <div class="wt-task-cell math">
                                     <div class="wt-task-info">
                                         <span class="wt-task-name">Heart of Algebra</span>
                                         <span class="wt-task-time">35m</span>
                                     </div>
-                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold;">&#10003;</span>
+                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold; font-size: 14px;">&#10003;</span>
                                 </div>
                                 <div class="wt-task-cell reading">
                                     <div class="wt-task-info">
-                                        <span class="wt-task-name">Command of Ev.</span>
+                                        <span class="wt-task-name">Command of Evidence</span>
                                         <span class="wt-task-time">32m</span>
                                     </div>
-                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold;">&#10003;</span>
+                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold; font-size: 14px;">&#10003;</span>
                                 </div>
                                 <div class="wt-task-cell math">
                                     <div class="wt-task-info">
                                         <span class="wt-task-name">Advanced Math</span>
                                         <span class="wt-task-time">30m</span>
                                     </div>
-                                    <span class="wt-task-icon missed" style="color: #EF4444; font-weight: bold;">&#10007;</span>
+                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold; font-size: 14px;">&#10003;</span>
                                 </div>
-                                <div class="wt-task-cell reading">
+                                <div class="wt-task-cell writing">
                                     <div class="wt-task-info">
-                                        <span class="wt-task-name">English Conv.</span>
+                                        <span class="wt-task-name">Rhetorical Synthesis</span>
                                         <span class="wt-task-time">25m</span>
                                     </div>
-                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold;">&#10003;</span>
+                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold; font-size: 14px;">&#10003;</span>
                                 </div>
                                 <div class="wt-task-cell vocab">
                                     <div class="wt-task-info">
                                         <span class="wt-task-name">Daily Vocab</span>
                                         <span class="wt-task-time">15m</span>
                                     </div>
-                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold;">&#10003;</span>
+                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold; font-size: 14px;">&#10003;</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Fri 13 &mdash; Today -->
+                        <!-- Fri 13 (Today) -->
                         <div class="wt-col today">
                             <div class="wt-col-head">
                                 <div class="wt-day-name">Fri</div>
                                 <div class="wt-day-num">13</div>
-                                <div class="wt-day-status wt-status-prog">&bull; Today</div>
+                                <div class="wt-day-status wt-status-up"><span style="color:var(--lav-accent); font-size: 14px;">&#9679;</span> Today</div>
                             </div>
-                            <div class="wt-col-tasks">
+                            <div class="wt-col-tasks" style="padding-bottom: 0;">
                                 <div class="wt-task-cell math">
                                     <div class="wt-task-info">
-                                        <span class="wt-task-name">Advanced Math</span>
+                                        <span class="wt-task-name">Heart of Algebra</span>
                                         <span class="wt-task-time">35m</span>
                                     </div>
-                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold;">&#10003;</span>
+                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold; font-size: 14px;">&#10003;</span>
                                 </div>
                                 <div class="wt-task-cell reading">
                                     <div class="wt-task-info">
-                                        <span class="wt-task-name">Central Ideas</span>
+                                        <span class="wt-task-name">Command of Evidence</span>
                                         <span class="wt-task-time">32m</span>
                                     </div>
-                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold;">&#10003;</span>
+                                    <span class="wt-task-icon done" style="color: #059669; font-weight: bold; font-size: 14px;">&#10003;</span>
                                 </div>
-                                <div class="wt-task-cell math">
+                                <div class="wt-task-cell math" style="opacity: 0.7;">
                                     <div class="wt-task-info">
                                         <span class="wt-task-name">Advanced Math</span>
                                         <span class="wt-task-time">30m</span>
                                     </div>
-                                    <span class="wt-task-icon prog" style="color: #7C6FE0; font-size: 14px;">&bull;</span>
+                                    <span class="wt-task-icon" style="color: var(--lav-accent); font-weight: bold; font-size: 14px;">&#9679;</span>
                                 </div>
-                                <div class="wt-task-cell reading">
+                                <div class="wt-task-cell writing" style="opacity: 0.5;">
                                     <div class="wt-task-info">
-                                        <span class="wt-task-name">English Conv.</span>
+                                        <span class="wt-task-name">Rhetorical Synthesis</span>
                                         <span class="wt-task-time">25m</span>
                                     </div>
                                     <span class="wt-task-icon"></span>
                                 </div>
-                                <div class="wt-task-cell vocab">
+                                <div class="wt-task-cell vocab" style="opacity: 0.5;">
                                     <div class="wt-task-info">
                                         <span class="wt-task-name">Daily Vocab</span>
                                         <span class="wt-task-time">15m</span>
@@ -1918,23 +1919,23 @@
                         </div>
 
                         <!-- Sat 14 -->
-                        <div class="wt-col">
+                        <div class="wt-col future">
                             <div class="wt-col-head">
                                 <div class="wt-day-name">Sat</div>
                                 <div class="wt-day-num">14</div>
-                                <div class="wt-day-status wt-status-up">&mdash; Ahead</div>
+                                <div class="wt-day-status wt-status-up"><span style="font-size:16px;">&middot;</span> Ahead</div>
                             </div>
-                            <div class="wt-col-tasks">
+                            <div class="wt-col-tasks" style="padding-bottom: 0;">
                                 <div class="wt-task-cell math">
                                     <div class="wt-task-info">
-                                        <span class="wt-task-name">Data Analysis</span>
+                                        <span class="wt-task-name">Geometry</span>
                                         <span class="wt-task-time">35m</span>
                                     </div>
                                     <span class="wt-task-icon"></span>
                                 </div>
                                 <div class="wt-task-cell reading">
                                     <div class="wt-task-info">
-                                        <span class="wt-task-name">Command of Ev.</span>
+                                        <span class="wt-task-name">Command of Evidence</span>
                                         <span class="wt-task-time">32m</span>
                                     </div>
                                     <span class="wt-task-icon"></span>
@@ -1946,9 +1947,9 @@
                                     </div>
                                     <span class="wt-task-icon"></span>
                                 </div>
-                                <div class="wt-task-cell reading">
+                                <div class="wt-task-cell writing">
                                     <div class="wt-task-info">
-                                        <span class="wt-task-name">Rhetorical Syn.</span>
+                                        <span class="wt-task-name">Rhetorical Synthesis</span>
                                         <span class="wt-task-time">25m</span>
                                     </div>
                                     <span class="wt-task-icon"></span>
@@ -1964,13 +1965,13 @@
                         </div>
 
                         <!-- Sun 15 -->
-                        <div class="wt-col">
+                        <div class="wt-col future">
                             <div class="wt-col-head">
                                 <div class="wt-day-name">Sun</div>
                                 <div class="wt-day-num">15</div>
-                                <div class="wt-day-status wt-status-up">&mdash; Ahead</div>
+                                <div class="wt-day-status wt-status-up"><span style="font-size:16px;">&middot;</span> Ahead</div>
                             </div>
-                            <div class="wt-col-tasks">
+                            <div class="wt-col-tasks" style="padding-bottom: 0;">
                                 <div class="wt-task-cell math">
                                     <div class="wt-task-info">
                                         <span class="wt-task-name">Geometry</span>
@@ -1978,9 +1979,9 @@
                                     </div>
                                     <span class="wt-task-icon"></span>
                                 </div>
-                                <div class="wt-task-cell reading">
+                                <div class="wt-task-cell writing">
                                     <div class="wt-task-info">
-                                        <span class="wt-task-name">Rhetorical Syn.</span>
+                                        <span class="wt-task-name">Rhetorical Synthesis</span>
                                         <span class="wt-task-time">32m</span>
                                     </div>
                                     <span class="wt-task-icon"></span>
@@ -2010,13 +2011,13 @@
                         </div>
 
                         <!-- Mon 16 -->
-                        <div class="wt-col">
+                        <div class="wt-col future">
                             <div class="wt-col-head">
                                 <div class="wt-day-name">Mon</div>
                                 <div class="wt-day-num">16</div>
                                 <div class="wt-day-status wt-status-up">&mdash; Ahead</div>
                             </div>
-                            <div class="wt-col-tasks">
+                            <div class="wt-col-tasks" style="padding-bottom: 0;">
                                 <div class="wt-task-cell exam">
                                     <div class="wt-task-info">
                                         <span class="wt-task-name">Mock Exam</span>
@@ -2056,13 +2057,13 @@
                         </div>
 
                         <!-- Tue 17 -->
-                        <div class="wt-col">
+                        <div class="wt-col future">
                             <div class="wt-col-head">
                                 <div class="wt-day-name">Tue</div>
                                 <div class="wt-day-num">17</div>
                                 <div class="wt-day-status wt-status-up">&mdash; Ahead</div>
                             </div>
-                            <div class="wt-col-tasks">
+                            <div class="wt-col-tasks" style="padding-bottom: 0;">
                                 <div class="wt-task-cell math">
                                     <div class="wt-task-info">
                                         <span class="wt-task-name">Advanced Math</span>
@@ -2102,13 +2103,13 @@
                         </div>
 
                         <!-- Wed 18 &mdash; Practice Test -->
-                        <div class="wt-col">
+                        <div class="wt-col future">
                             <div class="wt-col-head">
                                 <div class="wt-day-name">Wed</div>
                                 <div class="wt-day-num">18</div>
                                 <div class="wt-day-status wt-status-up">&mdash; Ahead</div>
                             </div>
-                            <div class="wt-col-tasks">
+                            <div class="wt-col-tasks" style="padding-bottom: 0;">
                                 <div class="wt-task-cell exam">
                                     <div class="wt-task-info">
                                         <span class="wt-task-name">Full Math Module</span>
@@ -2136,7 +2137,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="text-align: center; font-size: 11px; color: var(--lav-gray); padding: 8px 20px 12px; text-align: center !important;">&larr; scroll to see full week &rarr;</div>
+                <div style="width: 100%; text-align: center;"><div style="display: inline-block; font-size: 11px; color: var(--lav-gray); padding: 8px 20px 12px;">&larr; scroll to see full week &rarr;</div></div>
             </div>
         </main>
 
@@ -2473,7 +2474,7 @@
             
             return `
                 <button onclick="toggleAlternatingDay('${day}')" class="px-4 py-2 rounded-full font-bold text-xs transition-all ${bgClass} ${textClass} border border-transparent hover:border-current">
-                    ${day} — ${subject}
+                    ${day} Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ў ${subject}
                 </button>
             `;
         }).join('');
@@ -2528,7 +2529,7 @@
         };
         localStorage.setItem('oneprep_offline_plans', JSON.stringify(offlinePlans));
 
-        showToast("Your study plan has been created! 🎉");
+        showToast("Your study plan has been created! Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РІР‚вЂњР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В РІР‚в„ўР вЂ™Р’В°");
         closeModal('modal-days');
 
         // Render created plan inside view-dashboard
@@ -2553,7 +2554,7 @@
         };
         localStorage.setItem('oneprep_offline_plans', JSON.stringify(offlinePlans));
 
-        showToast("Your study plan has been created! 🎉");
+        showToast("Your study plan has been created! Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РІР‚вЂњР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В РІР‚в„ўР вЂ™Р’В°");
         closeModal('modal-days');
         renderSchedulePlan(fakePlanId, fakePlan, 1500, "2026-12-05", null, studyModeState);
       }
@@ -2601,12 +2602,12 @@
       const allowed = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
 
       if (!allowed.includes(file.type)) {
-        showToast("Unsupported file format! Please upload PDF or image. ⚠️");
+        showToast("Unsupported file format! Please upload PDF or image. Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В Р вЂ№Р В Р вЂ Р Р†Р вЂљРЎвЂєР РЋРЎвЂєР В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р Р‹Р Р†Р вЂљРІР‚СњР В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р вЂ™Р’ВР В Р’В Р вЂ™Р’В Р В Р’В Р В Р РЏ");
         return;
       }
 
       if (file.size > maxSize) {
-        showToast("File size exceeded 10MB limit! ⚠️");
+        showToast("File size exceeded 10MB limit! Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В Р вЂ№Р В Р вЂ Р Р†Р вЂљРЎвЂєР РЋРЎвЂєР В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р вЂ™Р’В Р В Р Р‹Р Р†Р вЂљРІР‚СњР В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р вЂ™Р’ВР В Р’В Р вЂ™Р’В Р В Р’В Р В Р РЏ");
         return;
       }
 
@@ -2871,11 +2872,11 @@
     }
 
     function getTaskStyling(type) {
-        if (type === 'Math') return { border: '#1D9E75', badgeBg: '#D1FAE5', badgeText: '#065F46', icon: '△' };
-        if (type === 'English') return { border: '#7F77DD', badgeBg: '#EEEDFE', badgeText: '#534AB7', icon: '☶' };
-        if (type === 'Vocab') return { border: '#EF9F27', badgeBg: '#FEF3C7', badgeText: '#92400E', icon: '✦' };
-        if (type === 'Mock Exam') return { border: '#F59E0B', badgeBg: '#FEF3C7', badgeText: '#F59E0B', icon: '📝' };
-        return { border: '#9CA3AF', badgeBg: '#F3F4F6', badgeText: '#6B7280', icon: '🧘' };
+        if (type === 'Math') return { border: '#1D9E75', badgeBg: '#D1FAE5', badgeText: '#065F46', icon: 'Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р вЂ Р В РІР‚С™Р РЋРЎв„ўР В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†Р вЂљРЎС™' };
+        if (type === 'English') return { border: '#7F77DD', badgeBg: '#EEEDFE', badgeText: '#534AB7', icon: 'Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’ВР В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В¶' };
+        if (type === 'Vocab') return { border: '#EF9F27', badgeBg: '#FEF3C7', badgeText: '#92400E', icon: 'Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В Р вЂ№Р В Р Р‹Р Р†РІР‚С›РЎС›Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В¦' };
+        if (type === 'Mock Exam') return { border: '#F59E0B', badgeBg: '#FEF3C7', badgeText: '#F59E0B', icon: 'Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРІвЂћСћР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРІвЂћСћ' };
+        return { border: '#9CA3AF', badgeBg: '#F3F4F6', badgeText: '#6B7280', icon: 'Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В§Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В' };
     }
 
     function renderCalendar() {
@@ -2902,7 +2903,7 @@
           const weekEnd = new Date(weekStart);
           weekEnd.setDate(weekStart.getDate() + 6);
           const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-          const weekDateRange = `${monthNames[weekStart.getMonth()]} ${weekStart.getDate()} – ${monthNames[weekEnd.getMonth()]} ${weekEnd.getDate()}, ${weekEnd.getFullYear()}`;
+          const weekDateRange = `${monthNames[weekStart.getMonth()]} ${weekStart.getDate()} Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРІвЂћСћ ${monthNames[weekEnd.getMonth()]} ${weekEnd.getDate()}, ${weekEnd.getFullYear()}`;
           
           let totalWkMins = 0;
           let totalWkTasks = 0;
@@ -2931,8 +2932,8 @@
               <h1 class="text-[18px] font-[800] text-[#1E1B4B] tracking-wide mb-1">Week ${currentWeek} <span class="text-[14px] font-medium text-[#6B7280] ml-2">(${weekDateRange})</span></h1>
               <div class="mt-2 flex items-center flex-wrap gap-3 text-[12px] font-bold text-[#6B7280]">
                 <span class="bg-white border border-gray-200 px-3 py-1 rounded-md shadow-sm flex items-center gap-1.5"><span class="text-[#1D9E75]">${compWkTasks}</span> / ${totalWkTasks} tasks</span>
-                <span class="bg-white border border-gray-200 px-3 py-1 rounded-md shadow-sm flex items-center gap-1.5">⏱ ${hrs}h ${mins}m studied</span>
-                <span class="bg-white border border-gray-200 px-3 py-1 rounded-md shadow-sm flex items-center gap-1.5">📚 ${subjsArr}</span>
+                <span class="bg-white border border-gray-200 px-3 py-1 rounded-md shadow-sm flex items-center gap-1.5">Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р’В Р В Р РЏР В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В± ${hrs}h ${mins}m studied</span>
+                <span class="bg-white border border-gray-200 px-3 py-1 rounded-md shadow-sm flex items-center gap-1.5">Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРІвЂћСћР В Р’В Р В Р вЂ№Р В Р вЂ Р Р†Р вЂљРЎвЂєР РЋРЎвЂє ${subjsArr}</span>
               </div>
             </div>
             <div class="flex items-center gap-3">
@@ -2941,7 +2942,7 @@
                 Jump to Today
               </button>
               <div class="flex items-center gap-2 bg-[#F5F3FF] px-4 py-2 rounded-xl shadow-sm border border-[#EDE9FE]">
-                <span class="text-lg">🔥</span>
+                <span class="text-lg">Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ўР В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћ</span>
                 <div>
                   <p class="text-[10px] font-bold text-[#7C6FE0] uppercase tracking-widest leading-none mb-0.5">Current Streak</p>
                   <p class="text-[15px] font-black text-[#5B21B6] leading-none">4 Days</p>
@@ -3040,12 +3041,12 @@
             if (isRest) {
                 // No action
             } else if (isMock) {
-                btnHtml = `<button onclick="window.location.href='/mock-exam'" class="bg-[#1D9E75] text-white text-[12px] h-[28px] px-[10px] rounded-[7px] font-medium transition-all whitespace-nowrap">Continue →</button>`;
+                btnHtml = `<button onclick="window.location.href='/mock-exam'" class="bg-[#1D9E75] text-white text-[12px] h-[28px] px-[10px] rounded-[7px] font-medium transition-all whitespace-nowrap">Continue Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р вЂ Р Р†Р вЂљРЎвЂєР РЋРЎвЂє</button>`;
             } else {
                 if (isChecked) {
-                    btnHtml = `<button onclick="window.location.href='/exam.html?mode=practice'" class="mr-3 font-medium text-[12px] h-[28px] px-[10px] rounded-[7px] transition-all bg-[#F3F4F6] border border-[#D1D5DB] text-[#4B5563] hover:bg-[#E5E7EB] whitespace-nowrap">Review →</button>`;
+                    btnHtml = `<button onclick="window.location.href='/exam.html?mode=practice'" class="mr-3 font-medium text-[12px] h-[28px] px-[10px] rounded-[7px] transition-all bg-[#F3F4F6] border border-[#D1D5DB] text-[#4B5563] hover:bg-[#E5E7EB] whitespace-nowrap">Review Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р вЂ Р Р†Р вЂљРЎвЂєР РЋРЎвЂє</button>`;
                 } else {
-                    btnHtml = `<button onclick="window.location.href='/exam.html?mode=practice'" class="mr-3 font-medium text-[12px] h-[28px] px-[10px] rounded-[7px] transition-all bg-[#7C6FE0] text-white hover:bg-[#5B21B6] whitespace-nowrap border-none">Start →</button>`;
+                    btnHtml = `<button onclick="window.location.href='/exam.html?mode=practice'" class="mr-3 font-medium text-[12px] h-[28px] px-[10px] rounded-[7px] transition-all bg-[#7C6FE0] text-white hover:bg-[#5B21B6] whitespace-nowrap border-none">Start Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В РІР‚в„ўР вЂ™Р’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р вЂ Р Р†Р вЂљРЎвЂєР РЋРЎвЂє</button>`;
                 }
                 actionHtml = `
                     <div class="relative flex items-center justify-center w-[18px] h-[18px] cursor-pointer shrink-0" onclick="togglePlanCheck(this, '${currentPlanId}', ${trueDayIndex}, ${taskIdx}, '${style.border}')">
@@ -3074,10 +3075,10 @@
                   </div>
                   <div class="flex items-center flex-wrap gap-x-2 mt-1">
                       ${!isRest && !isMock ? `
-                        <p class="text-[11px] text-[#9CA3AF] font-normal leading-none ${isChecked ? 'opacity-60' : ''}">${task.questionCount} questions · ${task.estimatedMinutes} mins</p>
+                        <p class="text-[11px] text-[#9CA3AF] font-normal leading-none ${isChecked ? 'opacity-60' : ''}">${task.questionCount} questions Р В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС›Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В· ${task.estimatedMinutes} mins</p>
                       ` : ''}
                       ${isMock ? `
-                        <p class="text-[11px] text-[#9CA3AF] font-normal leading-none mt-0">Full SAT Length · 134 mins</p>
+                        <p class="text-[11px] text-[#9CA3AF] font-normal leading-none mt-0">Full SAT Length Р В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РЎС›Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В· 134 mins</p>
                       ` : ''}
                       ${isRest ? `
                         <p class="text-[11px] text-[#9CA3AF] font-normal leading-none mt-0">Take a break today to prevent burnout.</p>
@@ -3134,11 +3135,11 @@
       const weeklyBar = document.getElementById('weekly-progress-bar');
       if (weeklyBar) weeklyBar.style.width = `${pct}%`;
       
-      let msg = "Let's get started! 🚀";
-      if (pct > 0) msg = "Great start! Keep going 🔥";
-      if (pct > 40) msg = "You're doing amazing! 🌟";
-      if (pct > 80) msg = "Almost done for the week! 💪";
-      if (pct === 100 && totalTasksThisWeek > 0) msg = "Perfect week! You crushed it! 🏆";
+      let msg = "Let's get started! Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р В Р вЂ№Р В Р вЂ Р Р†Р вЂљРЎвЂєР РЋРЎвЂєР В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћ";
+      if (pct > 0) msg = "Great start! Keep going Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ўР В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћ";
+      if (pct > 40) msg = "You're doing amazing! Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В°Р В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџ";
+      if (pct > 80) msg = "Almost done for the week! Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р вЂ Р Р†Р вЂљРЎвЂєР РЋРЎвЂєР В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІР‚С”";
+      if (pct === 100 && totalTasksThisWeek > 0) msg = "Perfect week! You crushed it! Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р вЂ™Р’В Р В Р’В Р В Р РЏР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В РІР‚в„ўР вЂ™Р’В ";
       const motText = document.getElementById('weekly-motivational-text');
       if (motText) motText.textContent = msg;
 
@@ -3189,9 +3190,9 @@
                   
                   tasks = [];
                   if (isRest) {
-                      tasks.push({ type: "Rest", topic: "Relax & Recharge 🧘", questionCount: 0, estimatedMinutes: 0 });
+                      tasks.push({ type: "Rest", topic: "Relax & Recharge Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В§Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В", questionCount: 0, estimatedMinutes: 0 });
                   } else if (isMock) {
-                      tasks.push({ type: "Mock Exam", topic: "Full SAT Simulator — 4 Modules — Timed", questionCount: 98, estimatedMinutes: 134 });
+                      tasks.push({ type: "Mock Exam", topic: "Full SAT Simulator Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ў 4 Modules Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ў Timed", questionCount: 98, estimatedMinutes: 134 });
                   } else {
                       tasks.push({ type: item.section || (i%2===0?"Math":"English"), topic: item.topic || "Practice", questionCount: item.questionCount || 20, estimatedMinutes: item.estimatedMinutes || 30 });
                   }
@@ -3270,7 +3271,7 @@
       const title = card.querySelector('.task-title');
 
       if (willBeChecked) {
-        showToast("Task completed! Keep crushing your plan! 🔥");
+        showToast("Task completed! Keep crushing your plan! Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ўР В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћ");
         box.style.backgroundColor = '#22C55E';
         box.style.borderColor = '#22C55E';
         checkmark.classList.remove('opacity-0');
@@ -3316,7 +3317,7 @@
 
       for (let i = 0; i < weeks * 7; i++) {
         const d = new Date(currentDate);
-        d.setDate(d.getDate() + i);
+        d.setDate(currentDate.getDate() + i);
         const dayName = dayNameList[d.getDay()];
         const fullDayName = fullDayNames[d.getDay()];
             const dateStr = `${monthNames[d.getMonth()].substring(0,3)} ${d.getDate()}`;
@@ -3340,7 +3341,7 @@
         if (isMockExamDay) {
            dayObj.isMock = true;
            dayObj.tasks.push({
-               type: "Mock Exam", topic: "Full SAT Simulator — 4 Modules — Timed", questionCount: 98, estimatedMinutes: 134
+               type: "Mock Exam", topic: "Full SAT Simulator Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ў 4 Modules Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ў Timed", questionCount: 98, estimatedMinutes: 134
            });
         } else if (isStudyDay) {
            const type = selectedDays[dayName]; // 'standard' or 'extended'
@@ -3373,7 +3374,7 @@
            globalStudyDayIndex++;
         } else {
            dayObj.isRest = true;
-           dayObj.tasks.push({ type: "Rest", topic: "Relax & Recharge 🧘", questionCount: 0, estimatedMinutes: 0 });
+           dayObj.tasks.push({ type: "Rest", topic: "Relax & Recharge Р В Р’В Р В Р вЂ№Р В Р’В Р Р†Р вЂљРЎв„ўР В Р’В Р В Р вЂ№Р В Р Р‹Р РЋРЎСџР В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В§Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В", questionCount: 0, estimatedMinutes: 0 });
         }
 
         plan.push(dayObj);
@@ -3476,13 +3477,17 @@
         const cardBg = '#ffffff';
 
         return `
-          <div class="da-task-card ${isChecked ? 'completed' : ''}" onclick="toggleMockAgendaTask('${task.id}')" style="padding: 12px 16px; background: ${cardBg}; border: 1px solid #EDE9FE; border-radius: 0 20px 20px 0; border-left: 4px solid ${task.border}; display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s ease; min-height: 48px;">
-              <span class="da-subject-badge" style="background: ${task.badgeBg}; color: #1E293B; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; text-transform: uppercase; align-self: flex-start; margin-top: 2px;">${task.subject}</span>
-              <h4 style="margin: 0; font-size: 13px; font-weight: 600; flex: 1; color: var(--lav-dark); line-height: 1.4; align-self: flex-start; margin-top: 1px;">${task.topic}</h4>
-              <span class="da-pill" style="font-size: 11px; background: #F3F2FF; color: #7C6FE0; padding: 2px 8px; border-radius: 20px; align-self: flex-start; margin-top: 2px;">${task.questions} Questions</span>
-              <span class="da-pill" style="font-size: 11px; background: #F3F2FF; color: #7C6FE0; padding: 2px 8px; border-radius: 20px; align-self: flex-start; margin-top: 2px;">~${task.time} min</span>
-              <div class="da-task-checkbox ${isChecked ? 'checked' : ''}" style="width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid ${cbBorder}; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; background: ${cbBg}; flex-shrink: 0; align-self: flex-start; margin-top: 4px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="check-icon" style="opacity: ${checkOp}; transition: opacity 0.2s;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <div class="da-task-card ${isChecked ? 'completed' : ''}" onclick="toggleMockAgendaTask('${task.id}')" style="padding: 10px 14px; background: ${cardBg}; border: 0.5px solid var(--color-border-tertiary, var(--lav-border)); border-radius: 0 20px 20px 0; border-left: 4px solid ${task.border}; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; cursor: pointer; transition: all 0.2s ease; min-height: 52px;">
+              <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                  <span class="da-subject-badge" style="background: ${task.badgeBg}; color: #1E293B; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; width: 60px; text-align: center;">${task.subject}</span>
+                  <h4 style="margin: 0; font-size: 14px; font-weight: 500; color: var(--lav-dark); line-height: 1.4; ${isChecked ? 'text-decoration: line-through; opacity: 0.6;' : ''}" title="${task.topic}">${task.topic}</h4>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                  <span class="da-pill" style="font-size: 12px; color: var(--color-text-secondary); white-space: nowrap;">${task.questions} Qs</span>
+                  <span class="da-pill" style="font-size: 12px; color: var(--color-text-secondary); white-space: nowrap;">~${task.time}m</span>
+                  <div class="da-task-checkbox ${isChecked ? 'checked' : ''}" style="width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid ${cbBorder}; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; background: ${cbBg}; flex-shrink: 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="check-icon" style="opacity: ${checkOp}; transition: opacity 0.2s;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </div>
               </div>
           </div>
         `;
@@ -3547,18 +3552,64 @@
                 <div class="jdot-wrapper" title="Week ${i} — ${i <= currentWeek ? 'Completed or Active' : 'Future Week'}" onclick="document.querySelector('.journey-scroll').scrollLeft += ${i < currentWeek ? '-80' : '80'}">
                     <div class="${dotClass}">${i}</div>
                     
+${i === currentWeek ? '<div style="position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--color-purple-primary, #7C6FE0); white-space: nowrap; font-weight: 500">Week 13 (current)</div>' : ''}
                 </div>
             `;
         }
         trackContainer.innerHTML = dotsHTML;
         
-        // Scroll dots to current week automatically
-        setTimeout(() => {
-            const currentEl = trackContainer.querySelector('.jdot.current');
-            if (currentEl) {
-                currentEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    // Auto-scroll to current week and set today's date
+    setTimeout(() => {
+        const today = new Date();
+        const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+        const dateEl = document.getElementById('header-today-date');
+        if (dateEl) {
+            dateEl.innerText = today.toLocaleDateString('en-US', options);
+        }
+
+        const stripContainer = document.querySelector('.journey-scroll');
+        const currentWeekDot = document.querySelector('.jdot.current');
+        const jumpToTodayLink = document.getElementById('jump-to-today');
+
+        if (currentWeekDot && stripContainer) {
+            const centerLeft = currentWeekDot.parentElement.offsetLeft - (stripContainer.offsetWidth / 2) + (currentWeekDot.parentElement.offsetWidth / 2);
+            stripContainer.scrollLeft = centerLeft;
+            
+            const checkVisibility = () => {
+                const dotRect = currentWeekDot.parentElement.getBoundingClientRect();
+                const containerRect = stripContainer.getBoundingClientRect();
+                
+                // Ensure dot is fully visible (add 1px tolerance)
+                if (dotRect.left >= (containerRect.left - 1) && dotRect.right <= (containerRect.right + 1)) {
+                    if (jumpToTodayLink) {
+                        jumpToTodayLink.style.opacity = '0.4';
+                        jumpToTodayLink.style.pointerEvents = 'none';
+                        jumpToTodayLink.style.cursor = 'default';
+                    }
+                } else {
+                    if (jumpToTodayLink) {
+                        jumpToTodayLink.style.opacity = '1';
+                        jumpToTodayLink.style.pointerEvents = 'auto';
+                        jumpToTodayLink.style.cursor = 'pointer';
+                    }
+                }
+            };
+            
+            // Check initial and bind event
+            checkVisibility();
+            stripContainer.addEventListener('scroll', checkVisibility);
+
+            if (jumpToTodayLink) {
+                jumpToTodayLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    stripContainer.scrollTo({
+                        left: currentWeekDot.parentElement.offsetLeft - (stripContainer.offsetWidth / 2) + (currentWeekDot.parentElement.offsetWidth / 2),
+                        behavior: 'smooth'
+                    });
+                });
             }
-        }, 100);
+        }
+    }, 100);
     }
 
     // Scroll weekly table so today's column is first visible
@@ -3578,5 +3629,51 @@
     });
   </script>
   </div>
+  <script>
+    /* Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ўР В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћР В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ўР В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћ Side-by-side layout enforcer Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ўР В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћР В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ўР В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћ
+       Inline styles on sp-body/sp-tasks-col/sp-table-col beat every stylesheet,
+       but inline styles are immune to CSS media queries.
+       This tiny script keeps the layout correct at every viewport width. */
+    (function() {
+      var body    = document.querySelector('.sp-body');
+      var left    = document.querySelector('.sp-tasks-col');
+      var right   = document.querySelector('.sp-table-col');
+      if (!body || !left || !right) return;
+
+      function applyLayout() {
+        if (window.innerWidth > 769) {
+          /* Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В РІР‚в„ўР вЂ™Р’В°Р В Р’В Р РЋРЎвЂєР В Р Р‹Р Р†Р вЂљРІвЂћСћ 770px Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ў side by side */
+          body.style.display        = 'flex';
+          body.style.flexDirection  = 'row';
+          body.style.alignItems     = 'stretch';
+          body.style.gap            = '16px';
+          left.style.width          = '42%';
+          left.style.flexShrink     = '0';
+          right.style.flex          = '1';
+          right.style.minWidth      = '0';
+          right.style.width         = '';
+        } else {
+          /* Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В РІР‚в„ўР вЂ™Р’В°Р В Р’В Р Р†Р вЂљРІвЂћСћР В РІР‚в„ўР вЂ™Р’В¤ 768px Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р вЂ Р В РІР‚С™Р РЋРІвЂћСћР В Р’В Р В РІР‚В Р В Р’В Р Р†Р вЂљРЎв„ўР В Р Р‹Р РЋРЎв„ў stack vertically */
+          body.style.flexDirection  = 'column';
+          body.style.gap            = '24px';
+          left.style.width          = '100%';
+          left.style.flexShrink     = '';
+          right.style.flex          = '';
+          right.style.width         = '100%';
+        }
+      }
+
+      applyLayout();
+      window.addEventListener('resize', applyLayout);
+    })();
+  </script>
   </body>
 </html>
+
+
+
+
+
+
+
+
